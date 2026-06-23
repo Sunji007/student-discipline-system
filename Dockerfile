@@ -29,6 +29,7 @@ ENV PHP_CATCHALL 1
 ENV APP_ENV production
 ENV APP_DEBUG false
 ENV LOG_CHANNEL stderr
+ENV SESSION_DRIVER file
 
 # Allow composer to run as root
 ENV COMPOSER_ALLOW_SUPERUSER 1
