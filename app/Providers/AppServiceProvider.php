@@ -11,5 +11,9 @@ class AppServiceProvider extends ServiceProvider
     {
         // ใช้ Bootstrap 5 สำหรับ Pagination
         Paginator::useBootstrap();
+
+        if (config('app.env') === 'production') {
+            \Illuminate\Support\Facades\URL::forceScheme('https');
+        }
     }
 }
