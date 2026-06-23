@@ -1,5 +1,9 @@
 FROM richarvey/nginx-php-fpm:3.1.6
 
+# Install PostgreSQL dev libraries and PHP extension
+RUN apk add --no-cache postgresql-dev && \
+    docker-php-ext-install pdo_pgsql
+
 COPY . .
 
 # Run composer install during Docker build
@@ -9,6 +13,9 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction
 RUN apk add --no-cache nodejs npm && \
     npm install && \
     npm run build
+
+# Set permissions for Laravel storage and cache
+RUN chmod -R 777 storage bootstrap/cache
 
 # Image config
 ENV SKIP_COMPOSER 1
