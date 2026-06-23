@@ -1,0 +1,37 @@
+<?php
+
+namespace App\Http\Controllers\Student;
+
+use App\Http\Controllers\Controller;
+use App\Models\Attendance;
+use Illuminate\Http\Request;
+
+class AttendanceController extends Controller
+{
+    public function index(Request $request)
+    {
+        $student = auth()->user()->student;
+        $month   = $request->get('month', now()->format('Y-m'));
+
+        [$year, $mon] = explode('-', $month);
+
+        $records = Attendance::where('StudentID', $student->StudentID)
+            ->whereYear('Date', $year)
+            ->whereMonth('Date', $mon)
+            ->orderBy('Date')
+            ->get()
+            ->keyBy(fn($r) => $r->Date->format('Y-m-d'));
+
+        $daysInMonth = cal_days_in_month(CAL_GREGORIAN, $mon, $year);
+
+        $summary = [
+            'มา'   => Attendance::where('StudentID', $student->StudentID)->where('Status', 'มา')->count(),
+            'สาย'  => Attendance::where('StudentID', $student->StudentID)->where('Status', 'สาย')->count(),
+            'ขาด'  => Attendance::where('StudentID', $student->StudentID)->where('Status', 'ขาด')->count(),
+        ];
+
+        return view('student.attendance.index', compact(
+            'student', 'records', 'month', 'daysInMonth', 'year', 'mon', 'summary'
+        ));
+    }
+}

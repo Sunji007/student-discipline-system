@@ -1,0 +1,521 @@
+﻿
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+DROP TABLE IF EXISTS `users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `users` (
+  `UserID` varchar(36) NOT NULL,
+  `Username` varchar(50) NOT NULL,
+  `Password` varchar(255) NOT NULL,
+  `FullName` varchar(100) NOT NULL,
+  `Role` varchar(50) NOT NULL,
+  `Status` varchar(50) NOT NULL DEFAULT 'ปกติ',
+  `AdditionalInfo` varchar(255) DEFAULT NULL,
+  `remember_token` varchar(100) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`UserID`),
+  UNIQUE KEY `users_username_unique` (`Username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES ('2567d140-8dad-40ad-812b-5a17556e765a','teacher02','$2y$12$HZ0pZyvd0GSCt8Gq3SJzo.h2.h6pWZRWXf2QTqXQqNU.x0ByImzA.','นายซูไฮมี มะเซ็ง','ครู','ปกติ',NULL,NULL,'2026-06-15 07:34:03','2026-06-15 07:34:03'),('34e7d5f3-7e5b-4976-878a-5007807c4706','teacher03','$2y$12$LpUnjZRJ6nBSMnEaabBoouXdMT1i/xVoKheRhBjJhIdFPwE3Bwczu','นางรอฮานี ยามา','ครู','ปกติ',NULL,NULL,'2026-06-15 07:34:03','2026-06-15 07:34:03'),('93e0027c-6349-49b2-a92c-aa1d3f9ff83a','admin','$2y$12$QDKH.HGNqXpChLyr.PWaG.6Jwkes3rsi5j3KZQCi1GBpBgI4OyL16','นายสมชาย ใจดี','ผู้ดูแลระบบ','ปกติ',NULL,NULL,'2026-06-15 07:34:02','2026-06-15 07:34:02'),('941c0e24-0744-485d-87af-67f3eaa3523c','discipline02','$2y$12$7Kg/mNAGNc3QDQZJ2fK6/.cIfeLx662LEth5Miuz8Oh9FeOq2tu4a','นางสาวฟาติมะห์ ดอเลาะ','ฝ่ายปกครอง','ปกติ',NULL,NULL,'2026-06-15 07:34:03','2026-06-15 07:34:03'),('9d1ef017-cd5c-4721-8561-7f0a86bc30fa','teacher04','$2y$12$pUi0pdWQMHtUUskEAW12PuYuWnJFV0SGxZkwGSamUH4lCDdg1fD9C','นายอาดิล แวดอเลาะ','ครู','ปกติ',NULL,NULL,'2026-06-15 07:34:03','2026-06-15 07:34:03'),('b310e8a1-804d-4eaa-9ced-135f610fd78d','teacher05','$2y$12$yY.VVHYhNy5Eclu/.sFs1eYbzBt9.hd9X2QFYi/W6doTdcV1jJTQm','นางสาวซาฟีนะห์ กาเซ็ง','ครู','ปกติ',NULL,NULL,'2026-06-15 07:34:03','2026-06-15 07:34:03'),('cfac8a99-f8f7-4007-a884-e2800e1dd5fd','teacher01','$2y$12$Gl0db7g9lG57yIypOwuCe.uUmEhHFhh71wfUgldNamJGWj/lKZCkC','นางสาวนูรีดา สาและ','ครู','ปกติ',NULL,NULL,'2026-06-15 07:34:03','2026-06-15 07:34:03'),('d3f3d7f5-29ea-4d98-8481-c833edf0ca56','teacher99','$2y$12$/I4EfCC2NoG3dabSoSH6CuIiRhAtpeXQvkIZ15ISwnNiDppUDypXe','Test Teacher','ครู','ปกติ',NULL,NULL,'2026-06-15 08:09:55','2026-06-15 08:12:43'),('f476b50c-fb7e-4ed2-a0bb-9f7b41fd9575','discipline01','$2y$12$bVXrFM2aAOgmumIzZNotfexiMemzdAtwT6MCoTjwVZuHpTARukyGe','นายอับดุลเลาะ มะแอ','ฝ่ายปกครอง','ปกติ',NULL,NULL,'2026-06-15 07:34:02','2026-06-15 07:34:02'),('parent-uuid-1','parent01','$2y$12$V50i0mFuu.545P6phsaAvu3jyFD5n0zBdelScz7KH0bNka7VVQh9e','นายสมคิด เรียนดี','ผู้ปกครอง','ปกติ',NULL,NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('parent-uuid-2','parent02','$2y$12$V50i0mFuu.545P6phsaAvu3jyFD5n0zBdelScz7KH0bNka7VVQh9e','นางกัลยา รักดี','ผู้ปกครอง','ปกติ',NULL,NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('parent-uuid-3','parent03','$2y$12$V50i0mFuu.545P6phsaAvu3jyFD5n0zBdelScz7KH0bNka7VVQh9e','นายขจร พากเพียร','ผู้ปกครอง','ปกติ',NULL,NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('parent-uuid-4','parent04','$2y$12$V50i0mFuu.545P6phsaAvu3jyFD5n0zBdelScz7KH0bNka7VVQh9e','นายดนัย ดนตรี','ผู้ปกครอง','ปกติ',NULL,NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('parent-uuid-5','parent05','$2y$12$V50i0mFuu.545P6phsaAvu3jyFD5n0zBdelScz7KH0bNka7VVQh9e','นางสมศรี ยินดี','ผู้ปกครอง','ปกติ',NULL,NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('parent-uuid-6','parent06','$2y$12$V50i0mFuu.545P6phsaAvu3jyFD5n0zBdelScz7KH0bNka7VVQh9e','นายประสงค์ เลิศล้ำ','ผู้ปกครอง','ปกติ',NULL,NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('stud-uuid-1','student01','$2y$12$V50i0mFuu.545P6phsaAvu3jyFD5n0zBdelScz7KH0bNka7VVQh9e','ด.ช. เก่ง เรียนดี','นักเรียน','ปกติ',NULL,NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('stud-uuid-2','student02','$2y$12$V50i0mFuu.545P6phsaAvu3jyFD5n0zBdelScz7KH0bNka7VVQh9e','ด.ญ. กานดา รักดี','นักเรียน','ปกติ',NULL,NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('stud-uuid-3','student03','$2y$12$V50i0mFuu.545P6phsaAvu3jyFD5n0zBdelScz7KH0bNka7VVQh9e','ด.ช. ขยัน พากเพียร','นักเรียน','ปกติ',NULL,NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('stud-uuid-4','student04','$2y$12$V50i0mFuu.545P6phsaAvu3jyFD5n0zBdelScz7KH0bNka7VVQh9e','ด.ช. เด็กดื้อ ดนตรี','นักเรียน','ปกติ',NULL,NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('stud-uuid-5','student05','$2y$12$V50i0mFuu.545P6phsaAvu3jyFD5n0zBdelScz7KH0bNka7VVQh9e','ด.ญ. สมใจ ยินดี','นักเรียน','ปกติ',NULL,NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('stud-uuid-6','student06','$2y$12$V50i0mFuu.545P6phsaAvu3jyFD5n0zBdelScz7KH0bNka7VVQh9e','ด.ช. ปัญญา เลิศล้ำ','นักเรียน','ปกติ',NULL,NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04');
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+UNLOCK TABLES;
+DROP TABLE IF EXISTS `behavior_rules`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `behavior_rules` (
+  `RuleID` varchar(36) NOT NULL,
+  `RuleName` varchar(100) NOT NULL,
+  `RuleType` varchar(50) NOT NULL,
+  `ScoreModifier` int(11) NOT NULL,
+  `Category` varchar(100) DEFAULT NULL,
+  `Description` text DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`RuleID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+LOCK TABLES `behavior_rules` WRITE;
+/*!40000 ALTER TABLE `behavior_rules` DISABLE KEYS */;
+INSERT INTO `behavior_rules` VALUES ('13505b02-3a9e-4672-94c6-8bd5206ad556','นักเรียนหญิงซอยผม','ตัดคะแนน',-30,'ความผิดไม่ร้ายแรง',NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('1c0cb2b4-65fd-4e63-a550-b81c99461dbf','มีพฤติกรรมลามกอนาจารนักเรียนด้วยกัน','ตัดคะแนน',-20,'ความผิดร้ายแรง',NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('2311b6d0-87f1-463b-8ebb-4f88b1794670','หลีกเลี่ยงหรือไม่ทำความเคารพครู','ตัดคะแนน',-5,'ความผิดไม่ร้ายแรง',NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('2a0a75f6-62d2-493b-a7fa-206346cb0490','ความประพฤติดีเด่นประจำเดือน','เพิ่มคะแนน',10,'ความประพฤติ',NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('2a4698bb-acda-4545-8a02-819654d49bcf','ขีดเขียน ฝาผนัง โต๊ะ เก้าอี้ ในห้องส้วม ห้องเรียน และอาคารประกอบอื่น ๆ','ตัดคะแนน',-5,'ความผิดไม่ร้ายแรง',NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('31b2ddb6-15db-45ad-b935-cd23136548da','ไม่ทิ้งขยะลงในภาชนะที่รองรับ ทำให้สถานที่สกปรก','ตัดคะแนน',-5,'ความผิดไม่ร้ายแรง',NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('3a708ff2-b5a3-4203-afcb-0ed6c6012666','กล่าวเท็จ ช่วยเหลือ ปกปิด ผู้กระทำความผิดอันเกิดความเสียหายต่อผู้อื่นและส่วนรวม','ตัดคะแนน',-10,'ความผิดไม่ร้ายแรง',NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('424fab26-b787-4148-94b2-3a7995753753','แอบอ้างชื่อของผู้อื่นมาใช้แทนตน','ตัดคะแนน',-5,'ความผิดไม่ร้ายแรง',NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('426dfd08-2e66-4798-91d5-f95a4f4517be','ใช้โทรศัพท์ เครื่องมือสื่อสารในโรงเรียนผิดวัตถุประสงค์และไม่เหมาะสมกับกาลเทศะ','ตัดคะแนน',-10,'ความผิดไม่ร้ายแรง',NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('45a1704b-b35f-46ee-bdcd-3b25a735dea4','เอาชายเสื้อออกนอกกางเกง กระโปรง (เครื่องแบบนักเรียนไทยพุทธ)','ตัดคะแนน',-5,'ความผิดไม่ร้ายแรง',NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('499f38de-0ddd-4583-b536-6ae4fe1e50c5','ใช้เครื่องประดับตกแต่งร่างกาย ใบหน้าอย่างไม่เหมาะสม','ตัดคะแนน',-10,'ความผิดไม่ร้ายแรง',NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('4b291bcb-11e1-46d9-91c4-2dcfba5b21ee','เข้าและออกริมรั้วโรงเรียน โดยไม่ได้อนุญาต (ปีนรั้ว, ลอดรั้ว)','ตัดคะแนน',-20,'ความผิดไม่ร้ายแรง',NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('4c4e8c5e-37d1-4635-a334-cc51fa2781aa','ทำร้ายร่างกายเพื่อนนักเรียนได้รับบาดเจ็บมีบาดแผลเล็กน้อย','ตัดคะแนน',-30,'ความผิดร้ายแรง',NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('575e1345-118d-485a-b6d9-dfcb2b22cffc','ความผิดไม่ร้ายแรงอื่น ๆ (ตามดุลพินิจหัวหน้าระดับชั้น/หัวหน้าฝ่าย)','ตัดคะแนน',-10,'ความผิดไม่ร้ายแรง',NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('6677fea6-1abd-4b22-94b6-d835d291e913','หยอกล้อ เล่นกันรุนแรง จนเกิดบาดแผลหรือบาดเจ็บ','ตัดคะแนน',-10,'ความผิดไม่ร้ายแรง',NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('694f1eef-e35d-4718-aeb9-8025cc95405a','ปลอมแปลงเอกสาร แอบอ้างกิจกรรมของโรงเรียนต่อผู้ปกครองอันเป็นเท็จ','ตัดคะแนน',-10,'ความผิดไม่ร้ายแรง',NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('6afb92d5-e72d-4a99-ad87-b3556fe175f6','เล่นประทัดหรือดอกไม้ไฟภายในโรงเรียน','ตัดคะแนน',-50,'ความผิดร้ายแรง',NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('77897bff-7c55-4a99-8b94-b5d516843478','ก่อเหตุทะเลาะวิวาททั่วไป','ตัดคะแนน',-20,'ความผิดร้ายแรง',NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('8379cc90-132e-487a-b38f-52fe3ec0748e','แต่งกายผิดระเบียบ','ตัดคะแนน',-5,'ความผิดไม่ร้ายแรง',NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('8b12fbca-37f5-404b-879b-00d146797fe1','เข้าร่วมกิจกรรมพิเศษ','เพิ่มคะแนน',5,'กิจกรรม',NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('8b3c082a-4fc2-4a93-9771-953e804baa34','ไม่มีบันทึกพฤติกรรมเชิงลบทั้งภาคเรียน','เพิ่มคะแนน',10,'ความประพฤติ',NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('93029f1d-f410-4e28-a725-2bf7c318a66e','นำอาหาร ขนม หรือเครื่องดื่มทุกชนิดขึ้นไปทานบนอาคารเรียน','ตัดคะแนน',-5,'ความผิดไม่ร้ายแรง',NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('95827815-a82b-4129-a728-31b5a631407c','จำหน่าย จ่ายแจก เอกสาร สื่ออิเล็กทรอนิกส์ และสิ่งของที่ใช้ในการบริโภค โดยมิได้ขออนุญาต','ตัดคะแนน',-30,'ความผิดร้ายแรง',NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('9d3477a8-c761-4ec8-8501-a84929f96412','มาสายหลังจากเข้าคาบเรียนที่ 1 โดยไม่มีเหตุอันควร','ตัดคะแนน',-5,'ความผิดไม่ร้ายแรง',NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('a1c6279d-f8f7-413c-8d71-716ad288c43a','ประพฤติผิดในทางชู้สาว ละเมิดทางเพศ ก่อนวัยอันควร','ตัดคะแนน',-50,'ความผิดร้ายแรง',NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('af0c4548-dfc3-4d8b-ab8f-99b191919a60','ไม่สำรวมกิริยามารยาท นอกบริเวณโรงเรียนขณะอยู่ในเครื่องแบบนักเรียน','ตัดคะแนน',-10,'ความผิดไม่ร้ายแรง',NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('bcece110-ee17-49a6-927d-ab591a9dc8d2','ซื้อเครื่องดื่ม ขนม อาหารว่างริมรั้วโรงเรียน','ตัดคะแนน',-10,'ความผิดไม่ร้ายแรง',NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('be57aec8-1f42-4b73-8531-ac685a72c5fa','หนีไม่เข้าชั้นเรียน','ตัดคะแนน',-5,'ความผิดไม่ร้ายแรง',NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('c11200a2-cba8-4494-871d-ba9d82dfb824','มาโรงเรียนสายหลัง 08.00 น. โดยไม่มีเหตุอันสมควร','ตัดคะแนน',-5,'ความผิดไม่ร้ายแรง',NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('da675c38-35b8-428f-b61e-5a5d74bba73c','ลักขโมยและมีส่วนร่วมในการลักขโมยของผู้อื่นมาเป็นตนโดยเจตนา','ตัดคะแนน',-30,'ความผิดร้ายแรง',NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('da77cb2d-1c3c-41a1-90e2-90886ff14d20','แสดงตนเป็นนักเลง อันธพาล ก่อกวนความสงบสุขภายในห้องเรียน ปลุกปั่นยุยงให้เกิดการแตกแยก','ตัดคะแนน',-50,'ความผิดร้ายแรง',NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('df24847d-4ca5-4dcd-b06d-e5820d101460','ชนะการแข่งขัน/ตัวแทนโรงเรียน','เพิ่มคะแนน',10,'กิจกรรม',NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('df3cc611-5f14-42b2-9c74-b0619f814465','หลีกเลี่ยงการปฏิบัติกิจกรรมหน้าเสาธงในตอนเช้า','ตัดคะแนน',-10,'ความผิดไม่ร้ายแรง',NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('ec1ffcd8-d524-4730-a04e-368c219b997b','การนำข้อมูลข่าวสารอันเป็นเท็จเข้าสู่ระบบคอมพิวเตอร์สื่อออนไลน์','ตัดคะแนน',-20,'ความผิดร้ายแรง',NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('ec491ab7-4dcb-4520-9602-c5b733eb815f','ช่วยเหลืองานโรงเรียน','เพิ่มคะแนน',5,'ความดี',NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('f01b3a74-3922-4490-838a-9e4b03b3b374','นำหนังสือ สื่อสิ่งพิมพ์ลามกอนาจาร เข้ามาเผยแพร่ในโรงเรียน','ตัดคะแนน',-20,'ความผิดร้ายแรง',NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('f03ac7c1-8daa-442c-80af-3fce12440de9','ทำลายทรัพย์สินของผู้อื่นและของโรงเรียน','ตัดคะแนน',-20,'ความผิดร้ายแรง',NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('f0a4663b-d2d0-4d53-8ce1-3e7c0699e4ae','เสพสารเสพติด เช่น บุหรี่ กัญชา ยาบ้า หรืออุปกรณ์ในการเสพ มีไว้ในครอบครองหรือจำหน่าย','ตัดคะแนน',-50,'ความผิดร้ายแรง',NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('fb90562b-2908-4ee9-b691-b42e7a59c5f6','ช่วยเหลือเพื่อน/ผู้อื่น','เพิ่มคะแนน',5,'ความดี',NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04');
+/*!40000 ALTER TABLE `behavior_rules` ENABLE KEYS */;
+UNLOCK TABLES;
+DROP TABLE IF EXISTS `cache`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `cache` (
+  `key` varchar(255) NOT NULL,
+  `value` mediumtext NOT NULL,
+  `expiration` int(11) NOT NULL,
+  PRIMARY KEY (`key`),
+  KEY `cache_expiration_index` (`expiration`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+LOCK TABLES `cache` WRITE;
+/*!40000 ALTER TABLE `cache` DISABLE KEYS */;
+/*!40000 ALTER TABLE `cache` ENABLE KEYS */;
+UNLOCK TABLES;
+DROP TABLE IF EXISTS `cache_locks`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `cache_locks` (
+  `key` varchar(255) NOT NULL,
+  `owner` varchar(255) NOT NULL,
+  `expiration` int(11) NOT NULL,
+  PRIMARY KEY (`key`),
+  KEY `cache_locks_expiration_index` (`expiration`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+LOCK TABLES `cache_locks` WRITE;
+/*!40000 ALTER TABLE `cache_locks` DISABLE KEYS */;
+/*!40000 ALTER TABLE `cache_locks` ENABLE KEYS */;
+UNLOCK TABLES;
+DROP TABLE IF EXISTS `failed_jobs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `failed_jobs` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `uuid` varchar(255) NOT NULL,
+  `connection` text NOT NULL,
+  `queue` text NOT NULL,
+  `payload` longtext NOT NULL,
+  `exception` longtext NOT NULL,
+  `failed_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+LOCK TABLES `failed_jobs` WRITE;
+/*!40000 ALTER TABLE `failed_jobs` DISABLE KEYS */;
+/*!40000 ALTER TABLE `failed_jobs` ENABLE KEYS */;
+UNLOCK TABLES;
+DROP TABLE IF EXISTS `job_batches`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `job_batches` (
+  `id` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `total_jobs` int(11) NOT NULL,
+  `pending_jobs` int(11) NOT NULL,
+  `failed_jobs` int(11) NOT NULL,
+  `failed_job_ids` longtext NOT NULL,
+  `options` mediumtext DEFAULT NULL,
+  `cancelled_at` int(11) DEFAULT NULL,
+  `created_at` int(11) NOT NULL,
+  `finished_at` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+LOCK TABLES `job_batches` WRITE;
+/*!40000 ALTER TABLE `job_batches` DISABLE KEYS */;
+/*!40000 ALTER TABLE `job_batches` ENABLE KEYS */;
+UNLOCK TABLES;
+DROP TABLE IF EXISTS `jobs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `jobs` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `queue` varchar(255) NOT NULL,
+  `payload` longtext NOT NULL,
+  `attempts` tinyint(3) unsigned NOT NULL,
+  `reserved_at` int(10) unsigned DEFAULT NULL,
+  `available_at` int(10) unsigned NOT NULL,
+  `created_at` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `jobs_queue_index` (`queue`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+LOCK TABLES `jobs` WRITE;
+/*!40000 ALTER TABLE `jobs` DISABLE KEYS */;
+/*!40000 ALTER TABLE `jobs` ENABLE KEYS */;
+UNLOCK TABLES;
+DROP TABLE IF EXISTS `migrations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `migrations` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `migration` varchar(255) NOT NULL,
+  `batch` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+LOCK TABLES `migrations` WRITE;
+/*!40000 ALTER TABLE `migrations` DISABLE KEYS */;
+INSERT INTO `migrations` VALUES (1,'0001_01_01_000000_create_users_table',1),(2,'0001_01_01_000001_create_cache_table',1),(3,'0001_01_01_000002_create_jobs_table',1),(4,'2026_06_07_141750_create_behavior_rules_table',1),(5,'2026_06_07_141756_create_users_table',1),(6,'2026_06_07_141757_create_teachers_table',1),(7,'2026_06_07_141758_create_discipline_staff_table',1),(8,'2026_06_07_141758_create_parents_table',1),(9,'2026_06_07_141758_create_students_table',1),(10,'2026_06_07_141759_add_fk_studentid_to_parents_table',1),(11,'2026_06_07_141759_create_behavior_records_table',1),(12,'2026_06_07_141760_create_appeals_table',1),(13,'2026_06_07_141800_create_attendances_table',1),(14,'2026_06_07_141800_create_informant_reports_table',1),(15,'2026_06_07_141800_create_messages_table',1),(16,'2026_06_07_141801_create_role_permissions_table',1),(17,'2026_06_11_160140_add_gender_and_photo_to_students_table',1),(18,'2026_06_11_160149_create_prayer_records_table',1),(19,'2026_06_14_220000_create_prayer_corrections_table',1);
+/*!40000 ALTER TABLE `migrations` ENABLE KEYS */;
+UNLOCK TABLES;
+DROP TABLE IF EXISTS `password_reset_tokens`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `password_reset_tokens` (
+  `email` varchar(255) NOT NULL,
+  `token` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+LOCK TABLES `password_reset_tokens` WRITE;
+/*!40000 ALTER TABLE `password_reset_tokens` DISABLE KEYS */;
+/*!40000 ALTER TABLE `password_reset_tokens` ENABLE KEYS */;
+UNLOCK TABLES;
+DROP TABLE IF EXISTS `role_permissions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `role_permissions` (
+  `PermissionID` varchar(36) NOT NULL,
+  `Role` varchar(50) NOT NULL,
+  `ModuleName` varchar(50) NOT NULL,
+  `CanAccess` tinyint(1) NOT NULL DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`PermissionID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+LOCK TABLES `role_permissions` WRITE;
+/*!40000 ALTER TABLE `role_permissions` DISABLE KEYS */;
+INSERT INTO `role_permissions` VALUES ('0e5ce691-3686-450e-8cfc-d07d6ad33e55','ครู','dashboard',1,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('29e93ddd-f64e-4774-b0c9-c44c24caa6e3','ผู้ปกครอง','appeals',0,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('2c62cdff-2cd0-4feb-b82c-ce50ea1487d3','ฝ่ายปกครอง','dashboard',1,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('2c88e6d1-a356-4435-8651-6ededdd97741','ผู้ดูแลระบบ','permissions',1,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('2d77dd84-7b15-4c09-b165-24ff092cdf62','ครู','behavior-records',1,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('33878211-e621-4ae5-bb46-bf7a6fafe8ac','นักเรียน','risk-students',0,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('3f4070fb-682e-4934-8615-ddcd9a382997','นักเรียน','appeals',1,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('419b37d3-6df5-47b1-a74c-1c194866822d','ผู้ปกครอง','users',0,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('433b3201-e7ee-4240-9075-66ade9953b6e','ผู้ดูแลระบบ','appeals',1,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('48cea667-e4cf-4b57-af14-1e66cb0b639f','ผู้ปกครอง','messages',1,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('4a075279-57e3-47f0-a9b7-74622aa72578','ครู','appeals',0,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('502b4223-8f30-4b9f-9fdc-338f20da0ef9','ครู','behavior-rules',0,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('54cd3bfc-c717-4513-8ef9-50105deab16a','ผู้ปกครอง','dashboard',1,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('6377d23d-fd9c-47f9-9faf-af4fc8c6b79b','นักเรียน','behavior-rules',0,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('67bea3d1-6c17-46cc-998c-c0f5224d5103','ผู้ดูแลระบบ','users',1,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('690209db-e0d0-438f-802b-695ea46b44b4','ฝ่ายปกครอง','appeals',1,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('7565301f-a391-4a01-98a4-1ec854d78cda','ครู','attendance',1,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('7583f648-0c81-4c04-9b04-5b88cc09010a','ผู้ดูแลระบบ','informant-reports',1,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('75d9fa4c-c05d-48aa-88f7-e90193f7bd84','ครู','risk-students',0,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('793334ed-b779-4470-a830-6b8f54f69cbf','นักเรียน','informant-reports',0,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('7a0dbc39-418a-4742-b773-2daac69e8595','ครู','permissions',0,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('81735150-2c43-4543-9b17-45b1ad65eb0d','ฝ่ายปกครอง','attendance',1,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('81f4ca57-2247-4bfe-90aa-e8598336f0ce','ครู','users',0,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('83905f46-b10f-46a1-b7a2-87c77570504b','ผู้ดูแลระบบ','dashboard',1,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('95671baf-6286-4007-9072-3602d2568e27','ผู้ดูแลระบบ','behavior-records',1,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('96ef9136-6f64-4e8e-96f3-806b101a9985','ฝ่ายปกครอง','messages',1,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('a34a73e0-1e4d-4170-b7cd-bc61aa3ab292','ผู้ปกครอง','behavior-rules',0,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('a39c8210-d41c-4b21-8548-ddceb4eb08ab','ครู','informant-reports',0,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('a5f9bc2c-d398-4882-8962-69e6a9f4accc','ผู้ปกครอง','informant-reports',0,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('a8d61a59-ca98-42f8-bd6b-5cb8b239620e','ฝ่ายปกครอง','informant-reports',1,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('ab2c7e7d-2d67-47e6-abc2-b9c57f45c50c','ผู้ปกครอง','risk-students',0,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('ac60044b-c344-4f24-83e5-3580435aa7dd','นักเรียน','attendance',1,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('bc738041-460d-47cb-b4be-1d0f140010e9','ฝ่ายปกครอง','users',0,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('bd22604f-76a7-4e10-9600-801ab3e74fab','ผู้ดูแลระบบ','messages',1,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('c74c8e45-d374-4c5a-bc3b-5798b3779d56','ผู้ดูแลระบบ','attendance',1,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('ce04d03b-8058-4b9c-a7a2-0cf6ace76d8f','นักเรียน','dashboard',1,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('cebd0e99-cdc5-4f74-965d-e9913af837e4','ครู','messages',1,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('d25bde78-9fd2-482c-9f30-ae5839495cd3','นักเรียน','users',0,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('d2b5b2ee-5822-4d9f-8411-f11c2535ee49','นักเรียน','messages',1,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('d7c51cc7-5527-4c42-a66a-2bdfb1e5d4bc','ฝ่ายปกครอง','behavior-records',1,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('d8da30cf-d4b4-4e05-a60e-a53c5bb53fdb','ฝ่ายปกครอง','risk-students',1,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('dd12a7d9-82e8-4585-993c-dc2f8fbdb90c','ผู้ปกครอง','attendance',1,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('dd906e1c-d957-4d95-8c68-a6fe867ac476','ผู้ปกครอง','permissions',0,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('e0d5c394-cbc3-4ef9-8069-2415a1a3862e','ผู้ปกครอง','behavior-records',1,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('e972b25a-b8b6-4a8d-87a7-b3bd3be01c51','ผู้ดูแลระบบ','behavior-rules',1,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('ecede3d7-57db-4bd4-8fec-c8342fc4c707','ฝ่ายปกครอง','permissions',0,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('ef24bb98-da59-44e8-9e4c-c8fbd3e55fbb','ผู้ดูแลระบบ','risk-students',1,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('f0ecdaa5-da21-4711-a89b-b2565bee0e27','นักเรียน','behavior-records',1,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('fd35a2cc-e31a-4af8-b3c8-df83fdad3188','นักเรียน','permissions',0,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('fe76c91f-e22a-42ad-a5cf-5d6004a23f4c','ฝ่ายปกครอง','behavior-rules',0,'2026-06-15 07:34:04','2026-06-15 07:34:04');
+/*!40000 ALTER TABLE `role_permissions` ENABLE KEYS */;
+UNLOCK TABLES;
+DROP TABLE IF EXISTS `sessions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sessions` (
+  `id` varchar(255) NOT NULL,
+  `user_id` bigint(20) unsigned DEFAULT NULL,
+  `ip_address` varchar(45) DEFAULT NULL,
+  `user_agent` text DEFAULT NULL,
+  `payload` longtext NOT NULL,
+  `last_activity` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `sessions_user_id_index` (`user_id`),
+  KEY `sessions_last_activity_index` (`last_activity`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+LOCK TABLES `sessions` WRITE;
+/*!40000 ALTER TABLE `sessions` DISABLE KEYS */;
+INSERT INTO `sessions` VALUES ('ColkNbMBwybB3Se2AApCHLBWIDAr3CBZOiOAVG6N',NULL,'127.0.0.1','Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0','YTozOntzOjY6Il90b2tlbiI7czo0MDoidUFwMllwejZpN2NCeGM2RmFIMHJHOWEyeVl3NGdlem92c1czcmtLRyI7czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6Mjc6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9sb2dpbiI7czo1OiJyb3V0ZSI7czo1OiJsb2dpbiI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=',1781534788),('YvFC9UWviYJzqcPSqeC8V9IoEx78dVlxnRPsKApE',NULL,'127.0.0.1','Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36','YTozOntzOjY6Il90b2tlbiI7czo0MDoiQXFWTVQxM3FmOFhjVXZ4bWlDNVVvc1dIN1hNbUladjF5TUxkMk9OcSI7czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6Mjc6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9sb2dpbiI7czo1OiJyb3V0ZSI7czo1OiJsb2dpbiI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=',1781535019);
+/*!40000 ALTER TABLE `sessions` ENABLE KEYS */;
+UNLOCK TABLES;
+DROP TABLE IF EXISTS `teachers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `teachers` (
+  `TeacherID` varchar(36) NOT NULL,
+  `UserID` varchar(36) NOT NULL,
+  `Department` varchar(100) DEFAULT NULL,
+  `AdvisoryRoom` varchar(10) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`TeacherID`),
+  KEY `teachers_userid_foreign` (`UserID`),
+  CONSTRAINT `teachers_userid_foreign` FOREIGN KEY (`UserID`) REFERENCES `users` (`UserID`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+LOCK TABLES `teachers` WRITE;
+/*!40000 ALTER TABLE `teachers` DISABLE KEYS */;
+INSERT INTO `teachers` VALUES ('teacher01','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','คณิตศาสตร์','ม.1/1','2026-06-15 07:34:03','2026-06-15 07:34:03'),('teacher02','2567d140-8dad-40ad-812b-5a17556e765a','วิทยาศาสตร์','ม.2/1','2026-06-15 07:34:03','2026-06-15 07:34:03'),('teacher03','34e7d5f3-7e5b-4976-878a-5007807c4706','ภาษาไทย','ม.3/1','2026-06-15 07:34:03','2026-06-15 07:34:03'),('teacher04','9d1ef017-cd5c-4721-8561-7f0a86bc30fa','สังคมศึกษา','ม.4/1','2026-06-15 07:34:03','2026-06-15 07:34:03'),('teacher05','b310e8a1-804d-4eaa-9ced-135f610fd78d','ภาษาอังกฤษ','ม.5/1','2026-06-15 07:34:03','2026-06-15 07:34:03'),('teacher99','d3f3d7f5-29ea-4d98-8481-c833edf0ca56',NULL,NULL,'2026-06-15 08:09:55','2026-06-15 08:12:43');
+/*!40000 ALTER TABLE `teachers` ENABLE KEYS */;
+UNLOCK TABLES;
+DROP TABLE IF EXISTS `discipline_staff`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `discipline_staff` (
+  `StaffID` varchar(36) NOT NULL,
+  `UserID` varchar(36) NOT NULL,
+  `Position` varchar(100) DEFAULT NULL,
+  `Level` enum('บันทึกได้','อนุมัติผล/ตั้งค่า') NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`StaffID`),
+  KEY `discipline_staff_userid_foreign` (`UserID`),
+  CONSTRAINT `discipline_staff_userid_foreign` FOREIGN KEY (`UserID`) REFERENCES `users` (`UserID`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+LOCK TABLES `discipline_staff` WRITE;
+/*!40000 ALTER TABLE `discipline_staff` DISABLE KEYS */;
+INSERT INTO `discipline_staff` VALUES ('3a73bd6a-5226-47b9-834e-7c81030b2381','f476b50c-fb7e-4ed2-a0bb-9f7b41fd9575','หัวหน้าฝ่ายปกครอง','อนุมัติผล/ตั้งค่า','2026-06-15 07:34:02','2026-06-15 07:34:02'),('7e6fd625-21ce-4afa-af54-67dc510d5741','941c0e24-0744-485d-87af-67f3eaa3523c','เจ้าหน้าที่ฝ่ายปกครอง','บันทึกได้','2026-06-15 07:34:03','2026-06-15 07:34:03');
+/*!40000 ALTER TABLE `discipline_staff` ENABLE KEYS */;
+UNLOCK TABLES;
+DROP TABLE IF EXISTS `parents`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `parents` (
+  `ParentID` varchar(36) NOT NULL,
+  `UserID` varchar(36) NOT NULL,
+  `StudentID` varchar(10) DEFAULT NULL,
+  `Relationship` enum('พ่อ','แม่','ญาติ') NOT NULL,
+  `FullName` varchar(100) NOT NULL,
+  `Phone` varchar(15) DEFAULT NULL,
+  `Email` varchar(100) DEFAULT NULL,
+  `Address` text DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`ParentID`),
+  KEY `parents_userid_foreign` (`UserID`),
+  KEY `parents_studentid_foreign` (`StudentID`),
+  CONSTRAINT `parents_userid_foreign` FOREIGN KEY (`UserID`) REFERENCES `users` (`UserID`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+LOCK TABLES `parents` WRITE;
+/*!40000 ALTER TABLE `parents` DISABLE KEYS */;
+INSERT INTO `parents` VALUES ('parent-uuid-1','parent-uuid-1','10001','พ่อ','นายสมคิด เรียนดี','0812345678','parent01@example.com','123/45 ถนนราษฎร์บำรุง อำเภอเมือง จังหวัดเชียงใหม่','2026-06-15 07:34:04','2026-06-15 07:34:04'),('parent-uuid-2','parent-uuid-2','10002','แม่','นางกัลยา รักดี','0812345678','parent02@example.com','123/45 ถนนราษฎร์บำรุง อำเภอเมือง จังหวัดเชียงใหม่','2026-06-15 07:34:04','2026-06-15 07:34:04'),('parent-uuid-3','parent-uuid-3','10003','พ่อ','นายขจร พากเพียร','0812345678','parent03@example.com','123/45 ถนนราษฎร์บำรุง อำเภอเมือง จังหวัดเชียงใหม่','2026-06-15 07:34:04','2026-06-15 07:34:04'),('parent-uuid-4','parent-uuid-4','10004','พ่อ','นายดนัย ดนตรี','0812345678','parent04@example.com','123/45 ถนนราษฎร์บำรุง อำเภอเมือง จังหวัดเชียงใหม่','2026-06-15 07:34:04','2026-06-15 07:34:04'),('parent-uuid-5','parent-uuid-5','10005','แม่','นางสมศรี ยินดี','0812345678','parent05@example.com','123/45 ถนนราษฎร์บำรุง อำเภอเมือง จังหวัดเชียงใหม่','2026-06-15 07:34:04','2026-06-15 07:34:04'),('parent-uuid-6','parent-uuid-6','10006','พ่อ','นายประสงค์ เลิศล้ำ','0812345678','parent06@example.com','123/45 ถนนราษฎร์บำรุง อำเภอเมือง จังหวัดเชียงใหม่','2026-06-15 07:34:04','2026-06-15 07:34:04');
+/*!40000 ALTER TABLE `parents` ENABLE KEYS */;
+UNLOCK TABLES;
+DROP TABLE IF EXISTS `students`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `students` (
+  `StudentID` varchar(10) NOT NULL,
+  `UserID` varchar(36) NOT NULL,
+  `ParentID` varchar(36) DEFAULT NULL,
+  `FullName` varchar(100) NOT NULL,
+  `Gender` varchar(10) DEFAULT NULL,
+  `Photo` varchar(255) DEFAULT NULL,
+  `GradeLevel` varchar(10) DEFAULT NULL,
+  `Classroom` varchar(10) DEFAULT NULL,
+  `BehaviorScore` int(11) NOT NULL DEFAULT 100,
+  `RiskStatus` varchar(50) NOT NULL DEFAULT 'ปกติ',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`StudentID`),
+  KEY `students_userid_foreign` (`UserID`),
+  KEY `students_parentid_foreign` (`ParentID`),
+  CONSTRAINT `students_parentid_foreign` FOREIGN KEY (`ParentID`) REFERENCES `parents` (`ParentID`) ON DELETE SET NULL,
+  CONSTRAINT `students_userid_foreign` FOREIGN KEY (`UserID`) REFERENCES `users` (`UserID`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+LOCK TABLES `students` WRITE;
+/*!40000 ALTER TABLE `students` DISABLE KEYS */;
+INSERT INTO `students` VALUES ('10001','stud-uuid-1','parent-uuid-1','ด.ช. เก่ง เรียนดี',NULL,'photos/10001.png','ม.1','ม.1/1',95,'ปกติ','2026-06-15 07:34:04','2026-06-15 08:22:22'),('10002','stud-uuid-2','parent-uuid-2','ด.ญ. กานดา รักดี',NULL,'photos/10002.png','ม.1','ม.1/1',95,'ปกติ','2026-06-15 07:34:04','2026-06-15 07:34:04'),('10003','stud-uuid-3','parent-uuid-3','ด.ช. ขยัน พากเพียร',NULL,'photos/10003.png','ม.1','ม.1/2',85,'ปกติ','2026-06-15 07:34:04','2026-06-15 07:34:04'),('10004','stud-uuid-4','parent-uuid-4','ด.ช. เด็กดื้อ ดนตรี',NULL,'photos/10004.png','ม.1','ม.1/1',55,'วิกฤต','2026-06-15 07:34:04','2026-06-15 07:34:04'),('10005','stud-uuid-5','parent-uuid-5','ด.ญ. สมใจ ยินดี',NULL,'photos/10005.png','ม.2','ม.2/1',75,'เฝ้าระวัง','2026-06-15 07:34:04','2026-06-15 07:34:04'),('10006','stud-uuid-6','parent-uuid-6','ด.ช. ปัญญา เลิศล้ำ',NULL,'photos/10006.png','ม.3','ม.3/1',100,'ปกติ','2026-06-15 07:34:04','2026-06-15 07:34:04');
+/*!40000 ALTER TABLE `students` ENABLE KEYS */;
+UNLOCK TABLES;
+DROP TABLE IF EXISTS `attendances`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `attendances` (
+  `AttendanceID` varchar(36) NOT NULL,
+  `StudentID` varchar(10) NOT NULL,
+  `Date` date NOT NULL,
+  `Status` varchar(50) NOT NULL,
+  `RecordedBy` varchar(36) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`AttendanceID`),
+  KEY `attendances_studentid_foreign` (`StudentID`),
+  KEY `attendances_recordedby_foreign` (`RecordedBy`),
+  CONSTRAINT `attendances_recordedby_foreign` FOREIGN KEY (`RecordedBy`) REFERENCES `users` (`UserID`) ON DELETE CASCADE,
+  CONSTRAINT `attendances_studentid_foreign` FOREIGN KEY (`StudentID`) REFERENCES `students` (`StudentID`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+LOCK TABLES `attendances` WRITE;
+/*!40000 ALTER TABLE `attendances` DISABLE KEYS */;
+INSERT INTO `attendances` VALUES ('00c8d181-a3fa-4bac-a979-bd8725f17447','10005','2026-05-28','มา','2567d140-8dad-40ad-812b-5a17556e765a','2026-06-15 07:34:04','2026-06-15 07:34:04'),('00ce8b70-aa09-4f1f-b80b-09867116b680','10004','2026-06-12','ขาด','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('051150be-b522-4d95-85c6-c7162d872357','10004','2026-06-10','สาย','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('07f8352f-cbf7-4f5c-84b2-856c77db5a6f','10001','2026-05-20','มา','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('0966ad3d-faeb-4aa7-9fe4-6f3497e8db58','10001','2026-06-09','ขาด','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('0a561664-ddbf-4342-a4a2-91aa7775e58f','10002','2026-06-01','มา','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('0acd59c0-ccef-45c4-827c-3687a17ca158','10001','2026-05-19','มา','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('0e4688e3-d212-4184-8912-e5fc61766f24','10005','2026-05-21','มา','2567d140-8dad-40ad-812b-5a17556e765a','2026-06-15 07:34:04','2026-06-15 07:34:04'),('10b9a5b3-9abd-4e7a-8266-0e5e1c0163df','10004','2026-06-09','มา','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('114fbddd-2591-4968-90b2-97754bf95e6a','10001','2026-05-18','มา','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('12e9ed79-5565-492d-b10e-d97429fc327f','10002','2026-06-12','มา','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('133be86e-f302-44d2-8235-25eeaa774c3a','10004','2026-06-01','มา','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('14e7428b-e7d2-4bad-8dee-8d2cd1d80c12','10003','2026-05-21','มา','2567d140-8dad-40ad-812b-5a17556e765a','2026-06-15 07:34:04','2026-06-15 07:34:04'),('164d99fe-72b1-4d90-874e-89cccdbfa0fe','10004','2026-06-11','ขาด','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('168c1e82-70a2-4468-a409-20d0c1ad6158','10002','2026-06-05','มา','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('17ed638a-22fc-4c3d-8c0c-716e3b31e32d','10001','2026-06-05','สาย','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('1894eda8-a0a4-442c-8dd0-721cb5d01731','10005','2026-06-08','สาย','2567d140-8dad-40ad-812b-5a17556e765a','2026-06-15 07:34:04','2026-06-15 07:34:04'),('1a24eda4-9649-4146-9200-b58976703f94','10005','2026-06-01','มา','2567d140-8dad-40ad-812b-5a17556e765a','2026-06-15 07:34:04','2026-06-15 07:34:04'),('1e6b8858-3617-49a5-b393-02a196e6c79c','10001','2026-06-08','มา','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('24ab98b3-db88-492b-9c9f-774afde1f557','10001','2026-06-12','มา','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('2c72b972-dc2f-4c5f-972d-4771ba324245','10001','2026-06-15','มา','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('2cab76be-b81a-4efe-8291-2061e655355f','10001','2026-05-21','มา','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('2cea4b97-992a-4c9b-a6be-c408d18a0798','10002','2026-06-03','มา','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('2d5bab03-23d4-4fad-9e62-4a37f6e57dd5','10002','2026-06-09','มา','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('2df51f7e-8e8d-4fbe-aa1f-6b54e4d7188b','10006','2026-05-27','สาย','34e7d5f3-7e5b-4976-878a-5007807c4706','2026-06-15 07:34:04','2026-06-15 07:34:04'),('2e60cdb4-50b7-4e0e-8431-35370791b378','10004','2026-05-18','มา','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('30775e3e-b9c2-4aa9-a964-512e46dc96ee','10004','2026-06-05','มา','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('339d2dc9-d27d-4d18-96b0-f6396e45a55b','10006','2026-06-15','มา','34e7d5f3-7e5b-4976-878a-5007807c4706','2026-06-15 07:34:04','2026-06-15 07:34:04'),('36c2428a-ae39-4196-972d-d13c90c8d0f0','10003','2026-06-01','มา','2567d140-8dad-40ad-812b-5a17556e765a','2026-06-15 07:34:04','2026-06-15 07:34:04'),('388e9d0d-304d-4666-be71-ffd2885910b4','10006','2026-06-09','ขาด','34e7d5f3-7e5b-4976-878a-5007807c4706','2026-06-15 07:34:04','2026-06-15 07:34:04'),('3a0e2d5b-0369-434e-a1f3-8016d38e96fe','10001','2026-05-26','มา','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('3f6e02a4-e491-4947-8fe5-0bed32cd4ccf','10005','2026-05-20','มา','2567d140-8dad-40ad-812b-5a17556e765a','2026-06-15 07:34:04','2026-06-15 07:34:04'),('4049ee55-ea28-41e5-b1c5-44c2c9a0b20c','10006','2026-05-21','ขาด','34e7d5f3-7e5b-4976-878a-5007807c4706','2026-06-15 07:34:04','2026-06-15 07:34:04'),('49ad499f-8fd8-4a54-b329-226adef619f7','10005','2026-05-29','มา','2567d140-8dad-40ad-812b-5a17556e765a','2026-06-15 07:34:04','2026-06-15 07:34:04'),('4ca3785c-3712-4ead-9fce-a5e8a3a96eb0','10001','2026-05-28','มา','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('4dbf0472-a4e5-44d5-8962-37b7d8b603a1','10005','2026-06-15','มา','2567d140-8dad-40ad-812b-5a17556e765a','2026-06-15 07:34:04','2026-06-15 07:34:04'),('56350811-0163-4b36-a224-300b13f13141','10006','2026-05-22','มา','34e7d5f3-7e5b-4976-878a-5007807c4706','2026-06-15 07:34:04','2026-06-15 07:34:04'),('56967371-38b9-4317-98c4-c6b644ce02ed','10004','2026-05-22','สาย','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('5cc7c121-2748-4121-9611-07c2b898d5e4','10005','2026-05-27','มา','2567d140-8dad-40ad-812b-5a17556e765a','2026-06-15 07:34:04','2026-06-15 07:34:04'),('5e004da3-a5d2-448e-9352-54e9ec9cc1fe','10001','2026-05-29','มา','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('5ebab51f-aec7-4270-977a-ee7b2a922eb9','10005','2026-06-02','มา','2567d140-8dad-40ad-812b-5a17556e765a','2026-06-15 07:34:04','2026-06-15 07:34:04'),('62b1dc81-d30f-4ad8-9387-bc7d2967d9be','10003','2026-05-22','มา','2567d140-8dad-40ad-812b-5a17556e765a','2026-06-15 07:34:04','2026-06-15 07:34:04'),('64340ea2-b128-4c83-a7f3-b8c4fcbdd198','10003','2026-06-02','สาย','2567d140-8dad-40ad-812b-5a17556e765a','2026-06-15 07:34:04','2026-06-15 07:34:04'),('64b4ab27-bdaf-475e-85a8-0996fe3603c1','10005','2026-06-05','มา','2567d140-8dad-40ad-812b-5a17556e765a','2026-06-15 07:34:04','2026-06-15 07:34:04'),('66bc0b0c-af5d-4325-a6ed-316e50acd914','10004','2026-06-03','มา','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('6b8d2330-6945-4d15-9caf-927fc44ea478','10002','2026-05-21','มา','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('6bd36a78-7092-46c2-816a-d1220b943e0b','10002','2026-06-08','ขาด','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('6eed12ed-a545-45a3-8d1b-967b8cf30d21','10001','2026-05-25','มา','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('7059c7dd-aa3c-4f8e-96f4-936e98e53985','10006','2026-05-19','มา','34e7d5f3-7e5b-4976-878a-5007807c4706','2026-06-15 07:34:04','2026-06-15 07:34:04'),('722e8637-d85e-4d35-83dd-0d1709102a99','10002','2026-05-25','มา','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('78a4c74a-d7f4-483d-b0a6-4c12cb5d283f','10001','2026-05-27','มา','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('7d361d94-c44f-4a7d-a1f5-3859d7ef4fd6','10005','2026-06-11','มา','2567d140-8dad-40ad-812b-5a17556e765a','2026-06-15 07:34:04','2026-06-15 07:34:04'),('7fc6ce8a-c95d-4016-a72a-96da9ff4a0b8','10003','2026-05-28','มา','2567d140-8dad-40ad-812b-5a17556e765a','2026-06-15 07:34:04','2026-06-15 07:34:04'),('81747dd6-3af3-4a6d-8e37-c38755f66ecf','10005','2026-05-26','มา','2567d140-8dad-40ad-812b-5a17556e765a','2026-06-15 07:34:04','2026-06-15 07:34:04'),('823cdef9-0aca-4026-81c4-3ef108b6863c','10003','2026-06-05','มา','2567d140-8dad-40ad-812b-5a17556e765a','2026-06-15 07:34:04','2026-06-15 07:34:04'),('8641a7f2-dd43-4680-be16-beab53304f0c','10004','2026-05-29','สาย','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('868cf97c-0117-4fe6-896a-574cc35d33a8','10006','2026-05-20','มา','34e7d5f3-7e5b-4976-878a-5007807c4706','2026-06-15 07:34:04','2026-06-15 07:34:04'),('8704cbbb-e752-4ad1-99dd-2b9c5f2d50c1','10003','2026-05-29','มา','2567d140-8dad-40ad-812b-5a17556e765a','2026-06-15 07:34:04','2026-06-15 07:34:04'),('88e8f4f1-4abd-4768-bd9e-4f8dfba232f9','10002','2026-05-20','สาย','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('8a892110-f303-4692-89ee-73c8de1ddacf','10006','2026-05-26','ขาด','34e7d5f3-7e5b-4976-878a-5007807c4706','2026-06-15 07:34:04','2026-06-15 07:34:04'),('8b328c58-f599-41ad-acc9-ca507b39d231','10005','2026-05-25','มา','2567d140-8dad-40ad-812b-5a17556e765a','2026-06-15 07:34:04','2026-06-15 07:34:04'),('8c14c7e1-0d1a-4577-b1a2-34e984e5aff1','10006','2026-05-18','ขาด','34e7d5f3-7e5b-4976-878a-5007807c4706','2026-06-15 07:34:04','2026-06-15 07:34:04'),('8d1fbfee-1afe-4b05-a0bb-ea6a5788dae9','10006','2026-06-05','มา','34e7d5f3-7e5b-4976-878a-5007807c4706','2026-06-15 07:34:04','2026-06-15 07:34:04'),('929736dc-f781-4f1d-aa75-ece1b609a62a','10001','2026-06-11','มา','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('936c3273-f9bb-4648-9214-8e28306bcc4d','10004','2026-06-02','มา','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('945031e8-1c44-45b6-8831-f478681681b5','10002','2026-06-15','สาย','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('960256d1-cc40-4cac-bd93-83e5bdb424d4','10002','2026-06-11','มา','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('96cd2c7a-25f8-490d-8907-901f43118bcc','10005','2026-05-18','มา','2567d140-8dad-40ad-812b-5a17556e765a','2026-06-15 07:34:04','2026-06-15 07:34:04'),('9b745540-ec4e-4b8d-aad2-09d8d5ed8753','10006','2026-06-04','มา','34e7d5f3-7e5b-4976-878a-5007807c4706','2026-06-15 07:34:04','2026-06-15 07:34:04'),('9ba4eab4-4d05-4fbc-97f3-42c4ec472cfc','10005','2026-06-10','มา','2567d140-8dad-40ad-812b-5a17556e765a','2026-06-15 07:34:04','2026-06-15 07:34:04'),('9c78ec0a-cd45-4a7f-8c3e-30e64bead08b','10001','2026-06-10','มา','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('a070a0be-40a7-43a5-b17f-7aa840c395cf','10004','2026-05-21','ขาด','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('a0b6f797-cc4e-4526-81da-a9328f622dd8','10004','2026-06-04','มา','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('a2e341c5-8da2-48e0-87e3-0c8668852a69','10006','2026-06-08','สาย','34e7d5f3-7e5b-4976-878a-5007807c4706','2026-06-15 07:34:04','2026-06-15 07:34:04'),('a30c8239-3c7d-45ae-9ad8-628164888a01','10004','2026-06-08','มา','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('a5813b4d-9ffd-4521-bd20-ec8aa009f678','10003','2026-05-27','มา','2567d140-8dad-40ad-812b-5a17556e765a','2026-06-15 07:34:04','2026-06-15 07:34:04'),('a6b2581c-1395-4379-99df-0db2767d0c06','10002','2026-06-02','มา','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('a8b5daf8-acc1-4ff9-b806-500aa819810b','10006','2026-05-25','มา','34e7d5f3-7e5b-4976-878a-5007807c4706','2026-06-15 07:34:04','2026-06-15 07:34:04'),('a8ef9206-98f7-47eb-b973-4f0393bf618a','10003','2026-05-19','มา','2567d140-8dad-40ad-812b-5a17556e765a','2026-06-15 07:34:04','2026-06-15 07:34:04'),('ad301d09-8f6c-4cfc-a331-9c5e717708f5','10003','2026-06-03','มา','2567d140-8dad-40ad-812b-5a17556e765a','2026-06-15 07:34:04','2026-06-15 07:34:04'),('ae825ab2-bad8-402d-baf6-fb95f2fdcc24','10003','2026-06-15','มา','2567d140-8dad-40ad-812b-5a17556e765a','2026-06-15 07:34:04','2026-06-15 07:34:04'),('af8bceff-87ca-40c9-baa7-0b487bd2a01e','10006','2026-05-29','สาย','34e7d5f3-7e5b-4976-878a-5007807c4706','2026-06-15 07:34:04','2026-06-15 07:34:04'),('b1cd9ab5-58cd-4888-aa9a-c27531400657','10006','2026-06-01','มา','34e7d5f3-7e5b-4976-878a-5007807c4706','2026-06-15 07:34:04','2026-06-15 07:34:04'),('b1ee9843-3fe1-49ca-b001-ba7db10e77ef','10006','2026-06-03','สาย','34e7d5f3-7e5b-4976-878a-5007807c4706','2026-06-15 07:34:04','2026-06-15 07:34:04'),('b3ccf8ec-9a76-4c4c-bd9f-7af0a635c75c','10003','2026-06-04','มา','2567d140-8dad-40ad-812b-5a17556e765a','2026-06-15 07:34:04','2026-06-15 07:34:04'),('b925f41d-0256-473f-8f28-19950e49a181','10003','2026-06-08','สาย','2567d140-8dad-40ad-812b-5a17556e765a','2026-06-15 07:34:04','2026-06-15 07:34:04'),('c58da3cc-eb22-40aa-a394-fbfdc4b47491','10002','2026-06-04','มา','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('c5fe5416-25a7-40a3-85be-a9f627097ea7','10005','2026-05-22','มา','2567d140-8dad-40ad-812b-5a17556e765a','2026-06-15 07:34:04','2026-06-15 07:34:04'),('c696f5c8-adf3-4781-bc3d-6cfd26aaedc5','10005','2026-06-12','มา','2567d140-8dad-40ad-812b-5a17556e765a','2026-06-15 07:34:04','2026-06-15 07:34:04'),('c86e14a4-9792-47f0-a184-e3b019f6deb5','10003','2026-06-12','มา','2567d140-8dad-40ad-812b-5a17556e765a','2026-06-15 07:34:04','2026-06-15 07:34:04'),('c9e63fdd-fddc-44b0-8030-b98ace53dac9','10002','2026-06-10','ขาด','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('cd688e3f-518d-4a76-8bc9-c7b36cc24d64','10003','2026-06-10','มา','2567d140-8dad-40ad-812b-5a17556e765a','2026-06-15 07:34:04','2026-06-15 07:34:04'),('cd9174c0-292f-4478-b8d2-01cb5b0a4d00','10001','2026-06-03','มา','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('d4109a4e-e747-4a87-b3d9-ed8e0636fb41','10003','2026-05-20','มา','2567d140-8dad-40ad-812b-5a17556e765a','2026-06-15 07:34:04','2026-06-15 07:34:04'),('d5c19088-3bdd-4f9a-b23a-157f31bcc821','10002','2026-05-29','มา','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('d5c47f22-bbd4-4c8b-8f72-d3ff796e2022','10004','2026-06-15','สาย','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('d5e43a3d-51ac-4ce1-8977-4512c3f5c32a','10003','2026-05-26','มา','2567d140-8dad-40ad-812b-5a17556e765a','2026-06-15 07:34:04','2026-06-15 07:34:04'),('d61e507e-0522-4ce5-9bc9-280f2cf04588','10005','2026-05-19','สาย','2567d140-8dad-40ad-812b-5a17556e765a','2026-06-15 07:34:04','2026-06-15 07:34:04'),('d81b1437-d881-4df8-a5db-f7ce81bd0e64','10003','2026-05-18','สาย','2567d140-8dad-40ad-812b-5a17556e765a','2026-06-15 07:34:04','2026-06-15 07:34:04'),('d8f53eb9-33f4-4bf5-81ed-ad531416311e','10004','2026-05-27','ขาด','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('da23225c-eeda-4fe2-b06d-7cdbd1ce6aea','10002','2026-05-28','มา','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('daa97261-a46b-4da4-81f1-c2cbf8f62846','10006','2026-06-02','มา','34e7d5f3-7e5b-4976-878a-5007807c4706','2026-06-15 07:34:04','2026-06-15 07:34:04'),('dbb36eed-af62-4cce-b198-d063f481efcc','10004','2026-05-28','สาย','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('de6df393-11c5-4f01-bde4-481a3d31a13f','10006','2026-05-28','มา','34e7d5f3-7e5b-4976-878a-5007807c4706','2026-06-15 07:34:04','2026-06-15 07:34:04'),('de81ce5d-f0cd-4920-af2e-d6234856ad95','10002','2026-05-26','มา','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('de9c457b-0f8a-49a8-bbe8-cc6973c640ac','10004','2026-05-25','ขาด','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('dfbfa07c-0e98-401d-8d83-5578c6ab22bd','10002','2026-05-22','มา','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('e0511f7a-dbb3-4e4f-8f10-500e8e8eca68','10005','2026-06-09','มา','2567d140-8dad-40ad-812b-5a17556e765a','2026-06-15 07:34:04','2026-06-15 07:34:04'),('e244e2f3-4c98-41a2-8f8d-3e3934dd66c1','10004','2026-05-19','ขาด','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('e3312e2a-a41f-408b-b772-0562089a8bd1','10003','2026-05-25','มา','2567d140-8dad-40ad-812b-5a17556e765a','2026-06-15 07:34:04','2026-06-15 07:34:04'),('e59d0b89-2d0b-4113-85ae-20f013ad5d53','10001','2026-06-02','มา','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('e629e22c-2dc0-4244-ad71-951d640e2321','10003','2026-06-11','มา','2567d140-8dad-40ad-812b-5a17556e765a','2026-06-15 07:34:04','2026-06-15 07:34:04'),('e7e59378-a5b2-4bb4-b7e5-4fd3cb3b5654','10002','2026-05-18','ขาด','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('e98a989c-217d-4b7d-af92-26538bb81d49','10001','2026-05-22','มา','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('ea3512e9-0ec5-49d0-804e-4d573889fad6','10006','2026-06-12','ขาด','34e7d5f3-7e5b-4976-878a-5007807c4706','2026-06-15 07:34:04','2026-06-15 07:34:04'),('f1f14e92-36ce-4e2f-98e1-c621cf4ead8d','10004','2026-05-20','สาย','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('f25f081a-17db-473e-82ca-54442221d23c','10005','2026-06-03','มา','2567d140-8dad-40ad-812b-5a17556e765a','2026-06-15 07:34:04','2026-06-15 07:34:04'),('f419d08b-10e7-48f0-82fc-019568f9e257','10002','2026-05-19','มา','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('f45fc38b-0bbd-4d0c-8e02-9e68a40cd9ed','10006','2026-06-11','สาย','34e7d5f3-7e5b-4976-878a-5007807c4706','2026-06-15 07:34:04','2026-06-15 07:34:04'),('f519e4d4-aed9-49ab-b011-709df7ff3080','10005','2026-06-04','ขาด','2567d140-8dad-40ad-812b-5a17556e765a','2026-06-15 07:34:04','2026-06-15 07:34:04'),('f77d881f-53a4-4922-a3d7-417b5d775615','10003','2026-06-09','มา','2567d140-8dad-40ad-812b-5a17556e765a','2026-06-15 07:34:04','2026-06-15 07:34:04'),('f987ebb3-0261-44a4-b289-d8f76365201f','10006','2026-06-10','มา','34e7d5f3-7e5b-4976-878a-5007807c4706','2026-06-15 07:34:04','2026-06-15 07:34:04'),('fa187959-e243-4f83-a2fe-49c41866aa92','10001','2026-06-01','มา','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('fa1e6633-a914-4b89-b6bd-4add6d6a96d9','10002','2026-05-27','มา','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('fa292a66-c6ae-4cc3-b69b-9c68e42ec492','10004','2026-05-26','ขาด','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04'),('fd31d875-a23f-4295-99bc-7c178e03b1a7','10001','2026-06-04','มา','cfac8a99-f8f7-4007-a884-e2800e1dd5fd','2026-06-15 07:34:04','2026-06-15 07:34:04');
+/*!40000 ALTER TABLE `attendances` ENABLE KEYS */;
+UNLOCK TABLES;
+DROP TABLE IF EXISTS `behavior_records`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `behavior_records` (
+  `RecordID` varchar(36) NOT NULL,
+  `StudentID` varchar(10) NOT NULL,
+  `RuleID` varchar(36) NOT NULL,
+  `RecordDate` date NOT NULL,
+  `Description` text DEFAULT NULL,
+  `RecordedBy` varchar(36) NOT NULL,
+  `Status` varchar(50) NOT NULL DEFAULT 'รออนุมัติ',
+  `Penalty` varchar(100) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`RecordID`),
+  KEY `behavior_records_studentid_foreign` (`StudentID`),
+  KEY `behavior_records_ruleid_foreign` (`RuleID`),
+  KEY `behavior_records_recordedby_foreign` (`RecordedBy`),
+  CONSTRAINT `behavior_records_recordedby_foreign` FOREIGN KEY (`RecordedBy`) REFERENCES `users` (`UserID`) ON DELETE CASCADE,
+  CONSTRAINT `behavior_records_ruleid_foreign` FOREIGN KEY (`RuleID`) REFERENCES `behavior_rules` (`RuleID`) ON DELETE CASCADE,
+  CONSTRAINT `behavior_records_studentid_foreign` FOREIGN KEY (`StudentID`) REFERENCES `students` (`StudentID`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+LOCK TABLES `behavior_records` WRITE;
+/*!40000 ALTER TABLE `behavior_records` DISABLE KEYS */;
+INSERT INTO `behavior_records` VALUES ('0438d1d9-d32b-4b1f-9aa8-2e31fd8f720d','10006','45a1704b-b35f-46ee-bdcd-3b25a735dea4','2026-04-25','พบพฤติกรรม: เอาชายเสื้อออกนอกกางเกง กระโปรง (เครื่องแบบนักเรียนไทยพุทธ) บริเวณโรงอาหาร','2567d140-8dad-40ad-812b-5a17556e765a','อนุมัติแล้ว','ทำงานสาธารณประโยชน์','2026-06-15 07:34:04','2026-06-15 07:34:04'),('141373a0-2511-4ba0-9fbe-a50ea9ac2f7f','10003','499f38de-0ddd-4583-b536-6ae4fe1e50c5','2026-05-02','พบพฤติกรรม: ใช้เครื่องประดับตกแต่งร่างกาย ใบหน้าอย่างไม่เหมาะสม บริเวณโรงอาหาร','941c0e24-0744-485d-87af-67f3eaa3523c','รออนุมัติ','ทำงานสาธารณประโยชน์','2026-06-15 07:34:04','2026-06-15 07:34:04'),('155f97cf-a55b-4305-b95a-050f664298e0','10005','da675c38-35b8-428f-b61e-5a5d74bba73c','2026-05-08','พบพฤติกรรม: ลักขโมยและมีส่วนร่วมในการลักขโมยของผู้อื่นมาเป็นตนโดยเจตนา บริเวณสนาม','941c0e24-0744-485d-87af-67f3eaa3523c','อนุมัติแล้ว',NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('15d03ff9-6c54-490a-8b9d-3c834b85440f','10004','3a708ff2-b5a3-4203-afcb-0ed6c6012666','2026-05-18','พบพฤติกรรม: กล่าวเท็จ ช่วยเหลือ ปกปิด ผู้กระทำความผิดอันเกิดความเสียหายต่อผู้อื่นและส่วนรวม บริเวณโรงอาหาร','2567d140-8dad-40ad-812b-5a17556e765a','อยู่ในระหว่างโต้แย้ง','ทำความสะอาด','2026-06-15 07:34:04','2026-06-15 07:34:04'),('1c0c5daa-f576-45d3-9fd5-e6936ecd9069','10002','af0c4548-dfc3-4d8b-ab8f-99b191919a60','2026-04-28','พบพฤติกรรม: ไม่สำรวมกิริยามารยาท นอกบริเวณโรงเรียนขณะอยู่ในเครื่องแบบนักเรียน บริเวณห้องเรียน','941c0e24-0744-485d-87af-67f3eaa3523c','อนุมัติแล้ว','ทำงานสาธารณประโยชน์','2026-06-15 07:34:04','2026-06-15 07:34:04'),('1c5b7b39-becb-4f84-b377-446b214d53c4','10004','fb90562b-2908-4ee9-b691-b42e7a59c5f6','2026-05-17','นักเรียนแสดงพฤติกรรมที่ดี: ช่วยเหลือเพื่อน/ผู้อื่น','941c0e24-0744-485d-87af-67f3eaa3523c','อนุมัติแล้ว',NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('313572ce-9e4e-4bd1-8ec4-ab22c4c1f66f','10001','df3cc611-5f14-42b2-9c74-b0619f814465','2026-04-26','พบพฤติกรรม: หลีกเลี่ยงการปฏิบัติกิจกรรมหน้าเสาธงในตอนเช้า บริเวณโรงอาหาร','941c0e24-0744-485d-87af-67f3eaa3523c','อนุมัติแล้ว','ทำความสะอาด','2026-06-15 07:34:04','2026-06-15 07:34:04'),('33d399bc-e31b-426e-bcca-e26995a58a34','10003','f0a4663b-d2d0-4d53-8ce1-3e7c0699e4ae','2026-05-16','พบพฤติกรรม: เสพสารเสพติด เช่น บุหรี่ กัญชา ยาบ้า หรืออุปกรณ์ในการเสพ มีไว้ในครอบครองหรือจำหน่าย บริเวณห้องเรียน','941c0e24-0744-485d-87af-67f3eaa3523c','อนุมัติแล้ว','ทำงานสาธารณประโยชน์','2026-06-15 07:34:04','2026-06-15 07:34:04'),('3a033f06-6b2c-4f1e-a6c9-f7f08a311a48','10006','77897bff-7c55-4a99-8b94-b5d516843478','2026-05-08','พบพฤติกรรม: ก่อเหตุทะเลาะวิวาททั่วไป บริเวณโรงอาหาร','941c0e24-0744-485d-87af-67f3eaa3523c','อนุมัติแล้ว',NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('3bbd5960-6442-45ea-b352-e116057209db','10004','8379cc90-132e-487a-b38f-52fe3ec0748e','2026-05-01','พบพฤติกรรม: แต่งกายผิดระเบียบ บริเวณสนาม','941c0e24-0744-485d-87af-67f3eaa3523c','อนุมัติแล้ว','ทำงานสาธารณประโยชน์','2026-06-15 07:34:04','2026-06-15 07:34:04'),('417fea60-ddd3-46b6-89fb-e5c9d551b059','10003','df24847d-4ca5-4dcd-b06d-e5820d101460','2026-06-03','นักเรียนแสดงพฤติกรรมที่ดี: ชนะการแข่งขัน/ตัวแทนโรงเรียน','941c0e24-0744-485d-87af-67f3eaa3523c','อนุมัติแล้ว',NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('4feba19f-be55-4dc6-9ed3-9d6fc4e3e6c9','10006','2a4698bb-acda-4545-8a02-819654d49bcf','2026-04-21','พบพฤติกรรม: ขีดเขียน ฝาผนัง โต๊ะ เก้าอี้ ในห้องส้วม ห้องเรียน และอาคารประกอบอื่น ๆ บริเวณห้องเรียน','941c0e24-0744-485d-87af-67f3eaa3523c','รออนุมัติ','ทำความสะอาด','2026-06-15 07:34:04','2026-06-15 07:34:04'),('528a558a-1155-4353-b6a2-015fe0e0081d','10006','2a0a75f6-62d2-493b-a7fa-206346cb0490','2026-05-20','นักเรียนแสดงพฤติกรรมที่ดี: ความประพฤติดีเด่นประจำเดือน','941c0e24-0744-485d-87af-67f3eaa3523c','อนุมัติแล้ว',NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('54c801ef-cf45-4f0c-a996-5c4181337c11','10001','499f38de-0ddd-4583-b536-6ae4fe1e50c5','2026-06-07','พบพฤติกรรม: ใช้เครื่องประดับตกแต่งร่างกาย ใบหน้าอย่างไม่เหมาะสม บริเวณหน้าโรงเรียน','941c0e24-0744-485d-87af-67f3eaa3523c','รออนุมัติ','ทำงานสาธารณประโยชน์','2026-06-15 07:34:04','2026-06-15 07:34:04'),('5ce82134-96bf-4914-ac31-12e3197784d3','10005','a1c6279d-f8f7-413c-8d71-716ad288c43a','2026-04-23','พบพฤติกรรม: ประพฤติผิดในทางชู้สาว ละเมิดทางเพศ ก่อนวัยอันควร บริเวณโรงอาหาร','2567d140-8dad-40ad-812b-5a17556e765a','อยู่ในระหว่างโต้แย้ง',NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('5ef64e4f-2938-4d2c-b378-4b56abde2314','10001','df24847d-4ca5-4dcd-b06d-e5820d101460','2026-05-16','นักเรียนแสดงพฤติกรรมที่ดี: ชนะการแข่งขัน/ตัวแทนโรงเรียน','941c0e24-0744-485d-87af-67f3eaa3523c','อนุมัติแล้ว',NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('8b0dc132-d984-444b-a104-2fcf3a51e3f6','10005','8b3c082a-4fc2-4a93-9771-953e804baa34','2026-06-13','นักเรียนแสดงพฤติกรรมที่ดี: ไม่มีบันทึกพฤติกรรมเชิงลบทั้งภาคเรียน','941c0e24-0744-485d-87af-67f3eaa3523c','อนุมัติแล้ว',NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('8ccb8cdd-b5c3-423d-ba91-23392188dd0f','10002','499f38de-0ddd-4583-b536-6ae4fe1e50c5','2026-06-06','พบพฤติกรรม: ใช้เครื่องประดับตกแต่งร่างกาย ใบหน้าอย่างไม่เหมาะสม บริเวณห้องเรียน','2567d140-8dad-40ad-812b-5a17556e765a','อนุมัติแล้ว','ทำความสะอาด','2026-06-15 07:34:04','2026-06-15 07:34:04'),('9138b10f-e111-40fb-b7cb-f48f46f5daa2','10002','8b3c082a-4fc2-4a93-9771-953e804baa34','2026-05-29','นักเรียนแสดงพฤติกรรมที่ดี: ไม่มีบันทึกพฤติกรรมเชิงลบทั้งภาคเรียน','941c0e24-0744-485d-87af-67f3eaa3523c','อนุมัติแล้ว',NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('9aba6592-309f-465b-aefd-492cc9e45f21','10004','8b3c082a-4fc2-4a93-9771-953e804baa34','2026-05-28','นักเรียนแสดงพฤติกรรมที่ดี: ไม่มีบันทึกพฤติกรรมเชิงลบทั้งภาคเรียน','941c0e24-0744-485d-87af-67f3eaa3523c','อนุมัติแล้ว',NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('aef219e0-3f6b-4f71-b142-664160dc6803','10002','fb90562b-2908-4ee9-b691-b42e7a59c5f6','2026-06-02','นักเรียนแสดงพฤติกรรมที่ดี: ช่วยเหลือเพื่อน/ผู้อื่น','941c0e24-0744-485d-87af-67f3eaa3523c','อนุมัติแล้ว',NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('c859da41-1f58-4e58-ba44-81bd75bf35c2','10003','6afb92d5-e72d-4a99-ad87-b3556fe175f6','2026-05-06','พบพฤติกรรม: เล่นประทัดหรือดอกไม้ไฟภายในโรงเรียน บริเวณสนาม','2567d140-8dad-40ad-812b-5a17556e765a','อนุมัติแล้ว','แจ้งผู้ปกครอง','2026-06-15 07:34:04','2026-06-15 07:34:04'),('cd99f8e0-6bf7-49d4-b24c-ae2bd844a633','10001','6677fea6-1abd-4b22-94b6-d835d291e913','2026-05-30','พบพฤติกรรม: หยอกล้อ เล่นกันรุนแรง จนเกิดบาดแผลหรือบาดเจ็บ บริเวณห้องเรียน','2567d140-8dad-40ad-812b-5a17556e765a','อนุมัติแล้ว','แจ้งผู้ปกครอง','2026-06-15 07:34:04','2026-06-15 07:34:04'),('d823eb90-8954-4884-815b-fef7ff649ae3','10005','ec491ab7-4dcb-4520-9602-c5b733eb815f','2026-06-03','นักเรียนแสดงพฤติกรรมที่ดี: ช่วยเหลืองานโรงเรียน','941c0e24-0744-485d-87af-67f3eaa3523c','อนุมัติแล้ว',NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('daa4c228-9dfc-4d4b-97b4-0d483f069ada','10004','2a4698bb-acda-4545-8a02-819654d49bcf','2026-05-18','พบพฤติกรรม: ขีดเขียน ฝาผนัง โต๊ะ เก้าอี้ ในห้องส้วม ห้องเรียน และอาคารประกอบอื่น ๆ บริเวณห้องเรียน','941c0e24-0744-485d-87af-67f3eaa3523c','รออนุมัติ',NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('dc02817f-e80f-45c4-8dda-a8caed288a5c','10003','fb90562b-2908-4ee9-b691-b42e7a59c5f6','2026-05-23','นักเรียนแสดงพฤติกรรมที่ดี: ช่วยเหลือเพื่อน/ผู้อื่น','941c0e24-0744-485d-87af-67f3eaa3523c','อนุมัติแล้ว',NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('e4d29506-dada-4621-993d-8b4c6b37cacf','10001','8b12fbca-37f5-404b-879b-00d146797fe1','2026-05-25','นักเรียนแสดงพฤติกรรมที่ดี: เข้าร่วมกิจกรรมพิเศษ','941c0e24-0744-485d-87af-67f3eaa3523c','อนุมัติแล้ว',NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('e627b624-e14c-497f-a36b-55288783223a','10001','2311b6d0-87f1-463b-8ebb-4f88b1794670','2026-06-15','Test mobile recording','f476b50c-fb7e-4ed2-a0bb-9f7b41fd9575','อนุมัติแล้ว',NULL,'2026-06-15 08:17:54','2026-06-15 08:22:22'),('e7bd14eb-3cdc-4a0a-b5dd-03df4fe20cf6','10006','df24847d-4ca5-4dcd-b06d-e5820d101460','2026-06-11','นักเรียนแสดงพฤติกรรมที่ดี: ชนะการแข่งขัน/ตัวแทนโรงเรียน','941c0e24-0744-485d-87af-67f3eaa3523c','อนุมัติแล้ว',NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('e88e3ba7-df79-4dc6-9a6f-6ec2b6924e11','10002','3a708ff2-b5a3-4203-afcb-0ed6c6012666','2026-05-22','พบพฤติกรรม: กล่าวเท็จ ช่วยเหลือ ปกปิด ผู้กระทำความผิดอันเกิดความเสียหายต่อผู้อื่นและส่วนรวม บริเวณโรงอาหาร','941c0e24-0744-485d-87af-67f3eaa3523c','รออนุมัติ','แจ้งผู้ปกครอง','2026-06-15 07:34:04','2026-06-15 07:34:04'),('fd2366c7-6fd2-4454-87e0-e83e2ef8f41a','10005','1c0cb2b4-65fd-4e63-a550-b81c99461dbf','2026-05-20','พบพฤติกรรม: มีพฤติกรรมลามกอนาจารนักเรียนด้วยกัน บริเวณหน้าโรงเรียน','941c0e24-0744-485d-87af-67f3eaa3523c','รออนุมัติ','แจ้งผู้ปกครอง','2026-06-15 07:34:04','2026-06-15 07:34:04');
+/*!40000 ALTER TABLE `behavior_records` ENABLE KEYS */;
+UNLOCK TABLES;
+DROP TABLE IF EXISTS `appeals`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `appeals` (
+  `AppealID` varchar(36) NOT NULL,
+  `RecordID` varchar(36) NOT NULL,
+  `StudentID` varchar(10) NOT NULL,
+  `Reason` text NOT NULL,
+  `EvidencePath` varchar(255) DEFAULT NULL,
+  `AppealDate` date NOT NULL,
+  `Status` varchar(50) NOT NULL DEFAULT 'รอตรวจสอบ',
+  `ReviewerID` varchar(36) DEFAULT NULL,
+  `ReviewDate` date DEFAULT NULL,
+  `ReviewNotes` text DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`AppealID`),
+  KEY `appeals_recordid_foreign` (`RecordID`),
+  KEY `appeals_studentid_foreign` (`StudentID`),
+  KEY `appeals_reviewerid_foreign` (`ReviewerID`),
+  CONSTRAINT `appeals_recordid_foreign` FOREIGN KEY (`RecordID`) REFERENCES `behavior_records` (`RecordID`) ON DELETE CASCADE,
+  CONSTRAINT `appeals_reviewerid_foreign` FOREIGN KEY (`ReviewerID`) REFERENCES `users` (`UserID`) ON DELETE SET NULL,
+  CONSTRAINT `appeals_studentid_foreign` FOREIGN KEY (`StudentID`) REFERENCES `students` (`StudentID`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+LOCK TABLES `appeals` WRITE;
+/*!40000 ALTER TABLE `appeals` DISABLE KEYS */;
+INSERT INTO `appeals` VALUES ('bbb38a98-31e2-4321-93f0-9a4e8499805d','15d03ff9-6c54-490a-8b9d-3c834b85440f','10004','ข้าพเจ้าไม่ได้กระทำการดังกล่าว เนื่องจากในวันเกิดเหตุข้าพเจ้าอยู่ที่ห้องสมุดตลอดช่วงเวลานั้น ขอให้ตรวจสอบกล้องวงจรปิดเพื่อยืนยัน',NULL,'2026-05-25','รอตรวจสอบ',NULL,NULL,NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04'),('e5b3d02b-b5c7-4824-b497-b75d59e084da','5ce82134-96bf-4914-ac31-12e3197784d3','10005','ข้าพเจ้าไม่ได้กระทำการดังกล่าว เนื่องจากในวันเกิดเหตุข้าพเจ้าอยู่ที่ห้องสมุดตลอดช่วงเวลานั้น ขอให้ตรวจสอบกล้องวงจรปิดเพื่อยืนยัน',NULL,'2026-05-22','ยกเลิกคำร้อง',NULL,NULL,NULL,'2026-06-15 07:34:04','2026-06-15 07:34:04');
+/*!40000 ALTER TABLE `appeals` ENABLE KEYS */;
+UNLOCK TABLES;
+DROP TABLE IF EXISTS `informant_reports`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `informant_reports` (
+  `ReportID` varchar(36) NOT NULL,
+  `Title` varchar(100) DEFAULT NULL,
+  `Category` varchar(50) DEFAULT NULL,
+  `Description` text NOT NULL,
+  `IsAnonymous` tinyint(1) NOT NULL DEFAULT 0,
+  `ReporterName` varchar(100) DEFAULT NULL,
+  `ReporterID` varchar(36) DEFAULT NULL,
+  `StudentID` varchar(10) DEFAULT NULL,
+  `EvidencePath` varchar(255) DEFAULT NULL,
+  `Status` varchar(50) NOT NULL DEFAULT 'เรื่องใหม่',
+  `Remarks` text DEFAULT NULL,
+  `ReportDate` datetime DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`ReportID`),
+  KEY `informant_reports_reporterid_foreign` (`ReporterID`),
+  KEY `informant_reports_studentid_foreign` (`StudentID`),
+  CONSTRAINT `informant_reports_reporterid_foreign` FOREIGN KEY (`ReporterID`) REFERENCES `users` (`UserID`) ON DELETE SET NULL,
+  CONSTRAINT `informant_reports_studentid_foreign` FOREIGN KEY (`StudentID`) REFERENCES `students` (`StudentID`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+LOCK TABLES `informant_reports` WRITE;
+/*!40000 ALTER TABLE `informant_reports` DISABLE KEYS */;
+INSERT INTO `informant_reports` VALUES ('0717f2d0-3b14-42a8-a55c-dbd9b2eb8201','พกพาสิ่งของมีคมเข้าโรงเรียน','อื่นๆ','นักเรียนนำสิ่งของมีคมเข้าโรงเรียน พบในกระเป๋านักเรียนชั้น ม.3',1,NULL,NULL,'10006',NULL,'รอดำเนินการ',NULL,'2026-06-15 14:34:04','2026-06-13 07:34:04','2026-06-13 07:34:04'),('149d4968-b370-47db-a78a-8446f46ec0e8','ทุจริตนำโทรศัพท์เข้าห้องสอบ','อื่นๆ','มีนักเรียนนำโทรศัพท์เข้าห้องสอบ สังเกตเห็นในช่วงสอบกลางภาค',0,'ด.ช. เก่ง เรียนดี','stud-uuid-1','10002',NULL,'รอดำเนินการ',NULL,'2026-06-15 14:34:04','2026-06-14 07:34:04','2026-06-14 07:34:04'),('1e10320e-216d-4c88-9766-8fddc580e39d','เหตุทะเลาะวิวาทบริเวณโรงอาหาร','ทะเลาะวิวาท','พบการทะเลาะวิวาทระหว่างนักเรียนต่างห้อง บริเวณโรงอาหาร',1,NULL,NULL,'10003',NULL,'กำลังตรวจสอบ',NULL,'2026-06-15 14:34:04','2026-06-10 07:34:04','2026-06-10 07:34:04'),('287a0a84-472d-42b7-9fea-0577278f97ad','เหตุลักขโมยทรัพย์สินในห้องเรียน ม.1/1','อื่นๆ','มีการลักขโมยของในห้องเรียน ม.1/1 หลายครั้งในสัปดาห์นี้',0,'ด.ช. เก่ง เรียนดี','stud-uuid-1','10001',NULL,'กำลังตรวจสอบ',NULL,'2026-06-15 14:34:04','2026-06-11 07:34:04','2026-06-11 07:34:04'),('319fd0a1-c8c9-4137-bf5a-bdf25d0eca5e','พฤติกรรมสูบบุหรี่หลังโรงเรียน','สิ่งเสพติดและอบายมุข','พบนักเรียนกลุ่มหนึ่งสูบบุหรี่บริเวณหลังโรงเรียน ช่วงพักกลางวัน ประมาณ 3–4 คน',1,NULL,NULL,'10004',NULL,'กำลังตรวจสอบ',NULL,'2026-06-15 14:34:04','2026-06-12 07:34:04','2026-06-12 07:34:04'),('63337092-e21f-4180-a8e7-954b4183dd25','นักเรียนลักลอบออกนอกโรงเรียน','หนีเรียน','นักเรียนชั้น ม.2 กลุ่มหนึ่งมักออกนอกโรงเรียนในช่วงพัก โดยไม่ได้รับอนุญาต',0,'นายซูไฮมี มะเซ็ง','2567d140-8dad-40ad-812b-5a17556e765a','10005',NULL,'ดำเนินการแล้ว',NULL,'2026-06-15 14:34:04','2026-05-31 07:34:04','2026-05-31 07:34:04');
+/*!40000 ALTER TABLE `informant_reports` ENABLE KEYS */;
+UNLOCK TABLES;
+DROP TABLE IF EXISTS `messages`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `messages` (
+  `MessageID` varchar(36) NOT NULL,
+  `SenderID` varchar(36) NOT NULL,
+  `ReceiverID` varchar(36) NOT NULL,
+  `Content` text NOT NULL,
+  `SentDate` datetime NOT NULL,
+  `IsRead` tinyint(1) NOT NULL DEFAULT 0,
+  `AttachmentDir` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`MessageID`),
+  KEY `messages_senderid_foreign` (`SenderID`),
+  KEY `messages_receiverid_foreign` (`ReceiverID`),
+  CONSTRAINT `messages_receiverid_foreign` FOREIGN KEY (`ReceiverID`) REFERENCES `users` (`UserID`) ON DELETE CASCADE,
+  CONSTRAINT `messages_senderid_foreign` FOREIGN KEY (`SenderID`) REFERENCES `users` (`UserID`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+LOCK TABLES `messages` WRITE;
+/*!40000 ALTER TABLE `messages` DISABLE KEYS */;
+/*!40000 ALTER TABLE `messages` ENABLE KEYS */;
+UNLOCK TABLES;
+DROP TABLE IF EXISTS `prayer_records`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `prayer_records` (
+  `PrayerRecordID` varchar(36) NOT NULL,
+  `StudentID` varchar(10) NOT NULL,
+  `RecordDate` date NOT NULL,
+  `RecordTime` time NOT NULL,
+  `Period` varchar(20) NOT NULL,
+  `Status` varchar(50) NOT NULL,
+  `RecordedBy` varchar(36) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`PrayerRecordID`),
+  UNIQUE KEY `prayer_records_studentid_recorddate_period_unique` (`StudentID`,`RecordDate`,`Period`),
+  KEY `prayer_records_recordedby_foreign` (`RecordedBy`),
+  CONSTRAINT `prayer_records_recordedby_foreign` FOREIGN KEY (`RecordedBy`) REFERENCES `users` (`UserID`) ON DELETE CASCADE,
+  CONSTRAINT `prayer_records_studentid_foreign` FOREIGN KEY (`StudentID`) REFERENCES `students` (`StudentID`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+LOCK TABLES `prayer_records` WRITE;
+/*!40000 ALTER TABLE `prayer_records` DISABLE KEYS */;
+/*!40000 ALTER TABLE `prayer_records` ENABLE KEYS */;
+UNLOCK TABLES;
+DROP TABLE IF EXISTS `prayer_corrections`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `prayer_corrections` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `StudentID` varchar(10) NOT NULL,
+  `Year` int(11) NOT NULL,
+  `Month` int(11) NOT NULL,
+  `Status` varchar(50) NOT NULL DEFAULT 'แก้ละหมาดแล้ว',
+  `RecordedBy` varchar(36) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `prayer_corrections_studentid_year_month_unique` (`StudentID`,`Year`,`Month`),
+  KEY `prayer_corrections_recordedby_foreign` (`RecordedBy`),
+  CONSTRAINT `prayer_corrections_recordedby_foreign` FOREIGN KEY (`RecordedBy`) REFERENCES `users` (`UserID`) ON DELETE CASCADE,
+  CONSTRAINT `prayer_corrections_studentid_foreign` FOREIGN KEY (`StudentID`) REFERENCES `students` (`StudentID`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+LOCK TABLES `prayer_corrections` WRITE;
+/*!40000 ALTER TABLE `prayer_corrections` DISABLE KEYS */;
+/*!40000 ALTER TABLE `prayer_corrections` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+
+SET FOREIGN_KEY_CHECKS=0;
+ALTER TABLE `parents` ADD CONSTRAINT `parents_studentid_foreign` FOREIGN KEY (`StudentID`) REFERENCES `students` (`StudentID`) ON DELETE SET NULL;
+SET FOREIGN_KEY_CHECKS=1;
