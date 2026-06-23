@@ -26,4 +26,4 @@ ENV LOG_CHANNEL stderr
 # Allow composer to run as root
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
-CMD ["sh", "-c", "php artisan migrate --force && /start.sh"]
+CMD ["sh", "-c", "php artisan migrate --force && php artisan db:seed --force && /start.sh"]
