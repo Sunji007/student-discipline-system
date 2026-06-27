@@ -152,15 +152,15 @@
 
         /* ── Card Header ── */
         .card-header {
-            padding: 2.5rem 2.5rem 1.75rem;
+            padding: 1.5rem 2rem 1.25rem;
             text-align: center;
             border-bottom: 1px solid var(--border);
         }
 
         .school-emblem {
-            width: 80px;
+            width: 62px;
             height: auto;
-            margin: 0 auto 1.1rem;
+            margin: 0 auto 0.75rem;
             display: block;
             filter: drop-shadow(0 4px 14px hsla(270, 80%, 52%, 0.22));
             transition: transform 0.4s var(--ease-expo);
@@ -169,41 +169,41 @@
 
         .card-header h1 {
             color: var(--text);
-            font-size: 1.05rem;
+            font-size: 0.95rem;
             font-weight: 700;
-            line-height: 1.55;
+            line-height: 1.5;
         }
         .card-header p {
             color: var(--text-muted);
-            font-size: 0.82rem;
+            font-size: 0.78rem;
             font-weight: 500;
-            margin-top: 0.3rem;
+            margin-top: 0.2rem;
         }
 
         /* Purple divider */
         .card-divider {
             height: 2px;
-            width: 48px;
+            width: 40px;
             background: linear-gradient(90deg, hsl(270,80%,52%), hsl(310,70%,62%));
             border-radius: 99px;
-            margin: 1rem auto 0;
+            margin: 0.75rem auto 0;
         }
 
         /* ── Card Body ── */
-        .card-body { padding: 2rem 2.5rem 2.5rem; }
+        .card-body { padding: 1.25rem 2rem 1.75rem; }
 
         /* ── Login Title ── */
         .login-title {
-            font-size: 1.5rem;
+            font-size: 1.25rem;
             font-weight: 800;
             color: var(--text);
             letter-spacing: -0.02em;
-            margin-bottom: 0.35rem;
+            margin-bottom: 0.2rem;
         }
         .login-subtitle {
-            font-size: 0.83rem;
+            font-size: 0.8rem;
             color: var(--text-muted);
-            margin-bottom: 1.75rem;
+            margin-bottom: 1.25rem;
             font-weight: 400;
         }
 
@@ -229,7 +229,7 @@
         }
 
         /* ── Form groups ── */
-        .form-group { margin-bottom: 1.25rem; }
+        .form-group { margin-bottom: 0.9rem; }
 
         .form-group label {
             display: block;
@@ -260,7 +260,7 @@
         .form-group input[type="text"],
         .form-group input[type="password"] {
             width: 100%;
-            padding: 0.82rem 1rem 0.82rem 2.6rem;
+            padding: 0.65rem 1rem 0.65rem 2.6rem;
             border: 1.5px solid var(--border);
             border-radius: var(--r-sm);
             font-family: 'Sarabun', sans-serif;
@@ -322,7 +322,7 @@
         .toggle-password:active { transform: translateY(-50%) scale(0.85); }
 
         /* ── Remember me ── */
-        .form-actions { margin-bottom: 1.5rem; }
+        .form-actions { margin-bottom: 1rem; }
         .form-check-remember { display: flex; align-items: center; gap: 0.5rem; }
         .form-check-remember input[type="checkbox"] {
             width: 16px; height: 16px; min-width: 16px;
@@ -342,7 +342,7 @@
         /* ── Login button ── */
         .btn-login {
             width: 100%;
-            padding: 0.9rem 1.5rem;
+            padding: 0.75rem 1.5rem;
             border: none;
             border-radius: var(--r-sm);
             font-family: 'Sarabun', sans-serif;
@@ -386,7 +386,7 @@
         /* ── Footer note ── */
         .card-footer-note {
             text-align: center;
-            margin-top: 1.75rem;
+            margin-top: 1rem;
             font-size: 0.78rem;
             color: var(--text-muted);
             font-weight: 500;
