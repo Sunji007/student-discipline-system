@@ -398,7 +398,7 @@
         </div>
 
         <div class="card-body">
-            <h2 class="login-title" style="font-size: 1.25rem; font-weight: 800; color: var(--text); text-align: center; margin-bottom: 1.5rem; letter-spacing: -0.01em;">เข้าสู่ระบบ</h2>
+            <h2 class="login-title" style="font-size: 1.25rem; font-weight: 800; color: var(--text); text-align: left; margin-bottom: 1.5rem; letter-spacing: -0.01em;">เข้าสู่ระบบ</h2>
             @if ($errors->any())
                 <div class="alert-danger">
                     {{ $errors->first() }}
