@@ -277,7 +277,7 @@
 <body>
 
     <div class="controls">
-        <a href="javascript:history.back()" class="btn btn-back">
+        <a href="javascript:void(0)" onclick="if (window.history.length > 1 && document.referrer) { window.history.back(); } else { window.close(); setTimeout(function() { window.location.href = '{{ route('admin.students.index') }}'; }, 500); }" class="btn btn-back">
             <i class="fas fa-arrow-left"></i> ย้อนกลับ
         </a>
         <button onclick="window.print()" class="btn btn-print">

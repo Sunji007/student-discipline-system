@@ -16,8 +16,14 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
         $middleware->alias([
             'role' => \App\Http\Middleware\CheckRole::class,
+            'permission' => \App\Http\Middleware\CheckPermission::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
+    })
+    ->registered(function ($app) {
+        if (file_exists(base_path('../../public_html'))) {
+            $app->usePublicPath(realpath(base_path('../../public_html')));
+        }
     })->create();

@@ -17,4 +17,15 @@ class User extends Authenticatable {
     public function parent() { return $this->hasOne(ParentGuardian::class, 'UserID', 'UserID'); }
     public function parentGuardian() { return $this->hasOne(ParentGuardian::class, 'UserID', 'UserID'); }
     public function disciplineOfficer() { return $this->hasOne(DisciplineStaff::class, 'UserID', 'UserID'); }
+    
+    public function canAccess(string $module): bool
+    {
+        if (!$this->Role) {
+            return false;
+        }
+        return \App\Models\RolePermission::where('Role', $this->Role)
+            ->where('ModuleName', $module)
+            ->where('CanAccess', 1)
+            ->exists();
+    }
 }

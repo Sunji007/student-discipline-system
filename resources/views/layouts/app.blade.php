@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'ระบบวินัยนักเรียน') — ศิริราษฎร์สามัคคี</title>
+    <link rel="icon" href="{{ asset('images/logo.png') }}" type="image/png">
     {{-- Preconnect: เชื่อมต่อ CDN ล่วงหน้าลด latency --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -197,61 +198,69 @@
             color: rgba(255,255,255,0.35);
         }
 
+        /* ── Nav items (Impeccable v2) ── */
         .nav-item a {
             display: flex;
             align-items: center;
             gap: 0.85rem;
-            padding: 0.7rem 1.5rem;
-            color: rgba(255,255,255,0.68);
+            padding: 0.65rem 1rem 0.65rem 1.25rem;
+            margin: 2px 0.75rem;
+            color: rgba(255,255,255,0.62);
             text-decoration: none;
-            font-size: 0.88rem;
+            font-size: 0.875rem;
             font-weight: 500;
-            transition: var(--transition);
-            border-left: 3px solid transparent;
-            margin: 2px 0;
+            border-radius: 10px;
             position: relative;
+            transition: all 0.2s cubic-bezier(0.4,0,0.2,1);
         }
 
         .nav-item a:hover {
             color: var(--white);
-            background: rgba(255,255,255,0.05);
-            border-left-color: rgba(255,255,255,0.3);
-            padding-left: 1.65rem;
+            background: rgba(255,255,255,0.07);
         }
 
+        /* Impeccable active: indigo pill + left accent */
         .nav-item a.active {
             color: var(--white);
-            background: rgba(255,255,255,0.08);
-            border-left-color: var(--yellow);
+            background: rgba(6, 4, 234, 0.80);
             font-weight: 600;
-            padding-left: 1.65rem;
+            box-shadow: 0 4px 14px rgba(6,4,234,0.35), inset 0 1px 0 rgba(255,255,255,0.12);
+        }
+
+        /* Left accent bar for active */
+        .nav-item a.active::before {
+            content: '';
+            position: absolute;
+            left: -0.75rem;
+            top: 25%; bottom: 25%;
+            width: 3px;
+            border-radius: 0 3px 3px 0;
+            background: #fff;
+            opacity: 0.9;
         }
 
         .nav-item a i {
             width: 18px;
             text-align: center;
-            font-size: 0.95rem;
-            color: rgba(255,255,255,0.5);
-            transition: var(--transition);
+            font-size: 0.92rem;
+            color: rgba(255,255,255,0.45);
+            transition: all 0.2s ease;
             flex-shrink: 0;
         }
 
-        .nav-item a:hover i,
-        .nav-item a.active i {
-            color: var(--yellow);
-            opacity: 1;
-        }
+        .nav-item a:hover i { color: rgba(255,255,255,0.85); }
+        .nav-item a.active i { color: #fff; opacity: 1; }
 
         .nav-badge {
             margin-left: auto;
-            background: var(--yellow-gradient);
-            color: #0f0e34;
-            font-size: 0.68rem;
+            background: var(--orange-gradient);
+            color: #fff;
+            font-size: 0.65rem;
             font-family: 'Outfit', sans-serif;
-            padding: 0.15rem 0.5rem;
-            border-radius: 12px;
+            padding: 0.12rem 0.45rem;
+            border-radius: 10px;
             font-weight: 800;
-            box-shadow: 0 2px 6px rgba(242, 197, 61, 0.3);
+            box-shadow: 0 2px 6px rgba(240,134,24,0.35);
         }
 
         .sidebar-footer {
@@ -435,33 +444,47 @@
             margin-bottom: 2rem;
         }
 
+        /* ── Stat Cards (Impeccable v2) ── */
         .stat-card {
             background: var(--white);
-            border-radius: 12px;
+            border-radius: 14px;
             border: 1px solid var(--border);
-            padding: 1.5rem;
+            padding: 1.5rem 1.5rem 1.25rem;
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             gap: 1.25rem;
             position: relative;
             overflow: hidden;
-            box-shadow: var(--shadow-md);
-            transition: var(--transition);
-        }
-        
-        .stat-card:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
+            box-shadow: 0 2px 8px rgba(6,4,234,0.04), 0 1px 3px rgba(0,0,0,0.03);
+            transition: transform 0.25s cubic-bezier(0.4,0,0.2,1), box-shadow 0.25s cubic-bezier(0.4,0,0.2,1);
         }
 
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(6,4,234,0.08), 0 4px 10px rgba(0,0,0,0.04);
+            border-color: rgba(6,4,234,0.10);
+        }
+
+        /* Subtle shimmer bg on hover */
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0) 60%, rgba(6,4,234,0.025) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+        .stat-card:hover::after { opacity: 1; }
+
+        /* Accent left-border */
         .stat-card::before {
             content: '';
             position: absolute;
             left: 0; top: 0; bottom: 0;
             width: 4px;
+            border-radius: 0 2px 2px 0;
         }
-
-        /* Accent left-border ตาม variant */
         .stat-card.navy::before,
         .stat-card.primary::before { background: var(--primary-gradient); }
         .stat-card.gold::before    { background: var(--yellow-gradient); }
@@ -469,31 +492,55 @@
         .stat-card.green::before   { background: var(--green-gradient); }
         .stat-card.orange::before  { background: var(--orange-gradient); }
 
+        /* Gradient icon square (Impeccable v2) */
         .stat-icon {
-            width: 48px; height: 48px;
-            border-radius: 12px;
+            width: 52px; height: 52px;
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.25rem;
+            font-size: 1.3rem;
             flex-shrink: 0;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
-            transition: var(--transition);
+            transition: transform 0.25s ease;
         }
+        .stat-card:hover .stat-icon { transform: scale(1.08) rotate(-3deg); }
 
         .stat-icon.navy,
-        .stat-icon.primary { background: rgba(6,4,234,0.06); color: var(--primary); }
-        .stat-icon.gold    { background: rgba(242,197,61,0.08);  color: #c99307; }
-        .stat-icon.red     { background: rgba(189,39,67,0.06); color: var(--red); }
-        .stat-icon.green   { background: rgba(16,185,129,0.06); color: #059669; }
-        .stat-icon.orange  { background: rgba(240,134,24,0.06); color: var(--orange); }
+        .stat-icon.primary {
+            background: linear-gradient(135deg, #4c4bf7 0%, #0604EA 100%);
+            color: #fff;
+            box-shadow: 0 4px 14px rgba(6,4,234,0.28);
+        }
+        .stat-icon.gold {
+            background: linear-gradient(135deg, #F2C53D 0%, #d97706 100%);
+            color: #fff;
+            box-shadow: 0 4px 14px rgba(242,197,61,0.28);
+        }
+        .stat-icon.red {
+            background: linear-gradient(135deg, #e11d48 0%, #BD2743 100%);
+            color: #fff;
+            box-shadow: 0 4px 14px rgba(189,39,67,0.28);
+        }
+        .stat-icon.green {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: #fff;
+            box-shadow: 0 4px 14px rgba(16,185,129,0.28);
+        }
+        .stat-icon.orange {
+            background: linear-gradient(135deg, #F08618 0%, #f59e0b 100%);
+            color: #fff;
+            box-shadow: 0 4px 14px rgba(240,134,24,0.28);
+        }
+
+        .stat-info { flex: 1; min-width: 0; }
 
         .stat-info .stat-value {
-            font-size: 1.85rem;
+            font-size: 1.9rem;
             font-family: 'Outfit', sans-serif;
             font-weight: 800;
             color: #0f0e34;
             line-height: 1.1;
+            letter-spacing: -0.02em;
         }
 
         .stat-info .stat-label {
@@ -502,6 +549,21 @@
             margin-top: 0.3rem;
             font-weight: 500;
         }
+
+        /* Trend badge (เพิ่มใน v2) */
+        .stat-trend {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.2rem;
+            font-size: 0.72rem;
+            font-weight: 600;
+            margin-top: 0.4rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: 20px;
+        }
+        .stat-trend.up   { background: rgba(16,185,129,0.10); color: #059669; }
+        .stat-trend.down { background: rgba(189,39,67,0.08);  color: #BD2743; }
+        .stat-trend.neu  { background: rgba(107,114,128,0.08); color: #6b7280; }
 
         /* ================================================
            TABLES
@@ -528,14 +590,19 @@
 
         tbody td {
             padding: 0.9rem 1.25rem;
-            border-bottom: 1px solid #f2f2fa;
+            border-bottom: 1px solid #f0f0f8;
             color: var(--text);
             vertical-align: middle;
+            transition: background 0.15s ease;
         }
 
         tbody tr:last-child td { border-bottom: none; }
 
-        tbody tr:hover td { background: #fafafc; }
+        /* Impeccable v2: smooth row hover */
+        tbody tr { transition: background 0.15s ease; }
+        tbody tr:hover td {
+            background: linear-gradient(90deg, rgba(6,4,234,0.025) 0%, rgba(6,4,234,0.012) 100%);
+        }
 
         /* ================================================
            BADGES (Gills & Soft Backgrounds)
@@ -925,6 +992,88 @@
             .responsive-grid-3 {
                 grid-template-columns: 1fr !important;
             }
+        }
+
+        /* ============================================================
+           IMPECCABLE v2 — Additional Enhancements
+        ============================================================ */
+
+        /* Card: refined hover border glow */
+        .card:hover {
+            box-shadow: var(--shadow-lg);
+            border-color: rgba(6,4,234,0.10);
+        }
+
+        /* Card header: cleaner look */
+        .card-header-bar {
+            background: linear-gradient(180deg, #fcfcff 0%, #f8f8fd 100%);
+        }
+        .card-header-bar h3 {
+            font-size: 0.95rem;
+            letter-spacing: 0.01em;
+        }
+
+        /* Topbar: slightly more visible shadow */
+        .topbar {
+            box-shadow: 0 1px 0 rgba(0,0,0,0.04), 0 4px 20px -8px rgba(6,4,234,0.06);
+        }
+
+        /* Topbar title accent bar: gradient */
+        .topbar-title::before {
+            background: linear-gradient(180deg, hsl(241,90%,63%) 0%, hsl(240,95%,47%) 100%);
+            width: 3px;
+            height: 18px;
+            border-radius: 2px;
+        }
+
+        /* Btn-primary: shimmer on hover */
+        .btn-primary {
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-primary::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(105deg, transparent 35%, rgba(255,255,255,0.18) 50%, transparent 65%);
+            transform: translateX(-100%);
+            transition: transform 0.5s ease;
+        }
+        .btn-primary:hover::after { transform: translateX(100%); }
+
+        /* Page header: add divider */
+        .page-header {
+            padding-bottom: 1.25rem;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 1.75rem;
+        }
+        .page-header h2 {
+            font-size: 1.4rem;
+            letter-spacing: -0.01em;
+        }
+
+        /* Badge: slightly rounder */
+        .badge {
+            border-radius: 20px;
+            padding: 0.2rem 0.6rem;
+            font-size: 0.73rem;
+        }
+
+        /* Sidebar footer logout: refined */
+        .btn-logout {
+            border-radius: 10px;
+            font-size: 0.85rem;
+            letter-spacing: 0.01em;
+        }
+
+        /* Alert: rounded more */
+        .alert {
+            border-radius: 10px;
+            animation: alertSlideIn 0.35s cubic-bezier(0.16,1,0.3,1) both;
+        }
+        @keyframes alertSlideIn {
+            from { opacity:0; transform: translateY(-8px); }
+            to   { opacity:1; transform: translateY(0); }
         }
     </style>
 

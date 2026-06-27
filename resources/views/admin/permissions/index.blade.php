@@ -99,7 +99,12 @@ $moduleLabels = [
     cursor: pointer;
 }
 
-.toggle-switch input { display: none; }
+.toggle-switch input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
 
 .toggle-track {
     width: 40px;
@@ -124,7 +129,7 @@ $moduleLabels = [
 }
 
 .toggle-switch input:checked + .toggle-track {
-    background: var(--navy);
+    background: var(--primary, #0604EA);
 }
 
 .toggle-switch input:checked + .toggle-track::after {

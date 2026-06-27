@@ -269,29 +269,6 @@
                     <h3><i class="fas fa-keyboard"></i> เครื่องยิง Barcode (USB)</h3>
                 </div>
                 <div style="padding: 1.5rem;">
-                    <!-- Period Select -->
-                    <label class="form-label" style="font-weight: 700; color: var(--islamic-primary); margin-bottom: 0.5rem; display: block; font-size: 0.82rem;">1. เลือกช่วงเวลาการละหมาด</label>
-                    <div class="toggle-group" id="period-toggles" style="margin-bottom: 1.25rem;">
-                        <button type="button" class="toggle-btn {{ $defaultPeriod === 'เที่ยง' ? 'period-active' : '' }}" data-period="เที่ยง">
-                            <i class="fas fa-sun"></i> เที่ยง (ซุฮรี)
-                        </button>
-                        <button type="button" class="toggle-btn {{ $defaultPeriod === 'บ่าย' ? 'period-active' : '' }}" data-period="บ่าย">
-                            <i class="fas fa-cloud-sun"></i> บ่าย (อัศรี)
-                        </button>
-                    </div>
-
-                    <!-- Status Select -->
-                    <label class="form-label" style="font-weight: 700; color: var(--islamic-primary); margin-bottom: 0.5rem; display: block; font-size: 0.82rem;">2. เลือกสถานะการละหมาด</label>
-                    <div class="toggle-group" id="status-toggles" style="margin-bottom: 1.25rem;">
-                        <button type="button" class="toggle-btn status-active" data-status="ละหมาด">
-                            <i class="fas fa-check-circle"></i> ✅ ละหมาดแล้ว
-                        </button>
-                        <button type="button" class="toggle-btn" data-status="ละหมาดไม่ได้">
-                            <i class="fas fa-times-circle"></i> ❌ ละหมาดไม่ได้
-                        </button>
-                    </div>
-
-                    <label class="form-label" style="font-weight: 700; color: var(--islamic-primary); margin-bottom: 0.5rem; display: block; font-size: 0.82rem;">3. ป้อนรหัส / ยิงบาร์โค้ด</label>
                     <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:0.75rem;">
                         คลิกที่ช่องป้อนข้อมูลเพื่อเริ่มต้นยิงด้วยเครื่องสแกนบาร์โค้ด
                     </p>
@@ -349,26 +326,6 @@
         let selectedStatus = "ละหมาด";
         let lastScannedId = "";
         let lastScanTime = 0;
-
-        // UI event listeners for period toggles
-        document.querySelectorAll("#period-toggles .toggle-btn").forEach(btn => {
-            btn.addEventListener("click", function() {
-                selectedPeriod = this.getAttribute("data-period");
-                document.querySelectorAll("#period-toggles .toggle-btn").forEach(b => {
-                    b.classList.toggle("period-active", b === this);
-                });
-            });
-        });
-
-        // UI event listeners for status toggles
-        document.querySelectorAll("#status-toggles .toggle-btn").forEach(btn => {
-            btn.addEventListener("click", function() {
-                selectedStatus = this.getAttribute("data-status");
-                document.querySelectorAll("#status-toggles .toggle-btn").forEach(b => {
-                    b.classList.toggle("status-active", b === this);
-                });
-            });
-        });
 
         // UI Selectors
         const barcodeInput = document.getElementById("barcode-input");

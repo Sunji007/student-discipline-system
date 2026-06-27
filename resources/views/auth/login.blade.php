@@ -4,331 +4,262 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>เข้าสู่ระบบ — โรงเรียนศิริราษฎร์สามัคคี</title>
+    <link rel="icon" href="{{ asset('images/logo.png') }}" type="image/png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    {{-- โหลด font async ไม่บล็อก render --}}
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet"></noscript>
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
-        <style>
+    <style>
+        /* ============================================================
+           IMPECCABLE LOGIN — ศิริราษฎร์สามัคคี
+           Design tokens · 8px grid · HSL palette
+        ============================================================ */
         :root {
-            --primary:       #0604EA;
-            --primary-dark:  #0403b2;
-            --primary-light: #4c4bf7;
-            --primary-pale:  rgba(6, 4, 234, 0.06);
-            --primary-gradient: linear-gradient(135deg, #4224B8 0%, #0604EA 100%);
-            --white:         #FFFFFF;
-            --off-white:     #f7f7fa;
-            --red:           #BD2743;
-            --text:          #0d0d2b;
-            --text-muted:    #6366a0;
-            --border:        #e2e2f0;
-            --transition:    all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --primary:       hsl(240, 95%, 47%);
+            --primary-dark:  hsl(240, 95%, 35%);
+            --primary-light: hsl(241, 90%, 63%);
+            --primary-glow:  hsla(240, 95%, 55%, 0.30);
+            --primary-pale:  hsla(240, 95%, 55%, 0.07);
+            --card-bg:       hsla(0, 0%, 100%, 0.96);
+            --text:          hsl(240, 40%, 12%);
+            --text-sub:      hsl(240, 20%, 42%);
+            --text-muted:    hsl(240, 15%, 58%);
+            --border:        hsl(240, 20%, 91%);
+            --red:           hsl(348, 68%, 45%);
+            --ease-expo:     cubic-bezier(0.16, 1, 0.3, 1);
+            --ease-std:      cubic-bezier(0.4, 0, 0.2, 1);
+            --dur:           0.25s;
+            --r-sm: 8px;
+            --r-md: 14px;
+            --r-lg: 20px;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+        /* ── Background ── */
         body {
             font-family: 'Sarabun', sans-serif;
-            background: linear-gradient(135deg, #0f0e34 0%, #1c1a5e 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
             overflow: hidden;
+            background: hsl(240, 60%, 8%);
         }
 
-        /* ลาย grid พื้นหลังเรืองแสง */
         body::before {
             content: '';
             position: absolute;
             inset: 0;
-            background-image:
-                linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
-            background-size: 40px 40px;
+            background:
+                radial-gradient(ellipse 80% 60% at 15% 10%,  hsla(258,80%,32%,0.55) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 50% at 85% 88%,  hsla(290,70%,28%,0.40) 0%, transparent 55%),
+                radial-gradient(ellipse 100% 80% at 50% 50%, hsl(238,65%,11%) 0%, hsl(240,60%,7%) 100%);
             pointer-events: none;
         }
-        
-        /* วงเรืองแสงนีออนพื้นหลัง */
+
+        body::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(hsla(0,0%,100%,0.025) 1px, transparent 1px),
+                linear-gradient(90deg, hsla(0,0%,100%,0.025) 1px, transparent 1px);
+            background-size: 44px 44px;
+            pointer-events: none;
+        }
+
+        /* ── Floating orbs ── */
         .neon-glow {
             position: absolute;
             border-radius: 50%;
-            filter: blur(100px);
-            opacity: 0.15;
             pointer-events: none;
             z-index: 1;
         }
         .neon-glow-1 {
-            width: 500px;
-            height: 500px;
-            background: #4224B8;
-            top: -200px;
-            right: -100px;
+            width: 560px; height: 560px;
+            background: radial-gradient(circle, hsla(258,80%,55%,0.18) 0%, transparent 70%);
+            top: -180px; right: -120px;
+            animation: floatOrb 9s ease-in-out infinite alternate;
         }
         .neon-glow-2 {
-            width: 400px;
-            height: 400px;
-            background: #E51DE8;
-            bottom: -150px;
-            left: -100px;
+            width: 460px; height: 460px;
+            background: radial-gradient(circle, hsla(290,70%,50%,0.14) 0%, transparent 70%);
+            bottom: -160px; left: -120px;
+            animation: floatOrb 11s ease-in-out infinite alternate-reverse;
+        }
+        @keyframes floatOrb {
+            from { transform: translate(0,0) scale(1); }
+            to   { transform: translate(22px,-18px) scale(1.06); }
         }
 
-        /* วงกลมเส้นตกแต่ง */
+        /* ── Decorative circles ── */
         .circle-deco {
             position: absolute;
             border-radius: 50%;
-            border: 1px solid rgba(255,255,255,0.06);
+            border: 1px solid hsla(0,0%,100%,0.055);
             pointer-events: none;
             z-index: 2;
         }
-        .circle-deco:nth-child(1) { width: 700px; height: 700px; top: -250px; right: -150px; }
-        .circle-deco:nth-child(2) { width: 450px; height: 450px; bottom: -150px; left: -100px; }
+        .circle-deco:nth-child(3) { width: 720px; height: 720px; top: -260px; right: -160px; }
+        .circle-deco:nth-child(4) { width: 480px; height: 480px; bottom: -160px; left: -110px; }
 
+        /* ── Login Card ── */
         .login-card {
             position: relative;
             z-index: 10;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
             width: 100%;
-            max-width: 440px;
-            border-radius: 16px;
-            border: 1px solid rgba(255,255,255,0.5);
-            box-shadow:
-                0 20px 50px rgba(0,0,0,0.3),
-                0 0 0 1px rgba(255,255,255,0.05);
+            max-width: 448px;
+            border-radius: var(--r-lg);
             overflow: hidden;
-            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+            border: 1px solid hsla(0,0%,100%,0.12);
+            background: var(--card-bg);
+            backdrop-filter: blur(24px) saturate(1.6);
+            -webkit-backdrop-filter: blur(24px) saturate(1.6);
+            box-shadow:
+                0 0 0 1px hsla(0,0%,100%,0.06),
+                0 8px 32px  hsla(240,80%,10%,0.20),
+                0 32px 80px hsla(240,80%,10%,0.30),
+                0 64px 120px hsla(240,80%,10%,0.20);
+            animation: riseIn 0.7s var(--ease-expo) both;
         }
 
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(40px) scale(0.97); }
-            to   { opacity: 1; transform: translateY(0) scale(1); }
+        @keyframes riseIn {
+            from { opacity:0; transform:translateY(36px) scale(0.96); filter:blur(4px); }
+            to   { opacity:1; transform:translateY(0)    scale(1);    filter:blur(0);  }
         }
 
+        /* Top accent bar */
+        .login-card::before {
+            content: '';
+            position: absolute;
+            top:0; left:0; right:0;
+            height: 3px;
+            background: linear-gradient(90deg,
+                hsl(240,95%,35%) 0%,
+                hsl(241,90%,63%) 50%,
+                hsl(290,70%,55%) 100%);
+            z-index: 1;
+        }
 
-
+        /* ── Card Header ── */
         .card-header {
-            padding: 2.5rem 2.5rem 1.75rem;
+            padding: 2.5rem 2.5rem 2rem;
             text-align: center;
             border-bottom: 1px solid var(--border);
             position: relative;
         }
 
         .school-emblem {
-            width: 85px;
+            width: 82px;
             height: auto;
             margin: 0 auto 1.25rem;
             display: block;
-            filter: drop-shadow(0 4px 12px rgba(6, 4, 234, 0.15));
-            transition: var(--transition);
+            filter: drop-shadow(0 6px 18px hsla(240,95%,47%,0.18));
+            transition: transform 0.4s var(--ease-expo);
         }
-        
-        .school-emblem:hover {
-            transform: scale(1.05) rotate(2deg);
-        }
+        .school-emblem:hover { transform: scale(1.06) rotate(3deg); }
 
         .card-header h1 {
-            color: #0f0e34;
+            color: var(--text);
             font-size: 1.05rem;
             font-weight: 700;
-            letter-spacing: 0.02em;
-            line-height: 1.5;
+            line-height: 1.55;
+            letter-spacing: 0.01em;
         }
-
         .card-header p {
             color: var(--text-muted);
             font-size: 0.82rem;
             font-weight: 500;
-            margin-top: 0.25rem;
+            margin-top: 0.3rem;
+            letter-spacing: 0.02em;
         }
 
+        /* ── Card Body ── */
         .card-body { padding: 2rem 2.5rem 2.5rem; }
 
+        /* ── Alert ── */
+        .alert-danger {
+            background: hsla(348,68%,45%,0.06);
+            border: 1px solid hsla(348,68%,45%,0.18);
+            border-left: 3px solid var(--red);
+            color: var(--red);
+            padding: 0.85rem 1rem;
+            border-radius: var(--r-sm);
+            font-size: 0.875rem;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+            animation: shakeX 0.4s ease;
+        }
+        @keyframes shakeX {
+            0%,100%{transform:translateX(0);}
+            20%    {transform:translateX(-6px);}
+            40%    {transform:translateX(5px);}
+            60%    {transform:translateX(-4px);}
+            80%    {transform:translateX(3px);}
+        }
+
+        /* ── Form groups ── */
         .form-group { margin-bottom: 1.25rem; }
 
         .form-group label {
             display: block;
-            font-size: 0.8rem;
+            font-size: 0.74rem;
             font-weight: 700;
-            color: #0f0e34;
-            letter-spacing: 0.03em;
+            color: var(--text-sub);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
             margin-bottom: 0.5rem;
         }
 
         .form-group input {
             width: 100%;
-            padding: 0.75rem 1rem;
+            padding: 0.8rem 1rem;
             border: 1.5px solid var(--border);
-            border-radius: 8px;
+            border-radius: var(--r-sm);
             font-family: 'Sarabun', sans-serif;
             font-size: 0.95rem;
-            background: white;
+            background: hsl(240, 30%, 99%);
             color: var(--text);
-            transition: var(--transition);
             outline: none;
+            transition:
+                border-color var(--dur) var(--ease-std),
+                box-shadow   var(--dur) var(--ease-std),
+                background   var(--dur) var(--ease-std);
         }
-
+        .form-group input::placeholder { color: hsl(240,15%,72%); font-size: 0.9rem; }
+        .form-group input:hover        { border-color: hsl(240,30%,82%); }
         .form-group input:focus {
             border-color: var(--primary-light);
-            box-shadow: 0 0 0 4px rgba(6, 4, 234, 0.08);
+            background: #fff;
+            box-shadow: 0 0 0 3px var(--primary-pale), 0 1px 4px hsla(240,95%,47%,0.08);
         }
-
         .form-group input.is-invalid {
             border-color: var(--red);
+            box-shadow: 0 0 0 3px hsla(348,68%,45%,0.10);
         }
 
         .invalid-feedback {
             color: var(--red);
-            font-size: 0.8rem;
-            margin-top: 0.35rem;
+            font-size: 0.78rem;
+            margin-top: 0.4rem;
             font-weight: 500;
         }
 
-        .alert-danger {
-            background: rgba(189,39,67,0.06);
-            border: 1px solid rgba(189,39,67,0.2);
-            border-left: 4px solid var(--red);
-            color: var(--red);
-            padding: 0.8rem 1rem;
-            border-radius: 8px;
-            font-size: 0.88rem;
-            margin-bottom: 1.25rem;
-            font-weight: 500;
-        }
-
-        .form-actions {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 1.75rem;
-        }
-
-        .form-check-remember {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .form-check-remember input[type="checkbox"] {
-            width: 16px;
-            height: 16px;
-            accent-color: var(--primary);
-            cursor: pointer;
-        }
-
-        .remember-label {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            cursor: pointer;
-            user-select: none;
-            font-weight: 500;
-            transition: var(--transition);
-        }
-        
-        .form-check-remember input[type="checkbox"]:checked ~ .remember-label {
-            color: #0f0e34;
-            font-weight: 600;
-        }
-
-        .forgot-link {
-            font-size: 0.85rem;
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 700;
-            transition: var(--transition);
-        }
-
-        .forgot-link:hover {
-            color: var(--primary-dark);
-            text-decoration: underline;
-        }
-
-        .btn-login {
-            width: 100%;
-            padding: 0.85rem;
-            background: var(--primary-gradient);
-            color: var(--white);
-            border: none;
-            border-radius: 8px;
-            font-family: 'Sarabun', sans-serif;
-            font-size: 1rem;
-            font-weight: 700;
-            letter-spacing: 0.05em;
-            cursor: pointer;
-            transition: var(--transition);
-            box-shadow: 0 4px 16px rgba(6, 4, 234, 0.25);
-        }
-
-        .btn-login:hover {
-            box-shadow: 0 6px 22px rgba(6, 4, 234, 0.35);
-            transform: translateY(-1px);
-        }
-        
-        .btn-login:active {
-            transform: translateY(0);
-        }
-
-        .card-footer-note {
-            text-align: center;
-            margin-top: 1.75rem;
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            font-weight: 500;
-        }
-
-        /* แท็บเล็ตและมือถือ (กว้างไม่เกิน 1024px) */
-        @media (max-width: 1024px) {
-            body {
-                padding: 1.5rem;
-                align-items: flex-start;
-                overflow-y: auto;
-                overflow-x: hidden;
-            }
-            .login-card {
-                margin: 3rem auto;
-            }
-        }
-
-        /* มือถือขนาดเล็ก (กว้างไม่เกิน 480px) */
-        @media (max-width: 480px) {
-            body {
-                padding: 1rem;
-            }
-            .login-card {
-                margin: 1.5rem auto;
-                border-radius: 12px;
-            }
-            .card-header {
-                padding: 2rem 1.5rem 1.25rem;
-            }
-            .card-body {
-                padding: 1.5rem 1.5rem 2rem;
-            }
-            .school-emblem {
-                width: 70px;
-            }
-        }
-
-        /* ===== Password Toggle ===== */
+        /* ── Password wrapper ── */
         .password-wrapper {
             position: relative;
             display: flex;
             align-items: center;
             width: 100%;
         }
-
-        /* override .form-group input { width:100% } ให้เหลือพื้นที่ปุ่มตา */
         .password-wrapper > input[type="password"],
         .password-wrapper > input[type="text"] {
             width: 100% !important;
             padding-right: 3rem !important;
-            box-sizing: border-box;
         }
-
-        /* ซ่อนตาของ browser (Edge, IE, Chrome) ไม่ให้แสดงซ้ำกับตาของเรา */
         input[type="password"]::-ms-reveal,
         input[type="password"]::-ms-clear,
         input[type="password"]::-webkit-credentials-auto-fill-button,
@@ -346,40 +277,115 @@
             background: transparent;
             border: none;
             cursor: pointer;
-            color: #6366a0;
+            color: var(--text-muted);
             padding: 0.25rem;
             line-height: 1;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 6px;
-            transition: color 0.2s ease, background 0.2s ease;
+            transition:
+                color       var(--dur) var(--ease-std),
+                background  var(--dur) var(--ease-std);
             -webkit-tap-highlight-color: transparent;
         }
+        .toggle-password:hover  { color: var(--primary); background: var(--primary-pale); }
+        .toggle-password:focus  { outline: none; }
+        .toggle-password:active { transform: translateY(-50%) scale(0.85); }
+        .toggle-password svg    { pointer-events: none; display: block; }
 
-        .toggle-password:hover {
-            color: #0604EA;
-            background: rgba(6, 4, 234, 0.08);
+        /* ── Remember me ── */
+        .form-actions { margin-bottom: 1.5rem; }
+        .form-check-remember { display: flex; align-items: center; gap: 0.5rem; }
+        .form-check-remember input[type="checkbox"] {
+            width: 16px; height: 16px; min-width: 16px;
+            border: 1.5px solid var(--border);
+            border-radius: 4px;
+            cursor: pointer;
+            accent-color: var(--primary);
+        }
+        .remember-label {
+            font-size: 0.85rem;
+            color: var(--text-sub);
+            cursor: pointer;
+            font-weight: 500;
+            user-select: none;
         }
 
-        .toggle-password:focus {
-            outline: none;
+        /* ── Login button ── */
+        .btn-login {
+            width: 100%;
+            padding: 0.875rem 1.5rem;
+            border: none;
+            border-radius: var(--r-sm);
+            font-family: 'Sarabun', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            color: #fff;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg,
+                hsl(258,76%,43%) 0%,
+                var(--primary) 60%,
+                hsl(241,90%,58%) 100%);
+            box-shadow:
+                0 4px 16px var(--primary-glow),
+                0 1px 3px  hsla(240,95%,47%,0.20);
+            transition:
+                transform    var(--dur) var(--ease-std),
+                box-shadow   var(--dur) var(--ease-std);
+        }
+        /* Shimmer sweep */
+        .btn-login::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(105deg,
+                transparent 35%,
+                hsla(0,0%,100%,0.18) 50%,
+                transparent 65%);
+            transform: translateX(-100%);
+            transition: transform 0.55s var(--ease-std);
+        }
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow:
+                0 8px 28px var(--primary-glow),
+                0 2px 6px  hsla(240,95%,47%,0.25);
+        }
+        .btn-login:hover::after { transform: translateX(100%); }
+        .btn-login:active       { transform: translateY(0); box-shadow: 0 3px 10px var(--primary-glow); }
+
+        /* ── Footer note ── */
+        .card-footer-note {
+            text-align: center;
+            margin-top: 1.75rem;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            line-height: 1.6;
         }
 
-        .toggle-password:active {
-            transform: translateY(-50%) scale(0.88);
+        /* ── Responsive ── */
+        @media (max-width: 1024px) {
+            body { padding: 1.5rem; align-items: flex-start; overflow-y: auto; overflow-x: hidden; }
+            .login-card { margin: 3rem auto; }
         }
-
-        .toggle-password svg {
-            pointer-events: none;
-            display: block;
+        @media (max-width: 480px) {
+            body { padding: 1rem; }
+            .login-card { margin: 1.5rem auto; border-radius: var(--r-md); }
+            .card-header { padding: 2rem 1.5rem 1.5rem; }
+            .card-body   { padding: 1.5rem 1.5rem 2rem; }
+            .school-emblem { width: 68px; }
         }
     </style>
 </head>
 <body>
     <div class="neon-glow neon-glow-1"></div>
     <div class="neon-glow neon-glow-2"></div>
-    
+
     <div class="circle-deco"></div>
     <div class="circle-deco"></div>
 
@@ -461,21 +467,21 @@
     </div>
 <script>
     function togglePasswordVisibility() {
-        var input   = document.getElementById('Password');
-        var slash   = document.getElementById('eye-slash');
-        var circle  = document.getElementById('eye-circle');
-        var btn     = document.getElementById('togglePassword');
+        var input  = document.getElementById('Password');
+        var slash  = document.getElementById('eye-slash');
+        var circle = document.getElementById('eye-circle');
+        var btn    = document.getElementById('togglePassword');
 
         if (input.type === 'password') {
-            input.type          = 'text';
-            slash.style.display = 'inline';
+            input.type           = 'text';
+            slash.style.display  = 'inline';
             circle.style.display = 'none';
-            btn.title           = 'ซ่อนรหัสผ่าน';
+            btn.title            = 'ซ่อนรหัสผ่าน';
         } else {
-            input.type          = 'password';
-            slash.style.display = 'none';
+            input.type           = 'password';
+            slash.style.display  = 'none';
             circle.style.display = 'inline';
-            btn.title           = 'แสดงรหัสผ่าน';
+            btn.title            = 'แสดงรหัสผ่าน';
         }
     }
 </script>
