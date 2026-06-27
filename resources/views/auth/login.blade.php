@@ -278,6 +278,102 @@
             color: var(--text-muted);
             font-weight: 500;
         }
+
+        /* แท็บเล็ตและมือถือ (กว้างไม่เกิน 1024px) */
+        @media (max-width: 1024px) {
+            body {
+                padding: 1.5rem;
+                align-items: flex-start;
+                overflow-y: auto;
+                overflow-x: hidden;
+            }
+            .login-card {
+                margin: 3rem auto;
+            }
+        }
+
+        /* มือถือขนาดเล็ก (กว้างไม่เกิน 480px) */
+        @media (max-width: 480px) {
+            body {
+                padding: 1rem;
+            }
+            .login-card {
+                margin: 1.5rem auto;
+                border-radius: 12px;
+            }
+            .card-header {
+                padding: 2rem 1.5rem 1.25rem;
+            }
+            .card-body {
+                padding: 1.5rem 1.5rem 2rem;
+            }
+            .school-emblem {
+                width: 70px;
+            }
+        }
+
+        /* ===== Password Toggle ===== */
+        .password-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        /* override .form-group input { width:100% } ให้เหลือพื้นที่ปุ่มตา */
+        .password-wrapper > input[type="password"],
+        .password-wrapper > input[type="text"] {
+            width: 100% !important;
+            padding-right: 3rem !important;
+            box-sizing: border-box;
+        }
+
+        /* ซ่อนตาของ browser (Edge, IE, Chrome) ไม่ให้แสดงซ้ำกับตาของเรา */
+        input[type="password"]::-ms-reveal,
+        input[type="password"]::-ms-clear,
+        input[type="password"]::-webkit-credentials-auto-fill-button,
+        input[type="password"]::-webkit-textfield-decoration-container {
+            display: none !important;
+            visibility: hidden !important;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 10;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            color: #6366a0;
+            padding: 0.25rem;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            transition: color 0.2s ease, background 0.2s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .toggle-password:hover {
+            color: #0604EA;
+            background: rgba(6, 4, 234, 0.08);
+        }
+
+        .toggle-password:focus {
+            outline: none;
+        }
+
+        .toggle-password:active {
+            transform: translateY(-50%) scale(0.88);
+        }
+
+        .toggle-password svg {
+            pointer-events: none;
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -324,14 +420,23 @@
 
                 <div class="form-group">
                     <label for="Password">รหัสผ่าน</label>
-                    <input
-                        type="password"
-                        id="Password"
-                        name="Password"
-                        class="{{ $errors->has('Password') ? 'is-invalid' : '' }}"
-                        autocomplete="current-password"
-                        placeholder="กรอกรหัสผ่าน"
-                    >
+                    <div class="password-wrapper">
+                        <input
+                            type="password"
+                            id="Password"
+                            name="Password"
+                            class="{{ $errors->has('Password') ? 'is-invalid' : '' }}"
+                            autocomplete="current-password"
+                            placeholder="กรอกรหัสผ่าน"
+                        >
+                        <button type="button" class="toggle-password" id="togglePassword" onclick="togglePasswordVisibility()" title="แสดงรหัสผ่าน" aria-label="แสดง/ซ่อนรหัสผ่าน">
+                            <svg id="eye-svg" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path id="eye-path-1" d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                <circle id="eye-circle" cx="12" cy="12" r="3"/>
+                                <line id="eye-slash" x1="1" y1="1" x2="23" y2="23" style="display:none;"/>
+                            </svg>
+                        </button>
+                    </div>
                     @error('Password')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -354,5 +459,25 @@
             </p>
         </div>
     </div>
+<script>
+    function togglePasswordVisibility() {
+        var input   = document.getElementById('Password');
+        var slash   = document.getElementById('eye-slash');
+        var circle  = document.getElementById('eye-circle');
+        var btn     = document.getElementById('togglePassword');
+
+        if (input.type === 'password') {
+            input.type          = 'text';
+            slash.style.display = 'inline';
+            circle.style.display = 'none';
+            btn.title           = 'ซ่อนรหัสผ่าน';
+        } else {
+            input.type          = 'password';
+            slash.style.display = 'none';
+            circle.style.display = 'inline';
+            btn.title           = 'แสดงรหัสผ่าน';
+        }
+    }
+</script>
 </body>
 </html>
