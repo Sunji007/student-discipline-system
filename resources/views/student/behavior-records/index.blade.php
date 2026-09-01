@@ -37,7 +37,26 @@
                 @forelse($records as $r)
                 <tr>
                     <td>
-                        <div style="font-weight:500;">{{ $r->rule->RuleName }}</div>
+                        <div style="font-weight:500;">
+                            {{ $r->rule->RuleName }}
+                            @if($r->Photo)
+                                @php
+                                    $firstPhoto = $r->Photo;
+                                    if (str_starts_with($r->Photo, '[') && str_ends_with($r->Photo, ']')) {
+                                        $decoded = json_decode($r->Photo, true);
+                                        $firstPhoto = !empty($decoded) ? $decoded[0] : '';
+                                    }
+                                @endphp
+                                @if($firstPhoto)
+                                    <a href="{{ asset('storage/' . $firstPhoto) }}" target="_blank" 
+                                       style="display:inline-flex; align-items:center; gap:0.25rem; font-size:0.72rem; color:var(--orange, #f97316); margin-left:0.5rem; text-decoration:none; font-weight:600; background:rgba(249,115,22,0.08); padding:0.15rem 0.45rem; border-radius:4px; transition: all 0.2s;"
+                                       onmouseover="this.style.background='rgba(249,115,22,0.15)'"
+                                       onmouseout="this.style.background='rgba(249,115,22,0.08)'">
+                                        <i class="fas fa-image"></i> ดูรูปภาพหลักฐาน
+                                    </a>
+                                @endif
+                            @endif
+                        </div>
                         @if($r->Description)
                             <div style="font-size:0.75rem; color:var(--text-muted); margin-top:0.15rem;">{{ \Str::limit($r->Description, 60) }}</div>
                         @endif
@@ -49,27 +68,31 @@
                         </span>
                     </td>
                     <td style="font-size:0.82rem; color:var(--text-muted);">
-                        {{ \Carbon\Carbon::parse($r->RecordDate)->format('d/m/Y') }}
+                        {{ \Carbon\Carbon::parse($r->RecordDate)->format('d/m/') . (\Carbon\Carbon::parse($r->RecordDate)->year + 543) }}
                     </td>
                     <td>
                         @php
-                            $sc = match($r->Status) {
+                            $displayStatus = match($r->Status) {
+                                'อนุมัติแล้ว', 'อนุมัติ' => 'อนุมัติ',
+                                default => $r->Status,
+                            };
+                            $sc = match($displayStatus) {
                                 'รออนุมัติ' => 'badge-gold',
-                                'อนุมัติแล้ว' => 'badge-green',
-                                'อยู่ในระหว่างโต้แย้ง' => 'badge-orange',
+                                'อนุมัติ' => 'badge-green',
+                                'อยู่ในระหว่างยื่นอุทธรณ์' => 'badge-orange',
                                 default => 'badge-gray',
                             };
                         @endphp
-                        <span class="badge {{ $sc }}">{{ $r->Status }}</span>
+                        <span class="badge {{ $sc }}">{{ $displayStatus }}</span>
                     </td>
                     <td style="text-align:right;">
-                        @if($r->Status === 'อนุมัติแล้ว' && !$r->appeal)
+                        @if(in_array($r->Status, ['อนุมัติ', 'อนุมัติแล้ว']) && !$r->appeal)
                         <a href="{{ route('student.appeals.create', ['record' => $r->RecordID]) }}"
                            class="btn btn-outline btn-sm" style="font-size:0.72rem;">
-                            <i class="fas fa-balance-scale"></i> โต้แย้ง
+                            <i class="fas fa-balance-scale"></i> อุทธรณ์
                         </a>
                         @elseif($r->appeal)
-                        <span class="badge badge-orange" style="font-size:0.7rem;">ยื่นคำร้องแล้ว</span>
+                        <span class="badge badge-orange" style="font-size:0.7rem;">ยื่นเรื่องอุทธรณ์แล้ว</span>
                         @endif
                     </td>
                 </tr>

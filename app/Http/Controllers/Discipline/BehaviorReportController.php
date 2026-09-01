@@ -24,17 +24,14 @@ class BehaviorReportController extends Controller
         $grade = $request->input('grade');
         $classroom = $request->input('classroom');
 
-        // If no date range specified, default to start of this month to today
-        if (!$startDate && !$endDate) {
-            $startDate = Carbon::today()->startOfMonth()->toDateString();
-            $endDate = Carbon::today()->toDateString();
-        }
+        $selectedSemesterId = $this->getSelectedSemesterId();
 
         // 3. Build Base Query for Behavior Records
         $recordsQuery = BehaviorRecord::query()
             ->join('behavior_rules', 'behavior_records.RuleID', '=', 'behavior_rules.RuleID')
             ->join('students', 'behavior_records.StudentID', '=', 'students.StudentID')
-            ->where('behavior_records.Status', 'อนุมัติแล้ว');
+            ->where('behavior_records.semester_id', $selectedSemesterId)
+            ->whereIn('behavior_records.Status', ['อนุมัติ', 'อนุมัติแล้ว', 'อยู่ในระหว่างยื่นอุทธรณ์']);
 
         if ($startDate) {
             $recordsQuery->whereDate('behavior_records.RecordDate', '>=', $startDate);
@@ -58,7 +55,7 @@ class BehaviorReportController extends Controller
         $meritCount = (clone $recordsQuery)->where('behavior_rules.RuleType', 'เพิ่มคะแนน')->count();
         $meritPoints = (clone $recordsQuery)->where('behavior_rules.RuleType', 'เพิ่มคะแนน')->sum('behavior_rules.ScoreModifier');
 
-        // 5. Build Base Query for Students (current state, but filtered by grade/classroom)
+        // 5. Build Base Query for Students (filtered by grade/classroom)
         $studentsQuery = Student::query();
         if ($grade) {
             $studentsQuery->where('GradeLevel', $grade);
@@ -67,12 +64,31 @@ class BehaviorReportController extends Controller
             $studentsQuery->where('Classroom', $classroom);
         }
 
-        $totalStudents = (clone $studentsQuery)->count();
-        $avgScore = round((clone $studentsQuery)->avg('BehaviorScore') ?? 100, 1);
+        $allStudentsInReport = (clone $studentsQuery)->get();
+        $totalStudents = $allStudentsInReport->count();
 
-        $riskNormal = (clone $studentsQuery)->where('RiskStatus', 'ปกติ')->count();
-        $riskWatch = (clone $studentsQuery)->where('RiskStatus', 'เฝ้าระวัง')->count();
-        $riskCritical = (clone $studentsQuery)->where('RiskStatus', 'วิกฤต')->count();
+        // Net modifiers per student in selected semester
+        $netModifiers = DB::table('behavior_records')
+            ->join('behavior_rules', 'behavior_records.RuleID', '=', 'behavior_rules.RuleID')
+            ->where('behavior_records.semester_id', $selectedSemesterId)
+            ->whereIn('behavior_records.Status', ['อนุมัติ', 'อนุมัติแล้ว', 'อยู่ในระหว่างยื่นอุทธรณ์'])
+            ->select('StudentID')
+            ->selectRaw("SUM(CASE WHEN behavior_rules.RuleType = 'ตัดคะแนน' THEN -ABS(behavior_rules.ScoreModifier) ELSE ABS(behavior_rules.ScoreModifier) END) as net_modifier")
+            ->groupBy('StudentID')
+            ->pluck('net_modifier', 'StudentID');
+
+        $riskNormal = 0; $riskWatch = 0; $riskCritical = 0;
+        foreach ($allStudentsInReport as $st) {
+            $sc = isset($netModifiers[$st->StudentID]) 
+                ? max(0, min(100, 100 + $netModifiers[$st->StudentID])) 
+                : ($st->BehaviorScore ?? 100);
+            $st->BehaviorScore = $sc;
+            if ($sc >= 80) $riskNormal++;
+            elseif ($sc >= 60) $riskWatch++;
+            else $riskCritical++;
+        }
+
+        $avgScore = $totalStudents > 0 ? round($allStudentsInReport->avg('BehaviorScore'), 1) : 100;
 
         // 6. Behavior Category Breakdown for Chart
         $categoryCounts = (clone $recordsQuery)
@@ -82,11 +98,10 @@ class BehaviorReportController extends Controller
             ->pluck('count', 'Category')
             ->toArray();
 
-        // 7. Classroom summaries (Avg Score + merits/demerits count in range)
+        // 7. Classroom summaries
         $classroomStats = Student::query()
             ->select('Classroom', 'GradeLevel')
             ->selectRaw('count(*) as student_count')
-            ->selectRaw('avg(BehaviorScore) as avg_score')
             ->when($grade, fn($q) => $q->where('GradeLevel', $grade))
             ->when($classroom, fn($q) => $q->where('Classroom', $classroom))
             ->groupBy('Classroom', 'GradeLevel')
@@ -99,7 +114,8 @@ class BehaviorReportController extends Controller
             ->select('students.Classroom')
             ->selectRaw("sum(case when behavior_rules.RuleType = 'ตัดคะแนน' then 1 else 0 end) as demerit_count")
             ->selectRaw("sum(case when behavior_rules.RuleType = 'เพิ่มคะแนน' then 1 else 0 end) as merit_count")
-            ->where('behavior_records.Status', 'อนุมัติแล้ว')
+            ->where('behavior_records.semester_id', $selectedSemesterId)
+            ->whereIn('behavior_records.Status', ['อนุมัติ', 'อนุมัติแล้ว', 'อยู่ในระหว่างยื่นอุทธรณ์'])
             ->when($startDate, fn($q) => $q->whereDate('RecordDate', '>=', $startDate))
             ->when($endDate, fn($q) => $q->whereDate('RecordDate', '<=', $endDate))
             ->groupBy('students.Classroom')
@@ -110,19 +126,32 @@ class BehaviorReportController extends Controller
             $records = $classroomRecords->get($class->Classroom);
             $class->demerit_count = $records ? $records->demerit_count : 0;
             $class->merit_count = $records ? $records->merit_count : 0;
-            $class->avg_score = round($class->avg_score, 1);
+
+            // Class avg score
+            $classSts = $allStudentsInReport->where('Classroom', $class->Classroom);
+            $class->avg_score = $classSts->count() > 0 ? round($classSts->avg('BehaviorScore'), 1) : 100;
         }
 
         // 8. Top Students lists
-        $lowestScoreStudents = (clone $studentsQuery)
-            ->orderBy('BehaviorScore', 'asc')
-            ->take(10)
-            ->get();
+        $lowestScoreStudents = $allStudentsInReport->sortBy('BehaviorScore')->take(10);
+        $highestScoreStudents = $allStudentsInReport->sortByDesc('BehaviorScore')->take(10);
 
-        $highestScoreStudents = (clone $studentsQuery)
-            ->orderBy('BehaviorScore', 'desc')
-            ->take(10)
-            ->get();
+        $attachStats = function($students) use ($startDate, $endDate) {
+            foreach ($students as $s) {
+                $recordsQuery = BehaviorRecord::where('StudentID', $s->StudentID)
+                    ->whereIn('behavior_records.Status', ['อนุมัติ', 'อนุมัติแล้ว', 'อยู่ในระหว่างยื่นอุทธรณ์'])
+                    ->join('behavior_rules', 'behavior_records.RuleID', '=', 'behavior_rules.RuleID')
+                    ->when($startDate, fn($q) => $q->whereDate('RecordDate', '>=', $startDate))
+                    ->when($endDate, fn($q) => $q->whereDate('RecordDate', '<=', $endDate));
+
+                $s->total_demerit_points = abs($recordsQuery->clone()->where('behavior_rules.RuleType', 'ตัดคะแนน')->sum('behavior_rules.ScoreModifier'));
+                $s->total_merit_points = $recordsQuery->clone()->where('behavior_rules.RuleType', 'เพิ่มคะแนน')->sum('behavior_rules.ScoreModifier');
+            }
+            return $students;
+        };
+
+        $lowestScoreStudents = $attachStats($lowestScoreStudents);
+        $highestScoreStudents = $attachStats($highestScoreStudents);
 
         // 9. Most frequent rules violated/rewarded
         $frequentRules = BehaviorRecord::query()
@@ -131,7 +160,8 @@ class BehaviorReportController extends Controller
             ->select('behavior_rules.RuleName', 'behavior_rules.RuleType', 'behavior_rules.Category')
             ->selectRaw('count(*) as record_count')
             ->selectRaw('abs(sum(behavior_rules.ScoreModifier)) as total_points')
-            ->where('behavior_records.Status', 'อนุมัติแล้ว')
+            ->where('behavior_records.semester_id', $selectedSemesterId)
+            ->whereIn('behavior_records.Status', ['อนุมัติ', 'อนุมัติแล้ว', 'อยู่ในระหว่างยื่นอุทธรณ์'])
             ->when($startDate, fn($q) => $q->whereDate('RecordDate', '>=', $startDate))
             ->when($endDate, fn($q) => $q->whereDate('RecordDate', '<=', $endDate))
             ->when($grade, fn($q) => $q->where('students.GradeLevel', $grade))
@@ -157,9 +187,12 @@ class BehaviorReportController extends Controller
         $grade = $request->input('grade');
         $classroom = $request->input('classroom');
 
+        $selectedSemesterId = $this->getSelectedSemesterId();
+
         // Build query for behavior records details
         $query = BehaviorRecord::with(['student', 'rule', 'recorder'])
-            ->where('Status', 'อนุมัติแล้ว');
+            ->where('semester_id', $selectedSemesterId)
+            ->whereIn('Status', ['อนุมัติ', 'อนุมัติแล้ว', 'อยู่ในระหว่างยื่นอุทธรณ์']);
 
         if ($startDate) {
             $query->whereDate('RecordDate', '>=', $startDate);

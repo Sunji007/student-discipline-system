@@ -1,48 +1,63 @@
 @extends('layouts.app')
 
-@section('title', 'แดชบอร์ด')
-@section('page-title', 'แดชบอร์ดผู้ดูแลระบบ')
+@section('title', 'หน้าหลัก — ผู้ดูแลระบบ')
+@section('page-title', 'หน้าหลักผู้ดูแลระบบ')
 
 @section('content')
 <div class="page-header">
-    <h2>ภาพรวมระบบ</h2>
-    <p>ข้อมูล ณ วันที่ {{ now()->locale('th')->isoFormat('D MMMM YYYY') }}</p>
+    <h2>ภาพรวมระบบผู้ใช้งาน</h2>
+    <p>ผู้ดูแลระบบ: {{ auth()->user()->FullName }} &nbsp;&bull;&nbsp; ข้อมูล ณ วันที่ {{ now()->locale('th')->isoFormat('D MMMM ') . (now()->year + 543) }}</p>
 </div>
+
+<style>
+    @media (min-width: 1200px) {
+        .stat-grid {
+            grid-template-columns: repeat(6, 1fr) !important;
+        }
+    }
+</style>
 
 <div class="stat-grid">
     <a href="{{ route('admin.users.index') }}" class="stat-card navy" style="text-decoration:none; cursor:pointer;">
         <div class="stat-icon navy"><i class="fas fa-users"></i></div>
         <div class="stat-info">
             <div class="stat-value">{{ $stats['total_users'] }}</div>
-            <div class="stat-label">ผู้ใช้งานทั้งหมด</div>
+            <div class="stat-label">ผู้ใช้งาน</div>
+        </div>
+    </a>
+    <a href="{{ route('admin.users.index', ['role' => 'ผู้ดูแลระบบ']) }}" class="stat-card purple" style="text-decoration:none; cursor:pointer;">
+        <div class="stat-icon purple"><i class="fas fa-user-shield"></i></div>
+        <div class="stat-info">
+            <div class="stat-value">{{ $stats['total_admins'] }}</div>
+            <div class="stat-label">ผู้ดูแลระบบ</div>
         </div>
     </a>
     <a href="{{ route('admin.students.index') }}" class="stat-card gold" style="text-decoration:none; cursor:pointer;">
         <div class="stat-icon gold"><i class="fas fa-user-graduate"></i></div>
         <div class="stat-info">
             <div class="stat-value">{{ $stats['total_students'] }}</div>
-            <div class="stat-label">นักเรียนทั้งหมด</div>
+            <div class="stat-label">นักเรียน</div>
         </div>
     </a>
     <a href="{{ route('admin.users.index', ['role' => 'ครู']) }}" class="stat-card green" style="text-decoration:none; cursor:pointer;">
         <div class="stat-icon green"><i class="fas fa-chalkboard-teacher"></i></div>
         <div class="stat-info">
             <div class="stat-value">{{ $stats['total_teachers'] }}</div>
-            <div class="stat-label">ครูประจำชั้นทั้งหมด</div>
+            <div class="stat-label">ครูประจำชั้น</div>
         </div>
     </a>
     <a href="{{ route('admin.users.index', ['role' => 'ฝ่ายปกครอง']) }}" class="stat-card red" style="text-decoration:none; cursor:pointer;">
         <div class="stat-icon red"><i class="fas fa-shield-alt"></i></div>
         <div class="stat-info">
             <div class="stat-value">{{ $stats['total_discipline'] }}</div>
-            <div class="stat-label">ฝ่ายปกครองทั้งหมด</div>
+            <div class="stat-label">ฝ่ายปกครอง</div>
         </div>
     </a>
     <a href="{{ route('admin.users.index', ['role' => 'ผู้ปกครอง']) }}" class="stat-card orange" style="text-decoration:none; cursor:pointer;">
         <div class="stat-icon orange"><i class="fas fa-user-friends"></i></div>
         <div class="stat-info">
             <div class="stat-value">{{ $stats['total_parents'] }}</div>
-            <div class="stat-label">ผู้ปกครองทั้งหมด</div>
+            <div class="stat-label">ผู้ปกครอง</div>
         </div>
     </a>
 </div>

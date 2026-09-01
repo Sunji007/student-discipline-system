@@ -19,20 +19,52 @@
             <form method="POST" action="{{ route('admin.students.store') }}" enctype="multipart/form-data">
                 @csrf
 
-                <div class="form-group">
-                    <label class="form-label" for="StudentID">รหัสนักเรียน <span style="color:var(--red)">*</span></label>
-                    <input type="text" name="StudentID" id="StudentID" class="form-control @error('StudentID') is-invalid @enderror" value="{{ old('StudentID') }}" required placeholder="ระบุรหัสนักเรียน (เช่น 12345)">
-                    @error('StudentID')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="StudentID">รหัสนักเรียน <span style="color:var(--text-muted)">(สร้างอัตโนมัติ)</span></label>
+                        <input type="text" name="StudentID" id="StudentID" class="form-control @error('StudentID') is-invalid @enderror" value="{{ old('StudentID', $nextStudentId) }}" readonly style="background-color: #f5f5f5; cursor: not-allowed;">
+                        @error('StudentID')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="CitizenID">รหัสบัตรประชาชน <span style="color:var(--red)">*</span></label>
+                        <input type="text" name="CitizenID" id="CitizenID" class="form-control @error('CitizenID') is-invalid @enderror" value="{{ old('CitizenID') }}" required placeholder="เช่น 1234567890123" maxlength="13" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                        @error('CitizenID')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label" for="FullName">ชื่อ-นามสกุล <span style="color:var(--red)">*</span></label>
-                    <input type="text" name="FullName" id="FullName" class="form-control @error('FullName') is-invalid @enderror" value="{{ old('FullName') }}" required placeholder="เด็กชาย/เด็กหญิง/นาย/นางสาว...">
-                    @error('FullName')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="FirstName">ชื่อจริง <span style="color:var(--red)">*</span></label>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <select name="prefix" class="form-control" style="width: 120px; flex-shrink: 0;" required>
+                                <option value="">คำนำหน้า</option>
+                                <option value="นาย" {{ old('prefix') === 'นาย' ? 'selected' : '' }}>นาย</option>
+                                <option value="นาง" {{ old('prefix') === 'นาง' ? 'selected' : '' }}>นาง</option>
+                                <option value="นางสาว" {{ old('prefix') === 'นางสาว' ? 'selected' : '' }}>นางสาว</option>
+                                <option value="ด.ช." {{ old('prefix') === 'ด.ช.' ? 'selected' : '' }}>ด.ช.</option>
+                                <option value="ด.ญ." {{ old('prefix') === 'ด.ญ.' ? 'selected' : '' }}>ด.ญ.</option>
+                            </select>
+                            <input type="text" name="FirstName" id="FirstName" class="form-control @error('FirstName') is-invalid @enderror" 
+                                   value="{{ old('FirstName') }}" 
+                                   oninput="this.value = this.value.replace(/[^ก-๙]/g, '')" required placeholder="เช่น เก่ง" style="flex: 1;">
+                        </div>
+                        @error('FirstName')
+                            <div class="invalid-feedback" style="display: block;">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="LastName">นามสกุล <span style="color:var(--red)">*</span></label>
+                        <input type="text" name="LastName" id="LastName" class="form-control @error('LastName') is-invalid @enderror" 
+                               value="{{ old('LastName') }}" 
+                               oninput="this.value = this.value.replace(/[^ก-๙]/g, '')" required placeholder="เช่น เรียนดี">
+                        @error('LastName')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
                 </div>
 
                 <div class="form-row">
@@ -76,7 +108,7 @@
 
                 <div style="margin-top:2rem;">
                     <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">
-                        <i class="fas fa-save"></i> บันทึกข้อมูลและสร้างรหัสสมาชิก
+                        <i class="fas fa-save"></i> บันทึก
                     </button>
                 </div>
             </form>
@@ -84,3 +116,33 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    const gradeLevelSelect = document.getElementById('GradeLevel');
+    const classroomInput = document.getElementById('Classroom');
+    const studentIDInput = document.getElementById('StudentID');
+
+    async function fetchNextStudentID() {
+        const grade = gradeLevelSelect.value;
+        const classroom = classroomInput.value;
+
+        if (!grade || !classroom) {
+            studentIDInput.value = '';
+            return;
+        }
+
+        try {
+            const url = `{{ route('admin.students.get-next-id') }}?grade=${encodeURIComponent(grade)}&classroom=${encodeURIComponent(classroom)}`;
+            const response = await fetch(url);
+            const data = await response.json();
+            studentIDInput.value = data.StudentID;
+        } catch (error) {
+            console.error('Error fetching student ID:', error);
+        }
+    }
+
+    gradeLevelSelect.addEventListener('change', fetchNextStudentID);
+    classroomInput.addEventListener('input', fetchNextStudentID);
+</script>
+@endpush

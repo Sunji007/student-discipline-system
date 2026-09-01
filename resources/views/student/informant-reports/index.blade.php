@@ -10,9 +10,34 @@
         <p>ติดตามสถานะการตรวจสอบข้อมูลที่ท่านรายงาน</p>
     </div>
     <a href="{{ route($layoutPrefix . '.informant-reports.create') }}" class="btn btn-gold">
-        <i class="fas fa-plus"></i> แจ้งเบาะแสใหม่
+        <i class="fas fa-plus"></i> เพิ่ม
     </a>
 </div>
+
+@if(session('success'))
+<div style="background:#f0fdf4; border:1px solid #bbf7d0; border-left:4px solid #10b981; border-radius:8px; padding:1rem 1.25rem; margin-bottom:1.25rem; color:#166534; display:flex; align-items:center; gap:0.75rem; box-shadow:0 2px 8px rgba(16,185,129,0.12);">
+    <i class="fas fa-check-circle" style="font-size:1.5rem; color:#10b981; flex-shrink:0;"></i>
+    <div style="flex:1;">
+        <div style="font-weight:700; font-size:0.95rem;">ส่งข้อมูลสำเร็จแล้ว!</div>
+        <div style="font-size:0.85rem; margin-top:0.15rem; color:#15803d;">{{ session('success') }}</div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (typeof Swal !== 'undefined') {
+        Swal.fire({
+            title: 'ส่งสำเร็จแล้ว',
+            text: "{{ session('success') }}",
+            icon: 'success',
+            confirmButtonText: 'ตกลง',
+            confirmButtonColor: '#10b981'
+        });
+    }
+});
+</script>
+@endif
 
 <div class="card">
     <div class="table-wrap">
@@ -62,7 +87,7 @@
                         @endif
                     </td>
                     <td style="font-size:0.82rem; color:var(--text-muted);">
-                        {{ $report->created_at->format('d/m/Y H:i') }}
+                        {{ $report->created_at->format('d/m/') . ($report->created_at->year + 543) . $report->created_at->format(' H:i') }}
                     </td>
                     <td>
                         @php

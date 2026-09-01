@@ -6,8 +6,20 @@
 @section('content')
 <div class="page-header">
     <h2>เช็คชื่อนักเรียนเข้าแถว</h2>
-    <p>ห้องที่ปรึกษา: <strong>{{ auth()->user()->teacher->AdvisoryRoom ?? 'ไม่ระบุ' }}</strong></p>
+    <p>ห้องที่ปรึกษา: <strong>{{ $classroom ?? 'ไม่ระบุ' }}</strong></p>
 </div>
+
+@if(isset($rooms) && count($rooms) > 1)
+<div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; background: #f1f5f9; padding: 0.4rem; border-radius: 12px; width: fit-content; border: 1px solid var(--border);">
+    @foreach($rooms as $r)
+        <a href="{{ route('teacher.attendance.index', ['room' => $r, 'date' => $date]) }}" 
+           class="btn btn-sm {{ $classroom === $r ? 'btn-primary' : 'btn-outline' }}"
+           style="border-radius: 8px; padding: 0.4rem 1.25rem; font-weight: 700; transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.35rem;">
+           <i class="fas fa-door-open"></i> ห้อง {{ $r }}
+        </a>
+    @endforeach
+</div>
+@endif
 
 <div class="card">
     <div class="card-header-bar">
@@ -15,18 +27,20 @@
     </div>
     <div class="card-body-pad">
         <form method="GET" style="display:flex; gap:0.75rem; align-items:flex-end;">
+            <input type="hidden" name="room" value="{{ $classroom }}">
             <div class="form-group" style="margin:0;">
                 <label class="form-label">วันที่</label>
-                <input type="date" name="date" class="form-control" value="{{ $date }}">
+                <input type="text" id="att_date_display" class="form-control" style="background-color:#fff;" placeholder="วัน/เดือน/ปี พ.ศ.">
+                <input type="hidden" id="att_date_real" name="date" value="{{ $date }}">
             </div>
-            <button type="submit" class="btn btn-primary">ดูข้อมูล</button>
+            <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> ค้นหา</button>
         </form>
     </div>
 </div>
-
 <div class="card" style="margin-top:1rem;">
     <div class="card-header-bar">
-        <h3>รายชื่อนักเรียน — {{ \Carbon\Carbon::parse($date)->locale('th')->isoFormat('D MMMM YYYY') }}</h3>
+        @php $pDate = \Carbon\Carbon::parse($date)->locale('th'); @endphp
+        <h3>รายชื่อนักเรียน — {{ $pDate->isoFormat('D MMMM ') . ($pDate->year + 543) }}</h3>
         <div style="font-size:0.82rem; color:var(--text-muted);">{{ $students->count() }} คน</div>
     </div>
 
@@ -86,7 +100,7 @@
 
         <div style="padding:1rem 1.25rem; border-top:1px solid #ede8e0; display:flex; gap:0.75rem; align-items:center;">
             <button type="submit" class="btn btn-primary">
-                <i class="fas fa-save"></i> บันทึกการเข้าแถว
+                <i class="fas fa-save"></i> บันทึก
             </button>
             <span style="font-size:0.8rem; color:var(--text-muted);">
                 ระบบจะบันทึกทับข้อมูลเดิมของวันนั้นอัตโนมัติ
@@ -98,6 +112,12 @@
 
 @push('scripts')
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof initBEDatepicker === 'function') {
+            initBEDatepicker("#att_date", "{{ $date }}");
+        }
+    });
+
     // Interactive radio buttons
     document.querySelectorAll('.attendance-radio').forEach(radio => {
         radio.addEventListener('change', function () {

@@ -10,7 +10,7 @@
         <p>คุณบันทึกไปทั้งหมด {{ $records->total() }} รายการ</p>
     </div>
     <a href="{{ route('teacher.behavior-records.create') }}" class="btn btn-primary btn-sm">
-        <i class="fas fa-plus"></i> เพิ่มบันทึกใหม่
+        <i class="fas fa-plus"></i> เพิ่ม
     </a>
 </div>
 
@@ -31,14 +31,14 @@
                 @forelse($records as $r)
                 <tr>
                     <td style="font-size:0.82rem; color:var(--text-muted);">
-                        {{ \Carbon\Carbon::parse($r->RecordDate)->format('d/m/Y') }}
+                        {{ \Carbon\Carbon::parse($r->RecordDate)->format('d/m/') . (\Carbon\Carbon::parse($r->RecordDate)->year + 543) }}
                     </td>
                     <td>
                         <div style="font-weight:500;">{{ $r->student->FullName ?? 'N/A' }}</div>
                         <div style="font-size:0.75rem; color:var(--text-muted);">ห้อง {{ $r->student->Classroom ?? '-' }}</div>
                     </td>
                     <td>
-                        <div style="font-size:0.875rem;">{{ $r->rule->RuleName ?? '-' }}</div>
+                        <div style="font-size:0.875rem; font-weight:500;">{{ $r->rule->RuleName ?? '-' }}</div>
                     </td>
                     <td>
                         <strong style="color:{{ optional($r->rule)->RuleType === 'ตัดคะแนน' ? 'var(--red)' : 'var(--green)' }}">
@@ -47,13 +47,18 @@
                     </td>
                     <td>
                         @php
-                            $sc = match($r->Status) {
-                                'รออนุมัติ' => 'badge-gold', 'อนุมัติแล้ว' => 'badge-green',
-                                'ปฏิเสธ' => 'badge-red', 'อยู่ในระหว่างโต้แย้ง' => 'badge-orange',
+                            $displayStatus = match($r->Status) {
+                                'อนุมัติแล้ว', 'อนุมัติ' => 'อนุมัติ',
+                                'อยู่ในระหว่างโต้แย้ง', 'อยู่ในระหว่างยื่นอุทธรณ์' => 'อยู่ในระหว่างยื่นอุทธรณ์',
+                                default => $r->Status,
+                            };
+                            $sc = match($displayStatus) {
+                                'รออนุมัติ' => 'badge-gold', 'อนุมัติ' => 'badge-green',
+                                'ปฏิเสธ' => 'badge-red', 'อยู่ในระหว่างยื่นอุทธรณ์' => 'badge-orange',
                                 default => 'badge-gray',
                             };
                         @endphp
-                        <span class="badge {{ $sc }}" style="font-size:0.7rem;">{{ $r->Status }}</span>
+                        <span class="badge {{ $sc }}">{{ $displayStatus }}</span>
                     </td>
                     <td style="text-align:right;">
                         <a href="{{ route('teacher.behavior-records.show', $r->RecordID) }}" class="btn btn-outline btn-sm">

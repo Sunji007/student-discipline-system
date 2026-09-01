@@ -181,7 +181,8 @@
                 {{-- Date Fields --}}
                 <div id="daily-field" class="form-group">
                     <label class="form-label">วันที่</label>
-                    <input type="date" name="date" class="form-control" value="{{ date('Y-m-d') }}" style="max-width: 240px;">
+                    <input type="text" id="prayer_date_display" class="form-control" style="max-width: 240px; background-color: #fff;" placeholder="วัน/เดือน/ปี พ.ศ.">
+                    <input type="hidden" id="prayer_date_real" name="date" value="{{ date('Y-m-d') }}">
                 </div>
 
                 <div id="monthly-field" class="form-group" style="display: none;">
@@ -272,30 +273,18 @@
         </div>
     </div>
 
-    {{-- Quick links --}}
-    <div class="card">
-        <div class="card-header-bar">
-            <h3><i class="fas fa-star-and-crescent" style="color: #10b981; margin-right: 0.5rem;"></i>ลิงก์ด่วน</h3>
-        </div>
-        <div class="card-body-pad">
-            <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
-                <a href="{{ route('prayer.scan') }}" class="btn btn-primary">
-                    <i class="fas fa-qrcode"></i> เช็กชื่อละหมาด
-                </a>
-                <a href="{{ route('prayer.dashboard') }}" class="btn btn-outline">
-                    <i class="fas fa-chart-bar"></i> แดชบอร์ดสรุป
-                </a>
-                <a href="{{ route('prayer.calendar') }}" class="btn btn-outline">
-                    <i class="fas fa-calendar-alt"></i> ปฏิทินการละหมาด
-                </a>
-            </div>
-        </div>
-    </div>
+
 </div>
 @endsection
 
 @push('scripts')
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof initBEDatepicker === 'function') {
+            initBEDatepicker("#prayer_date", "{{ date('Y-m-d') }}");
+        }
+    });
+
     function setType(type) {
         // Update hidden input
         document.getElementById('typeInput').value = type;

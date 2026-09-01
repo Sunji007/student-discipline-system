@@ -59,11 +59,26 @@ class RolePermissionController extends Controller
 
         foreach ($this->roles as $role) {
             foreach ($this->modules as $module) {
+                $canAccess = isset($submitted[$role][$module]);
+
+                // บังคับสิทธิ์ความปลอดภัยในระดับ Server-side
+                if ($role === 'ผู้ดูแลระบบ') {
+                    // ผู้ดูแลระบบต้องเข้าถึงสิ่งจำเป็นได้เสมอ
+                    if (in_array($module, ['dashboard', 'users', 'permissions'])) {
+                        $canAccess = true;
+                    }
+                } else {
+                    // บทบาทอื่นๆ ห้ามเข้าถึงหน้าจัดการผู้ใช้หรือตั้งค่าสิทธิ์เด็ดขาด
+                    if (in_array($module, ['users', 'permissions'])) {
+                        $canAccess = false;
+                    }
+                }
+
                 RolePermission::create([
                     'PermissionID' => Str::uuid(),
                     'Role'         => $role,
                     'ModuleName'   => $module,
-                    'CanAccess'    => isset($submitted[$role][$module]),
+                    'CanAccess'    => $canAccess,
                 ]);
             }
         }

@@ -14,6 +14,7 @@ class BehaviorRecordController extends Controller
 
         $records = BehaviorRecord::with('rule')
             ->where('StudentID', $student->StudentID)
+            ->where('semester_id', $this->getSelectedSemesterId())
             ->when($request->filled('type'), fn($q) =>
                 $q->whereHas('rule', fn($r) =>
                     $r->where('RuleType', $request->type)

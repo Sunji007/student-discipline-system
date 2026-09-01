@@ -53,7 +53,7 @@ class BehaviorRecordSeeder extends Seeder
 
                     // อัปเดตสถานะ record ให้สอดคล้อง
                     BehaviorRecord::where('RecordID', $recordId)
-                        ->update(['Status' => 'อยู่ในระหว่างโต้แย้ง']);
+                        ->update(['Status' => 'อยู่ในระหว่างยื่นอุทธรณ์']);
                 }
             }
 

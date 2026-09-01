@@ -146,11 +146,14 @@
         <div class="school-name">โรงเรียนศิริราษฎร์สามัคคี</div>
         <h1 class="report-title">{{ $reportTitle }} ({{ $type === 'daily' ? 'รายวัน' : ($type === 'weekly' ? 'รายสัปดาห์' : ($type === 'monthly' ? 'รายเดือน' : 'รายภาคเรียน')) }})</h1>
         <div class="report-period">{{ $periodText }}</div>
-        @if($grade || $classroom || $passingStatus)
+        @if($grade || $classroom || $passingStatus || ($search ?? ''))
             <div class="filter-info">
                 ระดับชั้น: {{ $grade ?? 'ทั้งหมด' }} | ห้องเรียน: {{ $classroom ?? 'ทั้งหมด' }}
                 @if($passingStatus)
                     | เกณฑ์การละหมาด: {{ $passingStatus === 'pass' ? 'ผ่านเกณฑ์ (80% ขึ้นไป)' : 'ไม่ผ่านเกณฑ์ (ต่ำกว่า 80%)' }}
+                @endif
+                @if(!empty($search))
+                    | ค้นหา: "{{ $search }}"
                 @endif
             </div>
         @endif
@@ -204,7 +207,7 @@
             <p>ผู้รายงานข้อมูล</p>
             <div class="sign-line"></div>
             <p style="font-size:0.85rem; color:#666;">(......................................................)</p>
-            <p style="font-size:0.8rem; color:#888; margin-top:0.25rem;">วันที่: {{ now()->locale('th')->isoFormat('D MMMM YYYY') }}</p>
+            <p style="font-size:0.8rem; color:#888; margin-top:0.25rem;">วันที่: {{ now()->locale('th')->isoFormat('D MMMM ') . (now()->year + 543) }}</p>
         </div>
     </div>
 

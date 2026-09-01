@@ -7,7 +7,8 @@
 @php
     $prevMonth = \Carbon\Carbon::create($year, $mon, 1)->subMonth()->format('Y-m');
     $nextMonth = \Carbon\Carbon::create($year, $mon, 1)->addMonth()->format('Y-m');
-    $thMonth   = \Carbon\Carbon::create($year, $mon, 1)->locale('th')->isoFormat('MMMM YYYY');
+    $thCarbon  = \Carbon\Carbon::create($year, $mon, 1)->locale('th');
+    $thMonth   = $thCarbon->isoFormat('MMMM ') . ($year > 2400 ? $year : $year + 543);
     $firstDow  = (int)\Carbon\Carbon::create($year, $mon, 1)->dayOfWeek; // 0=Sun
 @endphp
 

@@ -38,11 +38,27 @@ class MessageController extends Controller
             403
         );
 
-        if ($message->ReceiverID === $userId && !$message->IsRead) {
-            $message->update(['IsRead' => true]);
-        }
+        $otherUserId = $message->SenderID === $userId ? $message->ReceiverID : $message->SenderID;
+        $otherUser = User::find($otherUserId);
 
-        return view('messages.show', compact('message'));
+        // Mark all unread messages from this sender as read
+        Message::where('SenderID', $otherUserId)
+            ->where('ReceiverID', $userId)
+            ->where('IsRead', false)
+            ->update(['IsRead' => true]);
+
+        // Get full conversation thread
+        $thread = Message::with(['sender', 'receiver'])
+            ->where(function ($q) use ($userId, $otherUserId) {
+                $q->where('SenderID', $userId)->where('ReceiverID', $otherUserId);
+            })
+            ->orWhere(function ($q) use ($userId, $otherUserId) {
+                $q->where('SenderID', $otherUserId)->where('ReceiverID', $userId);
+            })
+            ->orderBy('SentDate', 'asc')
+            ->get();
+
+        return view('messages.show', compact('message', 'thread', 'otherUser'));
     }
 
     public function create()
@@ -50,7 +66,8 @@ class MessageController extends Controller
         $recipients = User::where('UserID', '!=', auth()->user()->UserID)
             ->where('Status', 'ปกติ')
             ->orderBy('Role')
-            ->orderBy('FullName')
+            ->orderBy('FirstName')
+            ->orderBy('LastName')
             ->get();
 
         return view('messages.create', compact('recipients'));
@@ -59,16 +76,30 @@ class MessageController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'ReceiverID' => 'required|exists:users,UserID',
-            'Content'    => 'required|string|min:1|max:5000',
-            'attachment' => 'nullable|file|max:10240',
+            'ReceiverID'    => 'required|exists:users,UserID',
+            'Content'       => 'required|string|min:1|max:5000',
+            'attachment'    => 'nullable|file|max:10240',
+            'attachments'   => 'nullable|array',
+            'attachments.*' => 'nullable|file|max:10240',
         ]);
 
-        $attachmentDir = null;
-        if ($request->hasFile('attachment')) {
-            $attachmentDir = $request->file('attachment')
-                ->store('messages/attachments', 'public');
+        $savedFiles = [];
+        if ($request->hasFile('attachments')) {
+            foreach ($request->file('attachments') as $file) {
+                if ($file && $file->isValid()) {
+                    $savedFiles[] = $file->store('messages/attachments', 'public');
+                }
+            }
+        } elseif ($request->hasFile('attachment')) {
+            $file = $request->file('attachment');
+            if ($file && $file->isValid()) {
+                $savedFiles[] = $file->store('messages/attachments', 'public');
+            }
         }
+
+        $attachmentDir = !empty($savedFiles) ? json_encode($savedFiles) : null;
+
+        $receiverUser = User::find($validated['ReceiverID']);
 
         Message::create([
             'MessageID'     => Str::uuid(),
@@ -79,6 +110,22 @@ class MessageController extends Controller
             'IsRead'        => false,
             'AttachmentDir' => $attachmentDir,
         ]);
+
+        // Send copy to parent if requested
+        if ($request->boolean('send_to_parent') && $receiverUser && $receiverUser->Role === 'นักเรียน' && $receiverUser->student) {
+            $pRecord = \App\Models\ParentGuardian::where('StudentID', $receiverUser->student->StudentID)->first() ?? $receiverUser->student->parent;
+            if ($pRecord && $pRecord->user && $pRecord->user->UserID !== $validated['ReceiverID']) {
+                Message::create([
+                    'MessageID'     => Str::uuid(),
+                    'SenderID'      => auth()->user()->UserID,
+                    'ReceiverID'    => $pRecord->user->UserID,
+                    'Content'       => $validated['Content'],
+                    'SentDate'      => now(),
+                    'IsRead'        => false,
+                    'AttachmentDir' => $attachmentDir,
+                ]);
+            }
+        }
 
         return redirect()->back()->with('success', 'ส่งข้อความเรียบร้อยแล้ว');
     }

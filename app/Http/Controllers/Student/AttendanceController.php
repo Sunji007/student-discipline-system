@@ -24,10 +24,11 @@ class AttendanceController extends Controller
 
         $daysInMonth = cal_days_in_month(CAL_GREGORIAN, $mon, $year);
 
+        $selectedSemesterId = $this->getSelectedSemesterId();
         $summary = [
-            'มา'   => Attendance::where('StudentID', $student->StudentID)->where('Status', 'มา')->count(),
-            'สาย'  => Attendance::where('StudentID', $student->StudentID)->where('Status', 'สาย')->count(),
-            'ขาด'  => Attendance::where('StudentID', $student->StudentID)->where('Status', 'ขาด')->count(),
+            'มา'   => Attendance::where('StudentID', $student->StudentID)->where('semester_id', $selectedSemesterId)->where('Status', 'มา')->count(),
+            'สาย'  => Attendance::where('StudentID', $student->StudentID)->where('semester_id', $selectedSemesterId)->where('Status', 'สาย')->count(),
+            'ขาด'  => Attendance::where('StudentID', $student->StudentID)->where('semester_id', $selectedSemesterId)->where('Status', 'ขาด')->count(),
         ];
 
         return view('student.attendance.index', compact(

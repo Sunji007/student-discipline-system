@@ -10,12 +10,15 @@ class BehaviorRecordController extends Controller
 {
     public function index(Request $request)
     {
-        $student = auth()->user()->parentGuardian?->student;
+        $students = auth()->user()->parentStudents;
+        abort_if($students->isEmpty(), 404, 'ไม่พบข้อมูลบุตรหลาน');
 
-        abort_if(!$student, 404, 'ไม่พบข้อมูลบุตรหลาน');
+        $selectedStudentId = session('selected_student_id', $students->first()->StudentID);
+        $student = $students->firstWhere('StudentID', $selectedStudentId) ?? $students->first();
 
         $query = BehaviorRecord::with('rule')
-            ->where('StudentID', $student->StudentID);
+            ->where('StudentID', $student->StudentID)
+            ->where('semester_id', $this->getSelectedSemesterId());
 
         if ($request->filled('type')) {
             $query->whereHas('rule', fn($q) =>
@@ -25,6 +28,6 @@ class BehaviorRecordController extends Controller
 
         $records = $query->orderBy('RecordDate', 'desc')->paginate(20);
 
-        return view('parent.behavior-records.index', compact('student', 'records'));
+        return view('parent.behavior-records.index', compact('student', 'students', 'records'));
     }
 }

@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@section('title', 'แก้ไขกฎเกณฑ์')
-@section('page-title', 'แก้ไขกฎเกณฑ์พฤติกรรม')
+@section('title', 'แก้ไขเกณฑ์ประเมินพฤติกรรม')
+@section('page-title', 'แก้ไขเกณฑ์ประเมินพฤติกรรม')
 
 @section('content')
 <div style="max-width:580px;">
     <div class="card">
         <div class="card-header-bar">
-            <h3>แก้ไขกฎเกณฑ์</h3>
+            <h3>แก้ไขเกณฑ์ประเมินพฤติกรรม</h3>
             <a href="{{ route('discipline.behavior-rules.index') }}" class="btn btn-outline btn-sm">
                 <i class="fas fa-arrow-left"></i> ย้อนกลับ
             </a>
@@ -19,43 +19,44 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label class="form-label">ประเภท <span style="color:var(--red)">*</span></label>
-                        <select name="RuleType" class="form-control">
+                    <div class="form-group">
+                        <label class="form-label">ประเภท <span style="color:var(--red)">*</span></label>
+                        <select name="RuleType" class="form-control" id="ruleTypeSelect">
                             <option value="ตัดคะแนน" {{ old('RuleType', $behaviorRule->RuleType) === 'ตัดคะแนน' ? 'selected' : '' }}>▼ ตัดคะแนน</option>
                             <option value="เพิ่มคะแนน" {{ old('RuleType', $behaviorRule->RuleType) === 'เพิ่มคะแนน' ? 'selected' : '' }}>▲ เพิ่มคะแนน</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label class="form-label">หมวดหมู่ <span style="color:var(--red)">*</span></label>
-                        <input type="text" name="Category" class="form-control"
-                               value="{{ old('Category', $behaviorRule->Category) }}" list="category-list">
-                        <datalist id="category-list">
-                            @foreach(['การแต่งกาย','การเรียน','ความประพฤติ','การเข้าแถว','กิจกรรม','ความดี'] as $cat)
-                                <option value="{{ $cat }}">
-                            @endforeach
-                        </datalist>
+                        <select name="Category" id="categorySelect" class="form-control {{ $errors->has('Category') ? 'is-invalid' : '' }}" required>
+                            <option value="">เลือกหมวดหมู่</option>
+                        </select>
+                        @error('Category')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">ชื่อกฎเกณฑ์ <span style="color:var(--red)">*</span></label>
-                    <input type="text" name="RuleName" class="form-control"
+                    <label class="form-label">ชื่อเกณฑ์ประเมินพฤติกรรม <span style="color:var(--red)">*</span></label>
+                    <input type="text" name="RuleName" class="form-control {{ $errors->has('RuleName') ? 'is-invalid' : '' }}"
                            value="{{ old('RuleName', $behaviorRule->RuleName) }}" required>
+                    @error('RuleName')<div class="invalid-feedback" style="display:block; color:var(--red); font-size:0.8rem; margin-top:0.3rem;">{{ $message }}</div>@enderror
                 </div>
 
                 <div class="form-group">
                     <label class="form-label">คะแนนที่เปลี่ยนแปลง <span style="color:var(--red)">*</span></label>
-                    <input type="number" name="ScoreModifier" class="form-control"
-                           value="{{ old('ScoreModifier', abs($behaviorRule->ScoreModifier)) }}" min="1" max="100" required>
+                    <input type="text" name="ScoreModifier" id="scoreInput" class="form-control"
+                           value="{{ old('ScoreModifier', abs($behaviorRule->ScoreModifier)) }}"
+                           inputmode="numeric" pattern="[0-9]*" required>
                     <div style="font-size:0.75rem; color:var(--text-muted); margin-top:0.3rem;">
                         ปัจจุบัน: <strong style="color:{{ $behaviorRule->RuleType === 'ตัดคะแนน' ? 'var(--red)' : 'var(--green)' }}">
                             {{ $behaviorRule->RuleType === 'ตัดคะแนน' ? '-' : '+' }}{{ abs($behaviorRule->ScoreModifier) }}
-                        </strong>
+                        </strong> (สูงสุด 100 คะแนน)
                     </div>
                 </div>
 
                 <div style="display:flex; gap:0.75rem; margin-top:0.5rem;">
                     <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-save"></i> บันทึกการแก้ไข
+                        <i class="fas fa-save"></i> บันทึก
                     </button>
                     <a href="{{ route('discipline.behavior-rules.index') }}" class="btn btn-outline">ยกเลิก</a>
                 </div>
@@ -63,4 +64,78 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const typeSelect     = document.getElementById('ruleTypeSelect');
+        const categorySelect = document.getElementById('categorySelect');
+        const scoreInput     = document.getElementById('scoreInput');
+        const initialCategory = "{{ old('Category', $behaviorRule->Category) }}";
+
+        const deductCategories = [
+            'การแต่งกายและทรงผม',
+            'ความประพฤติและกริยามารยาท',
+            'สารเสพติดและของต้องห้าม',
+            'การใช้เครื่องมือสื่อสาร',
+            'การเข้าเรียนและระเบียบสถานศึกษา'
+        ];
+
+        const addCategories = [
+            'ความดีและจิตอาสา',
+            'กิจกรรมและสร้างชื่อเสียง',
+            'ความประพฤติดีเด่นและวินัย',
+            'คุณธรรมและศาสนกิจ',
+            'ความเป็นผู้นำและการมีส่วนร่วม',
+            'วิชาการและความขยันหมั่นเพียร'
+        ];
+
+        function updateCategoryOptions() {
+            const type = typeSelect ? typeSelect.value : '';
+            const currentVal = categorySelect.value || initialCategory;
+
+            categorySelect.innerHTML = '<option value="">เลือกหมวดหมู่</option>';
+
+            let targetList = [];
+            if (type === 'ตัดคะแนน') {
+                targetList = deductCategories;
+            } else if (type === 'เพิ่มคะแนน') {
+                targetList = addCategories;
+            } else {
+                targetList = [...deductCategories, ...addCategories];
+            }
+
+            targetList.forEach(cat => {
+                const opt = document.createElement('option');
+                opt.value = cat;
+                opt.textContent = cat;
+                if (currentVal && currentVal === cat) {
+                    opt.selected = true;
+                }
+                categorySelect.appendChild(opt);
+            });
+        }
+
+        if (typeSelect) {
+            typeSelect.addEventListener('change', updateCategoryOptions);
+        }
+
+        if (scoreInput) {
+            scoreInput.addEventListener('input', function() {
+                // Strip any non-digit character first
+                this.value = this.value.replace(/[^0-9]/g, '');
+                let score = parseInt(this.value) || 0;
+                if (score > 100) {
+                    this.value = 100;
+                } else if (score < 1 && this.value !== '') {
+                    this.value = 1;
+                }
+            });
+        }
+
+        // Initialize category dropdown on load
+        updateCategoryOptions();
+    });
+</script>
+@endpush
 @endsection

@@ -16,6 +16,7 @@ class DashboardController extends Controller
             $counts = DB::selectOne('
                 SELECT
                     (SELECT COUNT(*) FROM users)            AS total_users,
+                    (SELECT COUNT(*) FROM users WHERE Role = \'ผู้ดูแลระบบ\') AS total_admins,
                     (SELECT COUNT(*) FROM students)         AS total_students,
                     (SELECT COUNT(*) FROM teachers)         AS total_teachers,
                     (SELECT COUNT(*) FROM discipline_staff) AS total_discipline,
@@ -24,7 +25,7 @@ class DashboardController extends Controller
             return (array) $counts;
         });
 
-        $recentUsers = User::select('UserID','Username','FullName','Role','Status','created_at')
+        $recentUsers = User::select('UserID','Username','FirstName','LastName','Role','Status','created_at')
             ->latest()
             ->take(8)
             ->get();

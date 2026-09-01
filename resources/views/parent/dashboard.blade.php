@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'แดชบอร์ดผู้ปกครอง')
-@section('page-title', 'แดชบอร์ดผู้ปกครอง')
+@section('title', 'หน้าหลัก — ผู้ปกครอง')
+@section('page-title', 'หน้าหลักผู้ปกครอง')
 
 @section('content')
 @if(!$student)
@@ -16,8 +16,8 @@
 @endphp
 
 <div class="page-header">
-    <h2>ข้อมูลบุตรหลาน</h2>
-    <p>อัปเดตล่าสุด: {{ now()->locale('th')->isoFormat('D MMMM YYYY, HH:mm') }}</p>
+    <h2>ข้อมูลผู้ปกครองและบุตรหลาน</h2>
+    <p>ผู้ปกครอง: {{ auth()->user()->FullName }} &nbsp;&bull;&nbsp; อัปเดตล่าสุด: {{ now()->locale('th')->isoFormat('D MMMM ') . (now()->year + 543) . now()->locale('th')->isoFormat(', HH:mm น.') }}</p>
 </div>
 
 {{-- Student Card --}}
@@ -45,12 +45,23 @@
                 {{ $score }}
             </div>
             <div style="font-size:0.75rem; color:var(--text-muted);">คะแนนพฤติกรรม</div>
-            <span class="badge {{ $student->RiskStatus === 'ปกติ' ? 'badge-green' : ($student->RiskStatus === 'เฝ้าระวัง' ? 'badge-orange' : 'badge-red') }}" style="margin-top:0.35rem;">
-                {{ $student->RiskStatus }}
+            @php
+                $parentRiskStatus = in_array($student->RiskStatus, ['เฝ้าระวัง', 'ตักเตือน']) ? 'ตักเตือน' : (in_array($student->RiskStatus, ['วิกฤต', 'ทัณฑ์บน']) ? 'ทัณฑ์บน' : 'ปกติ');
+                $parentBadgeClass = match($parentRiskStatus) {
+                    'ปกติ' => 'badge-green',
+                    'ตักเตือน' => 'badge-orange',
+                    'ทัณฑ์บน' => 'badge-red',
+                    default => 'badge-green'
+                };
+            @endphp
+            <span class="badge {{ $parentBadgeClass }}" style="margin-top:0.35rem;">
+                {{ $parentRiskStatus }}
             </span>
         </div>
     </div>
 </div>
+
+
 
 @php
     $currentMonth = now()->month;
@@ -60,7 +71,7 @@
 <div class="card" style="margin-bottom:1rem; border-left:4px solid {{ $prayerStatus['status'] === 'pass' ? '#10b981' : ($prayerStatus['status'] === 'corrected' ? '#3b82f6' : '#ef4444') }};">
     <div style="padding:1.25rem 1.5rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
         <div>
-            <h4 style="color:#0d5c3a; margin:0;"><i class="fas fa-star-and-crescent"></i> เกณฑ์การละหมาดของบุตรหลาน ประจำเดือน {{ now()->locale('th')->isoFormat('MMMM YYYY') }}</h4>
+            <h4 style="color:#0d5c3a; margin:0;"><i class="fas fa-star-and-crescent"></i> เกณฑ์การละหมาดของบุตรหลาน ประจำเดือน {{ now()->locale('th')->isoFormat('MMMM ') . (now()->year + 543) }}</h4>
             <p style="font-size:0.8rem; color:var(--text-muted); margin-top:0.25rem;">
                 สถิติการเช็กชื่อในเดือนนี้: ละหมาดแล้ว <strong>{{ $prayerStatus['prayed_count'] }}</strong> ครั้ง | ขาด <strong>{{ $prayerStatus['absent_count'] }}</strong> ครั้ง | ละหมาดไม่ได้ <strong>{{ $prayerStatus['exempt_count'] }}</strong> ครั้ง
             </p>
@@ -101,15 +112,22 @@
                 <div style="flex:1; min-width:0;">
                     <div style="font-size:0.85rem; font-weight:500;">{{ $r->rule->RuleName }}</div>
                     <div style="font-size:0.75rem; color:var(--text-muted);">
-                        {{ \Carbon\Carbon::parse($r->RecordDate)->format('d/m/Y') }}
+                        @php $rd = \Carbon\Carbon::parse($r->RecordDate); @endphp
+                        {{ $rd->format('d/m/') . ($rd->year + 543) }}
                     </div>
                 </div>
                 <div style="display:flex; align-items:center; gap:0.5rem; flex-shrink:0;">
                     <span style="font-weight:700; font-size:0.9rem; color:{{ $r->rule->RuleType === 'ตัดคะแนน' ? 'var(--red)' : 'var(--green)' }}">
                         {{ $r->rule->RuleType === 'ตัดคะแนน' ? '-' : '+' }}{{ abs($r->rule->ScoreModifier) }}
                     </span>
-                    <span class="badge {{ $r->Status === 'อนุมัติแล้ว' ? 'badge-green' : 'badge-gold' }}" style="font-size:0.65rem;">
-                        {{ $r->Status }}
+                    @php
+                        $displayStatus = match($r->Status) {
+                            'อนุมัติแล้ว', 'อนุมัติ' => 'อนุมัติ',
+                            default => $r->Status,
+                        };
+                    @endphp
+                    <span class="badge {{ in_array($r->Status, ['อนุมัติ', 'อนุมัติแล้ว']) ? 'badge-green' : 'badge-gold' }}" style="font-size:0.65rem;">
+                        {{ $displayStatus }}
                     </span>
                 </div>
             </div>

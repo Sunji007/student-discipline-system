@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'จัดการนักเรียน')
+@section('title', 'จัดการข้อมูลนักเรียน')
 @section('page-title', 'จัดการข้อมูลนักเรียน')
 
 @section('content')
@@ -9,9 +9,14 @@
         <h2>นักเรียนทั้งหมด</h2>
         <p>จัดการฐานข้อมูลนักเรียนและพิมพ์บัตรนักเรียน</p>
     </div>
-    <a href="{{ route('admin.students.create') }}" class="btn btn-primary">
-        <i class="fas fa-plus"></i> เพิ่มนักเรียนใหม่
-    </a>
+    <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
+        <a href="{{ route('admin.students.import') }}" class="btn btn-outline" style="display:inline-flex; align-items:center; gap:0.4rem; font-weight:600; color:#10b981; border-color:#10b981;">
+            <i class="fas fa-file-excel"></i> นำเข้าไฟล์ Excel / CSV
+        </a>
+        <a href="{{ route('admin.students.create') }}" class="btn btn-primary" style="display:inline-flex; align-items:center; gap:0.4rem; font-weight:600;">
+            <i class="fas fa-plus"></i> เพิ่มนักเรียนใหม่
+        </a>
+    </div>
 </div>
 
 {{-- Filter --}}
@@ -89,7 +94,7 @@
                                 <i class="fas fa-pen"></i>
                             </a>
                             <form method="POST" action="{{ route('admin.students.destroy', $s->StudentID) }}"
-                                  onsubmit="return confirm('ยืนยันการลบนักเรียน {{ $s->FullName }}?')">
+                                  data-confirm="ยืนยันการลบนักเรียน {{ $s->FullName }}?">
                                 @csrf @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-sm">
                                     <i class="fas fa-trash"></i>

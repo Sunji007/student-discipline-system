@@ -27,12 +27,9 @@ class RolePermissionSeeder extends Seeder
         $access = [
             'ผู้ดูแลระบบ' => [
                 'dashboard', 'users', 'permissions',
-                'behavior-rules', 'behavior-records',
-                'appeals', 'attendance', 'messages',
-                'risk-students', 'informant-reports',
             ],
             'ฝ่ายปกครอง' => [
-                'dashboard', 'behavior-records', 'appeals',
+                'dashboard', 'behavior-records', 'behavior-rules', 'appeals',
                 'attendance', 'messages', 'risk-students',
                 'informant-reports',
             ],
@@ -42,7 +39,7 @@ class RolePermissionSeeder extends Seeder
             ],
             'นักเรียน' => [
                 'dashboard', 'behavior-records',
-                'appeals', 'attendance', 'messages',
+                'appeals', 'attendance', 'messages', 'informant-reports',
             ],
             'ผู้ปกครอง' => [
                 'dashboard', 'behavior-records',

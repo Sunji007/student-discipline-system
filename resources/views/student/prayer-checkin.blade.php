@@ -453,11 +453,11 @@
 
     @php
         $currentHour = now()->hour;
-        $defaultPeriod = $currentHour < 14 ? 'เที่ยง' : 'บ่าย';
-        $prayedNoon  = $prayerToday->where('Period','เที่ยง')->where('Status','ละหมาด')->first();
-        $absentNoon  = $prayerToday->where('Period','เที่ยง')->where('Status','ละหมาดไม่ได้')->first();
-        $prayedAsr   = $prayerToday->where('Period','บ่าย')->where('Status','ละหมาด')->first();
-        $absentAsr   = $prayerToday->where('Period','บ่าย')->where('Status','ละหมาดไม่ได้')->first();
+        $defaultPeriod = $currentHour < 14 ? 'ซุฮรี' : 'อัศรี';
+        $prayedNoon  = $prayerToday->whereIn('Period',['เที่ยง', 'ซุฮรี'])->where('Status','ละหมาด')->first();
+        $absentNoon  = $prayerToday->whereIn('Period',['เที่ยง', 'ซุฮรี'])->where('Status','ละหมาดไม่ได้')->first();
+        $prayedAsr   = $prayerToday->whereIn('Period',['บ่าย', 'อัศรี'])->where('Status','ละหมาด')->first();
+        $absentAsr   = $prayerToday->whereIn('Period',['บ่าย', 'อัศรี'])->where('Status','ละหมาดไม่ได้')->first();
     @endphp
 
     {{-- ===== SCAN OPTIONS CARD ===== --}}
@@ -470,11 +470,11 @@
             <!-- Period Select -->
             <label class="form-label" style="font-weight: 700; color: var(--islamic-primary); margin-bottom: 0.5rem; display: block; font-size: 0.82rem;">1. เลือกช่วงเวลาการละหมาด</label>
             <div class="toggle-group" id="period-toggles" style="margin-bottom: 1.25rem;">
-                <button type="button" class="toggle-btn {{ $defaultPeriod === 'เที่ยง' ? 'period-active' : '' }}" id="btnNoon" onclick="setPeriod('เที่ยง')" data-period="เที่ยง">
-                    <i class="fas fa-sun"></i> เที่ยง (ซุฮรี)
+                <button type="button" class="toggle-btn {{ in_array($defaultPeriod, ['เที่ยง', 'ซุฮรี']) ? 'period-active' : '' }}" id="btnNoon" onclick="setPeriod('ซุฮรี')" data-period="ซุฮรี">
+                    <i class="fas fa-sun"></i> ซุฮรี
                 </button>
-                <button type="button" class="toggle-btn {{ $defaultPeriod === 'บ่าย' ? 'period-active' : '' }}" id="btnAsr" onclick="setPeriod('บ่าย')" data-period="บ่าย">
-                    <i class="fas fa-cloud-sun"></i> บ่าย (อัศรี)
+                <button type="button" class="toggle-btn {{ in_array($defaultPeriod, ['บ่าย', 'อัศรี']) ? 'period-active' : '' }}" id="btnAsr" onclick="setPeriod('อัศรี')" data-period="อัศรี">
+                    <i class="fas fa-cloud-sun"></i> อัศรี
                 </button>
             </div>
 
@@ -499,16 +499,16 @@
         <div class="today-status-header">
             <i class="fas fa-calendar-day" style="color:#10b981;"></i>
             <h3>สถานะวันนี้</h3>
-            <span class="today-date-badge">{{ now()->locale('th')->isoFormat('D MMM YYYY') }}</span>
+            <span class="today-date-badge">{{ now()->locale('th')->isoFormat('D MMM ') . (now()->year + 543) }}</span>
         </div>
 
-        {{-- ละหมาดเที่ยง --}}
+        {{-- ละหมาดซุฮรี --}}
         <div class="prayer-row">
             <div class="prayer-icon-wrap" style="background:rgba(251,191,36,0.12);">
                 <i class="fas fa-sun" style="color:#d97706;"></i>
             </div>
             <div class="prayer-row-info">
-                <div class="prayer-row-name">ละหมาดเที่ยง</div>
+                <div class="prayer-row-name">ละหมาดซุฮรี</div>
                 <div class="prayer-row-time">Zuhur (12:00 – 13:30)</div>
             </div>
             <div id="status-chip-noon">
@@ -528,13 +528,13 @@
             </div>
         </div>
 
-        {{-- ละหมาดบ่าย --}}
+        {{-- ละหมาดอัศรี --}}
         <div class="prayer-row">
             <div class="prayer-icon-wrap" style="background:rgba(16,185,129,0.1);">
                 <i class="fas fa-cloud-sun" style="color:#059669;"></i>
             </div>
             <div class="prayer-row-info">
-                <div class="prayer-row-name">ละหมาดบ่าย</div>
+                <div class="prayer-row-name">ละหมาดอัศรี</div>
                 <div class="prayer-row-time">Asr (15:00 – 16:30)</div>
             </div>
             <div id="status-chip-asr">
@@ -599,8 +599,8 @@ function setPeriod(period) {
     sessionStorage.setItem('selectedPeriod', period);
     var btnNoon = document.getElementById('btnNoon');
     var btnAsr  = document.getElementById('btnAsr');
-    if (btnNoon) btnNoon.classList.toggle('period-active', period === 'เที่ยง');
-    if (btnAsr)  btnAsr.classList.toggle('period-active',  period === 'บ่าย');
+    if (btnNoon) btnNoon.classList.toggle('period-active', period === 'ซุฮรี' || period === 'เที่ยง');
+    if (btnAsr)  btnAsr.classList.toggle('period-active',  period === 'อัศรี' || period === 'บ่าย');
     
     generateCodes();
 }
@@ -619,11 +619,11 @@ function setStatus(status) {
 
 // ===== Generate Codes Dynamically =====
 function generateCodes() {
-    var periodVal = selectedPeriod; // 'เที่ยง' or 'บ่าย'
+    var periodVal = (selectedPeriod === 'ซุฮรี' || selectedPeriod === 'เที่ยง') ? 'ซุฮรี' : 'อัศรี';
     var statusVal = selectedStatus; // 'ละหมาด' or 'ละหมาดไม่ได้'
     
     // Format barcode payload: e.g. 10001-noon-pray
-    var barcodePeriod = (periodVal === 'เที่ยง') ? 'noon' : 'asr';
+    var barcodePeriod = (periodVal === 'ซุฮรี' || periodVal === 'เที่ยง') ? 'noon' : 'asr';
     var barcodeStatus = (statusVal === 'ละหมาด') ? 'pray' : 'exempt';
     var barcodePayload = studentId + '-' + barcodePeriod + '-' + barcodeStatus;
     

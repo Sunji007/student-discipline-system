@@ -12,7 +12,8 @@ return new class extends Migration
             $table->string('StudentID', 10)->primary();
             $table->string('UserID', 36);
             $table->string('ParentID', 36)->nullable();
-            $table->string('FullName', 100);
+            $table->string('FirstName', 50);
+            $table->string('LastName', 50);
             $table->string('GradeLevel', 10)->nullable();
             $table->string('Classroom', 10)->nullable();
             $table->integer('BehaviorScore')->default(100);

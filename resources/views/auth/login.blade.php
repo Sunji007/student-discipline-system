@@ -34,6 +34,7 @@
             --text-muted:    hsl(260, 12%, 58%);
             --border:        hsl(260, 18%, 88%);
             --red:           hsl(348, 68%, 45%);
+            --green:         #16a34a;
             --r-sm: 10px;
             --r-md: 16px;
             --r-lg: 24px;
@@ -51,7 +52,8 @@
             justify-content: center;
             background: var(--purple-dark);
             position: relative;
-            overflow: hidden;
+            overflow-y: auto;
+            padding: 2rem 1rem;
         }
 
         /* ── Dot grid pattern ── */
@@ -220,6 +222,17 @@
             font-weight: 500;
             animation: shakeX 0.4s ease;
         }
+        .alert-success {
+            background: rgba(22, 163, 74, 0.06);
+            border: 1px solid rgba(22, 163, 74, 0.18);
+            border-left: 3px solid var(--green);
+            color: var(--green);
+            padding: 0.85rem 1rem;
+            border-radius: var(--r-sm);
+            font-size: 0.875rem;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+        }
         @keyframes shakeX {
             0%,100%{ transform:translateX(0); }
             20%    { transform:translateX(-6px); }
@@ -322,7 +335,7 @@
         .toggle-password:active { transform: translateY(-50%) scale(0.85); }
 
         /* ── Remember me ── */
-        .form-actions { margin-bottom: 1rem; }
+        .form-actions { margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; }
         .form-check-remember { display: flex; align-items: center; gap: 0.5rem; }
         .form-check-remember input[type="checkbox"] {
             width: 16px; height: 16px; min-width: 16px;
@@ -337,6 +350,17 @@
             cursor: pointer;
             font-weight: 500;
             user-select: none;
+        }
+        .forgot-password-link {
+            font-size: 0.85rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color var(--dur) var(--ease-std);
+        }
+        .forgot-password-link:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
         }
 
         /* ── Login button ── */
@@ -418,7 +442,7 @@
 
         <div class="card-header">
             <img src="{{ asset('images/logo.png') }}" alt="โลโก้โรงเรียนศิริราษฎร์สามัคคี" class="school-emblem">
-            <h1>ระบบบริหารงานวินัยนักเรียน<br>โรงเรียนศิริราษฎร์สามัคคี</h1>
+            <h1>ระบบสารสนเทศการบริหารงานวินัย<br>และติดตามพฤติกรรมนักเรียน<br>โรงเรียนศิริราษฎร์สามัคคี</h1>
             <p>จังหวัดปัตตานี</p>
             <div class="card-divider"></div>
         </div>
@@ -427,18 +451,24 @@
             <h2 class="login-title">เข้าสู่ระบบ</h2>
             <p class="login-subtitle">กรุณากรอกข้อมูลเพื่อเข้าใช้งาน</p>
 
+            @if (session('success'))
+                <div class="alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
+
             @if ($errors->any())
                 <div class="alert-danger">
                     {{ $errors->first() }}
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('login') }}">
+            <form method="POST" action="">
                 @csrf
 
                 {{-- Username --}}
                 <div class="form-group">
-                    <label for="Username">ชื่อผู้ใช้งาน</label>
+                    <label for="Username">รหัสประจำตัว/รหัสนักเรียน</label>
                     <div class="input-wrapper">
                         <span class="input-icon">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -454,7 +484,7 @@
                             class="{{ $errors->has('Username') ? 'is-invalid' : '' }}"
                             autocomplete="username"
                             autofocus
-                            placeholder="กรอกชื่อผู้ใช้งาน"
+                            placeholder="กรอกรหัสประจำตัว/รหัสนักเรียน"
                         >
                     </div>
                     @error('Username')
@@ -481,12 +511,13 @@
                                 autocomplete="current-password"
                                 placeholder="กรอกรหัสผ่าน"
                                 style="padding-left: 2.6rem;"
+                                oninput="this.value = this.value.replace(/[\u0e00-\u0e7f]/g, '')"
                             >
                             <button type="button" class="toggle-password" id="togglePassword" onclick="togglePasswordVisibility()" title="แสดงรหัสผ่าน" aria-label="แสดง/ซ่อนรหัสผ่าน">
                                 <svg id="eye-svg" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path id="eye-path-1" d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
                                     <circle id="eye-circle" cx="12" cy="12" r="3"/>
-                                    <line id="eye-slash" x1="1" y1="1" x2="23" y2="23" style="display:none;"/>
+                                    <line id="eye-slash" x1="1" y1="1" x2="23" y2="23" style="display:inline;"/>
                                 </svg>
                             </button>
                         </div>
@@ -502,6 +533,9 @@
                         <input type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
                         <label for="remember" class="remember-label">จดจำการเข้าสู่ระบบ</label>
                     </div>
+                    <a href="{{ route('password.request') }}" class="forgot-password-link">
+                        ลืมรหัสผ่าน?
+                    </a>
                 </div>
 
                 <button type="submit" class="btn-login">
@@ -524,16 +558,83 @@
 
         if (input.type === 'password') {
             input.type           = 'text';
-            slash.style.display  = 'inline';
-            circle.style.display = 'none';
+            slash.style.display  = 'none';
+            circle.style.display = 'inline';
             btn.title            = 'ซ่อนรหัสผ่าน';
         } else {
             input.type           = 'password';
-            slash.style.display  = 'none';
+            slash.style.display  = 'inline';
             circle.style.display = 'inline';
             btn.title            = 'แสดงรหัสผ่าน';
         }
     }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+@if (session('success'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var msg = "{{ session('success') }}";
+            var title = "สำเร็จ";
+            if (msg.indexOf("รหัสผ่าน") !== -1) {
+                title = "เปลี่ยนรหัสผ่านสำเร็จ";
+            }
+            Swal.fire({
+                icon: 'success',
+                title: title,
+                text: msg,
+                confirmButtonText: 'ตกลง',
+                confirmButtonColor: 'hsl(270, 80%, 52%)'
+            });
+        });
+    </script>
+@endif
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const loginForm = document.querySelector('form[method="POST"]');
+    if (loginForm) {
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const btn = loginForm.querySelector('.btn-login');
+            const origText = btn ? btn.innerText : 'เข้าสู่ระบบ';
+            if (btn) { btn.disabled = true; btn.innerText = 'กำลังเข้าสู่ระบบ...'; }
+
+            const oldAlerts = loginForm.parentNode.querySelectorAll('.alert-danger');
+            oldAlerts.forEach(a => a.remove());
+
+            const formData = new FormData(loginForm);
+
+            fetch(loginForm.action || window.location.href, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value,
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
+                },
+                body: formData
+            }).then(async res => {
+                const data = await res.json().catch(() => ({}));
+                if (res.ok && data.redirect) {
+                    window.location.href = data.redirect;
+                } else {
+                    if (btn) { btn.disabled = false; btn.innerText = origText; }
+                    let msg = 'เกิดข้อผิดพลาดในการเข้าสู่ระบบ';
+                    if (data.errors) {
+                        msg = Object.values(data.errors).flat().join('<br>');
+                    } else if (data.message) {
+                        msg = data.message;
+                    }
+                    const alertDiv = document.createElement('div');
+                    alertDiv.className = 'alert-danger';
+                    alertDiv.innerHTML = msg;
+                    loginForm.parentNode.insertBefore(alertDiv, loginForm);
+                }
+            }).catch(err => {
+                if (btn) { btn.disabled = false; btn.innerText = origText; }
+                loginForm.submit();
+            });
+        });
+    }
+});
 </script>
 </body>
 </html>

@@ -110,11 +110,13 @@
         <div class="form-row">
             <div class="form-group">
                 <label class="form-label" for="start_date">ตั้งแต่วันที่</label>
-                <input type="date" name="start_date" id="start_date" class="form-control" value="{{ $startDate }}">
+                <input type="text" id="start_date_display" class="form-control" style="background-color:#fff;" placeholder="วัน/เดือน/ปี พ.ศ.">
+                <input type="hidden" id="start_date_real" name="start_date" value="{{ $startDate }}">
             </div>
             <div class="form-group">
                 <label class="form-label" for="end_date">ถึงวันที่</label>
-                <input type="date" name="end_date" id="end_date" class="form-control" value="{{ $endDate }}">
+                <input type="text" id="end_date_display" class="form-control" style="background-color:#fff;" placeholder="วัน/เดือน/ปี พ.ศ.">
+                <input type="hidden" id="end_date_real" name="end_date" value="{{ $endDate }}">
             </div>
             <div class="form-group">
                 <label class="form-label" for="grade">ระดับชั้น</label>
@@ -152,7 +154,7 @@
         <div class="stat-icon navy"><i class="fas fa-clipboard-list"></i></div>
         <div class="stat-info">
             <div class="stat-value">{{ $totalRecords }}</div>
-            <div class="stat-label">บันทึกที่อนุมัติแล้ว</div>
+            <div class="stat-label">บันทึกที่อนุมัติ</div>
         </div>
     </div>
     <div class="stat-card red">
@@ -186,7 +188,7 @@
             <canvas id="riskStatusChart"></canvas>
         </div>
         <div style="margin-top: 1rem; font-size: 0.75rem; color: var(--text-muted); text-align: center; line-height: 1.4;">
-            วิกฤต: {{ $riskCritical }} คน | เฝ้าระวัง: {{ $riskWatch }} คน | ปกติ: {{ $riskNormal }} คน
+            ทัณฑ์บน: {{ $riskCritical }} คน | ตักเตือน: {{ $riskWatch }} คน | ปกติ: {{ $riskNormal }} คน
         </div>
     </div>
     
@@ -298,7 +300,9 @@
                         <th>รูป</th>
                         <th>ชื่อ-สกุล</th>
                         <th>ระดับชั้น/ห้อง</th>
-                        <th class="text-center">คะแนน</th>
+                        <th class="text-center" style="color:var(--green);">เพิ่ม (+)</th>
+                        <th class="text-center" style="color:var(--red);">หัก (-)</th>
+                        <th class="text-center">คะแนนรวม</th>
                         <th class="text-center">สถานะความเสี่ยง</th>
                     </tr>
                 </thead>
@@ -315,22 +319,29 @@
                             @endif
                         </td>
                         <td>
-                            <strong>{{ $s->FullName }}</strong>
+                            <a href="{{ route('discipline.behavior-records.index', ['search' => $s->StudentID]) }}" class="student-link">
+                                <strong>{{ $s->FullName }}</strong>
+                            </a>
                             <div style="font-size:0.75rem; color:var(--text-muted);">รหัส: {{ $s->StudentID }}</div>
                         </td>
                         <td>
                             {{ $s->classroom_display }}
                         </td>
+                        <td class="text-center" style="font-weight: 600; color:var(--green);">+{{ $s->total_merit_points }}</td>
+                        <td class="text-center" style="font-weight: 600; color:var(--red);">-{{ $s->total_demerit_points }}</td>
                         <td class="text-center" style="font-weight: 700; color:var(--red);">{{ $s->BehaviorScore }}</td>
                         <td class="text-center">
-                            <span class="badge {{ $s->RiskStatus === 'วิกฤต' ? 'badge-red' : 'badge-orange' }}">
-                                {{ $s->RiskStatus }}
+                            @php
+                                $isCrit = in_array($s->RiskStatus, ['วิกฤต', 'ทัณฑ์บน']);
+                            @endphp
+                            <span class="badge {{ $isCrit ? 'badge-red' : 'badge-orange' }}">
+                                {{ $isCrit ? 'ทัณฑ์บน' : 'ตักเตือน' }}
                             </span>
                         </td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="5" style="text-align:center; padding:1.5rem; color:var(--text-muted);">ไม่มีข้อมูลนักเรียน</td>
+                        <td colspan="7" style="text-align:center; padding:1.5rem; color:var(--text-muted);">ไม่มีข้อมูลนักเรียน</td>
                     </tr>
                     @endforelse
                 </tbody>
@@ -350,7 +361,9 @@
                         <th>รูป</th>
                         <th>ชื่อ-สกุล</th>
                         <th>ระดับชั้น/ห้อง</th>
-                        <th class="text-center">คะแนน</th>
+                        <th class="text-center" style="color:var(--green);">เพิ่ม (+)</th>
+                        <th class="text-center" style="color:var(--red);">หัก (-)</th>
+                        <th class="text-center">คะแนนรวม</th>
                         <th class="text-center">สถานะความเสี่ยง</th>
                     </tr>
                 </thead>
@@ -367,12 +380,16 @@
                             @endif
                         </td>
                         <td>
-                            <strong>{{ $s->FullName }}</strong>
+                            <a href="{{ route('discipline.behavior-records.index', ['search' => $s->StudentID]) }}" class="student-link">
+                                <strong>{{ $s->FullName }}</strong>
+                            </a>
                             <div style="font-size:0.75rem; color:var(--text-muted);">รหัส: {{ $s->StudentID }}</div>
                         </td>
                         <td>
                             {{ $s->classroom_display }}
                         </td>
+                        <td class="text-center" style="font-weight: 600; color:var(--green);">+{{ $s->total_merit_points }}</td>
+                        <td class="text-center" style="font-weight: 600; color:var(--red);">-{{ $s->total_demerit_points }}</td>
                         <td class="text-center" style="font-weight: 700; color:var(--green);">{{ $s->BehaviorScore }}</td>
                         <td class="text-center">
                             <span class="badge badge-green">
@@ -382,7 +399,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="5" style="text-align:center; padding:1.5rem; color:var(--text-muted);">ไม่มีข้อมูลนักเรียน</td>
+                        <td colspan="7" style="text-align:center; padding:1.5rem; color:var(--text-muted);">ไม่มีข้อมูลนักเรียน</td>
                     </tr>
                     @endforelse
                 </tbody>
@@ -396,6 +413,51 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // === dependent classroom dropdown filter ===
+    const gradeSelect = document.getElementById('grade');
+    const classroomSelect = document.getElementById('classroom');
+    
+    if (gradeSelect && classroomSelect) {
+        const originalClassrooms = Array.from(classroomSelect.options).map(opt => ({
+            value: opt.value,
+            text: opt.text,
+            selected: opt.selected
+        }));
+        
+        function updateClassrooms() {
+            const selectedGrade = gradeSelect.value;
+            const currentSelectedValue = classroomSelect.value;
+            
+            classroomSelect.innerHTML = '';
+            
+            originalClassrooms.forEach(optData => {
+                if (optData.value === '') {
+                    const opt = document.createElement('option');
+                    opt.value = optData.value;
+                    opt.text = optData.text;
+                    opt.selected = optData.selected;
+                    classroomSelect.appendChild(opt);
+                    return;
+                }
+                
+                const belongsToGrade = !selectedGrade || optData.value === selectedGrade || optData.value.startsWith(selectedGrade + '/');
+                
+                if (belongsToGrade) {
+                    const opt = document.createElement('option');
+                    opt.value = optData.value;
+                    opt.text = optData.text;
+                    if (optData.value === currentSelectedValue) {
+                        opt.selected = true;
+                    }
+                    classroomSelect.appendChild(opt);
+                }
+            });
+        }
+        
+        gradeSelect.addEventListener('change', updateClassrooms);
+        updateClassrooms();
+    }
+
     // === Chart 1: Risk Status Distribution ===
     const riskCtx = document.getElementById('riskStatusChart').getContext('2d');
     
@@ -407,7 +469,7 @@ document.addEventListener('DOMContentLoaded', function() {
     new Chart(riskCtx, {
         type: 'doughnut',
         data: {
-            labels: ['ปกติ', 'เฝ้าระวัง', 'วิกฤต'],
+            labels: ['ปกติ', 'ตักเตือน', 'ทัณฑ์บน'],
             datasets: [{
                 data: [normalCount, watchCount, criticalCount],
                 backgroundColor: [
@@ -496,6 +558,11 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     });
+
+    if (typeof initBEDatepicker === 'function') {
+        initBEDatepicker("#start_date", "{{ $startDate }}");
+        initBEDatepicker("#end_date", "{{ $endDate }}");
+    }
 });
 </script>
 @endpush

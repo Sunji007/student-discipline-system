@@ -15,7 +15,8 @@ return new class extends Migration
             // ใช้ nullable เพื่อสร้างตารางก่อนได้
             $table->string('StudentID', 10)->nullable();
             $table->enum('Relationship', ['พ่อ', 'แม่', 'ญาติ']);
-            $table->string('FullName', 100);
+            $table->string('FirstName', 50);
+            $table->string('LastName', 50);
             $table->string('Phone', 15)->nullable();
             $table->string('Email', 100)->nullable();
             $table->text('Address')->nullable();

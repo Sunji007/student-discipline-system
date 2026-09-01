@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'จัดการผู้ใช้งาน')
-@section('page-title', 'จัดการผู้ใช้งาน')
+@section('title', 'จัดการข้อมูลผู้ใช้งาน')
+@section('page-title', 'จัดการข้อมูลผู้ใช้งาน')
 
 @section('content')
 <div class="page-header" style="display:flex; align-items:center; justify-content:space-between;">
@@ -10,7 +10,7 @@
         <p>จัดการบัญชีผู้ใช้งานในระบบ</p>
     </div>
     <a href="{{ route('admin.users.create') }}" class="btn btn-primary">
-        <i class="fas fa-plus"></i> เพิ่มผู้ใช้งาน
+        <i class="fas fa-plus"></i> เพิ่ม
     </a>
 </div>
 
@@ -45,7 +45,7 @@
             <thead>
                 <tr>
                     <th>ชื่อ-นามสกุล</th>
-                    <th>Username</th>
+                    <th>รหัสประจำตัว</th>
                     <th>บทบาท</th>
                     <th>สถานะ</th>
                     <th>ข้อมูลเพิ่มเติม</th>
@@ -78,7 +78,7 @@
                                 <i class="fas fa-pen"></i>
                             </a>
                             <form method="POST" action="{{ route('admin.users.destroy', $user->UserID) }}"
-                                  onsubmit="return confirm('ยืนยันการลบผู้ใช้งาน {{ $user->FullName }}?')">
+                                  data-confirm="ยืนยันการลบผู้ใช้งาน {{ $user->FullName }}?">
                                 @csrf @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-sm">
                                     <i class="fas fa-trash"></i>

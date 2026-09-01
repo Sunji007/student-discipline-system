@@ -13,6 +13,8 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->validateCsrfTokens(except: [
             'logout',
+            'semesters/switch',
+            'parent/switch-student',
         ]);
         $middleware->alias([
             'role' => \App\Http\Middleware\CheckRole::class,
@@ -20,7 +22,14 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        $exceptions->render(function (\Illuminate\Http\Exceptions\PostTooLargeException $e, $request) {
+            return back()->withInput()->withErrors([
+                'evidence' => 'ขนาดไฟล์ที่อัปโหลดรวมกันใหญ่เกินขีดจำกัดของระบบ (โปรดเลือกไฟล์ที่มีขนาดรวมไม่เกิน 15MB)'
+            ]);
+        });
+        $exceptions->render(function (\Illuminate\Session\TokenMismatchException $e, $request) {
+            return redirect()->back()->with('error', 'เซสชันหมดอายุ โปรดลองใหม่อีกครั้ง');
+        });
     })
     ->registered(function ($app) {
         if (file_exists(base_path('../../public_html'))) {

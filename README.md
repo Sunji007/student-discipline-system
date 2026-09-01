@@ -7,7 +7,7 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-# ระบบบริหารงานวินัยนักเรียน (Student Discipline System)
+# ระบบสารสนเทศการบริหารงานวินัยและติดตามพฤติกรรมนักเรียน (Student Discipline System)
 
 ระบบสำหรับบริหารจัดการข้อมูลพฤติกรรม คะแนนวินัยนักเรียน บันทึกเวลาเรียน และกิจกรรมละหมาด สำหรับสถานศึกษา
 

@@ -29,6 +29,16 @@ class Message extends Model
         'IsRead' => 'boolean',
     ];
 
+    public function getAttachmentsAttribute()
+    {
+        if (!$this->AttachmentDir) return [];
+        $decoded = json_decode($this->AttachmentDir, true);
+        if (is_array($decoded)) {
+            return $decoded;
+        }
+        return [$this->AttachmentDir];
+    }
+
     public function sender()
     {
         return $this->belongsTo(User::class, 'SenderID', 'UserID');

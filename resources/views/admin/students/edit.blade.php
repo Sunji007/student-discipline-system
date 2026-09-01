@@ -31,12 +31,47 @@
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label" for="FullName">ชื่อ-นามสกุล <span style="color:var(--red)">*</span></label>
-                    <input type="text" name="FullName" id="FullName" class="form-control @error('FullName') is-invalid @enderror" value="{{ old('FullName', $student->FullName) }}" required placeholder="เด็กชาย/เด็กหญิง/นาย/นางสาว...">
-                    @error('FullName')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
+                <div class="form-row">
+                    @php
+                        $prefixes = ['นาย', 'นางสาว', 'นาง', 'ด.ช.', 'ด.ญ.'];
+                        $selectedPrefix = '';
+                        $firstNameOnly = $student->FirstName;
+                        foreach ($prefixes as $p) {
+                            if (str_starts_with($student->FirstName, $p)) {
+                                $selectedPrefix = $p;
+                                $firstNameOnly = substr($student->FirstName, strlen($p));
+                                break;
+                            }
+                        }
+                    @endphp
+                    <div class="form-group">
+                        <label class="form-label" for="FirstName">ชื่อจริง <span style="color:var(--red)">*</span></label>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <select name="prefix" class="form-control" style="width: 120px; flex-shrink: 0;" required>
+                                <option value="">คำนำหน้า</option>
+                                <option value="นาย" {{ old('prefix', $selectedPrefix) === 'นาย' ? 'selected' : '' }}>นาย</option>
+                                <option value="นาง" {{ old('prefix', $selectedPrefix) === 'นาง' ? 'selected' : '' }}>นาง</option>
+                                <option value="นางสาว" {{ old('prefix', $selectedPrefix) === 'นางสาว' ? 'selected' : '' }}>นางสาว</option>
+                                <option value="ด.ช." {{ old('prefix', $selectedPrefix) === 'ด.ช.' ? 'selected' : '' }}>ด.ช.</option>
+                                <option value="ด.ญ." {{ old('prefix', $selectedPrefix) === 'ด.ญ.' ? 'selected' : '' }}>ด.ญ.</option>
+                            </select>
+                            <input type="text" name="FirstName" id="FirstName" class="form-control @error('FirstName') is-invalid @enderror" 
+                                   value="{{ old('FirstName', $firstNameOnly) }}" 
+                                   oninput="this.value = this.value.replace(/[^ก-๙]/g, '')" required placeholder="เก่ง" style="flex: 1;">
+                        </div>
+                        @error('FirstName')
+                            <div class="invalid-feedback" style="display: block;">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="LastName">นามสกุล <span style="color:var(--red)">*</span></label>
+                        <input type="text" name="LastName" id="LastName" class="form-control @error('LastName') is-invalid @enderror" 
+                               value="{{ old('LastName', $student->LastName) }}" 
+                               oninput="this.value = this.value.replace(/[^ก-๙]/g, '')" required placeholder="เรียนดี">
+                        @error('LastName')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
                 </div>
 
                 <div class="form-row">
@@ -60,6 +95,16 @@
                     <div class="form-group">
                         <label class="form-label" for="Classroom">ห้องเรียน <span style="color:var(--red)">*</span></label>
                         <input type="text" name="Classroom" id="Classroom" class="form-control" value="{{ old('Classroom', $classroomValue) }}" required placeholder="ระบุเลขห้อง (เฉพาะตัวเลข เช่น 1)" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="CitizenID">รหัสบัตรประชาชน <span style="color:var(--text-muted); font-size:0.8rem;">(ไม่สามารถแก้ไขได้)</span></label>
+                        <input type="text" name="CitizenID" id="CitizenID" class="form-control @error('CitizenID') is-invalid @enderror" value="{{ old('CitizenID', $student->user?->CitizenID) }}" required placeholder="เช่น 1234567890123" maxlength="13" readonly style="background-color: #f1f5f9; cursor: not-allowed;">
+                        @error('CitizenID')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                 </div>
 
@@ -88,7 +133,7 @@
 
                 <div style="margin-top:2rem;">
                     <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">
-                        <i class="fas fa-save"></i> บันทึกการเปลี่ยนแปลง
+                        <i class="fas fa-save"></i> บันทึก
                     </button>
                 </div>
             </form>

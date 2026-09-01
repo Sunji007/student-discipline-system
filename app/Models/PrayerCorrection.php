@@ -8,6 +8,8 @@ class PrayerCorrection extends Model
 {
     protected $table = 'prayer_corrections';
     
+    protected $primaryKey = 'prayer_correction_id';
+    
     protected $fillable = [
         'StudentID',
         'Year',

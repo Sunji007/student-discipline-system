@@ -9,11 +9,13 @@
     <p>นักเรียนที่มีคะแนนพฤติกรรมต่ำกว่า 80 คะแนน</p>
 </div>
 
-<div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:1rem;">
+<div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(320px, 380px)); gap:1.25rem;">
     @forelse($students as $s)
     @php
+        $isCritical = in_array($s->RiskStatus, ['วิกฤต', 'ทัณฑ์บน']);
+        $riskDisplayName = $isCritical ? 'ทัณฑ์บน' : 'ตักเตือน';
         $scoreColor  = $s->BehaviorScore < 60 ? 'var(--red)' : 'var(--orange)';
-        $borderColor = $s->RiskStatus === 'วิกฤต' ? 'var(--red)' : 'var(--orange)';
+        $borderColor = $isCritical ? 'var(--red)' : 'var(--orange)';
         $pct = $s->BehaviorScore;
     @endphp
     <div class="card" style="border-top:3px solid {{ $borderColor }};">
@@ -25,8 +27,8 @@
                         รหัส: {{ $s->StudentID }} &nbsp;|&nbsp; ห้อง: {{ $s->Classroom }}
                     </div>
                 </div>
-                <span class="badge {{ $s->RiskStatus === 'วิกฤต' ? 'badge-red' : 'badge-orange' }}">
-                    {{ $s->RiskStatus }}
+                <span class="badge {{ $isCritical ? 'badge-red' : 'badge-orange' }}">
+                    {{ $riskDisplayName }}
                 </span>
             </div>
 
@@ -57,10 +59,10 @@
         <div style="padding:0.75rem 1.25rem; border-top:1px solid #ede8e0; display:flex; gap:0.5rem;">
             <a href="{{ route('discipline.behavior-records.create') }}?student={{ $s->StudentID }}"
                class="btn btn-primary btn-sm" style="flex:1; justify-content:center;">
-                <i class="fas fa-plus"></i> บันทึกพฤติกรรม
+                <i class="fas fa-plus"></i> บันทึก
             </a>
-            <a href="{{ route('discipline.messages.create') }}?receiver={{ $s->parent?->UserID }}"
-               class="btn btn-outline btn-sm">
+            <a href="{{ route('discipline.messages.create') }}?receiver={{ $s->UserID ?? $s->user?->UserID }}&from=risk-students"
+               class="btn btn-outline btn-sm" title="ส่งข้อความถึงนักเรียน {{ $s->FullName }}">
                 <i class="fas fa-envelope"></i>
             </a>
         </div>
@@ -76,7 +78,7 @@
     @endforelse
 </div>
 
-@if($students->hasPages())
+@if(method_exists($students, 'hasPages') && $students->hasPages())
 <div style="margin-top:1.25rem;">
     {{ $students->links() }}
 </div>

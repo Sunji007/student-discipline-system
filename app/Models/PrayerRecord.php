@@ -18,7 +18,8 @@ class PrayerRecord extends Model
         'RecordTime',
         'Period',
         'Status',
-        'RecordedBy'
+        'RecordedBy',
+        'semester_id'
     ];
 
     public function student()
@@ -29,5 +30,10 @@ class PrayerRecord extends Model
     public function recorder()
     {
         return $this->belongsTo(User::class, 'RecordedBy', 'UserID');
+    }
+
+    public function semester()
+    {
+        return $this->belongsTo(Semester::class, 'semester_id');
     }
 }

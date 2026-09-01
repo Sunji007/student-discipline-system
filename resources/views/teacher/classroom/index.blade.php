@@ -110,8 +110,20 @@
 {{-- ===== HEADER ===== --}}
 <div class="page-header">
     <h2><i class="fas fa-door-open" style="color:var(--primary); margin-right:0.5rem;"></i>ห้อง {{ $classroom ?? 'ยังไม่ได้รับมอบหมาย' }}</h2>
-    <p>นักเรียนในความดูแลทั้งหมด {{ $students->count() }} คน &nbsp;|&nbsp; {{ now()->locale('th')->isoFormat('D MMMM YYYY') }}</p>
+    <p>นักเรียนในความดูแลทั้งหมด {{ $students->count() }} คน &nbsp;|&nbsp; {{ now()->locale('th')->isoFormat('D MMMM ') . (now()->year + 543) }}</p>
 </div>
+
+@if(isset($rooms) && count($rooms) > 1)
+<div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; background: #f1f5f9; padding: 0.4rem; border-radius: 12px; width: fit-content; border: 1px solid var(--border);">
+    @foreach($rooms as $r)
+        <a href="{{ route('teacher.classroom.index', ['room' => $r]) }}" 
+           class="btn btn-sm {{ $classroom === $r ? 'btn-primary' : 'btn-outline' }}"
+           style="border-radius: 8px; padding: 0.4rem 1.25rem; font-weight: 700; transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.35rem;">
+           <i class="fas fa-door-open"></i> ห้อง {{ $r }}
+        </a>
+    @endforeach
+</div>
+@endif
 
 {{-- ===== STUDENT GRID ===== --}}
 <div class="student-grid">
@@ -129,6 +141,7 @@
              data-parent-relationship="{{ $s->parent ? $s->parent->Relationship : '-' }}"
              data-parent-phone="{{ $s->parent ? $s->parent->Phone : '-' }}"
              data-parent-email="{{ $s->parent ? $s->parent->Email : '-' }}"
+             data-parent-address="{{ $s->parent ? $s->parent->Address : '-' }}"
              data-parent-user-id="{{ $s->parent ? $s->parent->UserID : '' }}"
              onclick="showParentModal(this)"
              title="คลิกเพื่อดูข้อมูลผู้ปกครอง">
@@ -151,15 +164,20 @@
         {{-- Meta & Action --}}
         <div class="sc-meta">
             @php
-                $riskLabel = $s->RiskStatus ?? 'ปกติ';
+                $rawRisk = $s->RiskStatus ?? 'ปกติ';
+                $riskLabel = match($rawRisk) {
+                    'เฝ้าระวัง', 'ตักเตือน' => 'ตักเตือน',
+                    'วิกฤต', 'ทัณฑ์บน' => 'ทัณฑ์บน',
+                    default => 'ปกติ'
+                };
                 $badgeClass = match($riskLabel) {
-                    'เฝ้าระวัง' => 'status-warning',
-                    'วิกฤต' => 'status-critical',
+                    'ตักเตือน' => 'status-warning',
+                    'ทัณฑ์บน' => 'status-critical',
                     default => 'status-normal'
                 };
                 $icon = match($riskLabel) {
-                    'เฝ้าระวัง' => 'exclamation-circle',
-                    'วิกฤต' => 'exclamation-triangle',
+                    'ตักเตือน' => 'exclamation-circle',
+                    'ทัณฑ์บน' => 'exclamation-triangle',
                     default => 'check-circle'
                 };
             @endphp
@@ -168,7 +186,7 @@
             </span>
 
             <a href="{{ route('teacher.behavior-records.create', ['student_id' => $s->StudentID]) }}" class="btn btn-primary btn-sm" style="font-size:0.75rem; font-weight:700; padding:0.4rem 0.8rem; border-radius:8px;">
-                <i class="fas fa-plus"></i> บันทึกพฤติกรรม
+                <i class="fas fa-plus"></i> บันทึก
             </a>
         </div>
     </div>
@@ -211,8 +229,9 @@
                     </div>
                 </div>
 
+
                 <div style="display:flex; align-items:flex-start; gap:0.75rem;">
-                    <div style="width:36px; height:36px; border-radius:50%; background:rgba(22,163,74,0.06); color:#16a34a; display:flex; align-items:center; justify-content:center; font-size:0.95rem; flex-shrink:0;">
+                    <div style="width:36px; height:36px; border-radius:50%; background:rgba(16,185,129,0.08); color:var(--green); display:flex; align-items:center; justify-content:center; font-size:0.95rem; flex-shrink:0;">
                         <i class="fas fa-phone"></i>
                     </div>
                     <div>
@@ -228,6 +247,16 @@
                     <div>
                         <span style="font-size:0.75rem; color:var(--text-muted); display:block;">อีเมล</span>
                         <strong id="modalParentEmail" style="color:var(--text); font-size:0.92rem; word-break:break-all;"></strong>
+                    </div>
+                </div>
+
+                <div style="display:flex; align-items:flex-start; gap:0.75rem;">
+                    <div style="width:36px; height:36px; border-radius:50%; background:rgba(99,102,241,0.08); color:var(--purple); display:flex; align-items:center; justify-content:center; font-size:0.95rem; flex-shrink:0;">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <div style="flex:1; min-width:0;">
+                        <span style="font-size:0.75rem; color:var(--text-muted); display:block;">ที่อยู่</span>
+                        <strong id="modalParentAddress" style="color:var(--text); font-size:0.9rem; line-height:1.45; font-weight:600; display:block; word-break:break-word;"></strong>
                     </div>
                 </div>
             </div>
@@ -264,6 +293,7 @@ function showParentModal(element) {
     var pRel = element.getAttribute('data-parent-relationship');
     var pPhone = element.getAttribute('data-parent-phone');
     var pEmail = element.getAttribute('data-parent-email');
+    var pAddress = element.getAttribute('data-parent-address');
     var pUserId = element.getAttribute('data-parent-user-id');
 
     document.getElementById('modalStudentName').textContent = sName;
@@ -286,8 +316,9 @@ function showParentModal(element) {
         relBadge.style.display = 'none';
     }
 
-    document.getElementById('modalParentPhone').textContent = pPhone;
-    document.getElementById('modalParentEmail').textContent = pEmail;
+    document.getElementById('modalParentPhone').textContent = pPhone || '-';
+    document.getElementById('modalParentEmail').textContent = pEmail || '-';
+    document.getElementById('modalParentAddress').textContent = pAddress || '-';
 
     var msgBtn = document.getElementById('modalMsgBtn');
     if (pUserId) {

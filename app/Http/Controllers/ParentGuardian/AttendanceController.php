@@ -10,14 +10,20 @@ class AttendanceController extends Controller
 {
     public function index(Request $request)
     {
-        $student = auth()->user()->parentGuardian?->student;
-        abort_if(!$student, 404, 'ไม่พบข้อมูลบุตรหลาน');
+        $students = auth()->user()->parentStudents;
+        abort_if($students->isEmpty(), 404, 'ไม่พบข้อมูลบุตรหลาน');
+
+        $selectedStudentId = session('selected_student_id', $students->first()->StudentID);
+        $student = $students->firstWhere('StudentID', $selectedStudentId) ?? $students->first();
 
         $month = $request->get('month', now()->format('Y-m'));
 
         [$year, $mon] = explode('-', $month);
 
+        $selectedSemesterId = $this->getSelectedSemesterId();
+
         $records = Attendance::where('StudentID', $student->StudentID)
+            ->where('semester_id', $selectedSemesterId)
             ->whereYear('Date', $year)
             ->whereMonth('Date', $mon)
             ->orderBy('Date')
@@ -25,9 +31,9 @@ class AttendanceController extends Controller
             ->keyBy(fn($r) => $r->Date->format('Y-m-d'));
 
         $summary = [
-            'มา'   => Attendance::where('StudentID', $student->StudentID)->where('Status', 'มา')->count(),
-            'สาย'  => Attendance::where('StudentID', $student->StudentID)->where('Status', 'สาย')->count(),
-            'ขาด'  => Attendance::where('StudentID', $student->StudentID)->where('Status', 'ขาด')->count(),
+            'มา'   => Attendance::where('StudentID', $student->StudentID)->where('semester_id', $selectedSemesterId)->where('Status', 'มา')->count(),
+            'สาย'  => Attendance::where('StudentID', $student->StudentID)->where('semester_id', $selectedSemesterId)->where('Status', 'สาย')->count(),
+            'ขาด'  => Attendance::where('StudentID', $student->StudentID)->where('semester_id', $selectedSemesterId)->where('Status', 'ขาด')->count(),
         ];
 
         // สร้าง calendar grid

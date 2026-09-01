@@ -71,7 +71,7 @@ class TestUserSeeder extends Seeder
             'Password' => $password,
             'Status' => 'ปกติ'
         ]);
-        $student = Student::updateOrCreate(['StudentID' => '10001'], [
+        $student = Student::updateOrCreate(['StudentID' => '6940201'], [
             'UserID' => $studentUser->UserID,
             'FullName' => 'ด.ช. ทดสอบ ระบบ',
             'GradeLevel' => 'ม.1',

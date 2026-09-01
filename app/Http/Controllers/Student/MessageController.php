@@ -13,6 +13,28 @@ class MessageController extends Controller
     public function index()
     {
         $userId = auth()->user()->UserID;
+        $student = auth()->user()->student;
+        $recipients = collect();
+        if ($student) {
+            foreach ($student->advisory_teachers as $teacher) {
+                $teacherUser = \App\Models\User::where('UserID', $teacher->UserID)
+                    ->where('Status', 'ปกติ')
+                    ->first();
+                if ($teacherUser && !$recipients->contains('UserID', $teacherUser->UserID)) {
+                    $recipients->push($teacherUser);
+                }
+            }
+        }
+
+        $staffUsers = \App\Models\User::whereIn('Role', ['ครู', 'ฝ่ายปกครอง'])
+            ->where('Status', 'ปกติ')
+            ->orderBy('FirstName')
+            ->get();
+        foreach ($staffUsers as $su) {
+            if (!$recipients->contains('UserID', $su->UserID)) {
+                $recipients->push($su);
+            }
+        }
 
         $inbox = Message::with('sender')
             ->where('ReceiverID', $userId)
@@ -27,7 +49,7 @@ class MessageController extends Controller
         $unreadCount = Message::where('ReceiverID', $userId)
             ->where('IsRead', false)->count();
 
-        return view('messages.index', compact('inbox', 'sent', 'unreadCount'));
+        return view('messages.index', compact('inbox', 'sent', 'unreadCount', 'recipients'));
     }
 
     public function show(Message $message)
@@ -38,41 +60,114 @@ class MessageController extends Controller
             403
         );
 
-        if ($message->ReceiverID === $userId && !$message->IsRead) {
-            $message->update(['IsRead' => true]);
-        }
+        $otherUserId = $message->SenderID === $userId ? $message->ReceiverID : $message->SenderID;
+        $otherUser = User::find($otherUserId);
 
-        return view('messages.show', compact('message'));
+        // Mark all unread messages from this sender as read
+        Message::where('SenderID', $otherUserId)
+            ->where('ReceiverID', $userId)
+            ->where('IsRead', false)
+            ->update(['IsRead' => true]);
+
+        // Get full conversation thread
+        $thread = Message::with(['sender', 'receiver'])
+            ->where(function ($q) use ($userId, $otherUserId) {
+                $q->where('SenderID', $userId)->where('ReceiverID', $otherUserId);
+            })
+            ->orWhere(function ($q) use ($userId, $otherUserId) {
+                $q->where('SenderID', $otherUserId)->where('ReceiverID', $userId);
+            })
+            ->orderBy('SentDate', 'asc')
+            ->get();
+
+        return view('messages.show', compact('message', 'thread', 'otherUser'));
     }
 
     public function create()
     {
-        // ดึง users ที่สามารถส่งหาได้ (ยกเว้นตัวเอง)
-        $recipients = User::where('UserID', '!=', auth()->user()->UserID)
+        $student = auth()->user()->student;
+        $recipients = collect();
+        if ($student) {
+            foreach ($student->advisory_teachers as $teacher) {
+                $teacherUser = \App\Models\User::where('UserID', $teacher->UserID)
+                    ->where('Status', 'ปกติ')
+                    ->first();
+                if ($teacherUser && !$recipients->contains('UserID', $teacherUser->UserID)) {
+                    $recipients->push($teacherUser);
+                }
+            }
+        }
+
+        $staffUsers = \App\Models\User::whereIn('Role', ['ครู', 'ฝ่ายปกครอง'])
             ->where('Status', 'ปกติ')
-            ->orderBy('Role')
-            ->orderBy('FullName')
+            ->orderBy('FirstName')
             ->get();
+        foreach ($staffUsers as $su) {
+            if (!$recipients->contains('UserID', $su->UserID)) {
+                $recipients->push($su);
+            }
+        }
 
         return view('messages.create', compact('recipients'));
     }
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'ReceiverID'  => 'required|exists:users,UserID',
-            'Content'     => 'required|string|min:1|max:5000',
-            'attachment'  => 'nullable|file|max:10240',
-        ]);
-
-        $attachmentDir = null;
-        if ($request->hasFile('attachment')) {
-            $attachmentDir = $request->file('attachment')
-                ->store('messages/attachments', 'public');
+        $student = auth()->user()->student;
+        $allowedUserIds = [];
+        if ($student) {
+            foreach ($student->advisory_teachers as $teacher) {
+                $allowedUserIds[] = $teacher->UserID;
+            }
         }
 
+        // Allow teachers, discipline, admins
+        $staffIds = User::whereIn('Role', ['ครู', 'ฝ่ายปกครอง', 'ผู้ดูแลระบบ', 'admin', 'discipline', 'teacher'])
+            ->where('Status', 'ปกติ')
+            ->pluck('UserID')
+            ->toArray();
+
+        // Allow any user who sent messages to this student
+        $pastSenderIds = Message::where('ReceiverID', auth()->user()->UserID)
+            ->pluck('SenderID')
+            ->toArray();
+
+        $allAllowedIds = array_unique(array_merge($allowedUserIds, $staffIds, $pastSenderIds));
+
+        $validated = $request->validate([
+            'ReceiverID'  => [
+                'required',
+                'exists:users,UserID',
+                function ($attribute, $value, $fail) use ($allAllowedIds) {
+                    if (!in_array($value, $allAllowedIds)) {
+                        $fail('ไม่สามารถส่งข้อความถึงผู้ใช้นี้ได้');
+                    }
+                }
+            ],
+            'Content'       => 'required|string|min:1|max:5000',
+            'attachment'    => 'nullable|file|max:10240',
+            'attachments'   => 'nullable|array',
+            'attachments.*' => 'nullable|file|max:10240',
+        ]);
+
+        $savedFiles = [];
+        if ($request->hasFile('attachments')) {
+            foreach ($request->file('attachments') as $file) {
+                if ($file && $file->isValid()) {
+                    $savedFiles[] = $file->store('messages/attachments', 'public');
+                }
+            }
+        } elseif ($request->hasFile('attachment')) {
+            $file = $request->file('attachment');
+            if ($file && $file->isValid()) {
+                $savedFiles[] = $file->store('messages/attachments', 'public');
+            }
+        }
+
+        $attachmentDir = !empty($savedFiles) ? json_encode($savedFiles) : null;
+
         Message::create([
-            'MessageID'     => Str::uuid(),
+            'MessageID'     => (string) Str::uuid(),
             'SenderID'      => auth()->user()->UserID,
             'ReceiverID'    => $validated['ReceiverID'],
             'Content'       => $validated['Content'],
@@ -81,6 +176,6 @@ class MessageController extends Controller
             'AttachmentDir' => $attachmentDir,
         ]);
 
-        return redirect()->back()->with('success', 'ส่งข้อความเรียบร้อยแล้ว');
+        return redirect()->back()->with('success', 'ส่งข้อความตอบกลับเรียบร้อยแล้ว');
     }
 }

@@ -10,7 +10,7 @@
         <p>จัดการและอนุมัติบันทึกพฤติกรรม</p>
     </div>
     <a href="{{ route('discipline.behavior-records.create') }}" class="btn btn-primary">
-        <i class="fas fa-plus"></i> บันทึกใหม่
+        <i class="fas fa-plus"></i> บันทึก
     </a>
 </div>
 
@@ -23,17 +23,34 @@
                 <input type="text" name="search" class="form-control"
                        value="{{ request('search') }}" placeholder="ชื่อ หรือ รหัสนักเรียน...">
             </div>
-            <div class="form-group" style="margin:0; min-width:160px;">
-                <label class="form-label">สถานะ</label>
-                <select name="status" class="form-control">
+            <div class="form-group" style="margin:0; min-width:180px;">
+                <label class="form-label">หมวดหมู่พฤติกรรม</label>
+                <select name="category" class="form-control" onchange="this.form.submit()">
                     <option value="">ทั้งหมด</option>
-                    @foreach(['รออนุมัติ','อนุมัติแล้ว','อยู่ในระหว่างโต้แย้ง'] as $s)
+                    <option value="ความผิดไม่ร้ายแรง" {{ request('category') === 'ความผิดไม่ร้ายแรง' ? 'selected' : '' }}>⚠️ ความผิดไม่ร้ายแรง (ตัดน้อยกว่า 20 คะแนน)</option>
+                    <option value="ความผิดร้ายแรง" {{ request('category') === 'ความผิดร้ายแรง' ? 'selected' : '' }}>🚨 ความผิดร้ายแรง (ตัด 20 คะแนนขึ้นไป / สารเสพติด)</option>
+                    <option disabled>──────────</option>
+                    @php
+                        $catList = (isset($categories) && count($categories) > 0)
+                            ? $categories
+                            : ['การแต่งกายและทรงผม','การเข้าเรียนและระเบียบสถานศึกษา','การใช้เครื่องมือสื่อสาร','ความประพฤติและกริยามารยาท','สารเสพติดและของต้องห้าม','กิจกรรมและผลงาน','ความดีและจิตอาสา','ความประพฤติดีเด่น'];
+                    @endphp
+                    @foreach($catList as $cat)
+                        <option value="{{ $cat }}" {{ request('category') === $cat ? 'selected' : '' }}>📁 {{ $cat }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="form-group" style="margin:0; min-width:140px;">
+                <label class="form-label">สถานะ</label>
+                <select name="status" class="form-control" onchange="this.form.submit()">
+                    <option value="">ทั้งหมด</option>
+                    @foreach(['รออนุมัติ','อนุมัติ','อยู่ในระหว่างยื่นอุทธรณ์'] as $s)
                         <option value="{{ $s }}" {{ request('status') === $s ? 'selected' : '' }}>{{ $s }}</option>
                     @endforeach
                 </select>
             </div>
             <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> ค้นหา</button>
-            @if(request()->hasAny(['search','status']))
+            @if(request()->hasAny(['search','status','category']))
                 <a href="{{ route('discipline.behavior-records.index') }}" class="btn btn-outline">ล้าง</a>
             @endif
         </form>
@@ -61,8 +78,8 @@
                         <strong>{{ $r->student->FullName }}</strong>
                         <div style="font-size:0.75rem; color:var(--text-muted);">{{ $r->student->Classroom }}</div>
                     </td>
-                    <td style="max-width:200px;">
-                        <div style="font-size:0.875rem;">{{ $r->rule->RuleName }}</div>
+                    <td style="max-width:260px;">
+                        <div style="font-size:0.875rem; font-weight:500;">{{ $r->rule->RuleName ?? '-' }}</div>
                         @if($r->Description)
                             <div style="font-size:0.72rem; color:var(--text-muted);">{{ \Str::limit($r->Description, 50) }}</div>
                         @endif
@@ -74,18 +91,23 @@
                     </td>
                     <td style="font-size:0.82rem;">{{ $r->recorder->FullName }}</td>
                     <td style="font-size:0.82rem; color:var(--text-muted);">
-                        {{ \Carbon\Carbon::parse($r->RecordDate)->format('d/m/Y') }}
+                        {{ \Carbon\Carbon::parse($r->RecordDate)->format('d/m/') . (\Carbon\Carbon::parse($r->RecordDate)->year + 543) }}
                     </td>
                     <td>
                         @php
-                            $sc = match($r->Status) {
+                            $displayStatus = match($r->Status) {
+                                'อนุมัติแล้ว', 'อนุมัติ' => 'อนุมัติ',
+                                'อยู่ในระหว่างโต้แย้ง', 'อยู่ในระหว่างยื่นอุทธรณ์' => 'อยู่ในระหว่างยื่นอุทธรณ์',
+                                default => $r->Status,
+                            };
+                            $sc = match($displayStatus) {
                                 'รออนุมัติ' => 'badge-gold',
-                                'อนุมัติแล้ว' => 'badge-green',
-                                'อยู่ในระหว่างโต้แย้ง' => 'badge-orange',
+                                'อนุมัติ' => 'badge-green',
+                                'อยู่ในระหว่างยื่นอุทธรณ์' => 'badge-orange',
                                 default => 'badge-gray',
                             };
                         @endphp
-                        <span class="badge {{ $sc }}">{{ $r->Status }}</span>
+                        <span class="badge {{ $sc }}">{{ $displayStatus }}</span>
                     </td>
                     <td style="text-align:right;">
                         <div style="display:flex; gap:0.35rem; justify-content:flex-end; align-items:center;">
@@ -94,10 +116,18 @@
                                 <i class="fas fa-eye"></i>
                             </a>
                             @if($r->Status === 'รออนุมัติ')
-                            <form method="POST" action="{{ route('discipline.behavior-records.approve', $r->RecordID) }}">
+                            <form method="POST" action="{{ route('discipline.behavior-records.approve', $r->RecordID) }}" style="display:inline;">
                                 @csrf @method('PATCH')
-                                <button type="submit" class="btn btn-success btn-sm">
+                                <button type="button" class="btn btn-success btn-sm" onclick="confirmApprove(this)">
                                     <i class="fas fa-check"></i> อนุมัติ
+                                </button>
+                            </form>
+                            @endif
+                            @if($r->Status === 'ยกเลิก')
+                            <form method="POST" action="{{ route('discipline.behavior-records.destroy', $r->RecordID) }}" style="display:inline;">
+                                @csrf @method('DELETE')
+                                <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete(this)">
+                                    <i class="fas fa-trash-alt"></i> เอาออก
                                 </button>
                             </form>
                             @endif
@@ -118,4 +148,54 @@
         {{ $records->withQueryString()->links() }}
     </div>
 </div>
+
+@push('scripts')
+<script>
+    function confirmApprove(button) {
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                title: 'ยืนยันการอนุมัติ?',
+                text: 'ระบบจะทำการบันทึกและปรับคะแนนพฤติกรรมของนักเรียนทันที',
+                icon: 'success',
+                showCancelButton: true,
+                confirmButtonText: 'ตกลง',
+                cancelButtonText: 'ยกเลิก',
+                customClass: {
+                    confirmButton: 'swal2-confirm btn-swal-success',
+                    cancelButton: 'swal2-cancel btn-swal-cancel'
+                },
+                buttonsStyling: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    button.closest('form').submit();
+                }
+            });
+        } else {
+            if (confirm('ยืนยันการอนุมัติรายการนี้?')) {
+                button.closest('form').submit();
+            }
+        }
+    }
+
+    function confirmDelete(button) {
+        Swal.fire({
+            title: 'ยืนยันการเอาออกรายการนี้?',
+            text: 'รายการบันทึกนี้จะถูกลบออกจากระบบอย่างถาวรและไม่สามารถย้อนกลับได้',
+            icon: 'error',
+            showCancelButton: true,
+            confirmButtonText: 'ตกลง',
+            cancelButtonText: 'ยกเลิก',
+            customClass: {
+                confirmButton: 'swal2-confirm btn-swal-danger',
+                cancelButton: 'swal2-cancel btn-swal-cancel'
+            },
+            buttonsStyling: false
+        }).then((result) => {
+            if (result.isConfirmed) {
+                button.closest('form').submit();
+            }
+        });
+    }
+</script>
+@endpush
 @endsection

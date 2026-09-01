@@ -14,9 +14,13 @@ class CheckRole
             return redirect()->route('login');
         }
 
-        $userRole = strtolower(auth()->user()->Role);
+        $activeRole = strtolower(session('active_role', auth()->user()->Role));
+        if (in_array($activeRole, ['ผู้ดูแลระบบ', 'admin'])) {
+            return $next($request);
+        }
+
         foreach ($roles as $role) {
-            if ($userRole === strtolower($role)) {
+            if ($activeRole === strtolower($role)) {
                 return $next($request);
             }
         }

@@ -11,8 +11,17 @@ class AppealController extends Controller
 {
     public function index(Request $request)
     {
+        $selectedSemesterId = $this->getSelectedSemesterId();
+
         $appeals = Appeal::with(['student', 'behaviorRecord.rule'])
-            ->when($request->filled('status'), fn($q) => $q->where('Status', $request->status))
+            ->whereHas('behaviorRecord', fn($q) => $q->where('semester_id', $selectedSemesterId))
+            ->when($request->filled('status'), function($q) use ($request) {
+                if (in_array($request->status, ['ยกเลิกคำร้อง', 'ยกเลิกคำร้องยื่นอุทธรณ์'])) {
+                    $q->whereIn('Status', ['ยกเลิกคำร้อง', 'ยกเลิกคำร้องยื่นอุทธรณ์']);
+                } else {
+                    $q->where('Status', $request->status);
+                }
+            })
             ->orderBy('AppealDate', 'desc')
             ->paginate(20);
 
@@ -29,30 +38,37 @@ class AppealController extends Controller
     public function resolve(Request $request, Appeal $appeal)
     {
         $request->validate([
-            'action' => 'required|in:คืนคะแนน,ยกเลิกคำร้อง',
+            'action'          => 'required|in:คืนคะแนน,ยกเลิกคำร้อง',
+            'restored_points' => 'nullable|numeric|min:1|max:100',
+            'review_notes'    => 'nullable|string|max:500',
         ]);
 
-        DB::transaction(function () use ($request, $appeal) {
-            $appeal->update(['Status' => $request->action]);
+        $statusToSave = $request->action === 'คืนคะแนน' ? 'คืนคะแนน' : 'ยกเลิกคำร้อง';
 
+        DB::transaction(function () use ($request, $statusToSave, $appeal) {
+            $pointsToReturn = null;
             if ($request->action === 'คืนคะแนน') {
-                // คืน ScoreModifier กลับ
                 $record   = $appeal->behaviorRecord;
-                $modifier = $record->rule->ScoreModifier;
+                $defaultPoints = abs($record->rule->ScoreModifier ?? 0);
 
-                // การคืนคะแนน = ทำสิ่งที่ตรงข้ามกับการบันทึกเดิม
+                // ใช้คะแนนที่ฝ่ายปกครองระบุ หรือใช้คะแนนเต็มเดิมของกฎนั้น
+                $pointsToReturn = $request->filled('restored_points')
+                    ? floatval($request->restored_points)
+                    : $defaultPoints;
+
+                // การคืนคะแนน = เพิ่มคะแนนตามจำนวนที่กำหนดคืน
                 if ($record->rule->RuleType === 'ตัดคะแนน') {
-                    $modifier = abs($modifier); // คืนคะแนนที่เคยตัด
+                    $modifier = abs($pointsToReturn);
                 } else {
-                    $modifier = -abs($modifier); // ลดคะแนนที่เคยเพิ่ม (หายาก)
+                    $modifier = -abs($pointsToReturn);
                 }
 
-                $student = $appeal->student;
+                $student  = $appeal->student;
                 $newScore = max(0, min(100, $student->BehaviorScore + $modifier));
                 $riskStatus = match(true) {
                     $newScore >= 80 => 'ปกติ',
-                    $newScore >= 60 => 'เฝ้าระวัง',
-                    default         => 'วิกฤต',
+                    $newScore >= 60 => 'ตักเตือน',
+                    default         => 'ทัณฑ์บน',
                 };
 
                 $student->update([
@@ -60,13 +76,25 @@ class AppealController extends Controller
                     'RiskStatus'    => $riskStatus,
                 ]);
 
-                // เปลี่ยนสถานะ record กลับ
+                // เปลี่ยนสถานะ record
                 $record->update(['Status' => 'อนุมัติแล้ว']);
             }
+
+            $appeal->update([
+                'Status'         => $statusToSave,
+                'ReviewerID'     => auth()->id(),
+                'ReviewDate'     => now(),
+                'ReviewNotes'    => $request->input('review_notes'),
+                'RestoredPoints' => $pointsToReturn,
+            ]);
         });
 
+        $restoredText = ($request->action === 'คืนคะแนน' && $request->filled('restored_points'))
+            ? "จำนวน {$request->restored_points} คะแนน "
+            : " ";
+
         $msg = $request->action === 'คืนคะแนน'
-            ? 'คืนคะแนนให้นักเรียนเรียบร้อยแล้ว'
+            ? "คืนคะแนน{$restoredText}ให้นักเรียนเรียบร้อยแล้ว"
             : 'ยกเลิกคำร้องเรียบร้อยแล้ว';
 
         return redirect()->route('discipline.appeals.index')->with('success', $msg);

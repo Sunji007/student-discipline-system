@@ -32,7 +32,7 @@ class InformantReportController extends Controller
 
     public function create()
     {
-        $students = Student::orderBy('FullName')->get();
+        $students = Student::orderBy('FirstName')->orderBy('LastName')->get();
         $role = strtolower(auth()->user()->Role);
         $layoutPrefix = match($role) {
             'student' => 'student',
@@ -47,40 +47,96 @@ class InformantReportController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'Title' => 'required|string|max:100|min:5',
+            'Title' => 'required|string|max:100',
             'Category' => 'required|string|max:50',
-            'Description' => 'required|string|min:15',
-            'StudentID' => 'nullable|exists:students,StudentID',
-            'evidence' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
+            'Description' => 'required|string',
+            'StudentID' => 'nullable|string|max:255',
+            'evidence' => 'nullable',
+            'evidence.*' => 'nullable|file|mimes:pdf,jpg,jpeg,png,webp,heic,heif,gif,bmp|max:20480',
             'IsAnonymous' => 'nullable|boolean',
+        ], [
+            'Title.required' => 'กรุณากรอกหัวข้อเบาะแส',
+            'Category.required' => 'กรุณาเลือกประเภทพฤติกรรม',
+            'Description.required' => 'กรุณากรอกรายละเอียดเบาะแส',
+            'evidence.*.mimes' => 'ไฟล์หลักฐานต้องเป็นประเภท PDF, JPG, JPEG, PNG หรือ WEBP เท่านั้น',
+            'evidence.*.max' => 'ขนาดไฟล์หลักฐานต้องไม่เกิน 20MB แต่ละไฟล์',
         ]);
+
+        if ($request->filled('StudentID')) {
+            $rawIds = array_filter(array_map('trim', preg_split('/[\s,;]+/', $request->input('StudentID'))));
+            if (!empty($rawIds)) {
+                $myStudent = \App\Models\Student::where('UserID', auth()->id())->first();
+                $myStudentId = $myStudent ? $myStudent->StudentID : null;
+
+                if ($myStudentId && in_array($myStudentId, $rawIds)) {
+                    return back()->withInput()->withErrors([
+                        'StudentID' => 'ไม่สามารถระบุรหัสนักเรียนของตนเอง (' . $myStudentId . ') ในรายการแจ้งเบาะแสได้'
+                    ]);
+                }
+
+                $validIds = \App\Models\Student::whereIn('StudentID', $rawIds)->pluck('StudentID')->toArray();
+                $invalidIds = array_diff($rawIds, $validIds);
+                if (!empty($invalidIds)) {
+                    return back()->withInput()->withErrors([
+                        'StudentID' => 'ไม่พบรหัสนักเรียน: ' . implode(', ', $invalidIds) . ' ในระบบ กรุณาตรวจสอบรหัสนักเรียนใหม่อีกครั้ง'
+                    ]);
+                }
+            }
+        }
 
         $role = strtolower(auth()->user()->Role);
         $isAnonymous = $request->has('IsAnonymous') && $request->input('IsAnonymous') == 1;
 
-        $evidencePath = null;
+        $evidencePaths = [];
         if ($request->hasFile('evidence')) {
-            $evidencePath = $request->file('evidence')
-                ->store('informant_reports/evidence', 'public');
+            $files = is_array($request->file('evidence')) ? $request->file('evidence') : [$request->file('evidence')];
+            foreach ($files as $file) {
+                if ($file && $file->isValid()) {
+                    $savedPath = null;
+                    try {
+                        $savedPath = $file->store('informant_reports/evidence', 'public');
+                    } catch (\Throwable $e1) {
+                        try {
+                            $publicDir = public_path('uploads/informant-evidence');
+                            if (!file_exists($publicDir)) {
+                                @mkdir($publicDir, 0777, true);
+                            }
+                            $ext = strtolower($file->getClientOriginalExtension() ?: 'jpg');
+                            $filename = time() . '_' . \Illuminate\Support\Str::random(8) . '.' . $ext;
+                            if (@move_uploaded_file($file->getPathname(), $publicDir . '/' . $filename)) {
+                                $savedPath = 'uploads/informant-evidence/' . $filename;
+                            }
+                        } catch (\Throwable $e2) {}
+                    }
+
+                    if ($savedPath) {
+                        $evidencePaths[] = $savedPath;
+                    }
+                }
+            }
         }
+
+        $evidencePathStr = !empty($evidencePaths) ? (count($evidencePaths) === 1 ? $evidencePaths[0] : json_encode($evidencePaths)) : null;
 
         InformantReport::create([
             'Title' => $validated['Title'],
             'Category' => $validated['Category'],
             'Description' => $validated['Description'],
-            'IsAnonymous' => $isAnonymous,
-            'ReporterName' => $isAnonymous ? null : auth()->user()->FullName,
+            'IsAnonymous' => $request->boolean('IsAnonymous'),
+            'ReporterName' => auth()->user()->FullName,
             'ReporterID' => auth()->id(), // Still store ReporterID for user dashboard indexing
-            'StudentID' => $validated['StudentID'],
-            'EvidencePath' => $evidencePath,
+            'StudentID' => $request->input('StudentID'),
+            'EvidencePath' => $evidencePathStr,
             'Status' => 'เรื่องใหม่',
+            'semester_id' => $this->getSelectedSemesterId(),
         ]);
 
-        $redirectRoute = match($role) {
-            'student' => 'student.informant-reports.index',
-            'teacher' => 'teacher.informant-reports.index',
-            'parent' => 'parent.informant-reports.index',
-            default => 'home'
+        $redirectRoute = match(true) {
+            str_contains($role, 'student') || str_contains($role, 'นักเรียน') => 'student.informant-reports.index',
+            str_contains($role, 'teacher') || str_contains($role, 'ครู') => 'teacher.informant-reports.index',
+            str_contains($role, 'parent') || str_contains($role, 'ผู้ปกครอง') => 'parent.informant-reports.index',
+            str_contains($role, 'discipline') || str_contains($role, 'ฝ่ายปกครอง') => 'discipline.informant-reports.index',
+            default => 'student.informant-reports.index'
         };
 
         return redirect()->route($redirectRoute)

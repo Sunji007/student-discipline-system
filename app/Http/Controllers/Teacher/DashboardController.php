@@ -12,19 +12,21 @@ class DashboardController extends Controller
     public function index()
     {
         $teacher  = auth()->user()->teacher;
-        $room     = $teacher?->AdvisoryRoom;
+        $rooms    = $teacher?->advisory_rooms ?? [];
+        $room     = implode(', ', $rooms);
 
-        $students = Student::inAdvisoryRoom($room)->get();
+        $students = Student::inAdvisoryRoom($rooms)->get();
         $ids      = $students->pluck('StudentID');
 
         $stats = [
             'total'        => $students->count(),
-            'risk'         => $students->whereIn('RiskStatus', ['เฝ้าระวัง', 'วิกฤต'])->count(),
+            'risk'         => $students->whereIn('RiskStatus', ['เฝ้าระวัง', 'ตักเตือน', 'วิกฤต', 'ทัณฑ์บน'])->count(),
             'today_absent' => Attendance::where('Date', today())
                                 ->whereIn('StudentID', $ids)
                                 ->where('Status', 'ขาด')->count(),
             'pending'      => BehaviorRecord::whereIn('StudentID', $ids)
-                                ->where('Status', 'รออนุมัติ')->count(),
+                                ->where('Status', 'รออนุมัติ')
+                                ->where('semester_id', $this->getSelectedSemesterId())->count(),
         ];
 
         $recentAttendance = Attendance::with('student')

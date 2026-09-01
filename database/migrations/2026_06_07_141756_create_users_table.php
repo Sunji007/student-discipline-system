@@ -12,7 +12,8 @@ return new class extends Migration
             $table->string('UserID', 36)->primary();
             $table->string('Username', 50)->unique();
             $table->string('Password', 255);
-            $table->string('FullName', 100);
+            $table->string('FirstName', 50);
+            $table->string('LastName', 50);
             $table->string('Role', 50); // admin, discipline, teacher, student, parent
             $table->string('Status', 50)->default('ปกติ');
             $table->string('AdditionalInfo', 255)->nullable();

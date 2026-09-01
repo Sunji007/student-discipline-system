@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@section('title', 'คำร้องโต้แย้ง')
-@section('page-title', 'คำร้องโต้แย้งคะแนน')
+@section('title', 'พิจารณาคำอุทธรณ์')
+@section('page-title', 'พิจารณาคำอุทธรณ์')
 
 @section('content')
 <div class="page-header" style="display:flex; align-items:center; justify-content:space-between;">
     <div>
-        <h2>คำร้องโต้แย้งคะแนนพฤติกรรม</h2>
-        <p>ตรวจสอบและพิจารณาคำร้องจากนักเรียน</p>
+        <h2>พิจารณาคำอุทธรณ์</h2>
+        <p>ตรวจสอบและพิจารณาคำขออุทธรณ์จากนักเรียน</p>
     </div>
     <div style="display:flex; gap:0.5rem;">
         @foreach(['','รอตรวจสอบ','คืนคะแนน','ยกเลิกคำร้อง'] as $s)
@@ -45,18 +45,20 @@
                         </div>
                     </td>
                     <td style="font-size:0.82rem; color:var(--text-muted);">
-                        {{ \Carbon\Carbon::parse($appeal->AppealDate)->format('d/m/Y H:i') }}
+                        @php $ad = \Carbon\Carbon::parse($appeal->created_at ?? $appeal->AppealDate); @endphp
+                        {{ $ad->format('d/m/') . ($ad->year + 543) . $ad->format(' H:i') }}
                     </td>
                     <td>
                         @php
-                            $sc = match($appeal->Status) {
-                                'รอตรวจสอบ'   => 'badge-gold',
-                                'คืนคะแนน'    => 'badge-green',
+                            $displayStatus = in_array($appeal->Status, ['ยกเลิกคำร้อง', 'ยกเลิกคำร้องยื่นอุทธรณ์']) ? 'ยกเลิกคำร้อง' : $appeal->Status;
+                            $sc = match($displayStatus) {
+                                'รอตรวจสอบ' => 'badge-gold',
+                                'คืนคะแนน'   => 'badge-green',
                                 'ยกเลิกคำร้อง' => 'badge-red',
-                                default        => 'badge-gray',
+                                default       => 'badge-gray',
                             };
                         @endphp
-                        <span class="badge {{ $sc }}">{{ $appeal->Status }}</span>
+                        <span class="badge {{ $sc }}">{{ $displayStatus }}</span>
                     </td>
                     <td style="text-align:right;">
                         <a href="{{ route('discipline.appeals.show', $appeal->AppealID) }}" class="btn btn-outline btn-sm">
@@ -66,7 +68,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="5" style="text-align:center; color:var(--text-muted); padding:2rem;">ไม่มีคำร้อง</td>
+                    <td colspan="5" style="text-align:center; color:var(--text-muted); padding:2rem;">ไม่มีคำขออุทธรณ์</td>
                 </tr>
                 @endforelse
             </tbody>

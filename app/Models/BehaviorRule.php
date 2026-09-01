@@ -6,4 +6,9 @@ class BehaviorRule extends Model {
     public $incrementing = false;
     protected $keyType = 'string';
     protected $fillable = ['RuleID', 'RuleName', 'RuleType', 'ScoreModifier', 'Category', 'Description'];
+
+    public function getRouteKeyName()
+    {
+        return 'RuleID';
+    }
 }

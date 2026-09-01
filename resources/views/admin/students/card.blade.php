@@ -217,16 +217,10 @@
         .codes-section {
             width: 100%;
             display: flex;
-            justify-content: space-around;
+            justify-content: center;
             align-items: center;
             margin-top: auto;
             padding-bottom: 0.5rem;
-        }
-
-        .qr-box {
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
         .barcode-box {
@@ -317,11 +311,6 @@
 
             <!-- Codes Section -->
             <div class="codes-section">
-                <!-- QR Code Box -->
-                <div class="qr-box">
-                    <canvas id="qr-code"></canvas>
-                </div>
-
                 <!-- Barcode Box -->
                 <div class="barcode-box">
                     <svg id="barcode"></svg>
@@ -338,28 +327,11 @@
     <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            // Student data payload for QR code
-            const qrPayload = JSON.stringify({
-                id: "{{ $student->StudentID }}",
-                name: "{{ $student->FullName }}",
-                grade: "{{ $student->classroom_display }}"
-            });
-
-            // 1. Generate QR Code
-            const qr = new QRious({
-                element: document.getElementById('qr-code'),
-                value: qrPayload,
-                size: 85,
-                background: 'white',
-                foreground: '#0B4A3A',
-                level: 'H' // High error correction
-            });
-
-            // 2. Generate Barcode (Code128 format)
+            // Generate Barcode (Code128 format)
             JsBarcode("#barcode", "{{ $student->StudentID }}", {
                 format: "CODE128",
-                width: 1.3,
-                height: 48,
+                width: 1.5,
+                height: 52,
                 displayValue: false,
                 lineColor: "#0b4a3a",
                 margin: 0

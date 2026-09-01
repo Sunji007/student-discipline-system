@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'ระบบวินัยนักเรียน') — ศิริราษฎร์สามัคคี</title>
+    <title>@yield('title', 'ระบบสารสนเทศการบริหารงานวินัยและติดตามพฤติกรรมนักเรียน') — ศิริราษฎร์สามัคคี</title>
     <link rel="icon" href="{{ asset('images/logo.png') }}" type="image/png">
     {{-- Preconnect: เชื่อมต่อ CDN ล่วงหน้าลด latency --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,7 +17,257 @@
     <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"></noscript>
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    {{-- SweetAlert2 สำหรับแจ้งเตือนแบบโมเดิร์น --}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    {{-- Flatpickr CSS/JS for Buddhist Era Datepicker --}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/th.js"></script>
+    <script>
+        // Global Buddhist Era Timepicker Initializer
+        window.initBETimepicker = function(selector, initialValueReal) {
+            const inputDisplay = document.querySelector(selector + "_display");
+            const inputReal = document.querySelector(selector + "_real");
+            
+            if (!inputDisplay || !inputReal) return;
+
+            // Load initial date (if any)
+            let defaultDate = null;
+            if (initialValueReal) {
+                let parseable = initialValueReal;
+                if (!parseable.includes('T') && parseable.includes(' ')) {
+                    parseable = parseable.replace(' ', 'T');
+                }
+                defaultDate = new Date(parseable);
+                if (isNaN(defaultDate.getTime())) {
+                    defaultDate = new Date();
+                }
+            } else {
+                defaultDate = new Date();
+            }
+
+            const fp = flatpickr(inputDisplay, {
+                enableTime: true,
+                time_24hr: true,
+                dateFormat: "d/m/Y H:i",
+                defaultDate: defaultDate,
+                locale: "th",
+                formatDate: (date, format, locale) => {
+                    const day = ("0" + date.getDate()).slice(-2);
+                    const month = ("0" + (date.getMonth() + 1)).slice(-2);
+                    const yearBE = date.getFullYear() + 543;
+                    const hours = ("0" + date.getHours()).slice(-2);
+                    const minutes = ("0" + date.getMinutes()).slice(-2);
+                    return `${day}/${month}/${yearBE} ${hours}:${minutes}`;
+                },
+                onChange: function(selectedDates, dateStr, instance) {
+                    if (selectedDates[0]) {
+                        const d = selectedDates[0];
+                        const y = d.getFullYear();
+                        const m = ("0" + (d.getMonth() + 1)).slice(-2);
+                        const day = ("0" + d.getDate()).slice(-2);
+                        const h = ("0" + d.getHours()).slice(-2);
+                        const min = ("0" + d.getMinutes()).slice(-2);
+                        inputReal.value = `${y}-${m}-${day} ${h}:${min}`;
+                    } else {
+                        inputReal.value = "";
+                    }
+                },
+                onReady: function(selectedDates, dateStr, instance) {
+                    updateBEYearHeader(instance);
+                },
+                onOpen: function(selectedDates, dateStr, instance) {
+                    updateBEYearHeader(instance);
+                },
+                onMonthChange: function(selectedDates, dateStr, instance) {
+                    setTimeout(() => updateBEYearHeader(instance), 0);
+                },
+                onYearChange: function(selectedDates, dateStr, instance) {
+                    setTimeout(() => updateBEYearHeader(instance), 0);
+                }
+            });
+
+            inputDisplay.addEventListener('click', function() { fp.open(); });
+            if (inputDisplay.parentElement) {
+                inputDisplay.parentElement.addEventListener('click', function() { fp.open(); });
+            }
+
+            function updateBEYearHeader(instance) {
+                if (instance.currentYearElement) {
+                    instance.currentYearElement.style.display = 'none';
+                    if (instance.currentYearElement.nextSibling && instance.currentYearElement.nextSibling.className === 'arrowUp') {
+                        instance.currentYearElement.parentNode.style.display = 'none';
+                    }
+                    
+                    let container = instance.currentYearElement.parentNode.parentNode;
+                    let beYearSpan = container.querySelector('.be-year-display');
+                    if (!beYearSpan) {
+                        beYearSpan = document.createElement('span');
+                        beYearSpan.className = 'be-year-display';
+                        beYearSpan.style.fontWeight = '600';
+                        beYearSpan.style.fontSize = '1.05rem';
+                        beYearSpan.style.marginLeft = '4px';
+                        beYearSpan.style.color = '#374151';
+                        container.appendChild(beYearSpan);
+                    }
+                    beYearSpan.textContent = parseInt(instance.currentYear) + 543;
+                }
+            }
+        };
+
+        // Global Buddhist Era Datepicker Initializer (Date only)
+        window.initBEDatepicker = function(selector, initialValueReal) {
+            const inputDisplay = document.querySelector(selector + "_display");
+            const inputReal = document.querySelector(selector + "_real");
+            
+            if (!inputDisplay || !inputReal) return;
+
+            // Load initial date (if any)
+            let defaultDate = null;
+            if (initialValueReal) {
+                defaultDate = new Date(initialValueReal);
+                if (isNaN(defaultDate.getTime())) {
+                    defaultDate = new Date();
+                }
+            } else {
+                defaultDate = new Date();
+            }
+
+            const fp = flatpickr(inputDisplay, {
+                enableTime: false,
+                dateFormat: "d/m/Y",
+                defaultDate: defaultDate,
+                locale: "th",
+                formatDate: (date, format, locale) => {
+                    const day = ("0" + date.getDate()).slice(-2);
+                    const month = ("0" + (date.getMonth() + 1)).slice(-2);
+                    const yearBE = date.getFullYear() + 543;
+                    return `${day}/${month}/${yearBE}`;
+                },
+                onChange: function(selectedDates, dateStr, instance) {
+                    if (selectedDates[0]) {
+                        const d = selectedDates[0];
+                        const y = d.getFullYear();
+                        const m = ("0" + (d.getMonth() + 1)).slice(-2);
+                        const day = ("0" + d.getDate()).slice(-2);
+                        inputReal.value = `${y}-${m}-${day}`;
+                    } else {
+                        inputReal.value = "";
+                    }
+                },
+                onReady: function(selectedDates, dateStr, instance) {
+                    updateBEYearHeader(instance);
+                },
+                onOpen: function(selectedDates, dateStr, instance) {
+                    updateBEYearHeader(instance);
+                },
+                onMonthChange: function(selectedDates, dateStr, instance) {
+                    setTimeout(() => updateBEYearHeader(instance), 0);
+                },
+                onYearChange: function(selectedDates, dateStr, instance) {
+                    setTimeout(() => updateBEYearHeader(instance), 0);
+                }
+            });
+
+            inputDisplay.addEventListener('click', function() { fp.open(); });
+            if (inputDisplay.parentElement) {
+                inputDisplay.parentElement.addEventListener('click', function() { fp.open(); });
+            }
+
+            function updateBEYearHeader(instance) {
+                if (instance.currentYearElement) {
+                    instance.currentYearElement.style.display = 'none';
+                    if (instance.currentYearElement.nextSibling && instance.currentYearElement.nextSibling.className === 'arrowUp') {
+                        instance.currentYearElement.parentNode.style.display = 'none';
+                    }
+                    
+                    let container = instance.currentYearElement.parentNode.parentNode;
+                    let beYearSpan = container.querySelector('.be-year-display');
+                    if (!beYearSpan) {
+                        beYearSpan = document.createElement('span');
+                        beYearSpan.className = 'be-year-display';
+                        beYearSpan.style.fontWeight = '600';
+                        beYearSpan.style.fontSize = '1.05rem';
+                        beYearSpan.style.marginLeft = '4px';
+                        beYearSpan.style.color = '#374151';
+                        container.appendChild(beYearSpan);
+                    }
+                    beYearSpan.textContent = parseInt(instance.currentYear) + 543;
+                }
+            }
+        };
+    </script>
+    <script>
+        (function() {
+            try {
+                const isCollapsed = localStorage.getItem('sidebar_collapsed');
+                if (isCollapsed === null || isCollapsed === '1') {
+                    document.documentElement.classList.add('sidebar-collapsed-preload');
+                    document.addEventListener('DOMContentLoaded', function() {
+                        document.body.classList.add('sidebar-collapsed');
+                    });
+                }
+            } catch (e) {}
+        })();
+    </script>
+
     <style>
+        /* SweetAlert2 Theme Adjustments */
+        .swal2-popup {
+            font-family: 'Sarabun', 'Outfit', sans-serif !important;
+            border-radius: 12px !important;
+            padding: 1.75rem !important;
+        }
+        .swal2-title {
+            font-size: 1.25rem !important;
+            font-weight: 700 !important;
+            color: #0f0e34 !important;
+        }
+        .swal2-html-container {
+            font-size: 0.9rem !important;
+            color: #4b5563 !important;
+        }
+        .swal2-confirm.btn-swal-confirm {
+            background: var(--primary-gradient) !important;
+            color: #fff !important;
+            box-shadow: 0 4px 14px rgba(6, 4, 234, 0.25) !important;
+            border-radius: 8px !important;
+            padding: 0.6rem 1.5rem !important;
+            font-size: 0.88rem !important;
+            font-weight: 600 !important;
+            border: none !important;
+        }
+        .swal2-confirm.btn-swal-danger {
+            background: var(--red-gradient) !important;
+            color: #fff !important;
+            box-shadow: 0 4px 14px rgba(189, 39, 67, 0.25) !important;
+            border-radius: 8px !important;
+            padding: 0.6rem 1.5rem !important;
+            font-size: 0.88rem !important;
+            font-weight: 600 !important;
+            border: none !important;
+        }
+        .swal2-confirm.btn-swal-success {
+            background: var(--green-gradient) !important;
+            color: #fff !important;
+            box-shadow: 0 4px 14px rgba(16, 185, 129, 0.25) !important;
+            border-radius: 8px !important;
+            padding: 0.6rem 1.5rem !important;
+            font-size: 0.88rem !important;
+            font-weight: 600 !important;
+            border: none !important;
+        }
+        .swal2-cancel.btn-swal-cancel {
+            background: #f3f4f6 !important;
+            color: #374151 !important;
+            border: 1.5px solid #e5e7eb !important;
+            border-radius: 8px !important;
+            padding: 0.6rem 1.5rem !important;
+            font-size: 0.88rem !important;
+            font-weight: 600 !important;
+        }
+
         :root {
             /* ===== Core Brand & Gradients ===== */
             --primary:        #0604EA;
@@ -46,6 +296,9 @@
             --text:           #1e1e38;
             --text-muted:     #6c6c8f;
 
+            --purple:         #7c3aed;
+            --purple-gradient: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+            
             /* ===== Layout ===== */
             --sidebar-w: 260px;
             --topbar-h:  65px;
@@ -78,7 +331,8 @@
             top: 0; left: 0;
             display: flex;
             flex-direction: column;
-            overflow: hidden;        /* ป้องกัน sidebar ล้นออกไป */
+            overflow-x: hidden;
+            overflow-y: auto;        /* ป้องกัน sidebar ล้นออกไป */
             z-index: 100;
             box-shadow: 4px 0 25px rgba(15, 14, 52, 0.15);
 
@@ -89,45 +343,55 @@
                 var(--sidebar-gradient);
             background-size: 24px 24px, 24px 24px, 100% 100%;
             background-color: #0f0e34;
+            transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .sidebar-brand {
             padding: 1.5rem 1.25rem 1.25rem;
             border-bottom: 1px solid rgba(255,255,255,0.08);
+            transition: padding 0.25s ease;
         }
 
         .brand-content {
             display: flex;
             align-items: center;
             gap: 0.85rem;
+            transition: all 0.25s ease;
         }
 
         .brand-logo {
-            width: 44px;
+            width: 50px;
             height: auto;
             flex-shrink: 0;
             filter: drop-shadow(0 4px 10px rgba(0,0,0,0.25));
+            transition: all 0.25s ease;
         }
 
         .brand-text {
             display: flex;
             flex-direction: column;
-            gap: 0.1rem;
+            gap: 0.15rem;
+            min-width: 0;
+            flex: 1;
+            transition: opacity 0.2s ease;
         }
 
         .sidebar-brand .school-name {
             color: var(--white);
-            font-size: 0.85rem;
+            font-size: 0.86rem;
             font-weight: 700;
-            line-height: 1.3;
-            letter-spacing: 0.02em;
+            line-height: 1.25;
+            letter-spacing: 0.01em;
         }
 
         .sidebar-brand .system-name {
-            color: rgba(255,255,255,0.55);
-            font-size: 0.7rem;
+            color: rgba(255,255,255,0.65);
+            font-size: 0.68rem;
             font-weight: 400;
+            line-height: 1.35;
             letter-spacing: 0.01em;
+            white-space: normal;
+            word-break: normal;
         }
 
         /* Role Badge - Glassmorphism */
@@ -154,6 +418,9 @@
             color: var(--white);
             font-size: 0.88rem;
             font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .role-badge .user-role {
@@ -165,6 +432,7 @@
             display: flex;
             align-items: center;
             gap: 0.35rem;
+            white-space: nowrap;
         }
         
         .role-badge .user-role::before {
@@ -196,6 +464,9 @@
             letter-spacing: 0.15em;
             text-transform: uppercase;
             color: rgba(255,255,255,0.35);
+            white-space: nowrap;
+            overflow: hidden;
+            transition: all 0.25s ease;
         }
 
         /* ── Nav items (Impeccable v2) ── */
@@ -212,12 +483,32 @@
             border-radius: 10px;
             position: relative;
             transition: all 0.2s cubic-bezier(0.4,0,0.2,1);
+            white-space: nowrap;
+        }
+
+        .nav-item a i {
+            width: 20px;
+            text-align: center;
+            font-size: 1.05rem;
+            color: rgba(255,255,255,0.7);
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .nav-item a .nav-text {
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            transition: opacity 0.2s ease;
         }
 
         .nav-item a:hover {
             color: var(--white);
             background: rgba(255,255,255,0.07);
         }
+
+        .nav-item a:hover i { color: #fff; }
 
         /* Impeccable active: indigo pill + left accent */
         .nav-item a.active {
@@ -226,6 +517,8 @@
             font-weight: 600;
             box-shadow: 0 4px 14px rgba(6,4,234,0.35), inset 0 1px 0 rgba(255,255,255,0.12);
         }
+
+        .nav-item a.active i { color: #fff; opacity: 1; }
 
         /* Left accent bar for active */
         .nav-item a.active::before {
@@ -238,18 +531,6 @@
             background: #fff;
             opacity: 0.9;
         }
-
-        .nav-item a i {
-            width: 18px;
-            text-align: center;
-            font-size: 0.92rem;
-            color: rgba(255,255,255,0.45);
-            transition: all 0.2s ease;
-            flex-shrink: 0;
-        }
-
-        .nav-item a:hover i { color: rgba(255,255,255,0.85); }
-        .nav-item a.active i { color: #fff; opacity: 1; }
 
         .nav-badge {
             margin-left: auto;
@@ -266,7 +547,8 @@
         .sidebar-footer {
             padding: 1.25rem;
             border-top: 1px solid rgba(255,255,255,0.08);
-            flex-shrink: 0;          /* ป้องกันไม่ให้ถูกบีบออกไป */
+            flex-shrink: 0;
+            transition: all 0.25s ease;
         }
 
         .btn-logout {
@@ -286,6 +568,8 @@
             cursor: pointer;
             text-decoration: none;
             transition: var(--transition);
+            white-space: nowrap;
+            position: relative;
         }
 
         .btn-logout:hover {
@@ -293,6 +577,176 @@
             color: var(--white);
             border-color: transparent;
             box-shadow: 0 4px 12px rgba(189,39,67,0.3);
+        }
+
+        /* ============================================================
+           SIDEBAR COLLAPSED (Mini Sidebar / Icons & Logo Only)
+        ============================================================ */
+        @media (min-width: 769px) {
+            body.sidebar-collapsed .sidebar,
+            html.sidebar-collapsed-preload body .sidebar {
+                width: 78px;
+            }
+            body.sidebar-collapsed .main-wrapper,
+            html.sidebar-collapsed-preload body .main-wrapper {
+                margin-left: 78px;
+            }
+
+            body.sidebar-collapsed .sidebar-brand,
+            html.sidebar-collapsed-preload body .sidebar-brand {
+                padding: 1.25rem 0.5rem;
+                display: flex;
+                justify-content: center;
+            }
+            body.sidebar-collapsed .brand-content,
+            html.sidebar-collapsed-preload body .brand-content {
+                justify-content: center;
+                gap: 0;
+                width: 100%;
+            }
+            body.sidebar-collapsed .brand-logo,
+            html.sidebar-collapsed-preload body .brand-logo {
+                width: 44px;
+            }
+            body.sidebar-collapsed .brand-text,
+            html.sidebar-collapsed-preload body .brand-text {
+                display: none !important;
+                opacity: 0;
+            }
+
+            /* Role Badge in Collapsed mode */
+            body.sidebar-collapsed .role-badge,
+            html.sidebar-collapsed-preload body .role-badge {
+                margin: 0.75rem 0.5rem;
+                padding: 0.6rem 0.25rem;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+            }
+            body.sidebar-collapsed .role-badge .user-name,
+            body.sidebar-collapsed .role-badge .user-username,
+            body.sidebar-collapsed .role-badge .user-role-container,
+            html.sidebar-collapsed-preload body .role-badge .user-name,
+            html.sidebar-collapsed-preload body .role-badge .user-username,
+            html.sidebar-collapsed-preload body .role-badge .user-role-container {
+                display: none !important;
+            }
+            body.sidebar-collapsed .role-badge::after,
+            html.sidebar-collapsed-preload body .role-badge::after {
+                content: '\f007';
+                font-family: 'Font Awesome 6 Free';
+                font-weight: 900;
+                color: var(--yellow);
+                font-size: 1.15rem;
+            }
+
+            /* Section Title in Collapsed mode */
+            body.sidebar-collapsed .nav-section-title,
+            html.sidebar-collapsed-preload body .nav-section-title {
+                height: 1px;
+                padding: 0;
+                margin: 0.75rem 0.75rem;
+                background: rgba(255,255,255,0.08);
+                font-size: 0;
+                overflow: hidden;
+            }
+
+            /* Nav Item in Collapsed mode */
+            body.sidebar-collapsed .nav-item a,
+            html.sidebar-collapsed-preload body .nav-item a {
+                justify-content: center;
+                padding: 0.75rem 0;
+                margin: 4px 0.6rem;
+                gap: 0;
+            }
+            body.sidebar-collapsed .nav-item a .nav-text,
+            html.sidebar-collapsed-preload body .nav-item a .nav-text {
+                display: none !important;
+            }
+            body.sidebar-collapsed .nav-item a i,
+            html.sidebar-collapsed-preload body .nav-item a i {
+                font-size: 1.22rem;
+                margin: 0;
+                width: auto;
+            }
+            body.sidebar-collapsed .nav-item a.active::before,
+            html.sidebar-collapsed-preload body .nav-item a.active::before {
+                left: -0.6rem;
+            }
+
+            /* Sleek Floating Tooltip on Hover in Collapsed mode */
+            body.sidebar-collapsed .nav-item a:hover::after {
+                content: attr(data-title);
+                position: absolute;
+                left: calc(100% + 12px);
+                top: 50%;
+                transform: translateY(-50%);
+                background: #0f0e34;
+                color: #ffffff;
+                padding: 0.45rem 0.85rem;
+                border-radius: 6px;
+                font-size: 0.82rem;
+                font-weight: 500;
+                white-space: nowrap;
+                z-index: 9999;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.35);
+                border: 1px solid rgba(255,255,255,0.12);
+                pointer-events: none;
+                animation: tooltipFadeIn 0.15s ease;
+            }
+            body.sidebar-collapsed .nav-item a:hover::before {
+                content: '';
+                position: absolute;
+                left: calc(100% + 6px);
+                top: 50%;
+                transform: translateY(-50%);
+                border-width: 5px 6px 5px 0;
+                border-style: solid;
+                border-color: transparent #0f0e34 transparent transparent;
+                z-index: 9999;
+            }
+            @keyframes tooltipFadeIn {
+                from { opacity: 0; transform: translateY(-50%) translateX(-4px); }
+                to   { opacity: 1; transform: translateY(-50%) translateX(0); }
+            }
+
+            /* Logout Button in Collapsed mode */
+            body.sidebar-collapsed .sidebar-footer,
+            html.sidebar-collapsed-preload body .sidebar-footer {
+                padding: 0.75rem 0.5rem;
+            }
+            body.sidebar-collapsed .btn-logout,
+            html.sidebar-collapsed-preload body .btn-logout {
+                padding: 0.65rem 0;
+                justify-content: center;
+            }
+            body.sidebar-collapsed .btn-logout .logout-text,
+            html.sidebar-collapsed-preload body .btn-logout .logout-text {
+                display: none !important;
+            }
+            body.sidebar-collapsed .btn-logout i,
+            html.sidebar-collapsed-preload body .btn-logout i {
+                font-size: 1.15rem;
+                margin: 0;
+            }
+            body.sidebar-collapsed .btn-logout:hover::after {
+                content: 'ออกจากระบบ';
+                position: absolute;
+                left: calc(100% + 12px);
+                top: 50%;
+                transform: translateY(-50%);
+                background: #bd2743;
+                color: #ffffff;
+                padding: 0.45rem 0.85rem;
+                border-radius: 6px;
+                font-size: 0.82rem;
+                font-weight: 500;
+                white-space: nowrap;
+                z-index: 9999;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.35);
+                pointer-events: none;
+            }
         }
 
         /* ================================================
@@ -491,6 +945,7 @@
         .stat-card.red::before     { background: var(--red-gradient); }
         .stat-card.green::before   { background: var(--green-gradient); }
         .stat-card.orange::before  { background: var(--orange-gradient); }
+        .stat-card.purple::before  { background: var(--purple-gradient); }
 
         /* Gradient icon square (Impeccable v2) */
         .stat-icon {
@@ -530,6 +985,11 @@
             background: linear-gradient(135deg, #F08618 0%, #f59e0b 100%);
             color: #fff;
             box-shadow: 0 4px 14px rgba(240,134,24,0.28);
+        }
+        .stat-icon.purple {
+            background: var(--purple-gradient);
+            color: #fff;
+            box-shadow: 0 4px 14px rgba(124,58,237,0.28);
         }
 
         .stat-info { flex: 1; min-width: 0; }
@@ -623,6 +1083,7 @@
         .badge-red     { background: rgba(189,39,67,0.07);       color: var(--red); }
         .badge-green   { background: rgba(22,163,74,0.07);       color: #14532d; }
         .badge-orange  { background: rgba(240,134,24,0.07);       color: #7c2d12; }
+        .badge-purple  { background: rgba(124,58,237,0.08);       color: var(--purple); }
         .badge-gray    { background: rgba(91,91,138,0.06);       color: var(--text-muted); }
 
         /* ================================================
@@ -727,12 +1188,34 @@
             background: white;
             color: var(--text);
             outline: none;
-            transition: var(--transition);
+            transition: all 0.2s ease-in-out;
         }
 
-        .form-control:focus {
-            border-color: var(--primary-light);
-            box-shadow: 0 0 0 4px rgba(6, 4, 234, 0.08);
+        .form-control:hover, 
+        input[type="text"]:hover, 
+        input[type="search"]:hover, 
+        input[type="number"]:hover, 
+        input[type="email"]:hover, 
+        input[type="password"]:hover, 
+        input[type="date"]:hover, 
+        textarea:hover {
+            border-color: #3b82f6 !important;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.18) !important;
+            background-color: #f8fafc !important;
+            cursor: text;
+        }
+
+        select.form-control:hover, select:hover {
+            border-color: #3b82f6 !important;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.18) !important;
+            background-color: #f8fafc !important;
+            cursor: pointer;
+        }
+
+        .form-control:focus, input:focus, select:focus, textarea:focus {
+            border-color: var(--primary) !important;
+            box-shadow: 0 0 0 4px rgba(6, 4, 234, 0.2) !important;
+            background-color: #ffffff !important;
         }
 
         .form-control.is-invalid { border-color: var(--red); }
@@ -887,13 +1370,13 @@
             transform: translateX(20px);
         }
 
-        /* Mobile Toggle Button */
+        /* Sidebar Toggle Button (Always visible on Desktop & Mobile) */
         .sidebar-toggle {
-            display: none;
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            font-size: 1.25rem;
+            display: inline-flex;
+            background: #f0f0f8;
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-size: 1.05rem;
             cursor: pointer;
             width: 36px;
             height: 36px;
@@ -904,8 +1387,10 @@
         }
         
         .sidebar-toggle:hover {
-            background: #e5e5f5;
+            background: #e2e2f5;
             color: var(--primary);
+            border-color: rgba(6,4,234,0.25);
+            transform: translateY(-1px);
         }
 
         /* Sidebar Overlay */
@@ -1089,18 +1574,30 @@
                 <img src="{{ asset('images/logo.png') }}" alt="โลโก้โรงเรียนศิริราษฎร์สามัคคี" class="brand-logo">
                 <div class="brand-text">
                     <div class="school-name">โรงเรียนศิริราษฎร์สามัคคี</div>
-                    <div class="system-name">ระบบบริหารงานวินัยนักเรียน</div>
+                    <div class="system-name">ระบบสารสนเทศการบริหารงานวินัยและติดตามพฤติกรรมนักเรียน</div>
                 </div>
             </div>
         </div>
 
-        <div class="role-badge">
+        @php
+            $currentActiveRole = session('active_role', auth()->user()->Role);
+            $userAvailableRoles = auth()->user()->getAvailableRoles();
+        @endphp
+
+        <div class="role-badge" style="position:relative;">
             <div class="user-name">{{ auth()->user()->FullName }}</div>
-            <div class="user-role">{{ auth()->user()->Role === 'ครู' ? 'ครูประจำชั้น' : auth()->user()->Role }}</div>
+            <div class="user-username" style="font-size:0.75rem; color:rgba(255, 255, 255, 0.7); display:flex; align-items:center; gap:0.25rem;">
+                <i class="far fa-id-card" style="font-size:0.7rem;"></i> รหัสประจำตัว: <strong style="color:#fff;">{{ auth()->user()->Username }}</strong>
+            </div>
+            <div class="user-role-container" style="display:flex; align-items:center; gap:0.35rem; margin-top:0.15rem;">
+                <div class="user-role" style="margin:0;">
+                    {{ $currentActiveRole === 'ครู' ? 'ครูประจำชั้น' : $currentActiveRole }}
+                </div>
+            </div>
         </div>
 
         <nav class="sidebar-nav">
-            @include('layouts.partials.nav-' . match(strtolower(auth()->user()->Role)) {
+            @include('layouts.partials.nav-' . match(strtolower($currentActiveRole)) {
                 'ผู้ดูแลระบบ', 'admin' => 'admin',
                 'ฝ่ายปกครอง', 'discipline' => 'discipline',
                 'ครู', 'teacher' => 'teacher',
@@ -1113,9 +1610,9 @@
         <div class="sidebar-footer">
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
-                <button type="submit" class="btn-logout">
+                <button type="submit" class="btn-logout" title="ออกจากระบบ">
                     <i class="fas fa-sign-out-alt"></i>
-                    ออกจากระบบ
+                    <span class="logout-text">ออกจากระบบ</span>
                 </button>
             </form>
         </div>
@@ -1127,29 +1624,61 @@
     <div class="main-wrapper" @guest style="margin-left: 0;" @endguest>
         @auth
         <header class="topbar">
-            <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <div style="display: flex; align-items: center; gap: 1rem;">
                 <button class="sidebar-toggle" id="sidebarToggle" title="เมนู">
                     <i class="fas fa-bars"></i>
                 </button>
-                <span class="topbar-title">@yield('page-title', 'แดชบอร์ด')</span>
+
+                <!-- Semester Selector -->
+                @php
+                    $activeSemester = \App\Models\Semester::where('is_active', true)->first();
+                    $selectedSemesterId = session('selected_semester_id', $activeSemester?->semester_id);
+                    $semestersList = \App\Models\Semester::orderBy('academic_year', 'desc')->orderBy('term', 'desc')->get();
+                @endphp
+                @if($semestersList->count() > 0)
+                <form action="{{ route('semesters.switch') }}" method="POST" id="semester-switch-form" style="margin: 0; display: flex; align-items: center; gap: 0.4rem;">
+                    @csrf
+                    <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted); white-space: nowrap; display: flex; align-items: center; gap: 0.25rem;">
+                        <i class="fas fa-graduation-cap" style="color: var(--primary);"></i> ปีการศึกษา:
+                    </label>
+                    <select name="semester_id" onchange="document.getElementById('semester-switch-form').submit()" 
+                            style="font-family: 'Sarabun', sans-serif; font-size: 0.82rem; font-weight: 500; height: 32px; padding: 0.25rem 2rem 0.25rem 0.75rem; border-radius: 6px; border: 1px solid var(--border); background-color: #fff; color: var(--text); cursor: pointer; outline: none; transition: var(--transition); background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%236c6c8f%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat: no-repeat; background-position: right 0.75rem center; background-size: 0.65rem auto; -webkit-appearance: none; -moz-appearance: none; appearance: none; box-shadow: var(--shadow-sm);">
+                        @foreach($semestersList as $sem)
+                            <option value="{{ $sem->semester_id }}" {{ $selectedSemesterId == $sem->semester_id ? 'selected' : '' }}>
+                                {{ $sem->academic_year }} ภาคเรียนที่ {{ $sem->term }} {{ $sem->is_active ? '(ปัจจุบัน)' : '' }}
+                            </option>
+                        @endforeach
+                    </select>
+                </form>
+                @endif
+
+                <!-- Child/Student Selector for Parents -->
+                @if(in_array(strtolower(auth()->user()->Role), ['ผู้ปกครอง', 'parent']))
+                    @php
+                        $parentStudents = auth()->user()->parentStudents;
+                        $selectedStudentId = session('selected_student_id', $parentStudents->first()?->StudentID);
+                    @endphp
+                    @if($parentStudents->count() > 1)
+                    <form action="{{ route('parent.switch-student') }}" method="POST" id="student-switch-form" style="margin: 0; display: flex; align-items: center; gap: 0.4rem; margin-left: 1rem;">
+                        @csrf
+                        <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted); white-space: nowrap; display: flex; align-items: center; gap: 0.25rem;">
+                            <i class="fas fa-child" style="color: var(--primary);"></i> บุตรหลาน:
+                        </label>
+                        <select name="student_id" onchange="document.getElementById('student-switch-form').submit()" 
+                                style="font-family: 'Sarabun', sans-serif; font-size: 0.82rem; font-weight: 500; height: 32px; padding: 0.25rem 2rem 0.25rem 0.75rem; border-radius: 6px; border: 1px solid var(--border); background-color: #fff; color: var(--text); cursor: pointer; outline: none; transition: var(--transition); background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%236c6c8f%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat: no-repeat; background-position: right 0.75rem center; background-size: 0.65rem auto; -webkit-appearance: none; -moz-appearance: none; appearance: none; box-shadow: var(--shadow-sm);">
+                            @foreach($parentStudents as $std)
+                                <option value="{{ $std->StudentID }}" {{ $selectedStudentId == $std->StudentID ? 'selected' : '' }}>
+                                    {{ $std->FullName }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </form>
+                    @endif
+                @endif
             </div>
             <div class="topbar-right">
-                @php
-                    $msgRoute = match(auth()->user()->Role) {
-                        'ผู้ดูแลระบบ' => route('admin.messages.index'),
-                        'ฝ่ายปกครอง'  => route('discipline.messages.index'),
-                        'ครู'          => route('teacher.messages.index'),
-                        'นักเรียน'     => route('student.messages.index'),
-                        'ผู้ปกครอง'    => route('parent.messages.index'),
-                        default        => '#',
-                    };
-                @endphp
-                <a href="{{ $msgRoute }}" class="topbar-msg-btn" title="ข้อความ">
-                    <i class="fas fa-envelope"></i>
-                    <span class="dot"></span>
-                </a>
                 <span style="font-size:0.8rem; color:var(--text-muted);">
-                    {{ now()->locale('th')->isoFormat('D MMM YYYY') }}
+                    {{ now()->locale('th')->isoFormat('D MMM ') . (now()->year + 543) }}
                 </span>
             </div>
         </header>
@@ -1175,24 +1704,292 @@
     </div>
 
     @stack('scripts')
+
+    {{-- Reusable Custom Confirm Modal --}}
+    <div id="confirmModal" style="display:none; position:fixed; inset:0; background:rgba(15,14,52,0.55); backdrop-filter:blur(4px); z-index:9999; align-items:center; justify-content:center;">
+        <div style="background:#fff; border-radius:16px; max-width:400px; width:92%; box-shadow:0 24px 80px rgba(0,0,0,0.3); overflow:hidden; animation:slideUp .25s ease;">
+            <!-- Header bar -->
+            <div id="confirmHeaderBar" style="background:linear-gradient(135deg,#e05370,#bd2743); padding:1.5rem 2rem; text-align:center;">
+                <div id="confirmIcon" style="font-size:3rem; line-height:1; margin-bottom:0.25rem;">❓</div>
+                <h3 id="confirmTitle" style="color:#fff; margin:0; font-size:1.15rem; font-weight:700;">ยืนยันการทำรายการ</h3>
+            </div>
+            <!-- Body -->
+            <div style="padding:1.75rem 2rem;">
+                <p id="confirmMessage" style="margin:0 0 1.5rem; color:#374151; font-size:0.92rem; text-align:center; line-height:1.5;"></p>
+                <div style="display:flex; gap:0.75rem;">
+                    <button id="confirmCancelBtn" class="btn btn-outline" style="flex:1;">ยกเลิก</button>
+                    <button id="confirmSubmitBtn" class="btn btn-danger" style="flex:1;">ตกลง</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- 2-Step Delete Confirmation Modal --}}
+    <div id="deleteModal" style="display:none; position:fixed; inset:0; background:rgba(15,14,52,0.55); backdrop-filter:blur(4px); z-index:9999; align-items:center; justify-content:center;">
+        <div style="background:#fff; border-radius:16px; max-width:420px; width:92%; box-shadow:0 24px 80px rgba(0,0,0,0.3); overflow:hidden; animation:slideUp .25s ease;">
+
+            <!-- Step 1: Warning Alert -->
+            <div id="deleteStep1">
+                <!-- Header bar -->
+                <div style="background:linear-gradient(135deg,#bd2743,#e05370); padding:1.5rem 2rem; text-align:center; position:relative;">
+                    <div style="font-size:3rem; line-height:1; margin-bottom:0.25rem;">⚠️</div>
+                    <h3 style="color:#fff; margin:0; font-size:1.15rem; font-weight:700;">คำเตือน!</h3>
+                    <p style="color:rgba(255,255,255,0.8); margin:0.35rem 0 0; font-size:0.82rem;">การดำเนินการนี้ไม่สามารถย้อนกลับได้</p>
+                </div>
+                <!-- Body -->
+                <div style="padding:1.75rem 2rem;">
+                    <div style="background:#fff5f7; border:1.5px solid #fbc9d3; border-radius:10px; padding:1rem 1.25rem; margin-bottom:1.25rem;">
+                        <p id="deleteMsg1" style="margin:0; color:#7c1a2e; font-size:0.92rem; font-weight:600; line-height:1.5;"></p>
+                    </div>
+                    <p style="color:#6b7280; font-size:0.83rem; margin:0 0 1.5rem; text-align:center;">
+                        กด <strong style="color:#bd2743;">ดำเนินการต่อ</strong> เพื่อไปยังขั้นตอนยืนยัน
+                    </p>
+                    <div style="display:flex; gap:0.75rem;">
+                        <button id="deleteCancel1" class="btn btn-outline" style="flex:1;">ยกเลิก</button>
+                        <button id="deleteNext" class="btn btn-danger" style="flex:1;">ดำเนินการต่อ →</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2: Type to Confirm -->
+            <div id="deleteStep2" style="display:none;">
+                <!-- Header bar -->
+                <div style="background:linear-gradient(135deg,#7c1a2e,#bd2743); padding:1.5rem 2rem; text-align:center;">
+                    <div style="font-size:3rem; line-height:1; margin-bottom:0.25rem;">🗑️</div>
+                    <h3 style="color:#fff; margin:0; font-size:1.15rem; font-weight:700;">ยืนยันการลบ</h3>
+                    <p style="color:rgba(255,255,255,0.75); margin:0.35rem 0 0; font-size:0.82rem;">ขั้นตอนที่ 2 จาก 2</p>
+                </div>
+                <!-- Body -->
+                <div style="padding:1.75rem 2rem;">
+                    <p style="color:#374151; font-size:0.88rem; margin:0 0 0.6rem;">พิมพ์ <strong style="color:#bd2743; background:#fff5f7; padding:0.1rem 0.45rem; border-radius:4px; border:1px solid #fbc9d3;">ยืนยัน</strong> ในช่องด้านล่างเพื่อยืนยันการลบ</p>
+                    <input id="deleteConfirmInput"
+                           type="text"
+                           class="form-control"
+                           placeholder='พิมพ์ "ยืนยัน" ที่นี่'
+                           autocomplete="off"
+                           style="margin-bottom:1.25rem; border-color:#e5e7eb; text-align:center; font-size:1rem; letter-spacing:0.05em;">
+                    <div id="deleteInputError" style="display:none; color:#bd2743; font-size:0.8rem; text-align:center; margin:-0.75rem 0 1rem;">❌ กรุณาพิมพ์ "ยืนยัน" ให้ถูกต้อง</div>
+                    <div style="display:flex; gap:0.75rem;">
+                        <button id="deleteBack" class="btn btn-outline" style="flex:1;">← กลับ</button>
+                        <button id="deleteConfirmBtn" class="btn btn-danger" style="flex:1; opacity:0.5; cursor:not-allowed;" disabled>ลบ</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <style>
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to   { transform: translateY(0);    opacity: 1; }
+        }
+    </style>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const toggleBtn = document.getElementById('sidebarToggle');
             const sidebar = document.querySelector('.sidebar');
             const overlay = document.getElementById('sidebarOverlay');
 
-            if (toggleBtn && sidebar && overlay) {
+            if (toggleBtn && sidebar) {
                 toggleBtn.addEventListener('click', function() {
-                    sidebar.classList.toggle('show');
-                    overlay.classList.toggle('show');
+                    if (window.innerWidth <= 768) {
+                        sidebar.classList.toggle('show');
+                        if (overlay) overlay.classList.toggle('show');
+                    } else {
+                        document.body.classList.toggle('sidebar-collapsed');
+                        const isCollapsed = document.body.classList.contains('sidebar-collapsed');
+                        localStorage.setItem('sidebar_collapsed', isCollapsed ? '1' : '0');
+                    }
                 });
 
-                overlay.addEventListener('click', function() {
-                    sidebar.classList.remove('show');
-                    overlay.classList.remove('show');
-                });
+                if (overlay) {
+                    overlay.addEventListener('click', function() {
+                        sidebar.classList.remove('show');
+                        overlay.classList.remove('show');
+                    });
+                }
             }
+
+            // ── 2-Step Delete Modal ──────────────────────────────────
+            const modal         = document.getElementById('deleteModal');
+            const step1         = document.getElementById('deleteStep1');
+            const step2         = document.getElementById('deleteStep2');
+            const msg1El        = document.getElementById('deleteMsg1');
+            const confirmInput  = document.getElementById('deleteConfirmInput');
+            const inputError    = document.getElementById('deleteInputError');
+            const btnConfirmOk  = document.getElementById('deleteConfirmBtn');
+            let pendingForm     = null;
+
+            function openModal(msg) {
+                msg1El.textContent = msg || 'คุณกำลังจะลบรายการนี้ ข้อมูลจะหายไปอย่างถาวร';
+                step1.style.display = 'block';
+                step2.style.display = 'none';
+                confirmInput.value  = '';
+                inputError.style.display = 'none';
+                btnConfirmOk.disabled   = true;
+                btnConfirmOk.style.opacity = '0.5';
+                btnConfirmOk.style.cursor  = 'not-allowed';
+                modal.style.display = 'flex';
+                // Re-trigger animation
+                const box = modal.querySelector('div');
+                box.style.animation = 'none';
+                box.offsetHeight;
+                box.style.animation = '';
+            }
+            function closeModal() {
+                modal.style.display = 'none';
+                pendingForm = null;
+            }
+
+            // Step 1 → Step 2
+            document.getElementById('deleteNext').addEventListener('click', function() {
+                step1.style.display = 'none';
+                step2.style.display = 'block';
+                confirmInput.focus();
+            });
+
+            // Step 2 → back to Step 1
+            document.getElementById('deleteBack').addEventListener('click', function() {
+                step2.style.display = 'none';
+                step1.style.display = 'block';
+                confirmInput.value = '';
+                inputError.style.display = 'none';
+            });
+
+            // Cancel buttons
+            document.getElementById('deleteCancel1').addEventListener('click', closeModal);
+
+            // Enable confirm button only when typed correctly
+            confirmInput.addEventListener('input', function() {
+                const ok = this.value.trim() === 'ยืนยัน';
+                btnConfirmOk.disabled   = !ok;
+                btnConfirmOk.style.opacity = ok ? '1' : '0.5';
+                btnConfirmOk.style.cursor  = ok ? 'pointer' : 'not-allowed';
+                if (ok) inputError.style.display = 'none';
+            });
+
+            // Also allow pressing Enter to confirm
+            confirmInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && !btnConfirmOk.disabled) {
+                    btnConfirmOk.click();
+                }
+            });
+
+            // Final confirm → submit form
+            btnConfirmOk.addEventListener('click', function() {
+                if (this.disabled) return;
+                if (confirmInput.value.trim() !== 'ยืนยัน') {
+                    inputError.style.display = 'block';
+                    return;
+                }
+                if (pendingForm) {
+                    const f = pendingForm;
+                    closeModal();
+                    f.submit();
+                }
+            });
+
+            // Close when clicking backdrop
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) closeModal();
+            });
+
+            // ── Reusable Confirm Modal ──────────────────────────────
+            const confirmModal = document.getElementById('confirmModal');
+            const confirmMessage = document.getElementById('confirmMessage');
+            const confirmSubmitBtn = document.getElementById('confirmSubmitBtn');
+            const confirmCancelBtn = document.getElementById('confirmCancelBtn');
+            const confirmTitle = document.getElementById('confirmTitle');
+            const confirmHeader = document.getElementById('confirmHeaderBar');
+            const confirmIcon = document.getElementById('confirmIcon');
+            let confirmPendingForm = null;
+
+            window.showConfirmModal = function(options) {
+                confirmPendingForm = options.form || null;
+                confirmMessage.textContent = options.message || 'คุณต้องการยืนยันการทำรายการนี้ใช่หรือไม่?';
+                confirmTitle.textContent = options.title || 'ยืนยันการทำรายการ';
+                
+                // Color themes
+                if (options.theme === 'danger') {
+                    confirmHeader.style.background = 'linear-gradient(135deg,#bd2743,#e05370)';
+                    confirmSubmitBtn.className = 'btn btn-danger';
+                    confirmSubmitBtn.style.color = '#fff';
+                    confirmSubmitBtn.textContent = options.submitText || 'ยืนยัน';
+                    confirmIcon.textContent = options.icon || '⚠️';
+                } else if (options.theme === 'warning') {
+                    confirmHeader.style.background = 'linear-gradient(135deg,#eab308,#facc15)';
+                    confirmSubmitBtn.className = 'btn btn-warning';
+                    confirmSubmitBtn.style.color = '#000';
+                    confirmSubmitBtn.textContent = options.submitText || 'ดำเนินการ';
+                    confirmIcon.textContent = options.icon || '⚠️';
+                } else {
+                    confirmHeader.style.background = 'linear-gradient(135deg,#4f46e5,#6366f1)';
+                    confirmSubmitBtn.className = 'btn btn-primary';
+                    confirmSubmitBtn.style.color = '#fff';
+                    confirmSubmitBtn.textContent = options.submitText || 'ตกลง';
+                    confirmIcon.textContent = options.icon || '❓';
+                }
+                
+                confirmModal.style.display = 'flex';
+            };
+
+            function closeConfirmModal() {
+                confirmModal.style.display = 'none';
+                confirmPendingForm = null;
+            }
+
+            confirmCancelBtn.addEventListener('click', closeConfirmModal);
+            confirmModal.addEventListener('click', function(e) {
+                if (e.target === confirmModal) closeConfirmModal();
+            });
+
+            confirmSubmitBtn.addEventListener('click', function() {
+                if (confirmPendingForm) {
+                    const f = confirmPendingForm;
+                    closeConfirmModal();
+                    f.submit();
+                }
+            });
+
+            // Intercept form submissions
+            document.addEventListener('submit', function(e) {
+                const form = e.target.closest('form');
+                if (!form) return;
+
+                const methodInput = form.querySelector('input[name="_method"]');
+                const isDelete = methodInput && methodInput.value.toUpperCase() === 'DELETE';
+
+                if (isDelete) {
+                    e.preventDefault();
+                    pendingForm = form;
+                    const msg = form.getAttribute('data-confirm') || 'คุณกำลังจะลบรายการนี้ ข้อมูลจะหายไปอย่างถาวร';
+                    openModal(msg);
+                    return;
+                }
+
+                if (form.hasAttribute('data-confirm')) {
+                    e.preventDefault();
+                    const msg = form.getAttribute('data-confirm') || 'คุณต้องการยืนยันการทำรายการนี้ใช่หรือไม่?';
+                    const title = form.getAttribute('data-confirm-title') || 'ยืนยันการทำรายการ';
+                    const theme = form.getAttribute('data-confirm-theme') || 'danger';
+                    const submitText = form.getAttribute('data-confirm-submit') || 'ตกลง';
+                    const icon = form.getAttribute('data-confirm-icon') || '❓';
+                    
+                    window.showConfirmModal({
+                        form: form,
+                        message: msg,
+                        title: title,
+                        theme: theme,
+                        submitText: submitText,
+                        icon: icon
+                    });
+                }
+            });
         });
+
     </script>
+    @stack('scripts')
 </body>
 </html>

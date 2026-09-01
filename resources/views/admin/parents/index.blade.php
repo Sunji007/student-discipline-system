@@ -20,7 +20,7 @@
         </div>
     </div>
     <a href="{{ route('admin.students.parents.create', $student->StudentID) }}" class="btn btn-primary">
-        <i class="fas fa-plus"></i> เพิ่มผู้ปกครอง
+        <i class="fas fa-plus"></i> เพิ่ม
     </a>
 </div>
 
@@ -35,7 +35,7 @@
     <i class="fas fa-user-friends" style="font-size:3rem; opacity:0.25; display:block; margin-bottom:1rem;"></i>
     <p>ยังไม่มีข้อมูลผู้ปกครองของนักเรียนคนนี้</p>
     <a href="{{ route('admin.students.parents.create', $student->StudentID) }}" class="btn btn-primary" style="margin-top:0.75rem;">
-        <i class="fas fa-plus"></i> เพิ่มผู้ปกครองคนแรก
+        <i class="fas fa-plus"></i> เพิ่ม
     </a>
 </div>
 @else
@@ -47,7 +47,6 @@
                     <th>#</th>
                     <th>ชื่อ-นามสกุล</th>
                     <th>ความสัมพันธ์</th>
-                    <th>เบอร์โทรศัพท์</th>
                     <th>อีเมล</th>
                     <th>ที่อยู่</th>
                     <th style="text-align:right;">จัดการ</th>
@@ -70,15 +69,6 @@
                             {{ $p->Relationship }}
                         </span>
                     </td>
-                    <td>
-                        @if($p->Phone)
-                            <a href="tel:{{ $p->Phone }}" style="color:var(--primary); text-decoration:none;">
-                                <i class="fas fa-phone" style="font-size:0.8rem;"></i> {{ $p->Phone }}
-                            </a>
-                        @else
-                            <span style="color:var(--text-muted);">-</span>
-                        @endif
-                    </td>
                     <td>{{ $p->Email ?? '-' }}</td>
                     <td style="max-width:200px; font-size:0.85rem; color:var(--text-muted);">{{ $p->Address ?? '-' }}</td>
                     <td style="text-align:right;">
@@ -89,7 +79,7 @@
                             </a>
                             <form method="POST"
                                   action="{{ route('admin.students.parents.destroy', [$student->StudentID, $p->ParentID]) }}"
-                                  onsubmit="return confirm('ยืนยันการลบข้อมูลผู้ปกครอง {{ $p->FullName }}?')">
+                                  data-confirm="ยืนยันการลบข้อมูลผู้ปกครอง {{ $p->FullName }}?">
                                 @csrf @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-sm" title="ลบ">
                                     <i class="fas fa-trash"></i>

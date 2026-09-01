@@ -5,9 +5,15 @@ class Student extends Model {
     protected $primaryKey = 'StudentID';
     public $incrementing = false;
     protected $keyType = 'string';
-    protected $fillable = ['StudentID', 'UserID', 'FullName', 'GradeLevel', 'Classroom', 'BehaviorScore', 'RiskStatus', 'ParentID', 'Gender', 'Photo'];
+    protected $fillable = ['StudentID', 'UserID', 'FirstName', 'FirstName_EN', 'LastName', 'LastName_EN', 'GradeLevel', 'Classroom', 'BehaviorScore', 'RiskStatus', 'ParentID', 'Gender', 'Photo'];
+    
+    public function getFullNameAttribute() {
+        return $this->FirstName . ' ' . $this->LastName;
+    }
+    
     public function user() { return $this->belongsTo(User::class, 'UserID', 'UserID'); }
-    public function parent() { return $this->belongsTo(ParentGuardian::class, 'ParentID', 'ParentID'); }
+    public function parent() { return $this->hasOne(ParentGuardian::class, 'StudentID', 'StudentID'); }
+    public function parents() { return $this->hasMany(ParentGuardian::class, 'StudentID', 'StudentID'); }
     public function behaviorRecords() { return $this->hasMany(BehaviorRecord::class, 'StudentID', 'StudentID')->orderBy('RecordDate', 'desc'); }
     public function attendances() { return $this->hasMany(Attendance::class, 'StudentID', 'StudentID'); }
     public function appeals() { return $this->hasMany(Appeal::class, 'StudentID', 'StudentID'); }
@@ -43,11 +49,58 @@ class Student extends Model {
             $rooms[] = str_replace('ม.', '', $gradeLevel) . '/' . $classroom;
         }
 
-        return Teacher::whereIn('AdvisoryRoom', array_unique($rooms))->first();
+        return Teacher::whereHas('advisoryRooms', function($q) use ($rooms) {
+            $q->whereIn('Classroom', array_unique($rooms));
+        })->first();
+    }
+
+    public function getAdvisoryTeachersAttribute()
+    {
+        $classroom = $this->Classroom;
+        $gradeLevel = $this->GradeLevel;
+        if (!$classroom) return collect([]);
+
+        $rooms = [$classroom];
+        $gradeNum = preg_replace('/[^0-9]/', '', $gradeLevel);
+        
+        $classNum = $classroom;
+        if (str_contains($classroom, '/')) {
+            $parts = explode('/', $classroom);
+            $classNum = end($parts);
+        }
+        $classNum = preg_replace('/[^0-9]/', '', $classNum);
+
+        if ($gradeNum && $classNum) {
+            $rooms[] = "ม.{$gradeNum}/{$classNum}";
+            $rooms[] = "{$gradeNum}/{$classNum}";
+        }
+
+        if ($gradeLevel && !str_starts_with($classroom, $gradeLevel)) {
+            $rooms[] = $gradeLevel . '/' . $classroom;
+            $rooms[] = str_replace('ม.', '', $gradeLevel) . '/' . $classroom;
+        }
+
+        return Teacher::whereHas('advisoryRooms', function($q) use ($rooms) {
+            $q->whereIn('Classroom', array_unique($rooms));
+        })->get();
     }
 
     public function scopeInAdvisoryRoom($query, $advisoryRoom)
     {
+        if (is_array($advisoryRoom)) {
+            $advisoryRoom = array_filter($advisoryRoom);
+            if (empty($advisoryRoom)) {
+                return $query->whereRaw('1 = 0');
+            }
+            return $query->where(function ($q) use ($advisoryRoom) {
+                foreach ($advisoryRoom as $room) {
+                    $q->orWhere(function ($sub) use ($room) {
+                        $sub->inAdvisoryRoom($room);
+                    });
+                }
+            });
+        }
+
         if (!$advisoryRoom) {
             return $query->whereRaw('1 = 0');
         }
@@ -117,7 +170,7 @@ class Student extends Model {
             ->whereMonth('RecordDate', $month)
             ->get();
 
-        $prayedCount = $records->where('Status', 'ละหมาด')->count();
+        $prayedCount = $records->whereIn('Status', ['มา', 'ละหมาด', 'มาละหมาด', 'ละหมาดแล้ว', 'present'])->count();
         $exemptCount = $records->where('Status', 'ละหมาดไม่ได้')->count();
 
         $eligibleSessions = max(0, $totalActiveSessions - $exemptCount);
@@ -157,5 +210,27 @@ class Student extends Model {
             'status' => $status,
             'status_text' => $statusText,
         ];
+    }
+
+    public function getBehaviorScoreForSemester($semesterId)
+    {
+        $netModifier = \Illuminate\Support\Facades\DB::table('behavior_records')
+            ->join('behavior_rules', 'behavior_records.RuleID', '=', 'behavior_rules.RuleID')
+            ->where('behavior_records.StudentID', $this->StudentID)
+            ->where('behavior_records.semester_id', $semesterId)
+            ->whereIn('behavior_records.Status', ['อนุมัติ', 'อนุมัติแล้ว', 'อยู่ในระหว่างยื่นอุทธรณ์'])
+            ->sum(\Illuminate\Support\Facades\DB::raw("CASE WHEN behavior_rules.RuleType = 'ตัดคะแนน' THEN -ABS(behavior_rules.ScoreModifier) ELSE ABS(behavior_rules.ScoreModifier) END"));
+
+        return max(0, min(100, 100 + ($netModifier ?? 0)));
+    }
+
+    public function getRiskStatusForSemester($semesterId)
+    {
+        $score = $this->getBehaviorScoreForSemester($semesterId);
+        return match(true) {
+            $score >= 80 => 'ปกติ',
+            $score >= 60 => 'ตักเตือน',
+            default      => 'ทัณฑ์บน',
+        };
     }
 }

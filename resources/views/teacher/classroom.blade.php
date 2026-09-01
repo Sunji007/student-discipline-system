@@ -35,8 +35,8 @@
                         </strong>
                     </td>
                     <td>
-                        <span class="badge {{ match($student->RiskStatus) { 'ปกติ' => 'badge-green', 'เฝ้าระวัง' => 'badge-orange', 'วิกฤต' => 'badge-red', default => 'badge-gray' } }}">
-                            {{ $student->RiskStatus }}
+                        <span class="badge {{ match($student->RiskStatus) { 'ปกติ' => 'badge-green', 'เฝ้าระวัง', 'ตักเตือน' => 'badge-orange', 'วิกฤต', 'ทัณฑ์บน' => 'badge-red', default => 'badge-gray' } }}">
+                            {{ match($student->RiskStatus) { 'เฝ้าระวัง', 'ตักเตือน' => 'ตักเตือน', 'วิกฤต', 'ทัณฑ์บน' => 'ทัณฑ์บน', default => $student->RiskStatus ?? 'ปกติ' } }}
                         </span>
                     </td>
                     <td>

@@ -22,6 +22,8 @@ class DatabaseSeeder extends Seeder
             AttendanceSeeder::class,    // 5. การเข้าแถว
             RolePermissionSeeder::class,// 6. สิทธิ์
             InformantReportSeeder::class,// 7. แจ้งเบาะแส
+            AllClassroomsSeeder::class, // 8. ข้อมูลห้อง ม.1/1 ถึง ม.6/4
+            AllTeachersSeeder::class,   // 9. ครูประจำชั้น 24 ห้องเรียน
         ]);
     }
 }

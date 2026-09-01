@@ -1,16 +1,37 @@
 @extends('layouts.app')
 
-@section('title', 'กฎเกณฑ์พฤติกรรม')
-@section('page-title', 'กฎเกณฑ์พฤติกรรม')
+@section('title', 'เกณฑ์ประเมินพฤติกรรม')
+@section('page-title', 'เกณฑ์ประเมินพฤติกรรม')
 
 @section('content')
-<div class="page-header" style="display:flex; align-items:center; justify-content:space-between;">
-    <div>
-        <h2>กฎเกณฑ์การประเมินพฤติกรรม</h2>
-        <p>กำหนดประเภทและคะแนนสำหรับแต่ละพฤติกรรม</p>
+<div class="page-header">
+    <h2>เกณฑ์ประเมินพฤติกรรม</h2>
+    <p>กำหนดประเภทและคะแนนสำหรับแต่ละพฤติกรรม</p>
+</div>
+
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem; flex-wrap:wrap; gap:1rem;">
+    <!-- Filter Tabs -->
+    <div style="display:flex; gap:0.4rem; background:#faf8f5; padding:0.3rem; border-radius:10px; border:1px solid #ede8e0;">
+        <a href="{{ route('discipline.behavior-rules.index') }}" 
+           class="btn {{ !request('type') ? 'btn-primary' : 'btn-outline' }} btn-sm" 
+           style="box-shadow:none; padding:0.5rem 1rem; {{ !request('type') ? '' : 'border-color:transparent; background:transparent;' }}">
+           <i class="fas fa-list"></i> รายการทั้งหมด
+        </a>
+        <a href="{{ route('discipline.behavior-rules.index', ['type' => 'เพิ่มคะแนน']) }}" 
+           class="btn {{ request('type') === 'เพิ่มคะแนน' ? 'btn-success' : 'btn-outline' }} btn-sm" 
+           style="box-shadow:none; padding:0.5rem 1rem; {{ request('type') === 'เพิ่มคะแนน' ? '' : 'border-color:transparent; background:transparent;' }}">
+           <i class="fas fa-plus-circle"></i> เพิ่มคะแนน
+        </a>
+        <a href="{{ route('discipline.behavior-rules.index', ['type' => 'ตัดคะแนน']) }}" 
+           class="btn {{ request('type') === 'ตัดคะแนน' ? 'btn-danger' : 'btn-outline' }} btn-sm" 
+           style="box-shadow:none; padding:0.5rem 1rem; {{ request('type') === 'ตัดคะแนน' ? '' : 'border-color:transparent; background:transparent;' }}">
+           <i class="fas fa-minus-circle"></i> ตัดคะแนน
+        </a>
     </div>
+    
+    <!-- Add Button -->
     <a href="{{ route('discipline.behavior-rules.create') }}" class="btn btn-primary">
-        <i class="fas fa-plus"></i> เพิ่มกฎเกณฑ์
+        <i class="fas fa-plus"></i> เพิ่ม
     </a>
 </div>
 
@@ -34,11 +55,33 @@
                             {{ $rule->RuleType === 'ตัดคะแนน' ? '▼ ตัดคะแนน' : '▲ เพิ่มคะแนน' }}
                         </span>
                     </td>
-                    <td><span class="badge badge-gray">{{ $rule->Category }}</span></td>
+                    <td>
+                        @php
+                            $catColor = match($rule->Category) {
+                                'การแต่งกายและทรงผม'           => ['bg' => '#f3e8ff', 'color' => '#6d28d9'],
+                                'ความประพฤติและกริยามารยาท'   => ['bg' => '#fef3c7', 'color' => '#b45309'],
+                                'สารเสพติดและของต้องห้าม'     => ['bg' => '#fee2e2', 'color' => '#b91c1c'],
+                                'การใช้เครื่องมือสื่อสาร'       => ['bg' => '#e0f2fe', 'color' => '#0369a1'],
+                                'การเข้าเรียนและระเบียบสถานศึกษา' => ['bg' => '#d1fae5', 'color' => '#047857'],
+                                'ความดีและจิตอาสา'            => ['bg' => '#dcfce7', 'color' => '#15803d'],
+                                'กิจกรรมและสร้างชื่อเสียง',
+                                'กิจกรรมและผลงาน'           => ['bg' => '#e0f2fe', 'color' => '#0284c7'],
+                                'ความประพฤติดีเด่นและวินัย',
+                                'ความประพฤติดีเด่น'           => ['bg' => '#ede9fe', 'color' => '#7e22ce'],
+                                'คุณธรรมและศาสนกิจ'           => ['bg' => '#ccfbf1', 'color' => '#0f766e'],
+                                'ความเป็นผู้นำและการมีส่วนร่วม'  => ['bg' => '#ffedd5', 'color' => '#c2410c'],
+                                'วิชาการและความขยันหมั่นเพียร'  => ['bg' => '#dbeafe', 'color' => '#1d4ed8'],
+                                default                       => ['bg' => '#f1f5f9', 'color' => '#475569'],
+                            };
+                        @endphp
+                        <span class="badge" style="background:{{ $catColor['bg'] }}; color:{{ $catColor['color'] }}; font-weight:600; padding:0.25rem 0.6rem;">
+                            {{ $rule->Category }}
+                        </span>
+                    </td>
                     <td>{{ $rule->RuleName }}</td>
                     <td style="text-align:center;">
                         <strong style="color: {{ $rule->RuleType === 'ตัดคะแนน' ? 'var(--red)' : 'var(--green)' }}; font-size:1rem;">
-                            {{ $rule->RuleType === 'ตัดคะแนน' ? '-' : '+' }}{{ abs($rule->ScoreModifier) }}
+                            {{ abs($rule->ScoreModifier) }}
                         </strong>
                     </td>
                     <td style="text-align:right;">
@@ -47,7 +90,7 @@
                                 <i class="fas fa-pen"></i>
                             </a>
                             <form method="POST" action="{{ route('discipline.behavior-rules.destroy', $rule->RuleID) }}"
-                                  onsubmit="return confirm('ยืนยันการลบกฎเกณฑ์นี้?')">
+                                  data-confirm="ยืนยันการลบกฎเกณฑ์นี้?">
                                 @csrf @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-sm">
                                     <i class="fas fa-trash"></i>

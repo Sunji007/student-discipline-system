@@ -184,7 +184,7 @@
             @endphp
             <tr>
                 <td class="text-center">{{ $index + 1 }}</td>
-                <td class="text-center">{{ \Carbon\Carbon::parse($row->RecordDate)->format('d/m/Y') }}</td>
+                <td class="text-center">{{ \Carbon\Carbon::parse($row->RecordDate)->format('d/m/') . (\Carbon\Carbon::parse($row->RecordDate)->year + 543) }}</td>
                 <td class="text-center"><code>{{ $row->student->StudentID }}</code></td>
                 <td><strong>{{ $row->student->FullName }}</strong></td>
                 <td class="text-center">{{ $row->student->classroom_display }}</td>
@@ -208,7 +208,7 @@
             <div class="sign-line"></div>
             <p style="font-size:0.85rem; color:#666;">(......................................................)</p>
             <p style="font-size:0.8rem; color:#888; margin-top:0.25rem;">ฝ่ายปกครอง โรงเรียนศิริราษฎร์สามัคคี</p>
-            <p style="font-size:0.8rem; color:#888; margin-top:0.1rem;">วันที่พิมพ์: {{ now()->locale('th')->isoFormat('D MMMM YYYY') }}</p>
+            <p style="font-size:0.8rem; color:#888; margin-top:0.1rem;">วันที่พิมพ์: {{ now()->locale('th')->isoFormat('D MMMM ') . (now()->year + 543) }}</p>
         </div>
     </div>
 
