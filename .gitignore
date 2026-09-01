@@ -25,4 +25,5 @@ Thumbs.db
 temp_*.php
 *.html
 .deploy_state.json
-
+.agents/
+.cursor/
