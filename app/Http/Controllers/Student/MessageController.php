@@ -24,15 +24,13 @@ class MessageController extends Controller
                     $recipients->push($teacherUser);
                 }
             }
-        }
-
-        $staffUsers = \App\Models\User::whereIn('Role', ['ครู', 'ฝ่ายปกครอง'])
-            ->where('Status', 'ปกติ')
-            ->orderBy('FirstName')
-            ->get();
-        foreach ($staffUsers as $su) {
-            if (!$recipients->contains('UserID', $su->UserID)) {
-                $recipients->push($su);
+            if ($recipients->isEmpty() && $student->advisory_teacher) {
+                $teacherUser = \App\Models\User::where('UserID', $student->advisory_teacher->UserID)
+                    ->where('Status', 'ปกติ')
+                    ->first();
+                if ($teacherUser && !$recipients->contains('UserID', $teacherUser->UserID)) {
+                    $recipients->push($teacherUser);
+                }
             }
         }
 
@@ -96,15 +94,13 @@ class MessageController extends Controller
                     $recipients->push($teacherUser);
                 }
             }
-        }
-
-        $staffUsers = \App\Models\User::whereIn('Role', ['ครู', 'ฝ่ายปกครอง'])
-            ->where('Status', 'ปกติ')
-            ->orderBy('FirstName')
-            ->get();
-        foreach ($staffUsers as $su) {
-            if (!$recipients->contains('UserID', $su->UserID)) {
-                $recipients->push($su);
+            if ($recipients->isEmpty() && $student->advisory_teacher) {
+                $teacherUser = \App\Models\User::where('UserID', $student->advisory_teacher->UserID)
+                    ->where('Status', 'ปกติ')
+                    ->first();
+                if ($teacherUser && !$recipients->contains('UserID', $teacherUser->UserID)) {
+                    $recipients->push($teacherUser);
+                }
             }
         }
 
@@ -119,20 +115,17 @@ class MessageController extends Controller
             foreach ($student->advisory_teachers as $teacher) {
                 $allowedUserIds[] = $teacher->UserID;
             }
+            if ($student->advisory_teacher) {
+                $allowedUserIds[] = $student->advisory_teacher->UserID;
+            }
         }
-
-        // Allow teachers, discipline, admins
-        $staffIds = User::whereIn('Role', ['ครู', 'ฝ่ายปกครอง', 'ผู้ดูแลระบบ', 'admin', 'discipline', 'teacher'])
-            ->where('Status', 'ปกติ')
-            ->pluck('UserID')
-            ->toArray();
 
         // Allow any user who sent messages to this student
         $pastSenderIds = Message::where('ReceiverID', auth()->user()->UserID)
             ->pluck('SenderID')
             ->toArray();
 
-        $allAllowedIds = array_unique(array_merge($allowedUserIds, $staffIds, $pastSenderIds));
+        $allAllowedIds = array_unique(array_merge($allowedUserIds, $pastSenderIds));
 
         $validated = $request->validate([
             'ReceiverID'  => [

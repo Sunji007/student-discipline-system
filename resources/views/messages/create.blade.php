@@ -149,7 +149,13 @@
                         @endif
                         <select name="ReceiverID" id="receiverSelect" class="form-control" required>
                             @if(auth()->user()->Role === 'นักเรียน' || auth()->user()->Role === 'ผู้ปกครอง')
-                                <option value="">เลือกครูประจำชั้น</option>
+                                @if($recipients->isEmpty())
+                                    <option value="" disabled selected>ไม่พบข้อมูลครูประจำชั้นของท่านในระบบ</option>
+                                @elseif($recipients->count() === 1)
+                                    <option value="" disabled>เลือกครูประจำชั้น</option>
+                                @else
+                                    <option value="">เลือกครูประจำชั้น</option>
+                                @endif
                             @else
                                 <option value="">เลือกผู้รับ</option>
                             @endif
@@ -204,7 +210,7 @@
                                                 }
                                             }
                                         @endphp
-                                        <option value="{{ $u->UserID }}" {{ (old('ReceiverID') == $u->UserID) ? 'selected' : '' }} data-search="{{ $extraSearch }}" data-parent-user-id="{{ $pUserId }}" data-parent-name="{{ $pName }}" data-parent-rel="{{ $pRel }}">
+                                        <option value="{{ $u->UserID }}" {{ (old('ReceiverID') == $u->UserID || ((auth()->user()->Role === 'นักเรียน' || auth()->user()->Role === 'ผู้ปกครอง') && $recipients->count() === 1)) ? 'selected' : '' }} data-search="{{ $extraSearch }}" data-parent-user-id="{{ $pUserId }}" data-parent-name="{{ $pName }}" data-parent-rel="{{ $pRel }}">
                                             {{ $displayLabel }}
                                         </option>
                                     @endforeach

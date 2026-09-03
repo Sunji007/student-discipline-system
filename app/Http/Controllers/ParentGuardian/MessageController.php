@@ -36,16 +36,7 @@ class MessageController extends Controller
             }
         }
 
-        // Also add teachers and discipline
-        $staffUsers = \App\Models\User::whereIn('Role', ['ครู', 'ฝ่ายปกครอง'])
-            ->where('Status', 'ปกติ')
-            ->orderBy('FirstName')
-            ->get();
-        foreach ($staffUsers as $su) {
-            if (!$recipients->contains('UserID', $su->UserID)) {
-                $recipients->push($su);
-            }
-        }
+        // Removed global staffUsers loop to limit recipients to homeroom teachers only
 
         $inbox = Message::with('sender')
             ->where('ReceiverID', $userId)
@@ -119,16 +110,6 @@ class MessageController extends Controller
             }
         }
 
-        $staffUsers = \App\Models\User::whereIn('Role', ['ครู', 'ฝ่ายปกครอง'])
-            ->where('Status', 'ปกติ')
-            ->orderBy('FirstName')
-            ->get();
-        foreach ($staffUsers as $su) {
-            if (!$recipients->contains('UserID', $su->UserID)) {
-                $recipients->push($su);
-            }
-        }
-
         return view('messages.create', compact('recipients'));
     }
 
@@ -146,16 +127,11 @@ class MessageController extends Controller
             }
         }
 
-        $staffIds = User::whereIn('Role', ['ครู', 'ฝ่ายปกครอง', 'ผู้ดูแลระบบ', 'admin', 'discipline', 'teacher'])
-            ->where('Status', 'ปกติ')
-            ->pluck('UserID')
-            ->toArray();
-
         $pastSenderIds = Message::where('ReceiverID', auth()->user()->UserID)
             ->pluck('SenderID')
             ->toArray();
 
-        $allAllowedIds = array_unique(array_merge($allowedTeacherUserIds, $staffIds, $pastSenderIds));
+        $allAllowedIds = array_unique(array_merge($allowedTeacherUserIds, $pastSenderIds));
 
         $validated = $request->validate([
             'ReceiverID'  => [
