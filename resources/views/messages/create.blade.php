@@ -64,7 +64,9 @@
                         <label class="form-label">ถึง <span style="color:var(--red)">*</span></label>
                     @endif
                     @php
-                        $recipients->loadMissing(['student', 'parentGuardian.student']);
+                        if ($recipients instanceof \Illuminate\Database\Eloquent\Collection) {
+                            $recipients->loadMissing(['student', 'parentGuardian.student']);
+                        }
                         $receiverParam = request('receiver');
                         $preselected = $receiverParam ? ($recipients->where('UserID', $receiverParam)->first() ?? \App\Models\User::with(['student', 'parentGuardian.student'])->where('UserID', $receiverParam)->first()) : null;
                     @endphp
