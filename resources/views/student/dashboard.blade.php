@@ -18,6 +18,13 @@
     $score = $student->BehaviorScore;
     $scoreColor = $score >= 80 ? 'var(--green)' : ($score >= 60 ? 'var(--orange)' : 'var(--red)');
     $scoreClass = $score >= 80 ? '' : ($score >= 60 ? ' medium' : ' low');
+
+    $attTotal = (clone $attendancesQuery)->count();
+    $attPresent = (clone $attendancesQuery)->where('Status', 'มา')->count();
+    $attLate = (clone $attendancesQuery)->where('Status', 'สาย')->count();
+    $attAbsent = (clone $attendancesQuery)->where('Status', 'ขาด')->count();
+    $attRate = $attTotal > 0 ? round(($attPresent / $attTotal) * 100) : 100;
+    $attColor = $attRate >= 80 ? 'green' : ($attRate >= 60 ? 'gold' : 'red');
 @endphp
 
 <div class="page-header">
@@ -72,11 +79,22 @@
                 <div class="stat-label">รายการตัดคะแนน</div>
             </div>
         </a>
-        <a href="{{ route('student.attendance.index') }}" class="stat-card green" style="text-decoration:none; cursor:pointer;" title="ดูสถิติการเข้าแถว">
-            <div class="stat-icon green"><i class="fas fa-calendar-check"></i></div>
-            <div class="stat-info">
-                <div class="stat-value">{{ (clone $attendancesQuery)->where(['Status' => 'มา'])->count() }}</div>
-                <div class="stat-label">เข้าแถว</div>
+        <a href="{{ route('student.attendance.index') }}" class="stat-card {{ $attColor }}" style="text-decoration:none; cursor:pointer;" title="ดูสถิติการเข้าแถว">
+            <div class="stat-icon {{ $attColor }}"><i class="fas fa-calendar-check"></i></div>
+            <div class="stat-info" style="min-width:0;">
+                <div class="stat-value">{{ $attRate }}%</div>
+                <div class="stat-label">อัตราการเข้าแถว</div>
+                <div style="font-size:0.75rem; color:var(--text-muted); margin-top:0.35rem; display:flex; align-items:center; gap:0.35rem; flex-wrap:wrap;">
+                    @if($attTotal > 0)
+                        <span style="color:var(--green); font-weight:600;">เข้า {{ $attPresent }}</span>
+                        <span style="color:#d1d5db;">•</span>
+                        <span style="color:{{ $attLate > 0 ? 'var(--orange)' : 'var(--text-muted)' }}; font-weight:{{ $attLate > 0 ? '600' : '400' }};">สาย {{ $attLate }}</span>
+                        <span style="color:#d1d5db;">•</span>
+                        <span style="color:{{ $attAbsent > 0 ? 'var(--red)' : 'var(--text-muted)' }}; font-weight:{{ $attAbsent > 0 ? '600' : '400' }};">ขาด {{ $attAbsent }}</span>
+                    @else
+                        <span>ยังไม่มีข้อมูลเช็กชื่อ</span>
+                    @endif
+                </div>
             </div>
         </a>
         <a href="{{ route('student.appeals.index') }}" class="stat-card gold" style="text-decoration:none; cursor:pointer;" title="ดูคำร้องอุทธรณ์คะแนน">
