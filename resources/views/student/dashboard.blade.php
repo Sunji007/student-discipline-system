@@ -101,7 +101,7 @@
         </span>
     </div>
     <div style="padding:1rem 1.25rem;">
-        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:0.85rem;">
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:0.85rem;">
             <!-- ระดับปกติ -->
             <div style="display:flex; align-items:flex-start; gap:0.75rem; background:#f0fdf4; border:1px solid {{ $score >= 80 ? '#22c55e' : '#bbf7d0' }}; border-radius:10px; padding:0.85rem 1rem; {{ $score >= 80 ? 'box-shadow:0 0 0 2px rgba(34,197,94,0.2);' : '' }}">
                 <div style="font-size:1.35rem; line-height:1.2; flex-shrink:0;">🟢</div>
