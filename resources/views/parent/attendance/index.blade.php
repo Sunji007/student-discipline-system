@@ -23,7 +23,7 @@
         <div class="stat-icon green"><i class="fas fa-check"></i></div>
         <div class="stat-info">
             <div class="stat-value">{{ $summary['มา'] ?? 0 }}</div>
-            <div class="stat-label">มาเรียนปกติ</div>
+            <div class="stat-label">เข้าแถว</div>
         </div>
     </div>
     <div class="stat-card gold">
@@ -37,7 +37,7 @@
         <div class="stat-icon red"><i class="fas fa-times"></i></div>
         <div class="stat-info">
             <div class="stat-value">{{ $summary['ขาด'] ?? 0 }}</div>
-            <div class="stat-label">ขาดเรียน</div>
+            <div class="stat-label">ขาดเข้าแถว</div>
         </div>
     </div>
 </div>

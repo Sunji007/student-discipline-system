@@ -51,7 +51,7 @@
                 </div>
                 <div style="background:#faf8f4; padding:0.4rem 0.6rem; border-radius:2px;">
                     <i class="fas fa-user-times" style="color:var(--red); margin-right:0.3rem;"></i>
-                    ขาดเรียน: {{ $s->attendances()->where('Status', 'ขาด')->count() }}
+                    ขาดเข้าแถว: {{ $s->attendances()->where('Status', 'ขาด')->count() }}
                 </div>
             </div>
         </div>

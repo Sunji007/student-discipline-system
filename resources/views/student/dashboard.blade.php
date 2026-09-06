@@ -72,11 +72,11 @@
                 <div class="stat-label">รายการตัดคะแนน</div>
             </div>
         </a>
-        <a href="{{ route('student.attendance.index') }}" class="stat-card green" style="text-decoration:none; cursor:pointer;" title="ดูสถิติการเข้าแถว/มาเรียน">
+        <a href="{{ route('student.attendance.index') }}" class="stat-card green" style="text-decoration:none; cursor:pointer;" title="ดูสถิติการเข้าแถว">
             <div class="stat-icon green"><i class="fas fa-calendar-check"></i></div>
             <div class="stat-info">
                 <div class="stat-value">{{ (clone $attendancesQuery)->where(['Status' => 'มา'])->count() }}</div>
-                <div class="stat-label">มาเรียนปกติ</div>
+                <div class="stat-label">เข้าแถว</div>
             </div>
         </a>
         <a href="{{ route('student.appeals.index') }}" class="stat-card gold" style="text-decoration:none; cursor:pointer;" title="ดูคำร้องอุทธรณ์คะแนน">
