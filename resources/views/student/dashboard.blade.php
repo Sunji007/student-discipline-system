@@ -89,6 +89,72 @@
     </div>
 </div>
 
+{{-- Behavior Criteria Legend --}}
+<div class="card" style="margin-bottom: 1.5rem;">
+    <div class="card-header-bar" style="border-bottom:1px solid #f0ece4; padding:0.85rem 1.25rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;">
+        <h3 style="font-size:0.95rem; font-weight:700; color:var(--navy); margin:0; display:flex; align-items:center; gap:0.4rem;">
+            <i class="fas fa-info-circle" style="color:var(--gold);"></i> รายละเอียดเกณฑ์คะแนนพฤติกรรม
+        </h3>
+        <span style="font-size:0.8rem; color:var(--text-muted);">
+            สถานะปัจจุบันของคุณ: 
+            <strong style="color:{{ $scoreColor }};">{{ $studentRiskStatus }} ({{ $score }} คะแนน)</strong>
+        </span>
+    </div>
+    <div style="padding:1rem 1.25rem;">
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:0.85rem;">
+            <!-- ระดับปกติ -->
+            <div style="display:flex; align-items:flex-start; gap:0.75rem; background:#f0fdf4; border:1px solid {{ $score >= 80 ? '#22c55e' : '#bbf7d0' }}; border-radius:10px; padding:0.85rem 1rem; {{ $score >= 80 ? 'box-shadow:0 0 0 2px rgba(34,197,94,0.2);' : '' }}">
+                <div style="font-size:1.35rem; line-height:1.2; flex-shrink:0;">🟢</div>
+                <div style="font-size:0.85rem; line-height:1.5;">
+                    <div style="display:flex; align-items:center; gap:0.4rem; flex-wrap:wrap;">
+                        <strong style="color:#166534; font-size:0.9rem;">ระดับปกติ (Normal):</strong>
+                        @if($score >= 80)
+                            <span class="badge badge-green" style="font-size:0.7rem; padding:0.15rem 0.45rem;">ระดับของคุณ</span>
+                        @endif
+                    </div>
+                    <div style="color:#15803d; margin-top:0.25rem;">
+                        คะแนนคงเหลือตั้งแต่ <strong>80 ถึง 100 คะแนน</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ระดับตักเตือน -->
+            <div style="display:flex; align-items:flex-start; gap:0.75rem; background:#fefce8; border:1px solid {{ ($score >= 60 && $score < 80) ? '#eab308' : '#fef08a' }}; border-radius:10px; padding:0.85rem 1rem; {{ ($score >= 60 && $score < 80) ? 'box-shadow:0 0 0 2px rgba(234,179,8,0.2);' : '' }}">
+                <div style="font-size:1.35rem; line-height:1.2; flex-shrink:0;">🟡</div>
+                <div style="font-size:0.85rem; line-height:1.5;">
+                    <div style="display:flex; align-items:center; gap:0.4rem; flex-wrap:wrap;">
+                        <strong style="color:#854d0e; font-size:0.9rem;">ระดับตักเตือน (Warning):</strong>
+                        @if($score >= 60 && $score < 80)
+                            <span class="badge badge-orange" style="font-size:0.7rem; padding:0.15rem 0.45rem;">ระดับของคุณ</span>
+                        @endif
+                    </div>
+                    <div style="color:#a16207; margin-top:0.25rem;">
+                        คะแนนคงเหลือตั้งแต่ <strong>60 ถึง 79 คะแนน</strong>
+                        <span style="font-size:0.8rem; display:block; margin-top:0.15rem; color:#854d0e;">(ควรเริ่มว่ากล่าวตักเตือนและส่งข้อความแจ้งเตือนผู้ปกครอง)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ระดับทัณฑ์บน -->
+            <div style="display:flex; align-items:flex-start; gap:0.75rem; background:#fef2f2; border:1px solid {{ $score < 60 ? '#ef4444' : '#fecaca' }}; border-radius:10px; padding:0.85rem 1rem; {{ $score < 60 ? 'box-shadow:0 0 0 2px rgba(239,68,68,0.2);' : '' }}">
+                <div style="font-size:1.35rem; line-height:1.2; flex-shrink:0;">🔴</div>
+                <div style="font-size:0.85rem; line-height:1.5;">
+                    <div style="display:flex; align-items:center; gap:0.4rem; flex-wrap:wrap;">
+                        <strong style="color:#991b1b; font-size:0.9rem;">ระดับทัณฑ์บน (Probation):</strong>
+                        @if($score < 60)
+                            <span class="badge badge-red" style="font-size:0.7rem; padding:0.15rem 0.45rem;">ระดับของคุณ</span>
+                        @endif
+                    </div>
+                    <div style="color:#b91c1c; margin-top:0.25rem;">
+                        คะแนนคงเหลือ <strong>ต่ำกว่า 60 คะแนน</strong>
+                        <span style="font-size:0.8rem; display:block; margin-top:0.15rem; color:#991b1b;">(ระบบจะจัดกลุ่มนี้เป็นกลุ่มความเสี่ยงสูงเพื่อเตรียมมาตรการแนะแนวหรือทำทัณฑ์บน)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 {{-- Prayer Status Card --}}
 @php
     $currentMonth = now()->month;
