@@ -58,11 +58,11 @@
     </div>
 
     <div class="responsive-grid-2">
-        <a href="{{ route('student.behavior-records.index') }}" class="stat-card navy" style="text-decoration:none; cursor:pointer;" title="ดูบันทึกพฤติกรรมทั้งหมด">
+        <a href="{{ route('student.behavior-records.index') }}" class="stat-card navy" style="text-decoration:none; cursor:pointer;" title="ดูรายการพฤติกรรมทั้งหมด">
             <div class="stat-icon navy"><i class="fas fa-clipboard-list"></i></div>
             <div class="stat-info">
                 <div class="stat-value">{{ $recordsQuery->count() }}</div>
-                <div class="stat-label">บันทึกทั้งหมด</div>
+                <div class="stat-label">รายการพฤติกรรมทั้งหมด</div>
             </div>
         </a>
         <a href="{{ route('student.behavior-records.index', ['type' => 'ตัดคะแนน']) }}" class="stat-card red" style="text-decoration:none; cursor:pointer;" title="ดูรายการตัดคะแนน">
