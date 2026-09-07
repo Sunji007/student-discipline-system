@@ -10,42 +10,78 @@
     $thCarbon  = \Carbon\Carbon::create($year, $mon, 1)->locale('th');
     $thMonth   = $thCarbon->isoFormat('MMMM ') . ($year > 2400 ? $year : $year + 543);
     $firstDow  = (int)\Carbon\Carbon::create($year, $mon, 1)->dayOfWeek; // 0=Sun
+
+    $mPresent = $monthSummary['มา'] ?? 0;
+    $mLate    = $monthSummary['สาย'] ?? 0;
+    $mAbsent  = $monthSummary['ขาด'] ?? 0;
+    $mTotal   = $monthSummary['total'] ?? 0;
+    $mRate    = $mTotal > 0 ? round(($mPresent / $mTotal) * 100) : 0;
+    $mLateRate = $mTotal > 0 ? round(($mLate / $mTotal) * 100) : 0;
+    $mAbsentRate = $mTotal > 0 ? round(($mAbsent / $mTotal) * 100) : 0;
 @endphp
 
-<div class="page-header">
-    <h2>ปฏิทินการเข้าแถว</h2>
-    <p>{{ $student->FullName }} — ห้อง {{ $student->Classroom }}</p>
+<div class="page-header" style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1rem;">
+    <div>
+        <h2>ปฏิทินการเข้าแถว</h2>
+        <p>{{ $student->FullName }} — ห้อง {{ $student->Classroom }}</p>
+    </div>
+    <button type="button" class="btn btn-outline" id="openMonthlyModalBtn" style="font-size:0.85rem; font-weight:600; padding:0.5rem 1.15rem; border-radius:10px; display:inline-flex; align-items:center; gap:0.5rem; background:#fff; box-shadow:var(--shadow-sm); border:1.5px solid var(--border); color:var(--navy); cursor:pointer; transition:all 0.2s ease;">
+        <i class="fas fa-chart-pie" style="color:var(--primary); font-size:1rem;"></i> สรุปสถิติแต่ละเดือน (ร้อยละ %)
+    </button>
 </div>
 
-{{-- Summary --}}
-<div class="stat-grid" style="margin-bottom:1rem;">
-    <div class="stat-card green stat-card-clickable" data-filter="มา" role="button" tabindex="0" title="คลิกเพื่อกรองดูเฉพาะวันที่เข้าแถว">
+{{-- Summary Cards (Clickable to open Monthly Breakdown Modal) --}}
+<div class="stat-grid" style="margin-bottom:1.25rem;">
+    <div class="stat-card green stat-card-clickable" data-open-modal="true" data-filter-type="มา" role="button" tabindex="0" title="คลิกดูสรุปการเข้าแถวแต่ละเดือน (ร้อยละ %)">
         <div class="stat-icon green"><i class="fas fa-check"></i></div>
         <div class="stat-info">
-            <div class="stat-value">{{ $summary['มา'] ?? 0 }}</div>
-            <div class="stat-label">เข้าแถว</div>
-            <div class="stat-filter-badge" style="font-size:0.7rem; color:var(--text-muted); margin-top:0.35rem; display:flex; align-items:center; gap:0.25rem;">
-                <i class="fas fa-filter" style="font-size:0.65rem;"></i> <span class="filter-text">คลิกเพื่อดูเฉพาะรายการนี้</span>
+            <div style="display:flex; align-items:baseline; gap:0.45rem;">
+                <div class="stat-value">{{ $mPresent }}</div>
+                <span style="font-size:0.92rem; font-weight:700; color:var(--green);">
+                    ({{ $mRate }}%)
+                </span>
+            </div>
+            <div class="stat-label">เข้าแถว ({{ $thMonth }})</div>
+            <div style="font-size:0.72rem; color:var(--text-muted); margin-top:0.4rem; display:flex; align-items:center; gap:0.35rem;">
+                <span class="badge badge-green" style="font-size:0.68rem; padding:0.15rem 0.5rem; border-radius:6px;">
+                    <i class="fas fa-chart-bar"></i> คลิกดูแต่ละเดือน
+                </span>
             </div>
         </div>
     </div>
-    <div class="stat-card gold stat-card-clickable" data-filter="สาย" role="button" tabindex="0" title="คลิกเพื่อกรองดูเฉพาะวันที่มาสาย">
+
+    <div class="stat-card gold stat-card-clickable" data-open-modal="true" data-filter-type="สาย" role="button" tabindex="0" title="คลิกดูสรุปมาสายแต่ละเดือน (ร้อยละ %)">
         <div class="stat-icon gold"><i class="fas fa-clock"></i></div>
         <div class="stat-info">
-            <div class="stat-value">{{ $summary['สาย'] ?? 0 }}</div>
-            <div class="stat-label">มาสาย</div>
-            <div class="stat-filter-badge" style="font-size:0.7rem; color:var(--text-muted); margin-top:0.35rem; display:flex; align-items:center; gap:0.25rem;">
-                <i class="fas fa-filter" style="font-size:0.65rem;"></i> <span class="filter-text">คลิกเพื่อดูเฉพาะรายการนี้</span>
+            <div style="display:flex; align-items:baseline; gap:0.45rem;">
+                <div class="stat-value">{{ $mLate }}</div>
+                <span style="font-size:0.92rem; font-weight:700; color:var(--orange);">
+                    ({{ $mLateRate }}%)
+                </span>
+            </div>
+            <div class="stat-label">มาสาย ({{ $thMonth }})</div>
+            <div style="font-size:0.72rem; color:var(--text-muted); margin-top:0.4rem; display:flex; align-items:center; gap:0.35rem;">
+                <span class="badge badge-orange" style="font-size:0.68rem; padding:0.15rem 0.5rem; border-radius:6px;">
+                    <i class="fas fa-chart-bar"></i> คลิกดูแต่ละเดือน
+                </span>
             </div>
         </div>
     </div>
-    <div class="stat-card red stat-card-clickable" data-filter="ขาด" role="button" tabindex="0" title="คลิกเพื่อกรองดูเฉพาะวันที่ขาดเข้าแถว">
+
+    <div class="stat-card red stat-card-clickable" data-open-modal="true" data-filter-type="ขาด" role="button" tabindex="0" title="คลิกดูสรุปขาดเข้าแถวแต่ละเดือน (ร้อยละ %)">
         <div class="stat-icon red"><i class="fas fa-times"></i></div>
         <div class="stat-info">
-            <div class="stat-value">{{ $summary['ขาด'] ?? 0 }}</div>
-            <div class="stat-label">ขาดเข้าแถว</div>
-            <div class="stat-filter-badge" style="font-size:0.7rem; color:var(--text-muted); margin-top:0.35rem; display:flex; align-items:center; gap:0.25rem;">
-                <i class="fas fa-filter" style="font-size:0.65rem;"></i> <span class="filter-text">คลิกเพื่อดูเฉพาะรายการนี้</span>
+            <div style="display:flex; align-items:baseline; gap:0.45rem;">
+                <div class="stat-value">{{ $mAbsent }}</div>
+                <span style="font-size:0.92rem; font-weight:700; color:var(--red);">
+                    ({{ $mAbsentRate }}%)
+                </span>
+            </div>
+            <div class="stat-label">ขาดเข้าแถว ({{ $thMonth }})</div>
+            <div style="font-size:0.72rem; color:var(--text-muted); margin-top:0.4rem; display:flex; align-items:center; gap:0.35rem;">
+                <span class="badge badge-red" style="font-size:0.68rem; padding:0.15rem 0.5rem; border-radius:6px;">
+                    <i class="fas fa-chart-bar"></i> คลิกดูแต่ละเดือน
+                </span>
             </div>
         </div>
     </div>
@@ -53,14 +89,32 @@
 
 <div class="card">
     {{-- Month Nav --}}
-    <div class="card-header-bar">
-        <a href="{{ request()->url() }}?month={{ $prevMonth }}" class="btn btn-outline btn-sm">
-            <i class="fas fa-chevron-left"></i>
-        </a>
-        <h3 style="margin:0 1rem;">{{ $thMonth }}</h3>
-        <a href="{{ request()->url() }}?month={{ $nextMonth }}" class="btn btn-outline btn-sm">
-            <i class="fas fa-chevron-right"></i>
-        </a>
+    <div class="card-header-bar" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.75rem;">
+        <div style="display:flex; align-items:center;">
+            <a href="{{ request()->url() }}?month={{ $prevMonth }}" class="btn btn-outline btn-sm" title="เดือนก่อนหน้า">
+                <i class="fas fa-chevron-left"></i>
+            </a>
+            <h3 style="margin:0 1rem; font-size:1.05rem; font-weight:700; color:var(--navy);">{{ $thMonth }}</h3>
+            <a href="{{ request()->url() }}?month={{ $nextMonth }}" class="btn btn-outline btn-sm" title="เดือนถัดไป">
+                <i class="fas fa-chevron-right"></i>
+            </a>
+        </div>
+
+        {{-- Standardized Filter Tabs for Calendar --}}
+        <div class="filter-tab-bar" style="display:flex; gap:0.4rem; flex-wrap:wrap;">
+            <button type="button" class="cal-filter-tab active" data-cal-filter="all">
+                ทั้งหมด ({{ $mTotal }})
+            </button>
+            <button type="button" class="cal-filter-tab" data-cal-filter="มา" style="color:var(--green);">
+                <i class="fas fa-check"></i> เข้าแถว ({{ $mPresent }})
+            </button>
+            <button type="button" class="cal-filter-tab" data-cal-filter="สาย" style="color:var(--orange);">
+                <i class="fas fa-clock"></i> มาสาย ({{ $mLate }})
+            </button>
+            <button type="button" class="cal-filter-tab" data-cal-filter="ขาด" style="color:var(--red);">
+                <i class="fas fa-times"></i> ขาด ({{ $mAbsent }})
+            </button>
+        </div>
     </div>
 
     <div style="padding:1rem 1.25rem;">
@@ -106,7 +160,7 @@
                     {{ $day }}
                 </span>
                 @if($att)
-                <span style="font-size:0.6rem; color:{{ $textColor }}; margin-top:1px;">
+                <span style="font-size:0.6rem; font-weight:600; color:{{ $textColor }}; margin-top:1px;">
                     {{ $att->Status }}
                 </span>
                 @endif
@@ -141,9 +195,230 @@
     </div>
 </div>
 
+{{-- Modal สรุปสถิติการเข้าแถวแต่ละเดือน (Monthly Attendance Breakdown Modal) --}}
+<div id="monthlyAttendanceModal" style="display:none; position:fixed; inset:0; background:rgba(15,14,52,0.6); backdrop-filter:blur(5px); z-index:9999; align-items:center; justify-content:center; padding:1rem;">
+    <div style="background:#fff; border-radius:18px; max-width:680px; width:100%; max-height:90vh; display:flex; flex-direction:column; box-shadow:0 25px 60px rgba(0,0,0,0.3); overflow:hidden; animation:modalPop 0.25s ease-out;">
+        
+        <!-- Header -->
+        <div style="background:linear-gradient(135deg, #0f0e34, #27256e); padding:1.25rem 1.5rem; display:flex; justify-content:space-between; align-items:center; color:#fff;">
+            <div style="display:flex; align-items:center; gap:0.75rem;">
+                <div style="width:42px; height:42px; border-radius:10px; background:rgba(255,255,255,0.12); display:flex; align-items:center; justify-content:center; font-size:1.25rem; color:var(--yellow);">
+                    <i class="fas fa-chart-pie"></i>
+                </div>
+                <div>
+                    <h3 style="margin:0; font-size:1.15rem; font-weight:700; color:#fff;">สรุปสถิติการเข้าแถวแต่ละเดือน</h3>
+                    <p style="margin:0.2rem 0 0; font-size:0.8rem; color:rgba(255,255,255,0.75);">
+                        {{ $student->FullName }} (ห้อง {{ $student->Classroom }})
+                    </p>
+                </div>
+            </div>
+            <button type="button" class="close-monthly-modal" style="background:none; border:none; color:rgba(255,255,255,0.8); font-size:1.35rem; cursor:pointer; padding:0.25rem; line-height:1; transition:color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,0.8)'">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <!-- Body -->
+        <div style="padding:1.5rem; overflow-y:auto; flex:1;">
+            
+            <!-- Overall Semester Card -->
+            <div style="background:linear-gradient(135deg, #f8fafc, #f1f5f9); border:1.5px solid #e2e8f0; border-radius:12px; padding:1.1rem 1.25rem; margin-bottom:1.5rem; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
+                <div>
+                    <div style="font-size:0.75rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.05em;">ภาพรวมทั้งภาคเรียน</div>
+                    <div style="display:flex; align-items:baseline; gap:0.5rem; margin-top:0.25rem;">
+                        <span style="font-size:2rem; font-weight:800; color:var(--navy); line-height:1;">
+                            {{ $summary['rate'] }}%
+                        </span>
+                        <span style="font-size:0.85rem; color:var(--text-muted);">อัตราการเข้าแถวเฉลี่ย</span>
+                    </div>
+                </div>
+                <div style="display:flex; gap:1.25rem; font-size:0.85rem;">
+                    <div style="text-align:center;">
+                        <div style="font-size:1.15rem; font-weight:700; color:var(--green);">{{ $summary['มา'] }}</div>
+                        <div style="font-size:0.72rem; color:var(--text-muted);">เข้าแถว</div>
+                    </div>
+                    <div style="text-align:center;">
+                        <div style="font-size:1.15rem; font-weight:700; color:var(--orange);">{{ $summary['สาย'] }}</div>
+                        <div style="font-size:0.72rem; color:var(--text-muted);">มาสาย</div>
+                    </div>
+                    <div style="text-align:center;">
+                        <div style="font-size:1.15rem; font-weight:700; color:var(--red);">{{ $summary['ขาด'] }}</div>
+                        <div style="font-size:0.72rem; color:var(--text-muted);">ขาด</div>
+                    </div>
+                    <div style="text-align:center; border-left:1px solid #cbd5e1; padding-left:1.25rem;">
+                        <div style="font-size:1.15rem; font-weight:700; color:var(--navy);">{{ $summary['total'] }}</div>
+                        <div style="font-size:0.72rem; color:var(--text-muted);">รวม (วัน)</div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="font-size:0.88rem; font-weight:700; color:var(--navy); margin-bottom:0.75rem; display:flex; align-items:center; gap:0.4rem;">
+                <i class="fas fa-calendar-alt" style="color:var(--primary);"></i> รายละเอียดแยกตามแต่ละเดือน:
+            </div>
+
+            <!-- Table of Monthly Breakdown -->
+            <div style="border:1px solid var(--border); border-radius:12px; overflow:hidden; box-shadow:var(--shadow-sm);">
+                <table style="width:100%; border-collapse:collapse; font-size:0.85rem; text-align:left;">
+                    <thead>
+                        <tr style="background:#f8fafc; border-bottom:1px solid var(--border); color:var(--text-muted); font-size:0.78rem; text-transform:uppercase; letter-spacing:0.04em;">
+                            <th style="padding:0.75rem 1rem; font-weight:700;">เดือน</th>
+                            <th style="padding:0.75rem 0.5rem; text-align:center; font-weight:700; color:var(--green);">เข้าแถว</th>
+                            <th style="padding:0.75rem 0.5rem; text-align:center; font-weight:700; color:var(--orange);">มาสาย</th>
+                            <th style="padding:0.75rem 0.5rem; text-align:center; font-weight:700; color:var(--red);">ขาด</th>
+                            <th style="padding:0.75rem 0.75rem; text-align:center; font-weight:700;">รวม</th>
+                            <th style="padding:0.75rem 1rem; font-weight:700; min-width:130px;">ร้อยละ (%)</th>
+                            <th style="padding:0.75rem 1rem; text-align:center; font-weight:700;">ปฏิทิน</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($monthlyBreakdown as $mb)
+                        @php
+                            $rateColor = $mb['rate'] >= 80 ? 'var(--green)' : ($mb['rate'] >= 60 ? 'var(--orange)' : 'var(--red)');
+                            $barBg = $mb['rate'] >= 80 ? 'linear-gradient(90deg, #10b981, #34d399)' : ($mb['rate'] >= 60 ? 'linear-gradient(90deg, #f59e0b, #fbbf24)' : 'linear-gradient(90deg, #ef4444, #f87171)');
+                        @endphp
+                        <tr style="border-bottom:1px solid #f1f5f9; {{ $mb['is_current'] ? 'background:#f0fdf4;' : '' }}">
+                            <td style="padding:0.85rem 1rem; font-weight:600; color:var(--navy);">
+                                {{ $mb['month_name'] }}
+                                @if($mb['is_current'])
+                                    <span class="badge badge-green" style="font-size:0.65rem; margin-left:0.35rem;">เดือนนี้</span>
+                                @endif
+                            </td>
+                            <td style="padding:0.85rem 0.5rem; text-align:center; font-weight:700; color:var(--green);">
+                                {{ $mb['present'] }}
+                            </td>
+                            <td style="padding:0.85rem 0.5rem; text-align:center; font-weight:{{ $mb['late'] > 0 ? '700' : '400' }}; color:{{ $mb['late'] > 0 ? 'var(--orange)' : 'var(--text-muted)' }};">
+                                {{ $mb['late'] }}
+                            </td>
+                            <td style="padding:0.85rem 0.5rem; text-align:center; font-weight:{{ $mb['absent'] > 0 ? '700' : '400' }}; color:{{ $mb['absent'] > 0 ? 'var(--red)' : 'var(--text-muted)' }};">
+                                {{ $mb['absent'] }}
+                            </td>
+                            <td style="padding:0.85rem 0.75rem; text-align:center; font-weight:600; color:var(--text);">
+                                {{ $mb['total'] }} วัน
+                            </td>
+                            <td style="padding:0.85rem 1rem;">
+                                <div style="display:flex; align-items:center; gap:0.6rem;">
+                                    <span style="font-weight:700; color:{{ $rateColor }}; min-width:40px; font-size:0.85rem;">
+                                        {{ $mb['rate'] }}%
+                                    </span>
+                                    <div style="flex:1; height:6px; background:#e2e8f0; border-radius:3px; overflow:hidden;">
+                                        <div style="height:100%; width:{{ $mb['rate'] }}%; background:{{ $barBg }}; border-radius:3px; transition:width 0.6s ease;"></div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td style="padding:0.85rem 1rem; text-align:center;">
+                                @if($mb['is_current'])
+                                    <span style="font-size:0.75rem; color:var(--text-muted); font-weight:600;">กำลังดูอยู่</span>
+                                @else
+                                    <a href="{{ request()->url() }}?month={{ $mb['year_month'] }}" class="btn btn-sm btn-outline" style="font-size:0.75rem; padding:0.2rem 0.55rem; border-radius:6px; text-decoration:none;">
+                                        ดูปฏิทิน <i class="fas fa-arrow-right" style="font-size:0.65rem;"></i>
+                                    </a>
+                                @endif
+                            </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="7" style="text-align:center; padding:2rem; color:var(--text-muted);">
+                                ไม่พบข้อมูลสถิติในภาคเรียนนี้
+                            </td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <div style="padding:1rem 1.5rem; background:#f8fafc; border-top:1px solid var(--border); display:flex; justify-content:flex-end;">
+            <button type="button" class="btn btn-outline close-monthly-modal" style="font-size:0.85rem; padding:0.45rem 1.25rem; border-radius:8px;">
+                ปิดหน้าต่าง
+            </button>
+        </div>
+    </div>
+</div>
+
+<style>
+@keyframes modalPop {
+    from { opacity: 0; transform: scale(0.94) translateY(10px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}
+.cal-filter-tab {
+    padding: 0.4rem 0.85rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    font-family: 'Sarabun', sans-serif;
+    border: 1px solid var(--border);
+    background: #fff;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--text);
+}
+.cal-filter-tab:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+}
+.cal-filter-tab.active {
+    background: var(--navy);
+    color: #fff !important;
+    border-color: var(--navy);
+    box-shadow: 0 2px 6px rgba(15,14,52,0.2);
+}
+</style>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const cards = document.querySelectorAll('.stat-card-clickable');
+    // ── Monthly Breakdown Modal ──────────────────────────────
+    const modal = document.getElementById('monthlyAttendanceModal');
+    const openBtn = document.getElementById('openMonthlyModalBtn');
+    const closeBtns = document.querySelectorAll('.close-monthly-modal');
+    const statCards = document.querySelectorAll('.stat-card-clickable[data-open-modal="true"]');
+
+    function openModal() {
+        if (modal) {
+            modal.style.display = 'flex';
+        }
+    }
+
+    function closeModal() {
+        if (modal) {
+            modal.style.display = 'none';
+        }
+    }
+
+    if (openBtn) {
+        openBtn.addEventListener('click', openModal);
+    }
+
+    closeBtns.forEach(btn => {
+        btn.addEventListener('click', closeModal);
+    });
+
+    if (modal) {
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+    }
+
+    // Clicking any summary card directly opens the monthly breakdown modal!
+    statCards.forEach(card => {
+        card.addEventListener('click', function() {
+            openModal();
+        });
+        card.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                openModal();
+            }
+        });
+    });
+
+    // ── Calendar Tab Filtering ──────────────────────────────
+    const calTabs = document.querySelectorAll('.cal-filter-tab');
     const cells = document.querySelectorAll('.cal-day-cell');
     const emptyCells = document.querySelectorAll('.cal-empty-cell');
     const banner = document.getElementById('attendanceFilterBanner');
@@ -151,53 +426,34 @@ document.addEventListener('DOMContentLoaded', function() {
     const bannerDot = document.getElementById('filterIndicatorDot');
     const clearBtn = document.getElementById('clearAttendanceFilterBtn');
 
-    let currentFilter = null;
-
     const filterConfig = {
-        'มา': {
-            label: 'เข้าแถว',
-            color: '#10b981',
-            bg: '#e8f8ef'
-        },
-        'สาย': {
-            label: 'มาสาย',
-            color: '#f59e0b',
-            bg: '#fff3e0'
-        },
-        'ขาด': {
-            label: 'ขาดเข้าแถว',
-            color: '#ef4444',
-            bg: '#fdecea'
-        }
+        'มา': { label: 'เข้าแถว', color: '#10b981' },
+        'สาย': { label: 'มาสาย', color: '#f59e0b' },
+        'ขาด': { label: 'ขาดเข้าแถว', color: '#ef4444' }
     };
 
-    function applyFilter(filterType) {
-        if (currentFilter === filterType) {
-            clearFilter();
-            return;
-        }
-
-        currentFilter = filterType;
-        const cfg = filterConfig[filterType];
-
-        // Update cards
-        cards.forEach(c => {
-            const f = c.dataset.filter;
-            const textSpan = c.querySelector('.filter-text');
-            if (f === filterType) {
-                c.classList.add('active');
-                c.classList.remove('dimmed');
-                if (textSpan) textSpan.innerHTML = '<strong style="color:' + cfg.color + ';">✓ กำลังแสดงรายการนี้</strong>';
+    function applyCalendarFilter(filterType) {
+        // Update active tab
+        calTabs.forEach(t => {
+            if (t.dataset.calFilter === filterType) {
+                t.classList.add('active');
             } else {
-                c.classList.remove('active');
-                c.classList.add('dimmed');
-                if (textSpan) textSpan.innerHTML = 'คลิกเพื่อดูเฉพาะรายการนี้';
+                t.classList.remove('active');
             }
         });
 
-        // Filter calendar cells
+        if (filterType === 'all') {
+            // Show all
+            cells.forEach(c => c.classList.remove('dimmed', 'highlighted'));
+            emptyCells.forEach(ec => ec.style.opacity = '1');
+            if (banner) banner.style.display = 'none';
+            return;
+        }
+
+        const cfg = filterConfig[filterType];
         let matchCount = 0;
         let matchedDays = [];
+
         cells.forEach(cell => {
             const st = cell.dataset.status;
             if (st === filterType) {
@@ -211,11 +467,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        emptyCells.forEach(ec => {
-            ec.style.opacity = '0.2';
-        });
+        emptyCells.forEach(ec => ec.style.opacity = '0.2');
 
-        // Update banner
         if (banner && bannerText && bannerDot) {
             banner.style.display = 'flex';
             bannerDot.style.background = cfg.color;
@@ -228,41 +481,16 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    function clearFilter() {
-        currentFilter = null;
-        cards.forEach(c => {
-            c.classList.remove('active', 'dimmed');
-            const textSpan = c.querySelector('.filter-text');
-            if (textSpan) textSpan.innerHTML = 'คลิกเพื่อดูเฉพาะรายการนี้';
-        });
-
-        cells.forEach(cell => {
-            cell.classList.remove('dimmed', 'highlighted');
-        });
-
-        emptyCells.forEach(ec => {
-            ec.style.opacity = '1';
-        });
-
-        if (banner) {
-            banner.style.display = 'none';
-        }
-    }
-
-    cards.forEach(c => {
-        c.addEventListener('click', function() {
-            applyFilter(this.dataset.filter);
-        });
-        c.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                applyFilter(this.dataset.filter);
-            }
+    calTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            applyCalendarFilter(this.dataset.calFilter);
         });
     });
 
     if (clearBtn) {
-        clearBtn.addEventListener('click', clearFilter);
+        clearBtn.addEventListener('click', function() {
+            applyCalendarFilter('all');
+        });
     }
 });
 </script>
