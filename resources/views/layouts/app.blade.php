@@ -275,6 +275,7 @@
             --primary-border: rgba(6, 4, 234, 0.12);
             --primary-gradient: linear-gradient(135deg, #4224B8 0%, #0604EA 100%);
             --sidebar-gradient: linear-gradient(180deg, #0f0e34 0%, #1b1959 100%);
+            --navy:           #0f0e34;
             --white:          #FFFFFF;
 
             /* ===== Semantic Gradients ===== */

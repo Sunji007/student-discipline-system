@@ -101,17 +101,17 @@
         </div>
 
         {{-- Standardized Filter Tabs for Calendar --}}
-        <div class="filter-tab-bar" style="display:flex; gap:0.4rem; flex-wrap:wrap;">
-            <button type="button" class="cal-filter-tab active" data-cal-filter="all">
+        <div class="filter-tab-bar filter-tab-bar-sm">
+            <button type="button" class="filter-tab-item active" data-cal-filter="all">
                 ทั้งหมด ({{ $mTotal }})
             </button>
-            <button type="button" class="cal-filter-tab" data-cal-filter="มา" style="color:var(--green);">
+            <button type="button" class="filter-tab-item active-success" data-cal-filter="มา">
                 <i class="fas fa-check"></i> เข้าแถว ({{ $mPresent }})
             </button>
-            <button type="button" class="cal-filter-tab" data-cal-filter="สาย" style="color:var(--orange);">
+            <button type="button" class="filter-tab-item active-gold" data-cal-filter="สาย">
                 <i class="fas fa-clock"></i> มาสาย ({{ $mLate }})
             </button>
-            <button type="button" class="cal-filter-tab" data-cal-filter="ขาด" style="color:var(--red);">
+            <button type="button" class="filter-tab-item active-danger" data-cal-filter="ขาด">
                 <i class="fas fa-times"></i> ขาด ({{ $mAbsent }})
             </button>
         </div>
