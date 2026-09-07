@@ -100,20 +100,17 @@
             </a>
         </div>
 
-        {{-- Standardized Filter Tabs for Calendar --}}
-        <div class="filter-tab-bar filter-tab-bar-sm">
-            <button type="button" class="filter-tab-item active" data-cal-filter="all">
-                ทั้งหมด ({{ $mTotal }})
-            </button>
-            <button type="button" class="filter-tab-item active-success" data-cal-filter="มา">
-                <i class="fas fa-check"></i> เข้าแถว ({{ $mPresent }})
-            </button>
-            <button type="button" class="filter-tab-item active-gold" data-cal-filter="สาย">
-                <i class="fas fa-clock"></i> มาสาย ({{ $mLate }})
-            </button>
-            <button type="button" class="filter-tab-item active-danger" data-cal-filter="ขาด">
-                <i class="fas fa-times"></i> ขาด ({{ $mAbsent }})
-            </button>
+        {{-- Standardized Filter Dropdown for Calendar --}}
+        <div class="filter-dropdown-wrap">
+            <label class="filter-dropdown-label" for="calStatusFilter">
+                <i class="fas fa-filter"></i> ตัวเลือกสถานะ:
+            </label>
+            <select id="calStatusFilter" class="filter-dropdown-select">
+                <option value="all">📋 ทั้งหมด ({{ $mTotal }})</option>
+                <option value="มา">✅ เข้าแถว ({{ $mPresent }})</option>
+                <option value="สาย">⏰ มาสาย ({{ $mLate }})</option>
+                <option value="ขาด">❌ ขาด ({{ $mAbsent }})</option>
+            </select>
         </div>
     </div>
 
@@ -392,8 +389,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // ── Calendar Tab Filtering ──────────────────────────────
-    const calTabs = document.querySelectorAll('.filter-tab-bar .filter-tab-item[data-cal-filter]');
+    // ── Calendar Dropdown Filtering ──────────────────────────────
+    const calStatusFilter = document.getElementById('calStatusFilter');
     const cells = document.querySelectorAll('.cal-day-cell');
     const emptyCells = document.querySelectorAll('.cal-empty-cell');
     const banner = document.getElementById('attendanceFilterBanner');
@@ -408,14 +405,9 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     function applyCalendarFilter(filterType) {
-        // Update active tab
-        calTabs.forEach(t => {
-            if (t.dataset.calFilter === filterType) {
-                t.classList.add('active');
-            } else {
-                t.classList.remove('active');
-            }
-        });
+        if (calStatusFilter && calStatusFilter.value !== filterType) {
+            calStatusFilter.value = filterType;
+        }
 
         if (filterType === 'all') {
             // Show all
@@ -456,14 +448,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    calTabs.forEach(tab => {
-        tab.addEventListener('click', function() {
-            applyCalendarFilter(this.dataset.calFilter);
+    if (calStatusFilter) {
+        calStatusFilter.addEventListener('change', function() {
+            applyCalendarFilter(this.value);
         });
-    });
+    }
 
     if (clearBtn) {
         clearBtn.addEventListener('click', function() {
+            if (calStatusFilter) calStatusFilter.value = 'all';
             applyCalendarFilter('all');
         });
     }

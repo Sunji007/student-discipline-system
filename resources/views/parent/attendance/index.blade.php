@@ -100,20 +100,17 @@
             </a>
         </div>
 
-        {{-- Standardized Filter Tabs for Calendar --}}
-        <div class="filter-tab-bar filter-tab-bar-sm">
-            <button type="button" class="filter-tab-item active" data-cal-filter="all">
-                ทั้งหมด ({{ $mTotal }})
-            </button>
-            <button type="button" class="filter-tab-item active-success" data-cal-filter="มา">
-                <i class="fas fa-check"></i> เข้าแถว ({{ $mPresent }})
-            </button>
-            <button type="button" class="filter-tab-item active-gold" data-cal-filter="สาย">
-                <i class="fas fa-clock"></i> มาสาย ({{ $mLate }})
-            </button>
-            <button type="button" class="filter-tab-item active-danger" data-cal-filter="ขาด">
-                <i class="fas fa-times"></i> ขาด ({{ $mAbsent }})
-            </button>
+        {{-- Standardized Filter Dropdown for Calendar --}}
+        <div class="filter-dropdown-wrap">
+            <label class="filter-dropdown-label" for="calStatusFilter">
+                <i class="fas fa-filter"></i> ตัวเลือกสถานะ:
+            </label>
+            <select id="calStatusFilter" class="filter-dropdown-select">
+                <option value="all">📋 ทั้งหมด ({{ $mTotal }})</option>
+                <option value="มา">✅ เข้าแถว ({{ $mPresent }})</option>
+                <option value="สาย">⏰ มาสาย ({{ $mLate }})</option>
+                <option value="ขาด">❌ ขาด ({{ $mAbsent }})</option>
+            </select>
         </div>
     </div>
 
