@@ -42,9 +42,9 @@
                 </span>
             </div>
             <div class="stat-label">เข้าแถว ({{ $thMonth }})</div>
-            <div style="font-size:0.72rem; color:var(--text-muted); margin-top:0.4rem; display:flex; align-items:center; gap:0.35rem;">
-                <span class="badge badge-green" style="font-size:0.68rem; padding:0.15rem 0.5rem; border-radius:6px;">
-                    <i class="fas fa-chart-bar"></i> คลิกดูแต่ละเดือน
+            <div style="margin-top:0.45rem;">
+                <span style="font-size:0.75rem; font-weight:700; color:#065f46; background:#d1fae5; padding:0.25rem 0.65rem; border-radius:6px; display:inline-flex; align-items:center; gap:0.35rem; border:1px solid #a7f3d0;">
+                    <i class="fas fa-chart-pie"></i> คลิกดูแต่ละเดือน
                 </span>
             </div>
         </div>
@@ -60,9 +60,9 @@
                 </span>
             </div>
             <div class="stat-label">มาสาย ({{ $thMonth }})</div>
-            <div style="font-size:0.72rem; color:var(--text-muted); margin-top:0.4rem; display:flex; align-items:center; gap:0.35rem;">
-                <span class="badge badge-orange" style="font-size:0.68rem; padding:0.15rem 0.5rem; border-radius:6px;">
-                    <i class="fas fa-chart-bar"></i> คลิกดูแต่ละเดือน
+            <div style="margin-top:0.45rem;">
+                <span style="font-size:0.75rem; font-weight:700; color:#92400e; background:#fef3c7; padding:0.25rem 0.65rem; border-radius:6px; display:inline-flex; align-items:center; gap:0.35rem; border:1px solid #fde68a;">
+                    <i class="fas fa-chart-pie"></i> คลิกดูแต่ละเดือน
                 </span>
             </div>
         </div>
@@ -78,9 +78,9 @@
                 </span>
             </div>
             <div class="stat-label">ขาดเข้าแถว ({{ $thMonth }})</div>
-            <div style="font-size:0.72rem; color:var(--text-muted); margin-top:0.4rem; display:flex; align-items:center; gap:0.35rem;">
-                <span class="badge badge-red" style="font-size:0.68rem; padding:0.15rem 0.5rem; border-radius:6px;">
-                    <i class="fas fa-chart-bar"></i> คลิกดูแต่ละเดือน
+            <div style="margin-top:0.45rem;">
+                <span style="font-size:0.75rem; font-weight:700; color:#7f1d1d; background:#fee2e2; padding:0.25rem 0.65rem; border-radius:6px; display:inline-flex; align-items:center; gap:0.35rem; border:1px solid #fecaca;">
+                    <i class="fas fa-chart-pie"></i> คลิกดูแต่ละเดือน
                 </span>
             </div>
         </div>
@@ -101,17 +101,17 @@
         </div>
 
         {{-- Standardized Filter Tabs for Calendar --}}
-        <div class="filter-tab-bar" style="display:flex; gap:0.4rem; flex-wrap:wrap;">
-            <button type="button" class="cal-filter-tab active" data-cal-filter="all">
+        <div class="filter-tab-bar filter-tab-bar-sm">
+            <button type="button" class="filter-tab-item active" data-cal-filter="all">
                 ทั้งหมด ({{ $mTotal }})
             </button>
-            <button type="button" class="cal-filter-tab" data-cal-filter="มา" style="color:var(--green);">
+            <button type="button" class="filter-tab-item active-success" data-cal-filter="มา">
                 <i class="fas fa-check"></i> เข้าแถว ({{ $mPresent }})
             </button>
-            <button type="button" class="cal-filter-tab" data-cal-filter="สาย" style="color:var(--orange);">
+            <button type="button" class="filter-tab-item active-gold" data-cal-filter="สาย">
                 <i class="fas fa-clock"></i> มาสาย ({{ $mLate }})
             </button>
-            <button type="button" class="cal-filter-tab" data-cal-filter="ขาด" style="color:var(--red);">
+            <button type="button" class="filter-tab-item active-danger" data-cal-filter="ขาด">
                 <i class="fas fa-times"></i> ขาด ({{ $mAbsent }})
             </button>
         </div>
@@ -341,31 +341,6 @@
     from { opacity: 0; transform: scale(0.94) translateY(10px); }
     to { opacity: 1; transform: scale(1) translateY(0); }
 }
-.cal-filter-tab {
-    padding: 0.4rem 0.85rem;
-    font-size: 0.8rem;
-    font-weight: 600;
-    font-family: 'Sarabun', sans-serif;
-    border: 1px solid var(--border);
-    background: #fff;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    color: var(--text);
-}
-.cal-filter-tab:hover {
-    background: #f8fafc;
-    border-color: #cbd5e1;
-}
-.cal-filter-tab.active {
-    background: var(--navy);
-    color: #fff !important;
-    border-color: var(--navy);
-    box-shadow: 0 2px 6px rgba(15,14,52,0.2);
-}
 </style>
 
 <script>
@@ -418,7 +393,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // ── Calendar Tab Filtering ──────────────────────────────
-    const calTabs = document.querySelectorAll('.cal-filter-tab');
+    const calTabs = document.querySelectorAll('.filter-tab-bar .filter-tab-item[data-cal-filter]');
     const cells = document.querySelectorAll('.cal-day-cell');
     const emptyCells = document.querySelectorAll('.cal-empty-cell');
     const banner = document.getElementById('attendanceFilterBanner');
