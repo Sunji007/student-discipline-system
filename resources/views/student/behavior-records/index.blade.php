@@ -13,19 +13,21 @@
             </strong> คะแนน
         </p>
     </div>
-    <div class="filter-tab-bar">
-        <a href="{{ route('student.behavior-records.index') }}" 
-           class="filter-tab-item {{ !request('type') ? 'active' : '' }}">
-            <i class="fas fa-list"></i> ทั้งหมด
-        </a>
-        <a href="{{ route('student.behavior-records.index', ['type' => 'ตัดคะแนน']) }}" 
-           class="filter-tab-item active-danger {{ request('type') === 'ตัดคะแนน' ? 'active' : '' }}">
-            <i class="fas fa-minus-circle"></i> ตัดคะแนน
-        </a>
-        <a href="{{ route('student.behavior-records.index', ['type' => 'เพิ่มคะแนน']) }}" 
-           class="filter-tab-item active-success {{ request('type') === 'เพิ่มคะแนน' ? 'active' : '' }}">
-            <i class="fas fa-plus-circle"></i> เพิ่มคะแนน
-        </a>
+    <div class="filter-dropdown-wrap">
+        <label class="filter-dropdown-label" for="behaviorTypeFilter">
+            <i class="fas fa-filter"></i> ตัวเลือก:
+        </label>
+        <select id="behaviorTypeFilter" class="filter-dropdown-select" onchange="if(this.value){ window.location.href = this.value; }">
+            <option value="{{ route('student.behavior-records.index') }}" {{ !request('type') ? 'selected' : '' }}>
+                📋 ทั้งหมด
+            </option>
+            <option value="{{ route('student.behavior-records.index', ['type' => 'ตัดคะแนน']) }}" {{ request('type') === 'ตัดคะแนน' ? 'selected' : '' }}>
+                ➖ ตัดคะแนน
+            </option>
+            <option value="{{ route('student.behavior-records.index', ['type' => 'เพิ่มคะแนน']) }}" {{ request('type') === 'เพิ่มคะแนน' ? 'selected' : '' }}>
+                ➕ เพิ่มคะแนน
+            </option>
+        </select>
     </div>
 </div>
 
