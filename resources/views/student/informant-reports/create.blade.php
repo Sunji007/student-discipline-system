@@ -166,7 +166,7 @@
             </div>
 
             <div style="text-align:right; border-top:1px solid #ede8e0; padding-top:1.25rem; margin-top:1rem;">
-                <button type="button" class="btn btn-gold" id="btnSubmitForm" onclick="confirmAndSubmitForm()">
+                <button type="button" class="btn btn-primary" id="btnSubmitForm" onclick="confirmAndSubmitForm()">
                     <i class="fas fa-paper-plane"></i> ส่ง
                 </button>
             </div>

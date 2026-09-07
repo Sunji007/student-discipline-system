@@ -9,7 +9,7 @@
         <h2>รายการเบาะแสที่ฉันแจ้ง</h2>
         <p>ติดตามสถานะการตรวจสอบข้อมูลที่ท่านรายงาน</p>
     </div>
-    <a href="{{ route($layoutPrefix . '.informant-reports.create') }}" class="btn btn-gold">
+    <a href="{{ route($layoutPrefix . '.informant-reports.create') }}" class="btn btn-primary">
         <i class="fas fa-plus"></i> เพิ่ม
     </a>
 </div>

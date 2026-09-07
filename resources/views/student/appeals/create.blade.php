@@ -99,7 +99,7 @@
                 </div>
 
                 <div style="display:flex; gap:0.75rem;">
-                    <button type="submit" class="btn btn-gold">
+                    <button type="submit" class="btn btn-primary">
                         <i class="fas fa-paper-plane"></i> ส่ง
                     </button>
                     <a href="{{ route('student.appeals.index') }}" class="btn btn-outline">ยกเลิก</a>

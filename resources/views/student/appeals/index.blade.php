@@ -28,7 +28,7 @@
                 <i class="fas fa-times-circle"></i> ยกเลิกคำร้อง
             </a>
         </div>
-        <a href="{{ route('student.appeals.create') }}" class="btn btn-gold" style="white-space:nowrap;">
+        <a href="{{ route('student.appeals.create') }}" class="btn btn-primary" style="white-space:nowrap;">
             <i class="fas fa-plus"></i> เพิ่ม
         </a>
     </div>

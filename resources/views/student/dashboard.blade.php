@@ -221,7 +221,7 @@
             <a href="{{ route('prayer.calendar') }}" class="btn btn-primary btn-sm" style="background:linear-gradient(135deg, #0d5c3a 0%, #10b981 100%); border-color:transparent; box-shadow:0 4px 10px rgba(13,92,58,0.15);">
                 <i class="fas fa-star-and-crescent"></i> ประวัติการละหมาด
             </a>
-            <a href="{{ route('student.appeals.create') }}" class="btn btn-gold btn-sm">
+            <a href="{{ route('student.appeals.create') }}" class="btn btn-primary btn-sm">
                 <i class="fas fa-balance-scale"></i> อุทธรณ์คะแนน
             </a>
             <a href="{{ route('student.behavior-records.index') }}" class="btn btn-outline btn-sm">ดูทั้งหมด</a>
