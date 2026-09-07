@@ -50,7 +50,7 @@ class InformantReportController extends Controller
             'Title' => 'required|string|max:100',
             'Category' => 'required|string|max:50',
             'Description' => 'required|string',
-            'StudentID' => 'nullable|string|max:255',
+            'StudentID' => 'nullable|string|max:1000',
             'evidence' => 'nullable',
             'evidence.*' => 'nullable|file|mimes:pdf,jpg,jpeg,png,webp,heic,heif,gif,bmp|max:20480',
             'IsAnonymous' => 'nullable|boolean',
@@ -63,22 +63,14 @@ class InformantReportController extends Controller
         ]);
 
         if ($request->filled('StudentID')) {
-            $rawIds = array_filter(array_map('trim', preg_split('/[\s,;]+/', $request->input('StudentID'))));
-            if (!empty($rawIds)) {
+            $rawTokens = array_filter(array_map('trim', preg_split('/[\s,;]+/', $request->input('StudentID'))));
+            if (!empty($rawTokens)) {
                 $myStudent = \App\Models\Student::where('UserID', auth()->id())->first();
                 $myStudentId = $myStudent ? $myStudent->StudentID : null;
 
-                if ($myStudentId && in_array($myStudentId, $rawIds)) {
+                if ($myStudentId && in_array($myStudentId, $rawTokens)) {
                     return back()->withInput()->withErrors([
                         'StudentID' => 'ไม่สามารถระบุรหัสนักเรียนของตนเอง (' . $myStudentId . ') ในรายการแจ้งเบาะแสได้'
-                    ]);
-                }
-
-                $validIds = \App\Models\Student::whereIn('StudentID', $rawIds)->pluck('StudentID')->toArray();
-                $invalidIds = array_diff($rawIds, $validIds);
-                if (!empty($invalidIds)) {
-                    return back()->withInput()->withErrors([
-                        'StudentID' => 'ไม่พบรหัสนักเรียน: ' . implode(', ', $invalidIds) . ' ในระบบ กรุณาตรวจสอบรหัสนักเรียนใหม่อีกครั้ง'
                     ]);
                 }
             }

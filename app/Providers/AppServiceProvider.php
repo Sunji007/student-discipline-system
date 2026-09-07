@@ -21,14 +21,22 @@ class AppServiceProvider extends ServiceProvider
             URL::forceScheme('https');
         }
 
-        if (\Illuminate\Support\Facades\Schema::hasTable('informant_reports') && !\Illuminate\Support\Facades\Schema::hasColumn('informant_reports', 'semester_id')) {
-            try {
-                \Illuminate\Support\Facades\Schema::table('informant_reports', function (\Illuminate\Database\Schema\Blueprint $table) {
-                    $table->unsignedBigInteger('semester_id')->nullable()->after('ReportDate');
-                });
-            } catch (\Throwable $e) {
-                // Ignore
+        if (\Illuminate\Support\Facades\Schema::hasTable('informant_reports')) {
+            if (!\Illuminate\Support\Facades\Schema::hasColumn('informant_reports', 'semester_id')) {
+                try {
+                    \Illuminate\Support\Facades\Schema::table('informant_reports', function (\Illuminate\Database\Schema\Blueprint $table) {
+                        $table->unsignedBigInteger('semester_id')->nullable()->after('ReportDate');
+                    });
+                } catch (\Throwable $e) {
+                    // Ignore
+                }
             }
+            try {
+                \Illuminate\Support\Facades\DB::statement("ALTER TABLE informant_reports DROP FOREIGN KEY informant_reports_studentid_foreign");
+            } catch (\Throwable $e) {}
+            try {
+                \Illuminate\Support\Facades\DB::statement("ALTER TABLE informant_reports MODIFY StudentID TEXT NULL");
+            } catch (\Throwable $e) {}
         }
 
         if (\Illuminate\Support\Facades\Schema::hasTable('behavior_rules')) {
