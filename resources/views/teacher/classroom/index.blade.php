@@ -114,14 +114,18 @@
 </div>
 
 @if(isset($rooms) && count($rooms) > 1)
-<div style="margin-bottom: 1.25rem;">
-    <div class="filter-tab-bar">
-        @foreach($rooms as $r)
-            <a href="{{ route('teacher.classroom.index', ['room' => $r]) }}" 
-               class="filter-tab-item {{ $classroom === $r ? 'active' : '' }}">
-               <i class="fas fa-door-open"></i> ห้อง {{ $r }}
-            </a>
-        @endforeach
+<div style="margin-bottom: 1.25rem; display:flex; align-items:center;">
+    <div class="filter-dropdown-wrap">
+        <label class="filter-dropdown-label" for="teacherClassroomFilter">
+            <i class="fas fa-door-open"></i> เลือกห้องเรียน:
+        </label>
+        <select id="teacherClassroomFilter" class="filter-dropdown-select" onchange="if(this.value){ window.location.href = this.value; }">
+            @foreach($rooms as $r)
+                <option value="{{ route('teacher.classroom.index', ['room' => $r]) }}" {{ $classroom === $r ? 'selected' : '' }}>
+                    ห้อง {{ $r }}
+                </option>
+            @endforeach
+        </select>
     </div>
 </div>
 @endif

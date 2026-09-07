@@ -389,8 +389,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // ── Calendar Tab Filtering ──────────────────────────────
-    const calTabs = document.querySelectorAll('.filter-tab-bar .filter-tab-item[data-cal-filter]');
+    // ── Calendar Dropdown Filtering ──────────────────────────────
+    const calStatusFilter = document.getElementById('calStatusFilter');
     const cells = document.querySelectorAll('.cal-day-cell');
     const emptyCells = document.querySelectorAll('.cal-empty-cell');
     const banner = document.getElementById('attendanceFilterBanner');
@@ -405,14 +405,9 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     function applyCalendarFilter(filterType) {
-        // Update active tab
-        calTabs.forEach(t => {
-            if (t.dataset.calFilter === filterType) {
-                t.classList.add('active');
-            } else {
-                t.classList.remove('active');
-            }
-        });
+        if (calStatusFilter && calStatusFilter.value !== filterType) {
+            calStatusFilter.value = filterType;
+        }
 
         if (filterType === 'all') {
             // Show all
@@ -453,14 +448,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    calTabs.forEach(tab => {
-        tab.addEventListener('click', function() {
-            applyCalendarFilter(this.dataset.calFilter);
+    if (calStatusFilter) {
+        calStatusFilter.addEventListener('change', function() {
+            applyCalendarFilter(this.value);
         });
-    });
+    }
 
     if (clearBtn) {
         clearBtn.addEventListener('click', function() {
+            if (calStatusFilter) calStatusFilter.value = 'all';
             applyCalendarFilter('all');
         });
     }
