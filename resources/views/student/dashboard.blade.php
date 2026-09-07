@@ -97,11 +97,11 @@
                 </div>
             </div>
         </a>
-        <a href="{{ route('student.appeals.index') }}" class="stat-card gold" style="text-decoration:none; cursor:pointer;" title="ดูคำร้องอุทธรณ์คะแนน">
+        <a href="{{ route('student.appeals.index') }}" class="stat-card gold" style="text-decoration:none; cursor:pointer;" title="ดูคำอุทธรณ์รอพิจารณา">
             <div class="stat-icon gold"><i class="fas fa-balance-scale"></i></div>
             <div class="stat-info">
                 <div class="stat-value">{{ $appealsQuery->where(['Status' => 'รอตรวจสอบ'])->count() }}</div>
-                <div class="stat-label">คำร้องรอพิจารณา</div>
+                <div class="stat-label">คำอุทธรณ์รอพิจารณา</div>
             </div>
         </a>
     </div>
