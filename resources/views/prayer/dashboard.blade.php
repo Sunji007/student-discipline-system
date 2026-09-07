@@ -381,19 +381,19 @@
                     </button>
                 </div>
 
-                <!-- Gender Quick Filter Pills -->
-                <div style="display:inline-flex; background:#f1f5f9; border-radius:10px; padding:3px; gap:4px; border:1px solid #cbd5e1;">
+                <!-- Gender Quick Filter Tabs -->
+                <div class="filter-tab-bar filter-tab-bar-sm">
                     <a href="{{ request()->fullUrlWithQuery(['gender' => '']) }}" 
-                       class="btn btn-sm {{ empty($gender) ? 'btn-primary' : 'btn-outline' }}" style="border-radius:7px; padding:0.25rem 0.75rem; font-size:0.8rem;">
+                       class="filter-tab-item {{ empty($gender) ? 'active' : '' }}">
                        <i class="fas fa-users"></i> ทั้งหมด
                     </a>
                     <a href="{{ request()->fullUrlWithQuery(['gender' => 'ชาย']) }}" 
-                       class="btn btn-sm {{ ($gender ?? '') == 'ชาย' ? 'btn-primary' : 'btn-outline' }}" style="border-radius:7px; padding:0.25rem 0.75rem; font-size:0.8rem; {{ ($gender ?? '') == 'ชาย' ? 'background:#2563eb; border-color:#2563eb; color:#fff;' : '' }}">
-                       <i class="fas fa-mars" style="color:{{ ($gender ?? '') == 'ชาย' ? '#fff' : '#2563eb' }};"></i> ชาย
+                       class="filter-tab-item active-blue {{ ($gender ?? '') == 'ชาย' ? 'active' : '' }}">
+                       <i class="fas fa-mars"></i> ชาย
                     </a>
                     <a href="{{ request()->fullUrlWithQuery(['gender' => 'หญิง']) }}" 
-                       class="btn btn-sm {{ ($gender ?? '') == 'หญิง' ? 'btn-primary' : 'btn-outline' }}" style="border-radius:7px; padding:0.25rem 0.75rem; font-size:0.8rem; {{ ($gender ?? '') == 'หญิง' ? 'background:#ec4899; border-color:#ec4899; color:#fff;' : '' }}">
-                       <i class="fas fa-venus" style="color:{{ ($gender ?? '') == 'หญิง' ? '#fff' : '#ec4899' }};"></i> หญิง
+                       class="filter-tab-item active-pink {{ ($gender ?? '') == 'หญิง' ? 'active' : '' }}">
+                       <i class="fas fa-venus"></i> หญิง
                     </a>
                 </div>
 

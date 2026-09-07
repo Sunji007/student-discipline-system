@@ -114,14 +114,15 @@
 </div>
 
 @if(isset($rooms) && count($rooms) > 1)
-<div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; background: #f1f5f9; padding: 0.4rem; border-radius: 12px; width: fit-content; border: 1px solid var(--border);">
-    @foreach($rooms as $r)
-        <a href="{{ route('teacher.classroom.index', ['room' => $r]) }}" 
-           class="btn btn-sm {{ $classroom === $r ? 'btn-primary' : 'btn-outline' }}"
-           style="border-radius: 8px; padding: 0.4rem 1.25rem; font-weight: 700; transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.35rem;">
-           <i class="fas fa-door-open"></i> ห้อง {{ $r }}
-        </a>
-    @endforeach
+<div style="margin-bottom: 1.25rem;">
+    <div class="filter-tab-bar">
+        @foreach($rooms as $r)
+            <a href="{{ route('teacher.classroom.index', ['room' => $r]) }}" 
+               class="filter-tab-item {{ $classroom === $r ? 'active' : '' }}">
+               <i class="fas fa-door-open"></i> ห้อง {{ $r }}
+            </a>
+        @endforeach
+    </div>
 </div>
 @endif
 
