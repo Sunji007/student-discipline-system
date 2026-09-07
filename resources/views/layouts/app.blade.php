@@ -1163,15 +1163,14 @@
             color: var(--white);
         }
 
-        /* btn-gold → ขาวมีขอบสีน้ำเงินม่วง */
         .btn-gold {
-            background: var(--white);
-            color: var(--primary);
-            border: 1.5px solid var(--primary);
-            box-shadow: 0 2px 6px rgba(6, 4, 234, 0.03);
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: #ffffff;
+            box-shadow: 0 4px 14px rgba(245, 158, 11, 0.25);
         }
         .btn-gold:hover {
-            background: var(--primary-pale);
+            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.35);
+            color: #ffffff;
         }
 
         .btn-danger {
