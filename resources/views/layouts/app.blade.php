@@ -1166,6 +1166,78 @@
             border-radius: 6px;
         }
 
+        /* ============================================================
+           UNIFIED FILTER TAB BAR (Standardized Segmented Control)
+        ============================================================ */
+        .filter-tab-bar {
+            display: inline-flex;
+            align-items: center;
+            background: #f1f5f9;
+            padding: 0.32rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            gap: 0.35rem;
+            max-width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .filter-tab-bar .filter-tab-item {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            padding: 0.45rem 1.15rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-decoration: none;
+            border: none;
+            background: transparent;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            white-space: nowrap;
+            cursor: pointer;
+            line-height: 1.4;
+        }
+
+        .filter-tab-bar .filter-tab-item:hover {
+            color: var(--navy);
+            background: rgba(255, 255, 255, 0.75);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+        }
+
+        .filter-tab-bar .filter-tab-item.active {
+            background: var(--primary-gradient, linear-gradient(135deg, #4c4bf7 0%, #0604EA 100%));
+            color: #ffffff;
+            font-weight: 700;
+            box-shadow: 0 3px 10px rgba(6, 4, 234, 0.22);
+        }
+
+        .filter-tab-bar .filter-tab-item.active-danger.active {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: #ffffff;
+            box-shadow: 0 3px 10px rgba(239, 68, 68, 0.28);
+        }
+
+        .filter-tab-bar .filter-tab-item.active-success.active {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: #ffffff;
+            box-shadow: 0 3px 10px rgba(16, 185, 129, 0.28);
+        }
+
+        .filter-tab-bar .filter-tab-item.active-gold.active {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: #ffffff;
+            box-shadow: 0 3px 10px rgba(217, 119, 6, 0.28);
+        }
+
+        .filter-tab-bar.filter-tab-bar-sm .filter-tab-item {
+            padding: 0.35rem 0.85rem;
+            font-size: 0.8rem;
+            border-radius: 6px;
+        }
+
         /* ================================================
            FORMS (Rounded Controls)
         ================================================ */
