@@ -53,7 +53,7 @@
         @if($recentAttendance->isEmpty())
         <div style="text-align:center; padding:2rem; color:var(--text-muted); font-size:0.875rem;">
             ยังไม่ได้เช็คชื่อวันนี้
-            <br><a href="{{ route('teacher.attendance.index') }}" class="btn btn-gold btn-sm" style="margin-top:0.75rem;">เช็คชื่อตอนนี้</a>
+            <br><a href="{{ route('teacher.attendance.index') }}" class="btn btn-primary btn-sm" style="margin-top:0.75rem;">เช็คชื่อตอนนี้</a>
         </div>
         @else
         <div class="table-wrap">

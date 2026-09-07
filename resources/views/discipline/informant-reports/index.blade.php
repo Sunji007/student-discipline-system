@@ -133,7 +133,7 @@
                     @if($report->Status === 'เรื่องใหม่')
                     <form method="POST" action="{{ route('discipline.informant-reports.accept', $report->ReportID) }}" style="margin:0;">
                         @csrf @method('PATCH')
-                        <button type="submit" class="btn btn-gold btn-sm" style="width:100%;">
+                        <button type="submit" class="btn btn-primary btn-sm" style="width:100%;">
                             <i class="fas fa-check"></i> รับเรื่อง
                         </button>
                     </form>

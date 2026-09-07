@@ -204,7 +204,7 @@
             @if($informantReport->Status === 'เรื่องใหม่')
             <form method="POST" action="{{ route('discipline.informant-reports.accept', $informantReport->ReportID) }}">
                 @csrf @method('PATCH')
-                <button type="submit" class="btn btn-gold">
+                <button type="submit" class="btn btn-primary">
                     <i class="fas fa-check"></i> รับเรื่อง
                 </button>
             </form>
