@@ -46,7 +46,7 @@
             <div class="responsive-grid-2" style="margin-bottom:1.25rem; background:#fffdf7; border:1px solid #ede8e0; padding:1rem; border-radius:4px;">
                 <div>
                     <div style="font-size:0.75rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-muted); margin-bottom:0.35rem;">
-                        นักเรียนที่เกี่ยวข้อง
+                        ผู้เกี่ยวข้อง / รูปพรรณสัณฐาน
                     </div>
                     <div style="font-size:0.875rem; font-weight:600; color:var(--navy);">
                         @php
@@ -63,7 +63,7 @@
                             @endforeach
                         @elseif(!empty($informantReport->StudentID))
                             <div style="font-size:0.875rem; color:var(--navy);">
-                                <i class="fas fa-id-card" style="color:var(--gold); margin-right:0.25rem;"></i> รหัสที่ระบุ: <strong>{{ $informantReport->StudentID }}</strong>
+                                <i class="fas fa-user-tag" style="color:var(--gold); margin-right:0.25rem;"></i> รูปพรรณสัณฐาน / ข้อมูลที่ระบุ: <strong>{{ $informantReport->StudentID }}</strong>
                             </div>
                         @else
                             <span style="color:var(--text-muted); font-style:italic; font-weight:400;">ไม่ระบุเจาะจง</span>
