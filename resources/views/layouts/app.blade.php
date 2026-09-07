@@ -202,11 +202,9 @@
         (function() {
             try {
                 const isCollapsed = localStorage.getItem('sidebar_collapsed');
-                if (isCollapsed === null || isCollapsed === '1') {
-                    document.documentElement.classList.add('sidebar-collapsed-preload');
-                    document.addEventListener('DOMContentLoaded', function() {
-                        document.body.classList.add('sidebar-collapsed');
-                    });
+                // Only collapse if user explicitly saved preference as '1' (collapsed) on desktop
+                if (isCollapsed === '1' && window.innerWidth > 768) {
+                    document.documentElement.classList.add('sidebar-collapsed');
                 }
             } catch (e) {}
         })();
@@ -583,40 +581,33 @@
            SIDEBAR COLLAPSED (Mini Sidebar / Icons & Logo Only)
         ============================================================ */
         @media (min-width: 769px) {
-            body.sidebar-collapsed .sidebar,
-            html.sidebar-collapsed-preload body .sidebar {
+            .sidebar-collapsed .sidebar {
                 width: 78px;
             }
-            body.sidebar-collapsed .main-wrapper,
-            html.sidebar-collapsed-preload body .main-wrapper {
+            .sidebar-collapsed .main-wrapper {
                 margin-left: 78px;
             }
 
-            body.sidebar-collapsed .sidebar-brand,
-            html.sidebar-collapsed-preload body .sidebar-brand {
+            .sidebar-collapsed .sidebar-brand {
                 padding: 1.25rem 0.5rem;
                 display: flex;
                 justify-content: center;
             }
-            body.sidebar-collapsed .brand-content,
-            html.sidebar-collapsed-preload body .brand-content {
+            .sidebar-collapsed .brand-content {
                 justify-content: center;
                 gap: 0;
                 width: 100%;
             }
-            body.sidebar-collapsed .brand-logo,
-            html.sidebar-collapsed-preload body .brand-logo {
+            .sidebar-collapsed .brand-logo {
                 width: 44px;
             }
-            body.sidebar-collapsed .brand-text,
-            html.sidebar-collapsed-preload body .brand-text {
+            .sidebar-collapsed .brand-text {
                 display: none !important;
                 opacity: 0;
             }
 
             /* Role Badge in Collapsed mode */
-            body.sidebar-collapsed .role-badge,
-            html.sidebar-collapsed-preload body .role-badge {
+            .sidebar-collapsed .role-badge {
                 margin: 0.75rem 0.5rem;
                 padding: 0.6rem 0.25rem;
                 display: flex;
@@ -624,16 +615,12 @@
                 align-items: center;
                 text-align: center;
             }
-            body.sidebar-collapsed .role-badge .user-name,
-            body.sidebar-collapsed .role-badge .user-username,
-            body.sidebar-collapsed .role-badge .user-role-container,
-            html.sidebar-collapsed-preload body .role-badge .user-name,
-            html.sidebar-collapsed-preload body .role-badge .user-username,
-            html.sidebar-collapsed-preload body .role-badge .user-role-container {
+            .sidebar-collapsed .role-badge .user-name,
+            .sidebar-collapsed .role-badge .user-username,
+            .sidebar-collapsed .role-badge .user-role-container {
                 display: none !important;
             }
-            body.sidebar-collapsed .role-badge::after,
-            html.sidebar-collapsed-preload body .role-badge::after {
+            .sidebar-collapsed .role-badge::after {
                 content: '\f007';
                 font-family: 'Font Awesome 6 Free';
                 font-weight: 900;
@@ -642,8 +629,7 @@
             }
 
             /* Section Title in Collapsed mode */
-            body.sidebar-collapsed .nav-section-title,
-            html.sidebar-collapsed-preload body .nav-section-title {
+            .sidebar-collapsed .nav-section-title {
                 height: 1px;
                 padding: 0;
                 margin: 0.75rem 0.75rem;
@@ -653,30 +639,26 @@
             }
 
             /* Nav Item in Collapsed mode */
-            body.sidebar-collapsed .nav-item a,
-            html.sidebar-collapsed-preload body .nav-item a {
+            .sidebar-collapsed .nav-item a {
                 justify-content: center;
                 padding: 0.75rem 0;
                 margin: 4px 0.6rem;
                 gap: 0;
             }
-            body.sidebar-collapsed .nav-item a .nav-text,
-            html.sidebar-collapsed-preload body .nav-item a .nav-text {
+            .sidebar-collapsed .nav-item a .nav-text {
                 display: none !important;
             }
-            body.sidebar-collapsed .nav-item a i,
-            html.sidebar-collapsed-preload body .nav-item a i {
+            .sidebar-collapsed .nav-item a i {
                 font-size: 1.22rem;
                 margin: 0;
                 width: auto;
             }
-            body.sidebar-collapsed .nav-item a.active::before,
-            html.sidebar-collapsed-preload body .nav-item a.active::before {
+            .sidebar-collapsed .nav-item a.active::before {
                 left: -0.6rem;
             }
 
             /* Sleek Floating Tooltip on Hover in Collapsed mode */
-            body.sidebar-collapsed .nav-item a:hover::after {
+            .sidebar-collapsed .nav-item a:hover::after {
                 content: attr(data-title);
                 position: absolute;
                 left: calc(100% + 12px);
@@ -695,7 +677,7 @@
                 pointer-events: none;
                 animation: tooltipFadeIn 0.15s ease;
             }
-            body.sidebar-collapsed .nav-item a:hover::before {
+            .sidebar-collapsed .nav-item a:hover::before {
                 content: '';
                 position: absolute;
                 left: calc(100% + 6px);
@@ -712,25 +694,21 @@
             }
 
             /* Logout Button in Collapsed mode */
-            body.sidebar-collapsed .sidebar-footer,
-            html.sidebar-collapsed-preload body .sidebar-footer {
+            .sidebar-collapsed .sidebar-footer {
                 padding: 0.75rem 0.5rem;
             }
-            body.sidebar-collapsed .btn-logout,
-            html.sidebar-collapsed-preload body .btn-logout {
+            .sidebar-collapsed .btn-logout {
                 padding: 0.65rem 0;
                 justify-content: center;
             }
-            body.sidebar-collapsed .btn-logout .logout-text,
-            html.sidebar-collapsed-preload body .btn-logout .logout-text {
+            .sidebar-collapsed .btn-logout .logout-text {
                 display: none !important;
             }
-            body.sidebar-collapsed .btn-logout i,
-            html.sidebar-collapsed-preload body .btn-logout i {
+            .sidebar-collapsed .btn-logout i {
                 font-size: 1.15rem;
                 margin: 0;
             }
-            body.sidebar-collapsed .btn-logout:hover::after {
+            .sidebar-collapsed .btn-logout:hover::after {
                 content: 'ออกจากระบบ';
                 position: absolute;
                 left: calc(100% + 12px);
@@ -758,6 +736,7 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            transition: margin-left 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         /* Topbar - Glassmorphic */
@@ -1540,6 +1519,11 @@
             transform: translateY(-1px);
         }
 
+        .sidebar-toggle:active {
+            transform: scale(0.92);
+            background: #d5d5ee;
+        }
+
         /* Sidebar Overlay */
         .sidebar-overlay {
             display: none;
@@ -1939,15 +1923,30 @@
             const sidebar = document.querySelector('.sidebar');
             const overlay = document.getElementById('sidebarOverlay');
 
+            // Synchronize body and html class on load
+            const isSavedCollapsed = localStorage.getItem('sidebar_collapsed') === '1';
+            if (isSavedCollapsed && window.innerWidth > 768) {
+                document.body.classList.add('sidebar-collapsed');
+                document.documentElement.classList.add('sidebar-collapsed');
+            } else {
+                document.body.classList.remove('sidebar-collapsed');
+                document.documentElement.classList.remove('sidebar-collapsed');
+            }
+            document.documentElement.classList.remove('sidebar-collapsed-preload');
+
             if (toggleBtn && sidebar) {
-                toggleBtn.addEventListener('click', function() {
+                toggleBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
                     if (window.innerWidth <= 768) {
                         sidebar.classList.toggle('show');
                         if (overlay) overlay.classList.toggle('show');
                     } else {
-                        document.body.classList.toggle('sidebar-collapsed');
-                        const isCollapsed = document.body.classList.contains('sidebar-collapsed');
-                        localStorage.setItem('sidebar_collapsed', isCollapsed ? '1' : '0');
+                        const isCurrentlyCollapsed = document.body.classList.contains('sidebar-collapsed') || document.documentElement.classList.contains('sidebar-collapsed');
+                        const willCollapse = !isCurrentlyCollapsed;
+                        document.body.classList.toggle('sidebar-collapsed', willCollapse);
+                        document.documentElement.classList.toggle('sidebar-collapsed', willCollapse);
+                        localStorage.setItem('sidebar_collapsed', willCollapse ? '1' : '0');
                     }
                 });
 
