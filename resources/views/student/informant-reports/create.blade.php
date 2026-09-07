@@ -213,33 +213,7 @@
     box-shadow: 0 4px 14px rgba(59, 130, 246, 0.15) !important;
 }
 
-.suggestion-chip {
-    padding: 0.35rem 0.75rem;
-    font-size: 0.78rem;
-    font-weight: 500;
-    border-radius: 20px;
-    border: 1px solid #cbd5e1;
-    background-color: #f1f5f9;
-    color: #334155;
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.3rem;
-    line-height: 1.3;
-}
 
-.suggestion-chip:hover {
-    background-color: #0f172a !important;
-    color: #ffffff !important;
-    border-color: #0f172a !important;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.25);
-}
-
-.suggestion-chip:active {
-    transform: translateY(0);
-}
 </style>
 
 @push('scripts')
@@ -327,11 +301,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const input = document.getElementById('StudentID');
     const feedback = document.getElementById('student-id-feedback');
 
-    // Title Suggestion Handling
+    // ── Title Dropdown Management ──────────────────────────────
     const categorySelect = document.getElementById('Category');
-    const titleInput = document.getElementById('Title');
-    const suggestionsContainer = document.getElementById('titleSuggestionsContainer');
-    const suggestionChips = document.getElementById('suggestionChips');
+    const titleSelect = document.getElementById('TitleSelect');
+    const customTitleContainer = document.getElementById('customTitleContainer');
+    const customTitleInput = document.getElementById('CustomTitleInput');
+    const hiddenTitleInput = document.getElementById('Title');
 
     const topicSuggestions = {
         'การแต่งกายและทรงผม': [
@@ -375,40 +350,113 @@ document.addEventListener('DOMContentLoaded', function() {
         ]
     };
 
-    function updateTitleSuggestions() {
-        if (!categorySelect || !suggestionsContainer || !suggestionChips) return;
-        const selectedCat = categorySelect.value;
-        const list = topicSuggestions[selectedCat] || [];
+    const initialTitle = @json(old('Title', ''));
 
-        if (list.length === 0) {
-            suggestionsContainer.style.display = 'none';
-            return;
+    window.syncTitleValue = function() {
+        if (!titleSelect || !hiddenTitleInput) return;
+        if (titleSelect.value === '__custom__') {
+            hiddenTitleInput.value = customTitleInput ? customTitleInput.value.trim() : '';
+        } else {
+            hiddenTitleInput.value = titleSelect.value.trim();
+        }
+    };
+
+    function renderTitleDropdown() {
+        if (!titleSelect) return;
+        const selectedCat = categorySelect ? categorySelect.value : '';
+        const currentVal = (hiddenTitleInput && hiddenTitleInput.value) ? hiddenTitleInput.value : initialTitle;
+
+        titleSelect.innerHTML = '';
+
+        if (selectedCat && topicSuggestions[selectedCat]) {
+            // Category chosen: show direct options for that category
+            const defaultOpt = document.createElement('option');
+            defaultOpt.value = '';
+            defaultOpt.textContent = `-- เลือกหัวข้อเบาะแส (${selectedCat}) --`;
+            titleSelect.appendChild(defaultOpt);
+
+            topicSuggestions[selectedCat].forEach(topic => {
+                const opt = document.createElement('option');
+                opt.value = topic;
+                opt.textContent = topic;
+                if (topic === currentVal) opt.selected = true;
+                titleSelect.appendChild(opt);
+            });
+        } else {
+            // No category chosen: show categorized optgroups
+            const defaultOpt = document.createElement('option');
+            defaultOpt.value = '';
+            defaultOpt.textContent = '-- เลือกหัวข้อเบาะแส --';
+            titleSelect.appendChild(defaultOpt);
+
+            Object.keys(topicSuggestions).forEach(cat => {
+                const optGroup = document.createElement('optgroup');
+                optGroup.label = cat;
+                topicSuggestions[cat].forEach(topic => {
+                    const opt = document.createElement('option');
+                    opt.value = topic;
+                    opt.textContent = topic;
+                    opt.dataset.category = cat;
+                    if (topic === currentVal) opt.selected = true;
+                    optGroup.appendChild(opt);
+                });
+                titleSelect.appendChild(optGroup);
+            });
         }
 
-        suggestionChips.innerHTML = '';
-        list.forEach(item => {
-            const chip = document.createElement('button');
-            chip.type = 'button';
-            chip.className = 'suggestion-chip';
-            chip.innerHTML = `<i class="fas fa-plus-circle" style="font-size:0.7rem; opacity:0.6;"></i> ${item}`;
+        // Add custom option at the end
+        const customOpt = document.createElement('option');
+        customOpt.value = '__custom__';
+        customOpt.textContent = '✏️ อื่นๆ (พิมพ์ระบุหัวข้อเอง...)';
+        titleSelect.appendChild(customOpt);
 
-            chip.addEventListener('click', function() {
-                if (titleInput) {
-                    titleInput.value = item;
-                    titleInput.focus();
-                }
-            });
-
-            suggestionChips.appendChild(chip);
+        // Check if currentVal is custom
+        let isKnownTopic = false;
+        Object.values(topicSuggestions).forEach(list => {
+            if (list.includes(currentVal)) isKnownTopic = true;
         });
 
-        suggestionsContainer.style.display = 'flex';
+        if (currentVal && !isKnownTopic) {
+            customOpt.selected = true;
+            if (customTitleInput) customTitleInput.value = currentVal;
+            if (customTitleContainer) customTitleContainer.style.display = 'block';
+        } else if (titleSelect.value === '__custom__') {
+            if (customTitleContainer) customTitleContainer.style.display = 'block';
+        } else {
+            if (customTitleContainer) customTitleContainer.style.display = 'none';
+        }
+
+        window.syncTitleValue();
+    }
+
+    if (titleSelect) {
+        titleSelect.addEventListener('change', function() {
+            if (this.value === '__custom__') {
+                if (customTitleContainer) customTitleContainer.style.display = 'block';
+                if (customTitleInput) customTitleInput.focus();
+            } else {
+                if (customTitleContainer) customTitleContainer.style.display = 'none';
+                // Auto-sync category if selected from optgroup when category was empty
+                const selectedOpt = this.options[this.selectedIndex];
+                if (selectedOpt && selectedOpt.dataset && selectedOpt.dataset.category && categorySelect && !categorySelect.value) {
+                    categorySelect.value = selectedOpt.dataset.category;
+                }
+            }
+            window.syncTitleValue();
+        });
+    }
+
+    if (customTitleInput) {
+        customTitleInput.addEventListener('input', window.syncTitleValue);
     }
 
     if (categorySelect) {
-        categorySelect.addEventListener('change', updateTitleSuggestions);
-        updateTitleSuggestions();
+        categorySelect.addEventListener('change', function() {
+            renderTitleDropdown();
+        });
     }
+
+    renderTitleDropdown();
 
     if (input && feedback) {
         function checkStudentIds() {
@@ -568,11 +616,49 @@ window.confirmAndSubmitForm = function() {
     const reportForm = document.getElementById('informantReportForm');
     if (!reportForm) return;
 
+    if (window.syncTitleValue) {
+        window.syncTitleValue();
+    }
+
+    const titleSelectEl = document.getElementById('TitleSelect');
+    const customTitleInputEl = document.getElementById('CustomTitleInput');
     const titleInput = document.getElementById('Title');
     const categorySelect = document.getElementById('Category');
     const descInput = document.getElementById('Description');
     const evidenceInputEl = document.getElementById('evidence');
     const studentIdInput = document.getElementById('StudentID');
+
+    if (titleSelectEl && !titleSelectEl.value) {
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                icon: 'warning',
+                title: 'กรุณาเลือกหัวข้อเบาะแส',
+                text: 'โปรดเลือกหัวข้อเบาะแสจากรายการ หรือเลือกอื่นๆ เพื่อระบุหัวข้อเอง',
+                confirmButtonText: 'ตกลง',
+                confirmButtonColor: '#3b82f6'
+            }).then(() => titleSelectEl.focus());
+        } else {
+            alert('โปรดเลือกหัวข้อเบาะแส');
+            titleSelectEl.focus();
+        }
+        return false;
+    }
+
+    if (titleSelectEl && titleSelectEl.value === '__custom__' && (!customTitleInputEl || !customTitleInputEl.value.trim())) {
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                icon: 'warning',
+                title: 'กรุณาระบุหัวข้อเบาะแส',
+                text: 'คุณเลือก "อื่นๆ" โปรดพิมพ์ระบุหัวข้อเบาะแสของคุณ',
+                confirmButtonText: 'ตกลง',
+                confirmButtonColor: '#3b82f6'
+            }).then(() => customTitleInputEl && customTitleInputEl.focus());
+        } else {
+            alert('โปรดพิมพ์ระบุหัวข้อเบาะแส');
+            if (customTitleInputEl) customTitleInputEl.focus();
+        }
+        return false;
+    }
 
     const title = titleInput ? titleInput.value.trim() : '';
     const category = categorySelect ? categorySelect.value.trim() : '';
