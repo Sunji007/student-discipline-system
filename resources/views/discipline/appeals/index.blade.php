@@ -9,23 +9,24 @@
         <h2>พิจารณาคำอุทธรณ์</h2>
         <p>ตรวจสอบและพิจารณาคำขออุทธรณ์จากนักเรียน</p>
     </div>
-    <div class="filter-tab-bar">
-        <a href="{{ route('discipline.appeals.index') }}"
-           class="filter-tab-item {{ !request('status') ? 'active' : '' }}">
-            <i class="fas fa-list"></i> ทั้งหมด
-        </a>
-        <a href="{{ route('discipline.appeals.index', ['status' => 'รอตรวจสอบ']) }}"
-           class="filter-tab-item active-gold {{ request('status') === 'รอตรวจสอบ' ? 'active' : '' }}">
-            <i class="fas fa-clock"></i> รอตรวจสอบ
-        </a>
-        <a href="{{ route('discipline.appeals.index', ['status' => 'คืนคะแนน']) }}"
-           class="filter-tab-item active-success {{ request('status') === 'คืนคะแนน' ? 'active' : '' }}">
-            <i class="fas fa-check-circle"></i> คืนคะแนน
-        </a>
-        <a href="{{ route('discipline.appeals.index', ['status' => 'ยกเลิกคำร้อง']) }}"
-           class="filter-tab-item active-danger {{ request('status') === 'ยกเลิกคำร้อง' ? 'active' : '' }}">
-            <i class="fas fa-times-circle"></i> ยกเลิกคำร้อง
-        </a>
+    <div class="filter-dropdown-wrap">
+        <label class="filter-dropdown-label" for="discAppealStatusFilter">
+            <i class="fas fa-filter"></i> ตัวเลือกสถานะ:
+        </label>
+        <select id="discAppealStatusFilter" class="filter-dropdown-select" onchange="if(this.value){ window.location.href = this.value; }">
+            <option value="{{ route('discipline.appeals.index') }}" {{ !request('status') ? 'selected' : '' }}>
+                📋 ทั้งหมด
+            </option>
+            <option value="{{ route('discipline.appeals.index', ['status' => 'รอตรวจสอบ']) }}" {{ request('status') === 'รอตรวจสอบ' ? 'selected' : '' }}>
+                ⏳ รอตรวจสอบ
+            </option>
+            <option value="{{ route('discipline.appeals.index', ['status' => 'คืนคะแนน']) }}" {{ request('status') === 'คืนคะแนน' ? 'selected' : '' }}>
+                ✅ คืนคะแนน
+            </option>
+            <option value="{{ route('discipline.appeals.index', ['status' => 'ยกเลิกคำร้อง']) }}" {{ request('status') === 'ยกเลิกคำร้อง' ? 'selected' : '' }}>
+                ❌ ยกเลิกคำร้อง
+            </option>
+        </select>
     </div>
 </div>
 

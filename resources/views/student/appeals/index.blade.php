@@ -95,24 +95,25 @@
             @endif
         </div>
 
-        {{-- Standardized Filter Tabs --}}
-        <div class="filter-tab-bar filter-tab-bar-sm">
-            <a href="{{ route('student.appeals.index') }}"
-               class="filter-tab-item {{ !request('status') ? 'active' : '' }}">
-                ทั้งหมด ({{ $stats['total'] }})
-            </a>
-            <a href="{{ route('student.appeals.index', ['status' => 'คืนคะแนน']) }}"
-               class="filter-tab-item active-success {{ request('status') === 'คืนคะแนน' ? 'active' : '' }}">
-                <i class="fas fa-check-circle"></i> คืนคะแนน ({{ $stats['restored'] }})
-            </a>
-            <a href="{{ route('student.appeals.index', ['status' => 'รอพิจารณา']) }}"
-               class="filter-tab-item active-gold {{ in_array(request('status'), ['รอพิจารณา', 'รอตรวจสอบ']) ? 'active' : '' }}">
-                <i class="fas fa-clock"></i> รอพิจารณา ({{ $stats['pending'] }})
-            </a>
-            <a href="{{ route('student.appeals.index', ['status' => 'ยกเลิกคำร้อง']) }}"
-               class="filter-tab-item active-danger {{ in_array(request('status'), ['ยกเลิกคำร้อง', 'ยกเลิกคำร้องยื่นอุทธรณ์']) ? 'active' : '' }}">
-                <i class="fas fa-times-circle"></i> ยกเลิกคำร้อง ({{ $stats['cancelled'] }})
-            </a>
+        {{-- Standardized Filter Dropdown --}}
+        <div class="filter-dropdown-wrap">
+            <label class="filter-dropdown-label" for="appealStatusFilter">
+                <i class="fas fa-filter"></i> ตัวเลือกสถานะ:
+            </label>
+            <select id="appealStatusFilter" class="filter-dropdown-select" onchange="if(this.value){ window.location.href = this.value; }">
+                <option value="{{ route('student.appeals.index') }}" {{ !request('status') ? 'selected' : '' }}>
+                    📋 ทั้งหมด ({{ $stats['total'] }})
+                </option>
+                <option value="{{ route('student.appeals.index', ['status' => 'คืนคะแนน']) }}" {{ request('status') === 'คืนคะแนน' ? 'selected' : '' }}>
+                    ✅ คืนคะแนน ({{ $stats['restored'] }})
+                </option>
+                <option value="{{ route('student.appeals.index', ['status' => 'รอพิจารณา']) }}" {{ in_array(request('status'), ['รอพิจารณา', 'รอตรวจสอบ']) ? 'selected' : '' }}>
+                    ⏳ รอพิจารณา ({{ $stats['pending'] }})
+                </option>
+                <option value="{{ route('student.appeals.index', ['status' => 'ยกเลิกคำร้อง']) }}" {{ in_array(request('status'), ['ยกเลิกคำร้อง', 'ยกเลิกคำร้องยื่นอุทธรณ์']) ? 'selected' : '' }}>
+                    ❌ ยกเลิกคำร้อง ({{ $stats['cancelled'] }})
+                </option>
+            </select>
         </div>
     </div>
 

@@ -10,20 +10,22 @@
 </div>
 
 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem; flex-wrap:wrap; gap:1rem;">
-    <!-- Filter Tabs -->
-    <div class="filter-tab-bar">
-        <a href="{{ route('discipline.behavior-rules.index') }}" 
-           class="filter-tab-item {{ !request('type') ? 'active' : '' }}">
-           <i class="fas fa-list"></i> รายการทั้งหมด
-        </a>
-        <a href="{{ route('discipline.behavior-rules.index', ['type' => 'เพิ่มคะแนน']) }}" 
-           class="filter-tab-item active-success {{ request('type') === 'เพิ่มคะแนน' ? 'active' : '' }}">
-           <i class="fas fa-plus-circle"></i> เพิ่มคะแนน
-        </a>
-        <a href="{{ route('discipline.behavior-rules.index', ['type' => 'ตัดคะแนน']) }}" 
-           class="filter-tab-item active-danger {{ request('type') === 'ตัดคะแนน' ? 'active' : '' }}">
-           <i class="fas fa-minus-circle"></i> ตัดคะแนน
-        </a>
+    <!-- Standardized Filter Dropdown -->
+    <div class="filter-dropdown-wrap">
+        <label class="filter-dropdown-label" for="ruleTypeFilter">
+            <i class="fas fa-filter"></i> ตัวเลือกประเภท:
+        </label>
+        <select id="ruleTypeFilter" class="filter-dropdown-select" onchange="if(this.value){ window.location.href = this.value; }">
+            <option value="{{ route('discipline.behavior-rules.index') }}" {{ !request('type') ? 'selected' : '' }}>
+                📋 รายการทั้งหมด
+            </option>
+            <option value="{{ route('discipline.behavior-rules.index', ['type' => 'เพิ่มคะแนน']) }}" {{ request('type') === 'เพิ่มคะแนน' ? 'selected' : '' }}>
+                ➕ เพิ่มคะแนน
+            </option>
+            <option value="{{ route('discipline.behavior-rules.index', ['type' => 'ตัดคะแนน']) }}" {{ request('type') === 'ตัดคะแนน' ? 'selected' : '' }}>
+                ➖ ตัดคะแนน
+            </option>
+        </select>
     </div>
     
     <!-- Add Button -->
