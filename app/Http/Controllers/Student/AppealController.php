@@ -10,13 +10,21 @@ use Illuminate\Support\Str;
 
 class AppealController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $studentId = auth()->user()->student->StudentID;
         $appeals = Appeal::with(['behaviorRecord.rule'])
             ->where('StudentID', $studentId)
+            ->when($request->filled('status'), function($q) use ($request) {
+                if (in_array($request->status, ['ยกเลิกคำร้อง', 'ยกเลิกคำร้องยื่นอุทธรณ์'])) {
+                    $q->whereIn('Status', ['ยกเลิกคำร้อง', 'ยกเลิกคำร้องยื่นอุทธรณ์']);
+                } else {
+                    $q->where('Status', $request->status);
+                }
+            })
             ->orderBy('AppealDate', 'desc')
-            ->paginate(15);
+            ->paginate(15)
+            ->withQueryString();
 
         return view('student.appeals.index', compact('appeals'));
     }
