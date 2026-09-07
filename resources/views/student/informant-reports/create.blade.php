@@ -51,15 +51,17 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label" for="StudentID">รหัสนักเรียนที่เกี่ยวข้อง <span style="font-weight:400; color:var(--text-muted); font-size:0.8rem;">(ถ้ามี)</span></label>
+                    <label class="form-label" for="StudentID">
+                        <i class="fas fa-user-tag" style="color:var(--gold); margin-right:0.25rem;"></i> รูปพรรณสัณฐาน / ลักษณะ / รหัสนักเรียน <span style="font-weight:400; color:var(--text-muted); font-size:0.8rem;">(ถ้ามี — ไม่บังคับ)</span>
+                    </label>
                     <input type="text" 
                            name="StudentID" 
                            id="StudentID" 
                            class="form-control @error('StudentID') is-invalid @enderror" 
-                           placeholder="กรอกรหัสนักเรียน เช่น 6950201 (หากไม่ทราบสามารถเว้นว่างได้)" 
+                           placeholder="ใส่รูปพรรณสัณฐาน ลักษณะ (เช่น ตัวสูง ผิวสองสี เสื้อ ม.ปลาย) หรือรหัสนักเรียน (หรือเว้นว่างได้)" 
                            value="{{ old('StudentID') }}">
-                    <small style="color:var(--text-muted); display:block; margin-top:0.35rem; font-size:0.78rem;">
-                        <i class="fas fa-info-circle" style="color:var(--gold);"></i> หากมีหลายคน สามารถกรอกรหัสนักเรียนคั่นด้วยเครื่องหมายจุลภาค (,) เช่น <code>6950201, 6940201</code> (หรือเว้นว่างได้)
+                    <small style="color:var(--text-muted); display:block; margin-top:0.35rem; font-size:0.78rem; line-height:1.4;">
+                        <i class="fas fa-info-circle" style="color:var(--gold);"></i> <strong>ไม่จำเป็นต้องใส่รหัสนักเรียน</strong> สามารถระบุเฉพาะ<strong>รูปพรรณสัณฐาน ลักษณะ รูปร่าง จุดสังเกต</strong> หรือหากทราบรหัสนักเรียนก็สามารถใส่ได้ (หากมีหลายคนคั่นด้วยเครื่องหมายจุลภาค <code>,</code> หรือเว้นว่างได้)
                     </small>
                     <div id="student-id-feedback" style="margin-top:0.4rem;"></div>
                     @error('StudentID')<div class="invalid-feedback">{{ $message }}</div>@enderror
@@ -406,37 +408,49 @@ document.addEventListener('DOMContentLoaded', function() {
             const val = input.value.trim();
             if (!val) {
                 feedback.innerHTML = '';
+                input.classList.remove('is-invalid');
                 return;
             }
-            const ids = val.split(/[\s,;]+/).map(i => i.trim()).filter(i => i.length > 0);
-            if (ids.length === 0) {
+            const tokens = val.split(/[\s,;]+/).map(i => i.trim()).filter(i => i.length > 0);
+            if (tokens.length === 0) {
                 feedback.innerHTML = '';
+                input.classList.remove('is-invalid');
                 return;
             }
 
             const myStudentId = "{{ auth()->user()->student?->StudentID }}";
             let html = '';
-            let hasError = false;
-            ids.forEach(id => {
-                if (myStudentId && id === myStudentId) {
-                    hasError = true;
+            let hasSelfError = false;
+            let matchedStudents = [];
+            let otherWords = [];
+
+            tokens.forEach(tok => {
+                if (myStudentId && tok === myStudentId) {
+                    hasSelfError = true;
                     html += `<div style="display:inline-flex; align-items:center; gap:0.3rem; background:rgba(239,68,68,0.1); color:#dc2626; border:1px solid rgba(239,68,68,0.25); padding:0.25rem 0.65rem; border-radius:20px; font-size:0.8rem; margin-right:0.35rem; margin-bottom:0.35rem; font-weight:600;">
-                        <i class="fas fa-exclamation-triangle" style="color:#ef4444;"></i> ไม่สามารถระบุรหัสนักเรียนของตนเองได้ (${id})
+                        <i class="fas fa-exclamation-triangle" style="color:#ef4444;"></i> ไม่สามารถระบุรหัสนักเรียนของตนเองได้ (${tok})
                     </div>`;
-                } else if (studentMap[id]) {
-                    const st = studentMap[id];
+                } else if (studentMap[tok]) {
+                    const st = studentMap[tok];
+                    matchedStudents.push(st);
                     html += `<div style="display:inline-flex; align-items:center; gap:0.3rem; background:rgba(16,185,129,0.1); color:#047857; border:1px solid rgba(16,185,129,0.25); padding:0.25rem 0.65rem; border-radius:20px; font-size:0.8rem; margin-right:0.35rem; margin-bottom:0.35rem; font-weight:600;">
-                        <i class="fas fa-check-circle" style="color:#10b981;"></i> พบข้อมูล: ${st.id} - ${st.name} (${st.class})
+                        <i class="fas fa-check-circle" style="color:#10b981;"></i> พบรหัสนักเรียน: ${st.id} - ${st.name} (${st.class})
                     </div>`;
                 } else {
-                    hasError = true;
-                    html += `<div style="display:inline-flex; align-items:center; gap:0.3rem; background:rgba(239,68,68,0.1); color:#dc2626; border:1px solid rgba(239,68,68,0.25); padding:0.25rem 0.65rem; border-radius:20px; font-size:0.8rem; margin-right:0.35rem; margin-bottom:0.35rem; font-weight:600;">
-                        <i class="fas fa-exclamation-circle" style="color:#ef4444;"></i> ไม่พบรหัสนักเรียน: ${id} ในระบบ
-                    </div>`;
+                    otherWords.push(tok);
                 }
             });
 
-            if (hasError) {
+            // If user typed words/description instead of student IDs, show a neutral confirmation chip
+            if (otherWords.length > 0 && !hasSelfError) {
+                if (matchedStudents.length === 0) {
+                    html = `<div style="display:inline-flex; align-items:center; gap:0.3rem; background:rgba(59,130,246,0.08); color:#1d4ed8; border:1px solid rgba(59,130,246,0.2); padding:0.25rem 0.65rem; border-radius:20px; font-size:0.8rem; margin-right:0.35rem; margin-bottom:0.35rem; font-weight:500;">
+                        <i class="fas fa-user-tag" style="color:#2563eb;"></i> บันทึกเป็นข้อมูลรูปพรรณสัณฐาน / ลักษณะเด่น
+                    </div>` + html;
+                }
+            }
+
+            if (hasSelfError) {
                 input.classList.add('is-invalid');
             } else {
                 input.classList.remove('is-invalid');
@@ -562,13 +576,13 @@ window.confirmAndSubmitForm = function() {
         if (typeof Swal !== 'undefined') {
             Swal.fire({
                 icon: 'error',
-                title: 'รหัสนักเรียนไม่ถูกต้อง',
-                text: 'โปรดตรวจสอบรหัสนักเรียนที่เกี่ยวข้อง และห้ามระบุรหัสของตนเอง',
+                title: 'ไม่สามารถระบุตนเองได้',
+                text: 'ไม่สามารถระบุรหัสนักเรียนของตนเองในรายการแจ้งเบาะแสได้',
                 confirmButtonText: 'ตกลง',
                 confirmButtonColor: '#ef4444'
             });
         } else {
-            alert('โปรดตรวจสอบรหัสนักเรียนที่เกี่ยวข้อง');
+            alert('ไม่สามารถระบุรหัสนักเรียนของตนเองได้');
         }
         return false;
     }
@@ -610,11 +624,15 @@ window.confirmAndSubmitForm = function() {
             ? '<span style="color:#059669; font-weight:600;"><i class="fas fa-user-secret"></i> ปกปิดตัวตน</span>' 
             : '<span style="color:#2563eb; font-weight:600;"><i class="fas fa-user"></i> เปิดเผยตัวตน ({{ auth()->user()->FullName }})</span>';
 
+        const suspectVal = document.getElementById('StudentID')?.value?.trim();
+        const suspectText = suspectVal ? `<div style="margin-bottom:0.3rem;"><strong>🎯 ผู้เกี่ยวข้อง/รูปพรรณ:</strong> ${suspectVal}</div>` : '';
+
         Swal.fire({
             title: 'ยืนยันการส่งข้อมูลแจ้งเบาะแส',
             html: `<div style="font-size:0.9rem; color:#4b5563; line-height:1.6; text-align:left; background:#f9fafb; padding:0.85rem 1rem; border-radius:8px; border:1px solid #e5e7eb; margin-top:0.5rem;">
                      <div style="margin-bottom:0.3rem;"><strong>📌 ประเภท:</strong> ${category}</div>
                      <div style="margin-bottom:0.3rem;"><strong>📝 หัวข้อ:</strong> ${title}</div>
+                     ${suspectText}
                      <div style="margin-bottom:0.3rem;"><strong>👤 สถานะตัวตน:</strong> ${anonText}</div>
                      <div style="margin-bottom:0.3rem;"><strong>📁 ไฟล์หลักฐาน:</strong> ${fileText}</div>
                      <div style="margin-top:0.5rem; font-size:0.82rem; color:#059669; font-weight:600;">

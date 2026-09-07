@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <tr>
                     <th>หัวข้อเบาะแส</th>
                     <th>ประเภท</th>
-                    <th>นักเรียนที่เกี่ยวข้อง</th>
+                    <th>ผู้เกี่ยวข้อง / รูปพรรณสัณฐาน</th>
                     <th>การเปิดเผยตัวตน</th>
                     <th>วันที่แจ้ง</th>
                     <th>สถานะการดำเนินงาน</th>
@@ -70,11 +70,18 @@ document.addEventListener('DOMContentLoaded', function() {
                         <span class="badge badge-navy" style="font-size:0.7rem;">{{ $report->Category }}</span>
                     </td>
                     <td style="font-size:0.85rem;">
-                        @if($report->student)
-                            {{ $report->student->FullName }}
+                        @php
+                            $invList = $report->involved_students;
+                        @endphp
+                        @if($invList->count() > 0)
+                            <div>{{ $invList->pluck('FullName')->join(', ') }}</div>
                             <div style="font-size:0.75rem; color:var(--text-muted);">
-                                รหัส: {{ $report->student->StudentID }} ({{ $report->student->classroom_display }})
+                                รหัส: {{ $invList->pluck('StudentID')->join(', ') }}
                             </div>
+                        @elseif(!empty($report->StudentID))
+                            <span style="color:var(--navy); font-weight:500;" title="{{ $report->StudentID }}">
+                                <i class="fas fa-user-tag" style="color:var(--gold); font-size:0.75rem;"></i> {{ \Str::limit($report->StudentID, 40) }}
+                            </span>
                         @else
                             <span style="color:var(--text-muted); font-style:italic;">ไม่ระบุเจาะจง</span>
                         @endif
