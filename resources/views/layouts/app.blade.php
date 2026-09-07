@@ -1025,6 +1025,65 @@
         .stat-trend.down { background: rgba(189,39,67,0.08);  color: #BD2743; }
         .stat-trend.neu  { background: rgba(107,114,128,0.08); color: #6b7280; }
 
+        /* ── Clickable Filter Stat Cards ── */
+        .stat-card.stat-card-clickable {
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .stat-card.stat-card-clickable:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        }
+
+        .stat-card.stat-card-clickable.active {
+            transform: translateY(-3px);
+        }
+
+        .stat-card.stat-card-clickable.green.active {
+            border-color: #10b981;
+            box-shadow: 0 0 0 2px #10b981, 0 8px 24px rgba(16, 185, 129, 0.25);
+            background: linear-gradient(180deg, #ffffff 0%, #f0fdf4 100%);
+        }
+
+        .stat-card.stat-card-clickable.gold.active {
+            border-color: #f59e0b;
+            box-shadow: 0 0 0 2px #f59e0b, 0 8px 24px rgba(245, 158, 11, 0.25);
+            background: linear-gradient(180deg, #ffffff 0%, #fffbeb 100%);
+        }
+
+        .stat-card.stat-card-clickable.red.active {
+            border-color: #ef4444;
+            box-shadow: 0 0 0 2px #ef4444, 0 8px 24px rgba(239, 68, 68, 0.25);
+            background: linear-gradient(180deg, #ffffff 0%, #fef2f2 100%);
+        }
+
+        .stat-card.stat-card-clickable.dimmed {
+            opacity: 0.45;
+            filter: grayscale(40%);
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        /* ── Calendar Filter Styles ── */
+        .cal-day-cell {
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .cal-day-cell.dimmed {
+            opacity: 0.12 !important;
+            filter: grayscale(100%);
+            transform: scale(0.94);
+        }
+
+        .cal-day-cell.highlighted {
+            transform: scale(1.08);
+            box-shadow: 0 4px 14px rgba(0,0,0,0.14);
+            z-index: 5;
+            position: relative;
+        }
+
         /* ================================================
            TABLES
         ================================================ */
