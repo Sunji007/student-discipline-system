@@ -4,18 +4,28 @@
 @section('page-title', 'พิจารณาคำอุทธรณ์')
 
 @section('content')
-<div class="page-header" style="display:flex; align-items:center; justify-content:space-between;">
+<div class="page-header" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
     <div>
         <h2>พิจารณาคำอุทธรณ์</h2>
         <p>ตรวจสอบและพิจารณาคำขออุทธรณ์จากนักเรียน</p>
     </div>
-    <div style="display:flex; gap:0.5rem;">
-        @foreach(['','รอตรวจสอบ','คืนคะแนน','ยกเลิกคำร้อง'] as $s)
-        <a href="{{ route('discipline.appeals.index', $s ? ['status' => $s] : []) }}"
-           class="btn btn-sm {{ request('status') === $s ? 'btn-primary' : 'btn-outline' }}">
-            {{ $s ?: 'ทั้งหมด' }}
+    <div class="filter-tab-bar">
+        <a href="{{ route('discipline.appeals.index') }}"
+           class="filter-tab-item {{ !request('status') ? 'active' : '' }}">
+            <i class="fas fa-list"></i> ทั้งหมด
         </a>
-        @endforeach
+        <a href="{{ route('discipline.appeals.index', ['status' => 'รอตรวจสอบ']) }}"
+           class="filter-tab-item active-gold {{ request('status') === 'รอตรวจสอบ' ? 'active' : '' }}">
+            <i class="fas fa-clock"></i> รอตรวจสอบ
+        </a>
+        <a href="{{ route('discipline.appeals.index', ['status' => 'คืนคะแนน']) }}"
+           class="filter-tab-item active-success {{ request('status') === 'คืนคะแนน' ? 'active' : '' }}">
+            <i class="fas fa-check-circle"></i> คืนคะแนน
+        </a>
+        <a href="{{ route('discipline.appeals.index', ['status' => 'ยกเลิกคำร้อง']) }}"
+           class="filter-tab-item active-danger {{ request('status') === 'ยกเลิกคำร้อง' ? 'active' : '' }}">
+            <i class="fas fa-times-circle"></i> ยกเลิกคำร้อง
+        </a>
     </div>
 </div>
 

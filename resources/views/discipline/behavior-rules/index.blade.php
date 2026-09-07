@@ -11,20 +11,17 @@
 
 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem; flex-wrap:wrap; gap:1rem;">
     <!-- Filter Tabs -->
-    <div style="display:flex; gap:0.4rem; background:#faf8f5; padding:0.3rem; border-radius:10px; border:1px solid #ede8e0;">
+    <div class="filter-tab-bar">
         <a href="{{ route('discipline.behavior-rules.index') }}" 
-           class="btn {{ !request('type') ? 'btn-primary' : 'btn-outline' }} btn-sm" 
-           style="box-shadow:none; padding:0.5rem 1rem; {{ !request('type') ? '' : 'border-color:transparent; background:transparent;' }}">
+           class="filter-tab-item {{ !request('type') ? 'active' : '' }}">
            <i class="fas fa-list"></i> รายการทั้งหมด
         </a>
         <a href="{{ route('discipline.behavior-rules.index', ['type' => 'เพิ่มคะแนน']) }}" 
-           class="btn {{ request('type') === 'เพิ่มคะแนน' ? 'btn-success' : 'btn-outline' }} btn-sm" 
-           style="box-shadow:none; padding:0.5rem 1rem; {{ request('type') === 'เพิ่มคะแนน' ? '' : 'border-color:transparent; background:transparent;' }}">
+           class="filter-tab-item active-success {{ request('type') === 'เพิ่มคะแนน' ? 'active' : '' }}">
            <i class="fas fa-plus-circle"></i> เพิ่มคะแนน
         </a>
         <a href="{{ route('discipline.behavior-rules.index', ['type' => 'ตัดคะแนน']) }}" 
-           class="btn {{ request('type') === 'ตัดคะแนน' ? 'btn-danger' : 'btn-outline' }} btn-sm" 
-           style="box-shadow:none; padding:0.5rem 1rem; {{ request('type') === 'ตัดคะแนน' ? '' : 'border-color:transparent; background:transparent;' }}">
+           class="filter-tab-item active-danger {{ request('type') === 'ตัดคะแนน' ? 'active' : '' }}">
            <i class="fas fa-minus-circle"></i> ตัดคะแนน
         </a>
     </div>

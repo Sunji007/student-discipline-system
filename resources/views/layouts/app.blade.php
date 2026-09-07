@@ -1232,6 +1232,22 @@
             box-shadow: 0 3px 10px rgba(217, 119, 6, 0.28);
         }
 
+        .filter-tab-bar .filter-tab-item.active-blue.active {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: #ffffff;
+            box-shadow: 0 3px 10px rgba(37, 99, 235, 0.28);
+        }
+
+        .filter-tab-bar .filter-tab-item.active-pink.active {
+            background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
+            color: #ffffff;
+            box-shadow: 0 3px 10px rgba(236, 72, 153, 0.28);
+        }
+
+        .filter-tab-bar .filter-tab-item.active i {
+            color: #ffffff !important;
+        }
+
         .filter-tab-bar.filter-tab-bar-sm .filter-tab-item {
             padding: 0.35rem 0.85rem;
             font-size: 0.8rem;
