@@ -381,20 +381,22 @@
                     </button>
                 </div>
 
-                <!-- Gender Quick Filter Tabs -->
-                <div class="filter-tab-bar filter-tab-bar-sm">
-                    <a href="{{ request()->fullUrlWithQuery(['gender' => '']) }}" 
-                       class="filter-tab-item {{ empty($gender) ? 'active' : '' }}">
-                       <i class="fas fa-users"></i> ทั้งหมด
-                    </a>
-                    <a href="{{ request()->fullUrlWithQuery(['gender' => 'ชาย']) }}" 
-                       class="filter-tab-item active-blue {{ ($gender ?? '') == 'ชาย' ? 'active' : '' }}">
-                       <i class="fas fa-mars"></i> ชาย
-                    </a>
-                    <a href="{{ request()->fullUrlWithQuery(['gender' => 'หญิง']) }}" 
-                       class="filter-tab-item active-pink {{ ($gender ?? '') == 'หญิง' ? 'active' : '' }}">
-                       <i class="fas fa-venus"></i> หญิง
-                    </a>
+                <!-- Gender Quick Filter Dropdown -->
+                <div class="filter-dropdown-wrap">
+                    <label class="filter-dropdown-label" for="prayerGenderFilter">
+                        <i class="fas fa-venus-mars"></i> ตัวเลือกเพศ:
+                    </label>
+                    <select id="prayerGenderFilter" class="filter-dropdown-select" onchange="if(this.value){ window.location.href = this.value; }">
+                        <option value="{{ request()->fullUrlWithQuery(['gender' => '']) }}" {{ empty($gender) ? 'selected' : '' }}>
+                            👥 ทั้งหมด
+                        </option>
+                        <option value="{{ request()->fullUrlWithQuery(['gender' => 'ชาย']) }}" {{ ($gender ?? '') == 'ชาย' ? 'selected' : '' }}>
+                            👨 ชาย
+                        </option>
+                        <option value="{{ request()->fullUrlWithQuery(['gender' => 'หญิง']) }}" {{ ($gender ?? '') == 'หญิง' ? 'selected' : '' }}>
+                            👩 หญิง
+                        </option>
+                    </select>
                 </div>
 
                 <!-- PDF Export Link (Print View) -->
