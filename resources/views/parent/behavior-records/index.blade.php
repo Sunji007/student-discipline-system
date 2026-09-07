@@ -4,7 +4,7 @@
 @section('page-title', 'ประวัติพฤติกรรมของบุตรหลาน')
 
 @section('content')
-<div class="page-header" style="display:flex; align-items:center; justify-content:space-between;">
+<div class="page-header" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
     <div>
         <h2>ประวัติพฤติกรรม: {{ $student->FullName }}</h2>
         <p>คะแนนปัจจุบัน:
@@ -13,10 +13,19 @@
             </strong> คะแนน
         </p>
     </div>
-    <div style="display:flex; gap:0.5rem;">
-        <a href="{{ route('parent.behavior-records.index') }}" class="btn btn-sm {{ !request('type') ? 'btn-primary' : 'btn-outline' }}">ทั้งหมด</a>
-        <a href="{{ route('parent.behavior-records.index', ['type' => 'ตัดคะแนน']) }}" class="btn btn-sm {{ request('type') === 'ตัดคะแนน' ? 'btn-danger' : 'btn-outline' }}">ถูกตัดคะแนน</a>
-        <a href="{{ route('parent.behavior-records.index', ['type' => 'เพิ่มคะแนน']) }}" class="btn btn-sm {{ request('type') === 'เพิ่มคะแนน' ? 'btn-success' : 'btn-outline' }}">เพิ่มคะแนน</a>
+    <div class="filter-tab-bar">
+        <a href="{{ route('parent.behavior-records.index') }}" 
+           class="filter-tab-item {{ !request('type') ? 'active' : '' }}">
+            <i class="fas fa-list"></i> ทั้งหมด
+        </a>
+        <a href="{{ route('parent.behavior-records.index', ['type' => 'ตัดคะแนน']) }}" 
+           class="filter-tab-item active-danger {{ request('type') === 'ตัดคะแนน' ? 'active' : '' }}">
+            <i class="fas fa-minus-circle"></i> ถูกตัดคะแนน
+        </a>
+        <a href="{{ route('parent.behavior-records.index', ['type' => 'เพิ่มคะแนน']) }}" 
+           class="filter-tab-item active-success {{ request('type') === 'เพิ่มคะแนน' ? 'active' : '' }}">
+            <i class="fas fa-plus-circle"></i> เพิ่มคะแนน
+        </a>
     </div>
 </div>
 
