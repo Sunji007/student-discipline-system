@@ -69,17 +69,24 @@
             </div>
 
             <div class="form-group">
-                <label class="form-label" for="Title">หัวข้อเบาะแส <span style="color:var(--red);">*</span></label>
-                <input type="text" name="Title" id="Title" class="form-control @error('Title') is-invalid @enderror" value="{{ old('Title') }}" placeholder="กรุณาเลือกประเภทพฤติกรรมเพื่อดูหัวข้อแนะนำ หรือพิมพ์หัวข้อเอง..." required>
-                
-                {{-- Dynamic Title Suggestion Chips --}}
-                <div id="titleSuggestionsContainer" style="margin-top:0.45rem; display:none; flex-wrap:wrap; gap:0.35rem; align-items:center;">
-                    <span style="font-size:0.78rem; font-weight:600; color:var(--text-muted); margin-right:0.25rem;">
-                        <i class="fas fa-lightbulb" style="color:var(--gold);"></i> คลิกหัวข้อแนะนำ:
-                    </span>
-                    <div id="suggestionChips" style="display:inline-flex; flex-wrap:wrap; gap:0.35rem;"></div>
+                <label class="form-label" for="TitleSelect">
+                    <i class="fas fa-tag" style="color:var(--gold); margin-right:0.25rem;"></i> หัวข้อเบาะแส <span style="color:var(--red);">*</span>
+                </label>
+                <select id="TitleSelect" class="form-control @error('Title') is-invalid @enderror" required>
+                    <option value="">-- กรุณาเลือกหัวข้อเบาะแส --</option>
+                </select>
+
+                {{-- Custom input if user selects 'อื่นๆ (พิมพ์ระบุหัวข้อเอง...)' --}}
+                <div id="customTitleContainer" style="display:none; margin-top:0.6rem;">
+                    <input type="text" id="CustomTitleInput" class="form-control" placeholder="พิมพ์ระบุหัวข้อเบาะแสของคุณที่นี่...">
+                    <small style="color:var(--text-muted); font-size:0.78rem; margin-top:0.3rem; display:block;">
+                        <i class="fas fa-pencil-alt" style="color:var(--gold);"></i> ระบุหัวข้อเบาะแสที่ต้องการแจ้งให้ฝ่ายปกครองทราบ
+                    </small>
                 </div>
-                @error('Title')<div class="invalid-feedback">{{ $message }}</div>@enderror
+
+                {{-- Hidden input holding the actual Title value sent in form --}}
+                <input type="hidden" name="Title" id="Title" value="{{ old('Title') }}">
+                @error('Title')<div class="invalid-feedback" style="display:block;">{{ $message }}</div>@enderror
             </div>
 
             <div class="form-group">
