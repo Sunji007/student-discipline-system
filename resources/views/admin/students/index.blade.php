@@ -13,9 +13,6 @@
         <a href="{{ route('admin.students.import') }}" class="btn btn-outline" style="display:inline-flex; align-items:center; gap:0.4rem; font-weight:600; color:#10b981; border-color:#10b981;">
             <i class="fas fa-file-excel"></i> นำเข้าไฟล์ Excel / CSV
         </a>
-        <a href="{{ route('admin.students.create') }}" class="btn btn-primary" style="display:inline-flex; align-items:center; gap:0.4rem; font-weight:600;">
-            <i class="fas fa-plus"></i> เพิ่มนักเรียนใหม่
-        </a>
     </div>
 </div>
 
