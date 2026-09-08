@@ -563,7 +563,7 @@
                             <span>ตั้งเป็น <strong>ภาคเรียนปัจจุบัน (Active)</strong> ทันที</span>
                         </label>
                         <button type="submit" class="btn btn-primary" style="font-size: 0.85rem; padding: 0.45rem 1.25rem; border-radius: 8px; display: inline-flex; align-items: center; gap: 0.4rem;">
-                            <i class="fas fa-save"></i> บันทึกปีการศึกษา
+                            <i class="fas fa-save"></i> บันทึก
                         </button>
                     </div>
                 </form>
