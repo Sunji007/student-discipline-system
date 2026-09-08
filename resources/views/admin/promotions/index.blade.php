@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'ระบบเลื่อนชั้นปีนักเรียน — ผู้ดูแลระบบ')
-@section('page-title', 'ระบบเลื่อนชั้นปีนักเรียน')
+@section('title', 'ระบบเลื่อนชั้นปีการศึกษา — ผู้ดูแลระบบ')
+@section('page-title', 'ระบบเลื่อนชั้นปีการศึกษา')
 
 @push('styles')
 <style>
@@ -202,7 +202,7 @@
         <div>
             <h2 style="margin: 0 0 0.4rem 0; font-size: 1.4rem; display: flex; align-items: center; gap: 0.6rem;">
                 <i class="fas fa-layer-group" style="color: #fbbf24; margin-right: 0.25rem;"></i>
-                <span>ระบบจัดการเลื่อนชั้นปีนักเรียน (Student Grade Promotion)</span>
+                <span>ระบบจัดการเลื่อนชั้นปีการศึกษา (Academic Year Promotion)</span>
             </h2>
             <p style="margin: 0; opacity: 0.9; font-size: 0.88rem;">
                 เครื่องมือปรับระดับชั้นและห้องเรียนแบบกลุ่ม สำหรับเตรียมความพร้อมขึ้นปีการศึกษาใหม่
@@ -452,7 +452,7 @@
                         ยกเลิก
                     </a>
                     <button type="button" class="btn btn-primary" style="padding: 0.6rem 1.5rem; font-size: 0.95rem; font-weight: 700; background: #1e1b4b; border-color: #1e1b4b;" onclick="openConfirmModal()">
-                        <i class="fas fa-layer-group" style="margin-right: 0.35rem; color: #fbbf24;"></i> ดำเนินการเลื่อนชั้นปี
+                        <i class="fas fa-layer-group" style="margin-right: 0.35rem; color: #fbbf24;"></i> ดำเนินการเลื่อนชั้นปีการศึกษา
                     </button>
                 </div>
             </div>
@@ -465,7 +465,7 @@
     <div style="background: #fff; border-radius: 12px; width: 100%; max-width: 480px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2); overflow: hidden; animation: modalFadeIn 0.2s ease-out;">
         <div style="background: #1e1b4b; color: #fff; padding: 1.25rem 1.5rem; display: flex; align-items: center; justify-content: space-between;">
             <h4 style="margin: 0; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem;">
-                <i class="fas fa-exclamation-triangle" style="color: #fbbf24;"></i> ยืนยันการเลื่อนชั้นปี
+                <i class="fas fa-exclamation-triangle" style="color: #fbbf24;"></i> ยืนยันการเลื่อนชั้นปีการศึกษา
             </h4>
             <button type="button" onclick="closeConfirmModal()" style="background: none; border: none; color: #fff; font-size: 1.2rem; cursor: pointer; opacity: 0.8;">&times;</button>
         </div>

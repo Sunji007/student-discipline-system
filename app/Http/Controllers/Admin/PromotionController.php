@@ -158,7 +158,7 @@ class PromotionController extends Controller
 
             DB::commit();
 
-            $summaryMsg = "ดำเนินการเลื่อนชั้นปีสำเร็จ!";
+            $summaryMsg = "ดำเนินการเลื่อนชั้นปีการศึกษาสำเร็จ!";
             $details = [];
             if ($promotedCount > 0) $details[] = "เลื่อนชั้นไปยัง {$targetRoom}: {$promotedCount} คน";
             if ($graduatedCount > 0) $details[] = "สำเร็จการศึกษา: {$graduatedCount} คน";
@@ -175,7 +175,7 @@ class PromotionController extends Controller
         } catch (\Throwable $e) {
             DB::rollBack();
             return redirect()->back()
-                ->with('error', 'เกิดข้อผิดพลาดในการเลื่อนชั้นปี: ' . $e->getMessage());
+                ->with('error', 'เกิดข้อผิดพลาดในการเลื่อนชั้นปีการศึกษา: ' . $e->getMessage());
         }
     }
 }

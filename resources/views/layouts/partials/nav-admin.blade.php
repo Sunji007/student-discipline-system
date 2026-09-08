@@ -27,8 +27,8 @@
     </a>
 </div>
 <div class="nav-item">
-    <a href="{{ route('admin.promotions.index') }}" class="{{ request()->routeIs('admin.promotions.*') ? 'active' : '' }}" data-title="เลื่อนชั้นปีนักเรียน">
-        <i class="fas fa-layer-group"></i> <span class="nav-text">เลื่อนชั้นปีนักเรียน</span>
+    <a href="{{ route('admin.promotions.index') }}" class="{{ request()->routeIs('admin.promotions.*') ? 'active' : '' }}" data-title="เลื่อนชั้นปีการศึกษา">
+        <i class="fas fa-layer-group"></i> <span class="nav-text">เลื่อนชั้นปีการศึกษา</span>
     </a>
 </div>
 @endif
