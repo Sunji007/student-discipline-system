@@ -109,8 +109,11 @@ class AttendanceController extends Controller
             ];
         }
 
+        $deductionService = app(\App\Services\AttendanceDeductionService::class);
+        $deductionStats = $deductionService->calculateAttendanceStats($student->StudentID, $selectedSemesterId);
+
         return view('student.attendance.index', compact(
-            'student', 'records', 'month', 'daysInMonth', 'year', 'mon', 'summary', 'monthSummary', 'monthlyBreakdown'
+            'student', 'records', 'month', 'daysInMonth', 'year', 'mon', 'summary', 'monthSummary', 'monthlyBreakdown', 'deductionStats'
         ));
     }
 }
