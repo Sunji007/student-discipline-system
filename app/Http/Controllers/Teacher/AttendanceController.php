@@ -45,18 +45,44 @@ class AttendanceController extends Controller
             'attendance.*'=> 'required|in:มา,สาย,ขาด',
         ]);
 
+        $semesterId = $this->getSelectedSemesterId();
+        $recordedBy = auth()->user()->UserID;
+
         foreach ($request->attendance as $studentId => $status) {
             Attendance::updateOrCreate(
                 ['StudentID' => $studentId, 'Date' => $request->date],
                 [
                     'AttendanceID' => (string) Str::uuid(),
-                    'RecordedBy'   => auth()->user()->UserID,
+                    'RecordedBy'   => $recordedBy,
                     'Status'       => $status,
-                    'semester_id'  => $this->getSelectedSemesterId(),
+                    'semester_id'  => $semesterId,
                 ]
             );
         }
 
-        return back()->with('success', 'บันทึกการเข้าแถวเรียบร้อยแล้ว');
+        // Auto-deduct behavior score for students reaching absence/tardiness threshold
+        $deductionService = app(\App\Services\AttendanceDeductionService::class);
+        $deductedStudentsCount = 0;
+        $totalDeductionPoints = 0;
+
+        foreach ($request->attendance as $studentId => $status) {
+            $change = $deductionService->syncStudentDeductions(
+                $studentId,
+                $semesterId,
+                $recordedBy,
+                $request->date
+            );
+            if ($change > 0) {
+                $deductedStudentsCount++;
+                $totalDeductionPoints += ($change * 5);
+            }
+        }
+
+        $msg = 'บันทึกการเข้าแถวเรียบร้อยแล้ว';
+        if ($deductedStudentsCount > 0) {
+            $msg .= " (ระบบตัดคะแนนความประพฤติอัตโนมัติแก่นักเรียนที่ขาด/สายสะสมครบเกณฑ์จำนวน {$deductedStudentsCount} คน รวม -{$totalDeductionPoints} คะแนน)";
+        }
+
+        return back()->with('success', $msg);
     }
 }

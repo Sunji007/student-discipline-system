@@ -99,6 +99,18 @@ class AppServiceProvider extends ServiceProvider
                         );
                     }
                 }
+
+                // Ensure auto deduction rule exists
+                \App\Models\BehaviorRule::firstOrCreate(
+                    ['RuleName' => \App\Services\AttendanceDeductionService::RULE_NAME],
+                    [
+                        'RuleID'        => (string) \Illuminate\Support\Str::uuid(),
+                        'RuleType'      => 'ตัดคะแนน',
+                        'Category'      => 'การเข้าเรียนและระเบียบสถานศึกษา',
+                        'ScoreModifier' => -5,
+                        'Description'   => 'ระบบตัดคะแนนอัตโนมัติเมื่อขาดเข้าแถวสะสมครบทุก 3 ครั้ง (มาสายสะสม 3 ครั้ง = ขาด 1 ครั้ง)',
+                    ]
+                );
             } catch (\Throwable $e) {
                 // Ignore
             }
