@@ -25,12 +25,7 @@
     <div class="stat-card green stat-card-clickable" data-open-modal="true" role="button" tabindex="0" title="คลิกดูสรุปสถิติการคืนคะแนน (ร้อยละ %)">
         <div class="stat-icon green"><i class="fas fa-check-circle"></i></div>
         <div class="stat-info">
-            <div style="display:flex; align-items:baseline; gap:0.45rem;">
-                <div class="stat-value">{{ $stats['restored'] }}</div>
-                <span style="font-size:0.92rem; font-weight:700; color:var(--green);">
-                    ({{ $stats['restored_rate'] }}%)
-                </span>
-            </div>
+            <div class="stat-value">{{ $stats['restored'] }}</div>
             <div class="stat-label">คืนคะแนน (อนุมัติ)</div>
             <div style="margin-top:0.45rem; display:flex; gap:0.35rem; flex-wrap:wrap; align-items:center;">
                 <span style="font-size:0.75rem; font-weight:700; color:#065f46; background:#d1fae5; padding:0.25rem 0.65rem; border-radius:6px; display:inline-flex; align-items:center; gap:0.35rem; border:1px solid #a7f3d0;">
@@ -49,12 +44,7 @@
     <div class="stat-card gold stat-card-clickable" data-open-modal="true" role="button" tabindex="0" title="คลิกดูสรุปสถิติคำร้องรอพิจารณา (ร้อยละ %)">
         <div class="stat-icon gold"><i class="fas fa-clock"></i></div>
         <div class="stat-info">
-            <div style="display:flex; align-items:baseline; gap:0.45rem;">
-                <div class="stat-value">{{ $stats['pending'] }}</div>
-                <span style="font-size:0.92rem; font-weight:700; color:var(--orange);">
-                    ({{ $stats['pending_rate'] }}%)
-                </span>
-            </div>
+            <div class="stat-value">{{ $stats['pending'] }}</div>
             <div class="stat-label">รอพิจารณา (รอตรวจสอบ)</div>
             <div style="margin-top:0.45rem;">
                 <span style="font-size:0.75rem; font-weight:700; color:#78350f; background:#fef3c7; padding:0.25rem 0.65rem; border-radius:6px; display:inline-flex; align-items:center; gap:0.35rem; border:1px solid #fde68a;">
@@ -68,12 +58,7 @@
     <div class="stat-card red stat-card-clickable" data-open-modal="true" role="button" tabindex="0" title="คลิกดูสรุปสถิติคำร้องที่ยกเลิก/ไม่อนุมัติ (ร้อยละ %)">
         <div class="stat-icon red"><i class="fas fa-times-circle"></i></div>
         <div class="stat-info">
-            <div style="display:flex; align-items:baseline; gap:0.45rem;">
-                <div class="stat-value">{{ $stats['cancelled'] }}</div>
-                <span style="font-size:0.92rem; font-weight:700; color:var(--red);">
-                    ({{ $stats['cancelled_rate'] }}%)
-                </span>
-            </div>
+            <div class="stat-value">{{ $stats['cancelled'] }}</div>
             <div class="stat-label">ยกเลิกคำร้อง</div>
             <div style="margin-top:0.45rem;">
                 <span style="font-size:0.75rem; font-weight:700; color:#7f1d1d; background:#fee2e2; padding:0.25rem 0.65rem; border-radius:6px; display:inline-flex; align-items:center; gap:0.35rem; border:1px solid #fecaca;">
