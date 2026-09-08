@@ -30,6 +30,39 @@
     </button>
 </div>
 
+{{-- Auto-Deduction Rule Notice --}}
+@if(isset($deductionStats) && $deductionStats)
+<div style="background:linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); border:1.5px solid #fde68a; border-radius:12px; padding:0.9rem 1.25rem; margin-bottom:1.25rem; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.75rem; box-shadow:var(--shadow-sm);">
+    <div style="display:flex; align-items:center; gap:0.75rem;">
+        <div style="width:38px; height:38px; border-radius:10px; background:#f59e0b; color:#fff; display:flex; align-items:center; justify-content:center; font-size:1.1rem; flex-shrink:0;">
+            <i class="fas fa-gavel"></i>
+        </div>
+        <div>
+            <div style="font-size:0.88rem; font-weight:700; color:#92400e;">
+                เกณฑ์วินัยการตัดคะแนนความประพฤติอัตโนมัติ
+            </div>
+            <div style="font-size:0.78rem; color:#b45309; margin-top:0.15rem;">
+                ขาดเข้าแถวสะสมครบทุก <strong>3 ครั้ง</strong> ตัด <strong>5 คะแนน</strong> (มาสาย 3 ครั้ง = ขาด 1 ครั้ง)
+            </div>
+        </div>
+    </div>
+    <div style="display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap;">
+        <span style="font-size:0.78rem; font-weight:700; color:#78350f; background:#fff; padding:0.35rem 0.75rem; border-radius:8px; border:1px solid #fde68a;">
+            สะสมในภาคเรียน: ขาด {{ $deductionStats['absent'] }} ครั้ง | สาย {{ $deductionStats['late'] }} ครั้ง (เทียบเท่าขาด {{ $deductionStats['effective_absent'] }} ครั้ง)
+        </span>
+        @if($deductionStats['deducted_points'] > 0)
+        <span style="font-size:0.78rem; font-weight:700; color:#991b1b; background:#fee2e2; padding:0.35rem 0.75rem; border-radius:8px; border:1px solid #fecaca;">
+            <i class="fas fa-exclamation-triangle"></i> โดนตัดคะแนนสะสม -{{ $deductionStats['deducted_points'] }} คะแนน
+        </span>
+        @else
+        <span style="font-size:0.78rem; font-weight:700; color:#166534; background:#dcfce7; padding:0.35rem 0.75rem; border-radius:8px; border:1px solid #bbf7d0;">
+            <i class="fas fa-shield-alt"></i> ยังไม่ถูกตัดคะแนน (ขาดอีก {{ $deductionStats['needed_for_next'] }} ครั้งถึงเกณฑ์)
+        </span>
+        @endif
+    </div>
+</div>
+@endif
+
 {{-- Summary Cards (Clickable to open Monthly Breakdown Modal) --}}
 <div class="stat-grid" style="margin-bottom:1.25rem;">
     <div class="stat-card green stat-card-clickable" data-open-modal="true" data-filter-type="มา" role="button" tabindex="0" title="คลิกดูสรุปการเข้าแถวแต่ละเดือน (ร้อยละ %)">
