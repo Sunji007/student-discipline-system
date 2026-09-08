@@ -55,10 +55,17 @@ erDiagram
         text Address "ที่อยู่ปัจจุบัน"
     }
 
+    departments {
+        bigint department_id PK "รหัสกลุ่มสาระ"
+        varchar_100 name UK "ชื่อกลุ่มสาระเต็ม"
+        varchar_50 short_name UK "ชื่อย่อกลุ่มสาระ"
+        varchar_2 code UK "รหัสกลุ่มสาระ 2 หลัก"
+    }
+
     teachers {
         varchar_36 TeacherID PK "รหัสครู"
         varchar_36 UserID FK "รหัสผู้ใช้ล็อกอิน"
-        varchar_100 Department "กลุ่มสาระวิชา"
+        bigint department_id FK "รหัสกลุ่มสาระวิชา"
     }
 
     teacher_advisory_rooms {
@@ -102,6 +109,7 @@ erDiagram
         varchar_36 RecordedBy FK "ผู้บันทึก (UserID)"
         varchar_50 Status "สถานะใบรายการ"
         varchar_100 Penalty "การสั่งทำทัณฑ์บน/ลงโทษ"
+        text Photo "รูปภาพหลักฐานประกอบ"
     }
 
     appeals {
@@ -112,6 +120,7 @@ erDiagram
         varchar_255 EvidencePath "ไฟล์หลักฐานอ้างอิง"
         date AppealDate "วันที่ยื่นคำร้อง"
         varchar_50 Status "สถานะตรวจสอบเรื่อง"
+        decimal RestoredPoints "คะแนนที่ได้รับคืน"
         varchar_36 ReviewerID FK "ผู้พิจารณาคำร้อง (UserID)"
         date ReviewDate "วันที่พิจารณาผล"
         text ReviewNotes "บันทึกสรุปผลผู้พิจารณา"
@@ -139,6 +148,7 @@ erDiagram
         varchar_50 Status "ความคืบหน้าแจ้งความ"
         text Remarks "บันทึกเพิ่มเติมครูวินัย"
         datetime ReportDate "วันเวลาแจ้งเบาะแส"
+        bigint semester_id FK "รหัสภาคเรียน"
     }
 
     prayer_records {
@@ -168,12 +178,23 @@ erDiagram
         boolean CanAccess "เปิด/ปิดสิทธิ์เข้าใช้"
     }
 
+    messages {
+        varchar_36 MessageID PK "รหัสข้อความ"
+        varchar_36 SenderID FK "ผู้ส่งข้อความ (UserID)"
+        varchar_36 ReceiverID FK "ผู้รับข้อความ (UserID)"
+        text Content "เนื้อหาข้อความ"
+        datetime SentDate "วันเวลาที่ส่ง"
+        boolean IsRead "สถานะการเปิดอ่าน"
+        varchar_255 AttachmentDir "ไฟล์แนบ"
+    }
+
     %% Relationships
     users ||--o| students : "has profile"
     users ||--o| teachers : "has profile"
     users ||--o| parents : "has profile"
     users ||--o| discipline_staff : "has profile"
     
+    departments ||--o{ teachers : "contains"
     teachers ||--o{ teacher_advisory_rooms : "advises"
     parents ||--o{ students : "guarantees"
     
@@ -190,6 +211,7 @@ erDiagram
     
     users ||--o{ informant_reports : "reports"
     students ||--o{ informant_reports : "is suspect in"
+    semesters ||--o{ informant_reports : "groups"
     
     students ||--o{ prayer_records : "attends"
     users ||--o{ prayer_records : "registers"
@@ -200,6 +222,9 @@ erDiagram
     
     students ||--o{ prayer_corrections : "performs"
     users ||--o{ prayer_corrections : "verifies"
+
+    users ||--o{ messages : "sends"
+    users ||--o{ messages : "receives"
 ```
 
 ---
