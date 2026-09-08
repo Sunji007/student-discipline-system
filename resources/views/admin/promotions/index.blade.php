@@ -208,11 +208,14 @@
                 เครื่องมือปรับระดับชั้นและห้องเรียนแบบกลุ่ม สำหรับเตรียมความพร้อมขึ้นปีการศึกษาใหม่
             </p>
         </div>
-        <div style="display: flex; gap: 0.5rem; align-items: center;">
+        <div style="display: flex; gap: 0.65rem; align-items: center; flex-wrap: wrap;">
             <span class="badge" style="background: rgba(255,255,255,0.15); color: #fff; padding: 0.55rem 0.95rem; font-size: 0.88rem; border: 1px solid rgba(255,255,255,0.25); border-radius: 8px; display: inline-flex; align-items: center; gap: 0.5rem;">
                 <i class="fas fa-calendar-alt" style="color: #fbbf24; font-size: 0.95rem;"></i>
                 <span>{{ $currentSemester ? "ปีการศึกษา {$currentSemester->academic_year} (ภาคเรียนที่ {$currentSemester->term})" : "ปีการศึกษา " . (now()->year + 543) }}</span>
             </span>
+            <button type="button" class="btn" onclick="openSemesterModal()" style="background: #fbbf24; color: #78350f; font-weight: 700; font-size: 0.85rem; padding: 0.55rem 1rem; border-radius: 8px; border: none; display: inline-flex; align-items: center; gap: 0.4rem; box-shadow: 0 2px 6px rgba(0,0,0,0.15); cursor: pointer; transition: all 0.2s ease;">
+                <i class="fas fa-cog"></i> จัดการปีการศึกษา / เพิ่มปีใหม่
+            </button>
         </div>
     </div>
 
