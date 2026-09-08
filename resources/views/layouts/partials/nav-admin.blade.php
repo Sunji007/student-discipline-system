@@ -4,8 +4,8 @@
 
 @if(auth()->user()->canAccess('dashboard'))
 <div class="nav-item">
-    <a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" data-title="หน้าหลัก">
-        <i class="fas fa-home"></i> <span class="nav-text">หน้าหลัก</span>
+    <a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" data-title="แดชบอร์ด">
+        <i class="fas fa-home"></i> <span class="nav-text">แดชบอร์ด</span>
     </a>
 </div>
 @endif
