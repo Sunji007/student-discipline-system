@@ -11,7 +11,7 @@
 
 @php
 $moduleLabels = [
-    'dashboard'          => ['label' => 'หน้าหลัก', 'icon' => 'fa-home'],
+    'dashboard'          => ['label' => 'แดชบอร์ด', 'icon' => 'fa-home'],
     'behavior-records'   => ['label' => 'บันทึกพฤติกรรม', 'icon' => 'fa-clipboard-list'],
     'behavior-rules'     => ['label' => 'เกณฑ์ประเมินพฤติกรรม', 'icon' => 'fa-book-open'],
     'appeals'            => ['label' => 'พิจารณาคำอุทธรณ์', 'icon' => 'fa-balance-scale'],

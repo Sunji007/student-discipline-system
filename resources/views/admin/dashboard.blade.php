@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'หน้าหลัก — ผู้ดูแลระบบ')
-@section('page-title', 'หน้าหลักผู้ดูแลระบบ')
+@section('title', 'แดชบอร์ด — ผู้ดูแลระบบ')
+@section('page-title', 'แดชบอร์ดผู้ดูแลระบบ')
 
 @section('content')
 <div class="page-header">
