@@ -144,6 +144,11 @@ Route::middleware(['auth', 'role:ผู้ดูแลระบบ,admin'])->pre
     Route::get('promotions', [App\Http\Controllers\Admin\PromotionController::class, 'index'])->name('promotions.index')->middleware('permission:users');
     Route::post('promotions/execute', [App\Http\Controllers\Admin\PromotionController::class, 'promote'])->name('promotions.execute')->middleware('permission:users');
 
+    // Semesters Management
+    Route::post('semesters', [App\Http\Controllers\Admin\SemesterController::class, 'store'])->name('semesters.store')->middleware('permission:users');
+    Route::post('semesters/{semester}/set-active', [App\Http\Controllers\Admin\SemesterController::class, 'setActive'])->name('semesters.set-active')->middleware('permission:users');
+    Route::delete('semesters/{semester}', [App\Http\Controllers\Admin\SemesterController::class, 'destroy'])->name('semesters.destroy')->middleware('permission:users');
+
     // Messages
     Route::resource('messages', App\Http\Controllers\Admin\MessageController::class)->only(['index', 'show', 'create', 'store'])->middleware('permission:messages');
 });

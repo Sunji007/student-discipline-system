@@ -67,12 +67,18 @@ class PromotionController extends Controller
                 });
         }
 
+        $semestersList = Semester::withCount(['attendances', 'behaviorRecords', 'prayerRecords'])
+            ->orderBy('academic_year', 'desc')
+            ->orderBy('term', 'desc')
+            ->get();
+
         return view('admin.promotions.index', compact(
             'currentSemester',
             'allRooms',
             'selectedRoom',
             'suggestedTargetRoom',
-            'students'
+            'students',
+            'semestersList'
         ));
     }
 
