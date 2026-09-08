@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'หน้าหลัก — นักเรียน')
-@section('page-title', 'หน้าหลัก')
+@section('title', 'แดชบอร์ด — นักเรียน')
+@section('page-title', 'แดชบอร์ด')
 
 @section('content')
 @php

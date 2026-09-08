@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'หน้าหลัก — ผู้ปกครอง')
-@section('page-title', 'หน้าหลักผู้ปกครอง')
+@section('title', 'แดชบอร์ด — ผู้ปกครอง')
+@section('page-title', 'แดชบอร์ดผู้ปกครอง')
 
 @section('content')
 @if(!$student)
