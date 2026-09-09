@@ -16,16 +16,10 @@ class Controller extends BaseController
             return session('selected_semester_id');
         }
         
-        $activeId = \App\Models\Semester::where('is_active', true)->value('semester_id');
-        if ($activeId) {
-            session(['selected_semester_id' => $activeId]);
-            return $activeId;
-        }
-        
-        $firstId = \App\Models\Semester::value('semester_id');
-        if ($firstId) {
-            session(['selected_semester_id' => $firstId]);
-            return $firstId;
+        $activeSemester = \App\Models\Semester::current();
+        if ($activeSemester) {
+            session(['selected_semester_id' => $activeSemester->semester_id]);
+            return $activeSemester->semester_id;
         }
         
         return null;
