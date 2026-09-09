@@ -211,11 +211,11 @@
         <div style="display: flex; gap: 0.65rem; align-items: center; flex-wrap: wrap;">
             <span class="badge" style="background: rgba(255,255,255,0.15); color: #fff; padding: 0.55rem 0.95rem; font-size: 0.88rem; border: 1px solid rgba(255,255,255,0.25); border-radius: 8px; display: inline-flex; align-items: center; gap: 0.5rem;">
                 <i class="fas fa-calendar-alt" style="color: #fbbf24; font-size: 0.95rem;"></i>
-                <span>{{ $currentSemester ? "ปีการศึกษา {$currentSemester->academic_year} (ภาคเรียนที่ {$currentSemester->term})" : "ปีการศึกษา " . (now()->year + 543) }}</span>
+                <span>ปีการศึกษา {{ $currentSemester ? "{$currentSemester->academic_year} (ภาคเรียนที่ {$currentSemester->term})" : (now()->year + 543) }}</span>
+                <span style="background: rgba(16, 185, 129, 0.25); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.4); border-radius: 6px; padding: 0.15rem 0.45rem; font-size: 0.72rem; font-weight: 600;">
+                    <i class="fas fa-magic"></i> อัตโนมัติ
+                </span>
             </span>
-            <button type="button" class="btn" onclick="openSemesterModal()" style="background: #fbbf24; color: #78350f; font-weight: 700; font-size: 0.85rem; padding: 0.55rem 1rem; border-radius: 8px; border: none; display: inline-flex; align-items: center; gap: 0.4rem; box-shadow: 0 2px 6px rgba(0,0,0,0.15); cursor: pointer; transition: all 0.2s ease;">
-                <i class="fas fa-cog"></i> จัดการปีการศึกษา / เพิ่มปีใหม่
-            </button>
         </div>
     </div>
 
@@ -500,164 +500,6 @@
                     <i class="fas fa-check"></i> ยืนยันและดำเนินการ
                 </button>
             </div>
-        </div>
-    </div>
-</div>
-
-<!-- Semester Management Modal -->
-<div id="semesterModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); backdrop-filter: blur(3px); z-index: 9999; align-items: center; justify-content: center; padding: 1rem;">
-    <div style="background: #fff; border-radius: 16px; width: 100%; max-width: 680px; max-height: 90vh; overflow-y: auto; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); border: 1px solid var(--border);">
-        {{-- Modal Header --}}
-        <div style="padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; background: linear-gradient(135deg, var(--navy) 0%, #1e1b4b 100%); color: #fff; border-top-left-radius: 15px; border-top-right-radius: 15px;">
-            <div style="display: flex; align-items: center; gap: 0.65rem;">
-                <div style="width: 36px; height: 36px; border-radius: 8px; background: rgba(251,191,36,0.2); color: #fbbf24; display: flex; align-items: center; justify-content: center; font-size: 1.1rem;">
-                    <i class="fas fa-calendar-alt"></i>
-                </div>
-                <div>
-                    <h3 style="margin: 0; font-size: 1.1rem; font-weight: 700; color: #fff;">จัดการปีการศึกษาและภาคเรียน</h3>
-                    <p style="margin: 0; font-size: 0.8rem; color: rgba(255,255,255,0.75);">เพิ่มปีการศึกษาใหม่ หรือสลับภาคเรียนปัจจุบันของสถานศึกษา</p>
-                </div>
-            </div>
-            <button type="button" onclick="closeSemesterModal()" style="background: rgba(255,255,255,0.15); border: none; color: #fff; width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1rem;">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-
-        {{-- Modal Body --}}
-        <div style="padding: 1.5rem;">
-            {{-- Form: Add new semester --}}
-            <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 1.25rem; margin-bottom: 1.5rem;">
-                <h4 style="margin: 0 0 1rem 0; font-size: 0.95rem; font-weight: 700; color: var(--navy); display: flex; align-items: center; gap: 0.4rem;">
-                    <i class="fas fa-plus-circle" style="color: var(--primary);"></i> เพิ่มปีการศึกษา / ภาคเรียนใหม่
-                </h4>
-                <form action="{{ route('admin.semesters.store') }}" method="POST">
-                    @csrf
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
-                        <div>
-                            <label style="display: block; font-size: 0.82rem; font-weight: 600; margin-bottom: 0.35rem; color: #334155;">
-                                ปีการศึกษา (พ.ศ.) <span style="color: #ef4444;">*</span>
-                            </label>
-                            @php
-                                $maxYear = isset($semestersList) ? $semestersList->max('academic_year') : (now()->year + 543);
-                            @endphp
-                            <input type="number" name="academic_year" required min="2500" max="2700" 
-                                   value="{{ $maxYear }}"
-                                   placeholder="เช่น 2570"
-                                   style="width: 100%; height: 38px; border: 1px solid #cbd5e1; border-radius: 8px; padding: 0 0.75rem; font-size: 0.9rem; font-family: 'Sarabun', sans-serif;">
-                        </div>
-                        <div>
-                            <label style="display: block; font-size: 0.82rem; font-weight: 600; margin-bottom: 0.35rem; color: #334155;">
-                                ภาคเรียนที่ <span style="color: #ef4444;">*</span>
-                            </label>
-                            <select name="term" required style="width: 100%; height: 38px; border: 1px solid #cbd5e1; border-radius: 8px; padding: 0 0.75rem; font-size: 0.9rem; font-family: 'Sarabun', sans-serif; background: #fff;">
-                                <option value="1">ภาคเรียนที่ 1</option>
-                                <option value="2">ภาคเรียนที่ 2</option>
-                                <option value="3">ภาคเรียนฤดูร้อน (3)</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem;">
-                        <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: #334155; cursor: pointer; user-select: none;">
-                            <input type="checkbox" name="is_active" value="1" style="width: 16px; height: 16px; accent-color: var(--primary); cursor: pointer;">
-                            <span>ตั้งเป็น <strong>ภาคเรียนปัจจุบัน (Active)</strong> ทันที</span>
-                        </label>
-                        <button type="submit" class="btn btn-primary" style="font-size: 0.85rem; padding: 0.45rem 1.25rem; border-radius: 8px; display: inline-flex; align-items: center; gap: 0.4rem;">
-                            <i class="fas fa-save"></i> บันทึก
-                        </button>
-                    </div>
-                </form>
-            </div>
-
-            {{-- Table: All Semesters --}}
-            <div>
-                <h4 style="margin: 0 0 0.75rem 0; font-size: 0.95rem; font-weight: 700; color: var(--navy); display: flex; align-items: center; gap: 0.4rem;">
-                    <i class="fas fa-list-ul" style="color: var(--primary);"></i> รายการปีการศึกษาทั้งหมดในระบบ
-                </h4>
-                <div style="border: 1px solid var(--border); border-radius: 10px; overflow: hidden;">
-                    <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
-                        <thead style="background: #f1f5f9; border-bottom: 1px solid var(--border); text-align: left;">
-                            <tr>
-                                <th style="padding: 0.65rem 1rem; color: #475569; font-weight: 600;">ปีการศึกษา / ภาคเรียน</th>
-                                <th style="padding: 0.65rem 1rem; color: #475569; font-weight: 600; text-align: center;">สถานะ</th>
-                                <th style="padding: 0.65rem 1rem; color: #475569; font-weight: 600; text-align: center;">ข้อมูลในเทอม</th>
-                                <th style="padding: 0.65rem 1rem; color: #475569; font-weight: 600; text-align: right;">การจัดการ</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if(isset($semestersList))
-                                @forelse($semestersList as $sem)
-                                <tr style="border-bottom: 1px solid #f1f5f9; background: {{ $sem->is_active ? '#f0fdf4' : '#fff' }};">
-                                    <td style="padding: 0.75rem 1rem; font-weight: 600; color: #1e293b;">
-                                        ปีการศึกษา {{ $sem->academic_year }} ภาคเรียนที่ {{ $sem->term }}
-                                    </td>
-                                    <td style="padding: 0.75rem 1rem; text-align: center;">
-                                        @if($sem->is_active)
-                                            <span style="background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; font-weight: 700; display: inline-flex; align-items: center; gap: 0.3rem;">
-                                                <i class="fas fa-check-circle"></i> ปัจจุบัน
-                                            </span>
-                                        @else
-                                            <span style="color: #94a3b8; font-size: 0.78rem;">ปกติ</span>
-                                        @endif
-                                    </td>
-                                    <td style="padding: 0.75rem 1rem; text-align: center; font-size: 0.78rem; color: #64748b;">
-                                        @php
-                                            $recordsTotal = ($sem->attendances_count ?? 0) + ($sem->behavior_records_count ?? 0) + ($sem->prayer_records_count ?? 0);
-                                        @endphp
-                                        @if($recordsTotal > 0)
-                                            <span title="เช็คชื่อ: {{ $sem->attendances_count ?? 0 }} | พฤติกรรม: {{ $sem->behavior_records_count ?? 0 }} | ละหมาด: {{ $sem->prayer_records_count ?? 0 }}">
-                                                {{ $recordsTotal }} รายการ
-                                            </span>
-                                        @else
-                                            <span style="color: #cbd5e1;">-</span>
-                                        @endif
-                                    </td>
-                                    <td style="padding: 0.75rem 1rem; text-align: right;">
-                                        <div style="display: inline-flex; align-items: center; gap: 0.4rem;">
-                                            @if(!$sem->is_active)
-                                            <form action="{{ route('admin.semesters.set-active', $sem->semester_id) }}" method="POST" style="margin: 0;">
-                                                @csrf
-                                                <button type="submit" class="btn" style="background: #f1f5f9; color: #0f172a; border: 1px solid #cbd5e1; font-size: 0.75rem; font-weight: 600; padding: 0.25rem 0.65rem; border-radius: 6px; cursor: pointer;" title="สลับให้เป็นภาคเรียนปัจจุบัน">
-                                                    <i class="fas fa-toggle-on" style="color: #10b981;"></i> ตั้งเป็นปัจจุบัน
-                                                </button>
-                                            </form>
-
-                                            @if($recordsTotal === 0)
-                                            <form action="{{ route('admin.semesters.destroy', $sem->semester_id) }}" method="POST" style="margin: 0;" onsubmit="return confirm('ยืนยันการลบปีการศึกษา {{ $sem->academic_year }} ภาคเรียนที่ {{ $sem->term }} หรือไม่?');">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn" style="background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; font-size: 0.75rem; font-weight: 600; padding: 0.25rem 0.55rem; border-radius: 6px; cursor: pointer;" title="ลบปีการศึกษานี้">
-                                                    <i class="fas fa-trash-alt"></i>
-                                                </button>
-                                            </form>
-                                            @endif
-                                            @else
-                                            <span style="font-size: 0.75rem; font-weight: 600; color: #15803d; padding: 0.25rem 0.5rem;">
-                                                <i class="fas fa-star" style="color: #f59e0b;"></i> ใช้งานอยู่
-                                            </span>
-                                            @endif
-                                        </div>
-                                    </td>
-                                </tr>
-                                @empty
-                                <tr>
-                                    <td colspan="4" style="text-align: center; padding: 1.5rem; color: #94a3b8;">
-                                        ไม่พบข้อมูลปีการศึกษา
-                                    </td>
-                                </tr>
-                                @endforelse
-                            @endif
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        
-        {{-- Modal Footer --}}
-        <div style="padding: 1rem 1.5rem; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; background: #f8fafc; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px;">
-            <button type="button" class="btn" onclick="closeSemesterModal()" style="background: #e2e8f0; color: #334155; font-size: 0.85rem; font-weight: 600; padding: 0.45rem 1.25rem; border-radius: 8px; border: none; cursor: pointer;">
-                ปิดหน้าต่าง
-            </button>
         </div>
     </div>
 </div>
