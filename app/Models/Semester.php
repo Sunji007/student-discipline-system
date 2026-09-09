@@ -49,6 +49,15 @@ class Semester extends Model
             $semester->update(['is_active' => true]);
         }
 
+        // เลื่อนชั้นนักเรียนอัตโนมัติในเบื้องหลังตามคะแนนพฤติกรรม เมื่อเริ่มต้นปีการศึกษาใหม่ (ภาคเรียนที่ 1)
+        if ($semester->wasRecentlyCreated && $term === 1) {
+            $promoCacheKey = "auto_promoted_academic_year_{$academicYear}";
+            if (!cache()->has($promoCacheKey)) {
+                cache()->forever($promoCacheKey, true);
+                \App\Services\StudentPromotionService::autoPromoteByBehaviorScore(50);
+            }
+        }
+
         return $semester;
     }
 

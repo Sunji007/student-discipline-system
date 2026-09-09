@@ -140,9 +140,11 @@ Route::middleware(['auth', 'role:ผู้ดูแลระบบ,admin'])->pre
     Route::get('teachers/get-next-id', [App\Http\Controllers\Admin\TeacherController::class, 'getNextId'])->name('teachers.get-next-id')->middleware('permission:users');
     Route::resource('teachers', App\Http\Controllers\Admin\TeacherController::class)->middleware('permission:users');
 
-    // Promotions
-    Route::get('promotions', [App\Http\Controllers\Admin\PromotionController::class, 'index'])->name('promotions.index')->middleware('permission:users');
-    Route::post('promotions/execute', [App\Http\Controllers\Admin\PromotionController::class, 'promote'])->name('promotions.execute')->middleware('permission:users');
+    // Promotions (Automatic background promotion based on behavior scores)
+    Route::get('promotions', function () {
+        return redirect()->route('admin.students.index')
+            ->with('info', 'ระบบเลื่อนชั้นปีการศึกษาทำงานแบบอัตโนมัติในเบื้องหลังตามคะแนนพฤติกรรมแล้ว (เกณฑ์ผ่าน >= 50 คะแนน)');
+    })->name('promotions.index')->middleware('permission:users');
 
     // Semesters Management
     Route::post('semesters', [App\Http\Controllers\Admin\SemesterController::class, 'store'])->name('semesters.store')->middleware('permission:users');
