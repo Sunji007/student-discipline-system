@@ -1829,7 +1829,7 @@
 
                 <!-- Semester Selector -->
                 @php
-                    $activeSemester = \App\Models\Semester::where('is_active', true)->first();
+                    $activeSemester = \App\Models\Semester::current();
                     $selectedSemesterId = session('selected_semester_id', $activeSemester?->semester_id);
                     $semestersList = \App\Models\Semester::orderBy('academic_year', 'desc')->orderBy('term', 'desc')->get();
                 @endphp

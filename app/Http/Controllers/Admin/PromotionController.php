@@ -12,7 +12,7 @@ class PromotionController extends Controller
 {
     public function index(Request $request)
     {
-        $currentSemester = Semester::where('is_active', true)->first() ?? Semester::latest('semester_id')->first();
+        $currentSemester = Semester::current();
         $selectedSemesterId = $currentSemester ? $currentSemester->semester_id : null;
 
         // Build list of all available classrooms with student count
