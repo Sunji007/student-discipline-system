@@ -608,19 +608,7 @@
         document.getElementById('promotionForm').submit();
     }
 
-    function openSemesterModal() {
-        document.getElementById('semesterModal').style.display = 'flex';
-    }
-
-    function closeSemesterModal() {
-        document.getElementById('semesterModal').style.display = 'none';
-    }
-
     window.addEventListener('click', function(e) {
-        const sModal = document.getElementById('semesterModal');
-        if (e.target === sModal) {
-            closeSemesterModal();
-        }
         const cModal = document.getElementById('confirmModal');
         if (e.target === cModal) {
             closeConfirmModal();
