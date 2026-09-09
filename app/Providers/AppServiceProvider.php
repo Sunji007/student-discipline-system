@@ -121,6 +121,15 @@ class AppServiceProvider extends ServiceProvider
                 if (\App\Models\Student::where('Classroom', 'like', '%3/1%')->orWhere('Classroom', '3/1')->count() < 40) {
                     \Database\Seeders\Classroom31Seeder::seed40Students();
                 }
+
+                // ปรับข้อมูลห้องเรียนในฐานข้อมูลให้ตรงกับระดับชั้น (แก้ไขปัญหา ม.2/1/1 ให้เป็น 2/1 เสมอ)
+                \Illuminate\Support\Facades\DB::statement("
+                    UPDATE students 
+                    SET Classroom = CONCAT(REPLACE(GradeLevel, 'ม.', ''), '/', SUBSTRING_INDEX(Classroom, '/', -1))
+                    WHERE Classroom LIKE '%/%' 
+                      AND GradeLevel IS NOT NULL
+                      AND Classroom NOT LIKE CONCAT('%', REPLACE(GradeLevel, 'ม.', ''), '/%')
+                ");
             } catch (\Throwable $e) {
                 // Ignore
             }
