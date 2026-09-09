@@ -136,22 +136,32 @@ class Student extends Model {
 
     public function getClassroomDisplayAttribute()
     {
-        $classroom = $this->Classroom;
-        $grade = $this->GradeLevel;
-        if (!$classroom) return '';
-        if (!$grade) return $classroom;
+        $classroom = (string) $this->Classroom;
+        $grade = (string) $this->GradeLevel;
+        if (!$classroom && !$grade) return '';
         
-        if (str_starts_with($classroom, $grade)) {
-            return $classroom;
+        // รูปแบบระดับชั้น เช่น "ม.2"
+        $gradeNum = preg_replace('/[^0-9]/', '', $grade);
+        if (!$gradeNum && preg_match('/^(ม\.)?(\d)/', $classroom, $gm)) {
+            $gradeNum = $gm[2];
         }
-        
-        // Handle e.g. "6/3" and "ม.6" -> "ม.6/3"
-        $cleanGrade = str_replace('ม.', '', $grade);
-        if (str_starts_with($classroom, $cleanGrade . '/')) {
-            return 'ม.' . $classroom;
+        $gradeDisplay = $gradeNum ? "ม.{$gradeNum}" : ($grade ?: 'ม.1');
+
+        // ดึงหมายเลขห้องเรียนตัวสุดท้าย (ตัดเลขระดับชั้นที่อาจซ้ำซ้อนออก)
+        // เช่น "1/1" -> ห้อง 1, "ม.1/1" -> ห้อง 1, "2/1" -> ห้อง 1, "1" -> ห้อง 1
+        if (str_contains($classroom, '/')) {
+            $parts = explode('/', $classroom);
+            $roomNum = end($parts);
+        } else {
+            $roomNum = $classroom;
         }
-        
-        return $grade . '/' . $classroom;
+
+        $cleanRoomNum = preg_replace('/[^0-9]/', '', $roomNum);
+        if (!$cleanRoomNum) {
+            $cleanRoomNum = '1';
+        }
+
+        return "{$gradeDisplay}/{$cleanRoomNum}";
     }
 
     public function getPrayerMonthlyStatus($month, $year)

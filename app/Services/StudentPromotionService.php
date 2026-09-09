@@ -52,15 +52,19 @@ class StudentPromotionService
                     : ($student->BehaviorScore ?? 100);
 
                 // ค้นหาระดับชั้นและห้องเรียนปัจจุบัน
-                $gradeNum = null;
-                $classNum = null;
+                $gradeNum = (int) preg_replace('/[^0-9]/', '', $student->GradeLevel);
+                
+                // ดึงหมายเลขห้องเรียนตัวสุดท้าย (เช่น "1/1" -> 1, "ม.1/1" -> 1, "2/1" -> 1, "1" -> 1)
+                $parts = explode('/', (string) $student->Classroom);
+                $classNum = (int) preg_replace('/[^0-9]/', '', end($parts));
+                if (!$classNum) {
+                    $classNum = 1;
+                }
 
-                if (preg_match('/^(ม\.)?(\d)[\/\-](\d+)$/', $student->Classroom, $m)) {
-                    $gradeNum = (int) $m[2];
-                    $classNum = (int) $m[3];
-                } elseif (preg_match('/^(ม\.)?(\d)$/', $student->GradeLevel, $m)) {
-                    $gradeNum = (int) $m[2];
-                    $classNum = (int) (preg_replace('/[^0-9]/', '', $student->Classroom) ?: 1);
+                if (!$gradeNum) {
+                    if (preg_match('/^(ม\.)?(\d)/', $student->Classroom, $m)) {
+                        $gradeNum = (int) $m[2];
+                    }
                 }
 
                 if (!$gradeNum) {
