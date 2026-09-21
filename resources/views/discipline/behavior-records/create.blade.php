@@ -72,28 +72,22 @@
                 </div>
 
                 <div class="form-group" style="margin-bottom: 1.25rem;">
-                    <label class="form-label">ค้นหาเกณฑ์ประเมินพฤติกรรม</label>
-                    <input type="text" id="ruleSearchInput" class="form-control" style="background:#f8fafc; border-color:#cbd5e1; margin-bottom:0.5rem; padding: 0.75rem 1rem; line-height: 1.5;" placeholder="พิมพ์เพื่อค้นหาเกณฑ์ประเมิน...">
-                    
-                    {{-- Category Filter Buttons --}}
-                    <div id="categoryFilterContainer" style="display:flex; gap:0.5rem; margin-top:0.25rem; margin-bottom:0.75rem; flex-wrap:wrap;">
-                        {{-- Dynamic category buttons inserted via JS --}}
-                    </div>
-
-                    {{-- Dynamic Rule Items Cards Display --}}
-                    <div id="ruleItemsSection" style="margin-top:0.75rem; margin-bottom:1.25rem;">
-                        <div style="font-weight:700; font-size:0.85rem; color:var(--navy); margin-bottom:0.5rem; display:flex; justify-content:space-between; align-items:center;">
-                            <span id="ruleItemsHeaderTitle"><i class="fas fa-layer-group" style="color:var(--navy); margin-right:0.35rem;"></i> รายการเกณฑ์ประเมินในหมวดหมู่</span>
-                            <span id="ruleItemsCountBadge" class="badge badge-gray" style="font-size:0.75rem;">0 รายการ</span>
+                    <div style="display:flex; gap:0.75rem; margin-bottom:0.75rem; align-items:flex-end;">
+                        <div style="flex:1;">
+                            <label class="form-label">เลือกหมวดหมู่เกณฑ์</label>
+                            <select id="categoryFilterSelect" class="form-control" style="background:#f8fafc; border-color:#cbd5e1;">
+                                <option value="all">ทุกหมวดหมู่</option>
+                            </select>
                         </div>
-                        <div id="ruleItemsGrid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap:0.6rem; max-height:300px; overflow-y:auto; padding:0.5rem; background:#f8fafc; border:1px solid #cbd5e1; border-radius:8px;">
-                            {{-- Rule Cards inserted via JS --}}
+                        <div style="flex:2;">
+                            <label class="form-label">ค้นหาเกณฑ์ประเมิน (ชื่อ หรือ คะแนน)</label>
+                            <input type="text" id="ruleSearchInput" class="form-control" placeholder="พิมพ์เพื่อค้นหา เช่น มาสาย, ทรงผม, ลักขโมย, 10..." style="background:#f8fafc; border-color:#cbd5e1; padding: 0.75rem 1rem; line-height: 1.5;">
                         </div>
                     </div>
 
-                    <label class="form-label">เลือกเกณฑ์ประเมินพฤติกรรม (หรือคลิกเลือกการ์ดด้านบน) <span style="color:var(--red)">*</span></label>
+                    <label class="form-label">เกณฑ์ประเมินพฤติกรรม <span style="color:var(--red)">*</span></label>
                     <select name="RuleID" class="form-control {{ $errors->has('RuleID') ? 'is-invalid' : '' }}" id="ruleSelect">
-                        <option value="">เลือกเกณฑ์ประเมินพฤติกรรม</option>
+                        <option value="">-- เลือกเกณฑ์ประเมินพฤติกรรม --</option>
                         @foreach($rules as $rule)
                             <option value="{{ $rule->RuleID }}"
                                     data-type="{{ $rule->RuleType ?? ($rule->ScoreModifier > 0 ? 'เพิ่มคะแนน' : 'ตัดคะแนน') }}"
@@ -220,6 +214,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Store all rules directly from backend database
     const allRules = {!! json_encode($formattedRules, JSON_UNESCAPED_UNICODE) !!};
 
+    const categoryFilterSelect = document.getElementById('categoryFilterSelect');
     const ruleSearchInput = document.getElementById('ruleSearchInput');
     let selectedCategoryFilter = 'all';
     
@@ -231,9 +226,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    function renderCategoryButtons(selectedType) {
-        const container = document.getElementById('categoryFilterContainer');
-        if (!container) return;
+    function updateCategoryDropdown(selectedType) {
+        if (!categoryFilterSelect) return;
 
         const isPositive = selectedType === 'เพิ่มคะแนน';
         const typeRules = allRules.filter(r => {
@@ -242,78 +236,28 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const uniqueCats = Array.from(new Set(typeRules.map(r => r.category).filter(Boolean)));
 
-        const defaultIcons = {
-            // ตัดคะแนน
-            'การแต่งกายและทรงผม': { icon: 'fa-user-tie', color: '#8b5cf6' },
-            'ความประพฤติและกริยามารยาท': { icon: 'fa-user-slash', color: '#d97706' },
-            'สารเสพติดและของต้องห้าม': { icon: 'fa-ban', color: '#dc2626' },
-            'การใช้เครื่องมือสื่อสาร': { icon: 'fa-mobile-alt', color: '#0284c7' },
-            'การเข้าเรียนและระเบียบสถานศึกษา': { icon: 'fa-school', color: '#059669' },
-            
-            // เพิ่มคะแนน
-            'ความดีและจิตอาสา': { icon: 'fa-heart', color: '#16a34a' },
-            'ความดี/จิตอาสา': { icon: 'fa-heart', color: '#16a34a' },
-            'กิจกรรมและสร้างชื่อเสียง': { icon: 'fa-trophy', color: '#0284c7' },
-            'กิจกรรมและผลงาน': { icon: 'fa-trophy', color: '#0284c7' },
-            'กิจกรรม/สร้างชื่อเสียง': { icon: 'fa-trophy', color: '#0284c7' },
-            'ความประพฤติดีเด่นและวินัย': { icon: 'fa-star', color: '#7c3aed' },
-            'ความประพฤติดีเด่น': { icon: 'fa-star', color: '#7c3aed' },
-            'คุณธรรมและศาสนกิจ': { icon: 'fa-mosque', color: '#0d9488' },
-            'ความเป็นผู้นำและการมีส่วนร่วม': { icon: 'fa-users', color: '#ea580c' },
-            'วิชาการและความขยันหมั่นเพียร': { icon: 'fa-graduation-cap', color: '#2563eb' }
-        };
-
-        const fallbackColors = ['#16a34a', '#0284c7', '#7c3aed', '#d97706', '#dc2626', '#8b5cf6', '#059669'];
-
-        let categories = [
-            { id: 'all', label: 'ทั้งหมด', icon: 'fa-list', color: '#64748b' }
-        ];
-
-        uniqueCats.forEach((cat, idx) => {
-            const info = defaultIcons[cat] || {
-                icon: isPositive ? 'fa-medal' : 'fa-tag',
-                color: fallbackColors[idx % fallbackColors.length]
-            };
-            categories.push({
-                id: cat,
-                label: cat,
-                icon: info.icon,
-                color: info.color
-            });
+        categoryFilterSelect.innerHTML = '<option value="all">ทุกหมวดหมู่</option>';
+        uniqueCats.forEach(cat => {
+            const opt = document.createElement('option');
+            opt.value = cat;
+            opt.textContent = `หมวด${cat}`;
+            if (cat === selectedCategoryFilter) {
+                opt.selected = true;
+            }
+            categoryFilterSelect.appendChild(opt);
         });
 
         // If selectedCategoryFilter is not in current categories, reset to 'all'
-        if (!categories.some(c => c.id === selectedCategoryFilter)) {
+        if (selectedCategoryFilter !== 'all' && !uniqueCats.includes(selectedCategoryFilter)) {
             selectedCategoryFilter = 'all';
+            categoryFilterSelect.value = 'all';
         }
+    }
 
-        container.style.flexWrap = 'wrap';
-        container.innerHTML = '';
-        categories.forEach(c => {
-            const btn = document.createElement('button');
-            btn.type = 'button';
-            btn.className = 'btn category-btn';
-            btn.dataset.category = c.id;
-            btn.style.cssText = `padding:0.35rem 0.75rem; font-weight:600; border-radius:6px; font-size:0.78rem; cursor:pointer; transition:all 0.2s; border:1px solid ${c.color};`;
-            
-            const isActive = selectedCategoryFilter === c.id;
-            if (isActive) {
-                btn.style.backgroundColor = c.color;
-                btn.style.color = '#fff';
-            } else {
-                btn.style.backgroundColor = 'transparent';
-                btn.style.color = c.color;
-            }
-
-            btn.innerHTML = `<i class="fas ${c.icon}"></i> ${c.label}`;
-
-            btn.addEventListener('click', function() {
-                selectedCategoryFilter = c.id;
-                renderCategoryButtons(selectedType);
-                filterRules(ruleSelect.value);
-            });
-
-            container.appendChild(btn);
+    if (categoryFilterSelect) {
+        categoryFilterSelect.addEventListener('change', function() {
+            selectedCategoryFilter = this.value;
+            filterRules(ruleSelect.value);
         });
     }
 
@@ -366,7 +310,7 @@ document.addEventListener('DOMContentLoaded', function() {
             photoDropzoneSubtitle.textContent = isPositive ? 'แนบรูปภาพกิจกรรม/การทำความดี (สามารถคลิกดูรูปหรือกดลบรูปที่ไม่ต้องการได้)' : 'แนบได้หลายรูปพร้อมกัน (สามารถคลิกดูรูปหรือกดลบรูปที่ไม่ต้องการได้)';
         }
 
-        renderCategoryButtons(selectedType);
+        updateCategoryDropdown(selectedType);
 
         // Clear select options, keep the first one
         ruleSelect.innerHTML = '<option value="">-- เลือกเกณฑ์ประเมินพฤติกรรม --</option>';
@@ -409,89 +353,6 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
             ruleSelect.appendChild(groupEl);
-        }
-
-        // Render rule cards in grid container
-        const grid = document.getElementById('ruleItemsGrid');
-        const headerTitle = document.getElementById('ruleItemsHeaderTitle');
-        const countBadge = document.getElementById('ruleItemsCountBadge');
-
-        if (grid) {
-            grid.innerHTML = '';
-            
-            if (countBadge) {
-                countBadge.textContent = `${filtered.length} รายการ`;
-            }
-
-            if (headerTitle) {
-                const catLabel = selectedCategoryFilter === 'all' ? 'ทุกหมวดหมู่' : `หมวด ${selectedCategoryFilter}`;
-                headerTitle.innerHTML = `<i class="fas fa-layer-group" style="color:var(--navy); margin-right:0.35rem;"></i> รายการเกณฑ์ประเมิน (${catLabel})`;
-            }
-
-            if (filtered.length === 0) {
-                grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:1.5rem; color:var(--text-muted); font-size:0.85rem;">ไม่พบรายการเกณฑ์ประเมินที่ตรงกับหมวดหมู่หรือคำค้นหา</div>`;
-            } else {
-                filtered.forEach(r => {
-                    const cleanName = r.text.replace(/^\[.*?\]\s*/, '').replace(/\s*\([+-]?\d+\)$/, '').trim();
-                    const isSelected = selectedVal && r.value == selectedVal;
-                    const isDeduct = r.type === 'ตัดคะแนน';
-                    
-                    const card = document.createElement('div');
-                    card.className = 'rule-card-item';
-                    card.style.cssText = `
-                        padding: 0.65rem 0.85rem;
-                        border-radius: 8px;
-                        background: ${isSelected ? '#f0f9ff' : '#ffffff'};
-                        border: 2px solid ${isSelected ? '#0284c7' : '#e2e8f0'};
-                        cursor: pointer;
-                        transition: all 0.15s ease-in-out;
-                        display: flex;
-                        justify-content: space-between;
-                        align-items: center;
-                        gap: 0.5rem;
-                        box-shadow: 0 1px 3px rgba(0,0,0,0.03);
-                    `;
-
-                    const scoreBadgeBg = isDeduct ? '#fef2f2' : '#f0fdf4';
-                    const scoreBadgeColor = isDeduct ? '#dc2626' : '#16a34a';
-                    const scoreBadgeBorder = isDeduct ? '#fca5a5' : '#86efac';
-
-                    card.innerHTML = `
-                        <div style="flex:1; overflow:hidden;">
-                            <div style="font-weight:600; font-size:0.84rem; color:${isSelected ? '#0369a1' : '#1e293b'}; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
-                                ${isSelected ? '<i class="fas fa-check-circle" style="color:#0284c7; margin-right:0.25rem;"></i>' : ''} ${cleanName}
-                            </div>
-                            <div style="font-size:0.72rem; color:#64748b; margin-top:0.15rem;">
-                                📂 ${r.category || 'ทั่วไป'}
-                            </div>
-                        </div>
-                        <div style="background:${scoreBadgeBg}; color:${scoreBadgeColor}; border:1px solid ${scoreBadgeBorder}; padding:0.2rem 0.55rem; border-radius:6px; font-weight:700; font-size:0.78rem; flex-shrink:0;">
-                            ${isDeduct ? '-' : '+'}${Math.abs(r.score)} คะแนน
-                        </div>
-                    `;
-
-                    card.addEventListener('mouseover', function() {
-                        if (!isSelected) {
-                            this.style.borderColor = '#94a3b8';
-                            this.style.transform = 'translateY(-1px)';
-                        }
-                    });
-                    card.addEventListener('mouseout', function() {
-                        if (!isSelected) {
-                            this.style.borderColor = '#e2e8f0';
-                            this.style.transform = 'none';
-                        }
-                    });
-
-                    card.addEventListener('click', function() {
-                        ruleSelect.value = r.value;
-                        filterRules(r.value);
-                        updatePreview();
-                    });
-
-                    grid.appendChild(card);
-                });
-            }
         }
 
         // Trigger change event to update score preview

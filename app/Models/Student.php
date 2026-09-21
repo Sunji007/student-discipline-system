@@ -186,6 +186,22 @@ class Student extends Model {
         $eligibleSessions = max(0, $totalActiveSessions - $exemptCount);
         $absentCount = max(0, $eligibleSessions - $prayedCount);
 
+        // If no active prayer sessions exist for the whole school in this month
+        if ($totalActiveSessions === 0) {
+            return [
+                'prayed_count' => 0,
+                'exempt_count' => 0,
+                'total_sessions' => 0,
+                'eligible_sessions' => 0,
+                'absent_count' => 0,
+                'percentage' => null,
+                'is_passing_percentage' => false,
+                'is_corrected' => false,
+                'status' => 'no_data',
+                'status_text' => 'ไม่มีการเช็กชื่อในเดือนนี้',
+            ];
+        }
+
         $percentage = $eligibleSessions > 0 ? ($prayedCount / $eligibleSessions) * 100 : 100;
         $percent = round($percentage, 1);
         $isPassing = $percent >= 80;

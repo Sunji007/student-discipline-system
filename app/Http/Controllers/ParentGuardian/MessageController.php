@@ -10,14 +10,24 @@ use Illuminate\Support\Str;
 
 class MessageController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $userId = auth()->user()->UserID;
         $students = auth()->user()->parentStudents;
+
+        // Determine currently selected student from query or session
+        $selectedStudentId = $request->query('student_id', session('selected_student_id', $students->first()?->StudentID));
+        $selectedStudent = $students->firstWhere('StudentID', $selectedStudentId) ?? $students->first();
+
+        if ($selectedStudent && session('selected_student_id') !== $selectedStudent->StudentID) {
+            session(['selected_student_id' => $selectedStudent->StudentID]);
+        }
+
         $recipients = collect();
 
-        foreach ($students as $student) {
-            $teachers = $student->advisory_teachers;
+        // Get homeroom teachers strictly for the selected child
+        if ($selectedStudent) {
+            $teachers = $selectedStudent->advisory_teachers;
             foreach ($teachers as $teacher) {
                 $teacherUser = \App\Models\User::where('UserID', $teacher->UserID)
                     ->where('Status', 'ปกติ')
@@ -26,8 +36,8 @@ class MessageController extends Controller
                     $recipients->push($teacherUser);
                 }
             }
-            if ($student->advisory_teacher) {
-                $teacherUser = \App\Models\User::where('UserID', $student->advisory_teacher->UserID)
+            if ($recipients->isEmpty() && $selectedStudent->advisory_teacher) {
+                $teacherUser = \App\Models\User::where('UserID', $selectedStudent->advisory_teacher->UserID)
                     ->where('Status', 'ปกติ')
                     ->first();
                 if ($teacherUser && !$recipients->contains('UserID', $teacherUser->UserID)) {
@@ -36,7 +46,6 @@ class MessageController extends Controller
             }
         }
 
-        // Removed global staffUsers loop to limit recipients to homeroom teachers only
 
         $inbox = Message::with('sender')
             ->where('ReceiverID', $userId)
@@ -51,7 +60,7 @@ class MessageController extends Controller
         $unreadCount = Message::where('ReceiverID', $userId)
             ->where('IsRead', false)->count();
 
-        return view('messages.index', compact('inbox', 'sent', 'unreadCount', 'recipients'));
+        return view('messages.index', compact('inbox', 'sent', 'unreadCount', 'recipients', 'selectedStudent', 'students'));
     }
 
     public function show(Message $message)
@@ -85,13 +94,21 @@ class MessageController extends Controller
         return view('messages.show', compact('message', 'thread', 'otherUser'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
         $students = auth()->user()->parentStudents;
+        $selectedStudentId = $request->query('student_id', session('selected_student_id', $students->first()?->StudentID));
+        $selectedStudent = $students->firstWhere('StudentID', $selectedStudentId) ?? $students->first();
+
+        if ($selectedStudent && session('selected_student_id') !== $selectedStudent->StudentID) {
+            session(['selected_student_id' => $selectedStudent->StudentID]);
+        }
+
         $recipients = collect();
 
-        foreach ($students as $student) {
-            $teachers = $student->advisory_teachers;
+        // Get homeroom teachers strictly for the selected child
+        if ($selectedStudent) {
+            $teachers = $selectedStudent->advisory_teachers;
             foreach ($teachers as $teacher) {
                 $teacherUser = \App\Models\User::where('UserID', $teacher->UserID)
                     ->where('Status', 'ปกติ')
@@ -100,8 +117,8 @@ class MessageController extends Controller
                     $recipients->push($teacherUser);
                 }
             }
-            if ($student->advisory_teacher) {
-                $teacherUser = \App\Models\User::where('UserID', $student->advisory_teacher->UserID)
+            if ($recipients->isEmpty() && $selectedStudent->advisory_teacher) {
+                $teacherUser = \App\Models\User::where('UserID', $selectedStudent->advisory_teacher->UserID)
                     ->where('Status', 'ปกติ')
                     ->first();
                 if ($teacherUser && !$recipients->contains('UserID', $teacherUser->UserID)) {
@@ -110,7 +127,8 @@ class MessageController extends Controller
             }
         }
 
-        return view('messages.create', compact('recipients'));
+
+        return view('messages.create', compact('recipients', 'selectedStudent', 'students'));
     }
 
     public function store(Request $request)

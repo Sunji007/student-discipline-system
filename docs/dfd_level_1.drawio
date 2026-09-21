@@ -1,0 +1,124 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="DFD Level 1" id="dfd-level-1">
+    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- External Entities - Left Side -->
+        <mxCell id="admin" value="ผู้ดูแลระบบ&lt;br&gt;Admin" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff6666;strokeColor=#C92A2A;strokeWidth=2;fontColor=#ffffff;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="40" y="100" width="120" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="discipline" value="เจ้าหน้าที่ฝ่ายปกครอง&lt;br&gt;Discipline Staff" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff6666;strokeColor=#C92A2A;strokeWidth=2;fontColor=#ffffff;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="40" y="200" width="120" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="teacher" value="ครูที่ปรึกษา&lt;br&gt;Teacher" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff6666;strokeColor=#C92A2A;strokeWidth=2;fontColor=#ffffff;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="40" y="300" width="120" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- External Entities - Right Side -->
+        <mxCell id="student" value="นักเรียน&lt;br&gt;Student" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff6666;strokeColor=#C92A2A;strokeWidth=2;fontColor=#ffffff;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="1010" y="200" width="120" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="parent" value="ผู้ปกครอง&lt;br&gt;Parent" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ff6666;strokeColor=#C92A2A;strokeWidth=2;fontColor=#ffffff;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="1010" y="300" width="120" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Processes - Center Column 1 -->
+        <mxCell id="p1" value="1.0&lt;br&gt;จัดการข้อมูล&lt;br&gt;ผู้ใช้และหลัก" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#4A90E2;strokeColor=#2E5C8A;strokeWidth=2;fontColor=#ffffff;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="250" y="80" width="100" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="p2" value="2.0&lt;br&gt;เช็กชื่อ&lt;br&gt;เข้าแถว" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#4A90E2;strokeColor=#2E5C8A;strokeWidth=2;fontColor=#ffffff;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="250" y="220" width="100" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- Processes - Center Column 2 -->
+        <mxCell id="p3" value="3.0&lt;br&gt;จัดการคะแนน&lt;br&gt;พฤติกรรม" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#4A90E2;strokeColor=#2E5C8A;strokeWidth=2;fontColor=#ffffff;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="420" y="80" width="100" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="p4" value="4.0&lt;br&gt;จัดการ&lt;br&gt;เบาะแส" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#4A90E2;strokeColor=#2E5C8A;strokeWidth=2;fontColor=#ffffff;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="420" y="220" width="100" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="p5" value="5.0&lt;br&gt;จัดการ&lt;br&gt;อุทธรณ์" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#4A90E2;strokeColor=#2E5C8A;strokeWidth=2;fontColor=#ffffff;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="420" y="360" width="100" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- Processes - Center Column 3 -->
+        <mxCell id="p6" value="6.0&lt;br&gt;บันทึก&lt;br&gt;ละหมาด" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#4A90E2;strokeColor=#2E5C8A;strokeWidth=2;fontColor=#ffffff;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="590" y="80" width="100" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="p7" value="7.0&lt;br&gt;ระบบ&lt;br&gt;ข้อความ" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#4A90E2;strokeColor=#2E5C8A;strokeWidth=2;fontColor=#ffffff;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="590" y="220" width="100" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="p8" value="8.0&lt;br&gt;รายงานและ&lt;br&gt;แดชบอร์ด" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#4A90E2;strokeColor=#2E5C8A;strokeWidth=2;fontColor=#ffffff;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="760" y="150" width="100" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- Data Stores - Bottom Row 1 -->
+        <mxCell id="d1" value="D1: users" style="shape=partialRectangle;whiteSpace=wrap;html=1;left=0;right=0;fillColor=#50C878;strokeColor=#2E8B57;fontColor=#ffffff;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="80" y="550" width="120" height="40" as="geometry" />
+        </mxCell>
+
+        <mxCell id="d2" value="D2: students" style="shape=partialRectangle;whiteSpace=wrap;html=1;left=0;right=0;fillColor=#50C878;strokeColor=#2E8B57;fontColor=#ffffff;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="220" y="550" width="120" height="40" as="geometry" />
+        </mxCell>
+
+        <mxCell id="d3" value="D3: teachers" style="shape=partialRectangle;whiteSpace=wrap;html=1;left=0;right=0;fillColor=#50C878;strokeColor=#2E8B57;fontColor=#ffffff;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="360" y="550" width="120" height="40" as="geometry" />
+        </mxCell>
+
+        <mxCell id="d4" value="D4: parents" style="shape=partialRectangle;whiteSpace=wrap;html=1;left=0;right=0;fillColor=#50C878;strokeColor=#2E8B57;fontColor=#ffffff;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="500" y="550" width="120" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Data Stores - Bottom Row 2 -->
+        <mxCell id="d5" value="D5: attendances" style="shape=partialRectangle;whiteSpace=wrap;html=1;left=0;right=0;fillColor=#50C878;strokeColor=#2E8B57;fontColor=#ffffff;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="80" y="620" width="120" height="40" as="geometry" />
+        </mxCell>
+
+        <mxCell id="d6" value="D6: behavior_rules" style="shape=partialRectangle;whiteSpace=wrap;html=1;left=0;right=0;fillColor=#50C878;strokeColor=#2E8B57;fontColor=#ffffff;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="220" y="620" width="120" height="40" as="geometry" />
+        </mxCell>
+
+        <mxCell id="d7" value="D7: behavior_records" style="shape=partialRectangle;whiteSpace=wrap;html=1;left=0;right=0;fillColor=#50C878;strokeColor=#2E8B57;fontColor=#ffffff;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="360" y="620" width="140" height="40" as="geometry" />
+        </mxCell>
+
+        <mxCell id="d8" value="D8: informant_reports" style="shape=partialRectangle;whiteSpace=wrap;html=1;left=0;right=0;fillColor=#50C878;strokeColor=#2E8B57;fontColor=#ffffff;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="520" y="620" width="140" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Data Stores - Bottom Row 3 -->
+        <mxCell id="d9" value="D9: appeals" style="shape=partialRectangle;whiteSpace=wrap;html=1;left=0;right=0;fillColor=#50C878;strokeColor=#2E8B57;fontColor=#ffffff;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="680" y="620" width="120" height="40" as="geometry" />
+        </mxCell>
+
+        <mxCell id="d10" value="D10: prayer_records" style="shape=partialRectangle;whiteSpace=wrap;html=1;left=0;right=0;fillColor=#50C878;strokeColor=#2E8B57;fontColor=#ffffff;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="820" y="620" width="140" height="40" as="geometry" />
+        </mxCell>
+
+        <mxCell id="d11" value="D11: messages" style="shape=partialRectangle;whiteSpace=wrap;html=1;left=0;right=0;fillColor=#50C878;strokeColor=#2E8B57;fontColor=#ffffff;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="680" y="550" width="120" height="40" as="geometry" />
+        </mxCell>
+
+        <mxCell id="d12" value="D12: semesters" style="shape=partialRectangle;whiteSpace=wrap;html=1;left=0;right=0;fillColor=#50C878;strokeColor=#2E8B57;fontColor=#ffffff;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="820" y="550" width="120" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Sample Data Flows (คุณสามารถเพิ่มเส้นเองใน Draw.io) -->
+        <mxCell id="flow1" value="ข้อมูลผู้ใช้" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="admin" target="p1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -274,6 +274,9 @@
             </div>
             
             <form method="GET" style="display:flex; gap: 0.5rem; align-items: center;">
+                @if(isset($student) && $student)
+                    <input type="hidden" name="student_id" value="{{ $student->StudentID }}">
+                @endif
                 <select name="month" class="form-control" style="width: 130px;">
                     @foreach([1=>'มกราคม', 2=>'กุมภาพันธ์', 3=>'มีนาคม', 4=>'เมษายน', 5=>'พฤษภาคม', 6=>'มิถุนายน', 7=>'กรกฎาคม', 8=>'สิงหาคม', 9=>'กันยายน', 10=>'ตุลาคม', 11=>'พฤศจิกายน', 12=>'ธันวาคม'] as $num => $name)
                         <option value="{{ $num }}" {{ $month == $num ? 'selected' : '' }}>{{ $name }}</option>
@@ -298,7 +301,7 @@
     
     <!-- Real-time Prayer Status Summary Card -->
     @if(isset($monthlyStatus))
-    <div class="card" style="margin-bottom: 1.5rem; border-left: 4px solid {{ $monthlyStatus['status'] === 'pass' ? '#10b981' : ($monthlyStatus['status'] === 'corrected' ? '#3b82f6' : '#ef4444') }};">
+    <div class="card" style="margin-bottom: 1.5rem; border-left: 4px solid {{ $monthlyStatus['status'] === 'pass' ? '#10b981' : ($monthlyStatus['status'] === 'corrected' ? '#3b82f6' : ($monthlyStatus['status'] === 'no_data' ? '#94a3b8' : '#ef4444')) }};">
         <div class="card-body-pad" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1.5rem;">
             <div style="flex:1; min-width:280px;">
                 <h4 style="margin:0; font-size:1.05rem; color:var(--islamic-primary); display:flex; align-items:center; gap:0.5rem;">
@@ -323,8 +326,8 @@
             <div style="display:flex; align-items:center; gap:1.5rem; flex-wrap:wrap;">
                 {{-- Percentage --}}
                 <div style="text-align:center;">
-                    <div style="font-size:2rem; font-weight:800; font-family:'Outfit', sans-serif; color: {{ $monthlyStatus['percentage'] >= 80 ? 'var(--green)' : ($monthlyStatus['percentage'] >= 60 ? 'var(--orange)' : 'var(--red)') }}; line-height:1;">
-                        {{ $monthlyStatus['percentage'] }}%
+                    <div style="font-size:2rem; font-weight:800; font-family:'Outfit', sans-serif; color: {{ $monthlyStatus['status'] === 'no_data' ? 'var(--text-muted)' : ($monthlyStatus['percentage'] >= 80 ? 'var(--green)' : ($monthlyStatus['percentage'] >= 60 ? 'var(--orange)' : 'var(--red)')) }}; line-height:1;">
+                        {{ $monthlyStatus['percentage'] !== null ? $monthlyStatus['percentage'].'%' : '-' }}
                     </div>
                     <div style="font-size:0.7rem; color:var(--text-muted); margin-top:0.2rem;">ร้อยละการละหมาด</div>
                 </div>
@@ -336,6 +339,8 @@
                             <span class="badge badge-green" style="font-size:0.85rem; padding:0.3rem 0.75rem;"><i class="fas fa-check-circle"></i> ผ่านเกณฑ์การละหมาด</span>
                         @elseif($monthlyStatus['status'] === 'corrected')
                             <span class="badge badge-primary" style="font-size:0.85rem; padding:0.3rem 0.75rem; background: rgba(59, 130, 246, 0.1); color: #1d4ed8; border: 1px solid rgba(59, 130, 246, 0.2);"><i class="fas fa-user-check"></i> แก้ละหมาดแล้ว (ผ่าน)</span>
+                        @elseif($monthlyStatus['status'] === 'no_data')
+                            <span class="badge" style="font-size:0.85rem; padding:0.3rem 0.75rem; background:#f1f5f9; color:#64748b; border:1px solid #cbd5e1;"><i class="fas fa-calendar-times"></i> ไม่มีการเช็กชื่อในเดือนนี้</span>
                         @else
                             <span class="badge badge-red" style="font-size:0.85rem; padding:0.3rem 0.75rem;"><i class="fas fa-times-circle"></i> ไม่ผ่านเกณฑ์การละหมาด</span>
                         @endif
@@ -345,6 +350,8 @@
                             เข้าละหมาดครบถ้วนตามเกณฑ์ (> 80%)
                         @elseif($monthlyStatus['status'] === 'corrected')
                             ได้รับการบันทึกแก้ละหมาดจากฝ่ายปกครองแล้ว
+                        @elseif($monthlyStatus['status'] === 'no_data')
+                            ไม่มีการบันทึกข้อมูลการละหมาดในเดือนที่เลือก
                         @else
                             ขาดละหมาดเกินเกณฑ์ (ติดต่อฝ่ายปกครองเพื่อแก้)
                         @endif
@@ -384,12 +391,18 @@
                         $dayDate = Carbon\Carbon::create($year, $month, $day);
                         $isToday = $dayDate->isToday();
                         $isWeekend = $dayDate->isWeekend();
-                        $isPast = $dayDate->isPast();
 
                         // Get records for Zuhur (ซุฮรี/เที่ยง) and Asr (อัศรี/บ่าย) for this day
                         $dayRecords = $calendarDays['records']->get($day) ?? collect();
                         $zuhurRecord = $dayRecords->first(fn($r) => in_array($r->Period, ['เที่ยง', 'ซุฮรี']));
                         $asrRecord = $dayRecords->first(fn($r) => in_array($r->Period, ['บ่าย', 'อัศรี']));
+
+                        // Check if the school held active prayer sessions on this day
+                        $schoolActivePeriods = (isset($calendarDays['school_sessions']) && $calendarDays['school_sessions']->has($day))
+                            ? $calendarDays['school_sessions']->get($day)
+                            : [];
+                        $schoolHadZuhur = in_array('ซุฮรี', $schoolActivePeriods);
+                        $schoolHadAsr = in_array('อัศรี', $schoolActivePeriods);
                     @endphp
                     <div class="calendar-cell @if($isToday) today @endif">
                         <span class="cell-date">{{ $day }}</span>
@@ -397,23 +410,27 @@
                         <div class="cell-prayers">
                             <!-- Noon Zuhur Check -->
                             @if($zuhurRecord)
-                                @if($zuhurRecord->Status === 'ละหมาด')
+                                @if(in_array($zuhurRecord->Status, ['มา', 'ละหมาด', 'มาละหมาด', 'ละหมาดแล้ว', 'present']))
                                     <div class="prayer-indicator prayed">🟢 ซุฮรี</div>
-                                @else
+                                @elseif($zuhurRecord->Status === 'ละหมาดไม่ได้')
                                     <div class="prayer-indicator exempt">⚪ ซุฮรี</div>
+                                @else
+                                    <div class="prayer-indicator absent">🔴 ซุฮรี</div>
                                 @endif
-                            @elseif($isPast && !$isWeekend)
+                            @elseif($schoolHadZuhur)
                                 <div class="prayer-indicator absent">🔴 ซุฮรี</div>
                             @endif
 
                             <!-- Afternoon Asr Check -->
                             @if($asrRecord)
-                                @if($asrRecord->Status === 'ละหมาด')
+                                @if(in_array($asrRecord->Status, ['มา', 'ละหมาด', 'มาละหมาด', 'ละหมาดแล้ว', 'present']))
                                     <div class="prayer-indicator prayed">🟢 อัศรี</div>
-                                @else
+                                @elseif($asrRecord->Status === 'ละหมาดไม่ได้')
                                     <div class="prayer-indicator exempt">⚪ อัศรี</div>
+                                @else
+                                    <div class="prayer-indicator absent">🔴 อัศรี</div>
                                 @endif
-                            @elseif($isPast && !$isWeekend)
+                            @elseif($schoolHadAsr)
                                 <div class="prayer-indicator absent">🔴 อัศรี</div>
                             @endif
                         </div>
@@ -429,7 +446,7 @@
                 </div>
                 <div class="legend-item">
                     <span class="legend-dot red"></span>
-                    <span>🔴 ไม่ละหมาด (ขาด) *เฉพาะวันเรียน</span>
+                    <span>🔴 ไม่ละหมาด (ขาด) *เฉพาะวันและคาบที่มีการเช็กชื่อ</span>
                 </div>
                 <div class="legend-item">
                     <span class="legend-dot gray"></span>
@@ -598,96 +615,91 @@
 
 @push('scripts')
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    var select = document.getElementById('studentSelect');
-    var pills = document.querySelectorAll('.btn-grade-filter');
-    
-    if (select && pills.length > 0) {
+(function() {
+    function initFilter() {
+        var select = document.getElementById('studentSelect');
+        var pills = document.querySelectorAll('.btn-grade-filter');
+        var typedInput = document.getElementById('studentIdInput');
+        if (!select) return;
+
+        // Cache all original options once
+        if (!window.originalStudentOptions) {
+            window.originalStudentOptions = Array.from(select.querySelectorAll('option')).filter(function(opt) {
+                return opt.value !== '';
+            });
+        }
+
         var defaultOpt = select.querySelector('option[value=""]');
-        var originalOptions = Array.from(select.querySelectorAll('option')).filter(function(opt) {
-            return opt.value !== '';
-        });
-        
-        var activeGrade = 'all';
-        
-        function applyGradeFilter() {
-            var currentValue = select.value;
+        var originalOptions = window.originalStudentOptions;
+        var currentStudentId = "{{ $studentId ?? '' }}";
+        var activeGrade = "{{ $selectedGrade ?? 'all' }}";
+
+        // If a student ID is present, find which grade they belong to
+        if (currentStudentId) {
+            var match = originalOptions.find(function(o) { return o.value === currentStudentId; });
+            if (match) {
+                var g = match.getAttribute('data-grade');
+                if (g && (activeGrade === 'all' || !activeGrade)) {
+                    activeGrade = g;
+                }
+            }
+        }
+
+        function applyFilter() {
+            var curVal = select.value || (typedInput ? typedInput.value.trim() : '') || currentStudentId;
             select.innerHTML = '';
-            
             if (defaultOpt) {
                 select.appendChild(defaultOpt.cloneNode(true));
             }
-            
-            var matchedOptions = originalOptions.filter(function(opt) {
-                var optGrade = opt.getAttribute('data-grade');
-                return activeGrade === 'all' || optGrade === activeGrade;
+
+            var matched = originalOptions.filter(function(opt) {
+                var g = opt.getAttribute('data-grade');
+                return activeGrade === 'all' || g === activeGrade;
             });
-            
-            matchedOptions.forEach(function(opt) {
-                var newOpt = opt.cloneNode(true);
-                if (newOpt.value === currentValue) {
-                    newOpt.selected = true;
+
+            matched.forEach(function(opt) {
+                var cloned = opt.cloneNode(true);
+                if (cloned.value === curVal) {
+                    cloned.selected = true;
                 }
-                select.appendChild(newOpt);
+                select.appendChild(cloned);
             });
-            
-            // If the previously selected value is no longer available in filtered list, reset select value
-            var valueStillExists = matchedOptions.some(function(opt) {
-                return opt.value === currentValue;
+
+            // Update pills UI
+            pills.forEach(function(p) {
+                if (p.getAttribute('data-grade') === activeGrade) {
+                    p.classList.add('active');
+                } else {
+                    p.classList.remove('active');
+                }
             });
-            if (!valueStillExists && currentValue !== '') {
-                select.value = '';
-            }
+
+            var gradeInput = document.getElementById('gradeInput');
+            if (gradeInput) gradeInput.value = activeGrade;
         }
-        
+
+        // Pill clicks
         pills.forEach(function(btn) {
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
-                pills.forEach(function(p) { p.classList.remove('active'); });
-                this.classList.add('active');
                 activeGrade = this.getAttribute('data-grade');
-                applyGradeFilter();
-
-                var gradeInput = document.getElementById('gradeInput');
-                if (gradeInput) gradeInput.value = activeGrade;
-
-                var sel = document.getElementById('studentSelect');
-                var typed = document.getElementById('studentIdInput');
-                if ((!sel || !sel.value) && (!typed || !typed.value)) {
-                    var form = document.getElementById('calendarFilterForm');
-                    if (form) form.submit();
-                }
+                applyFilter();
             });
         });
-        
-        // Pre-select active pill if student is pre-selected
-        var currentVal = select.value;
-        if (currentVal) {
-            var selectedOpt = originalOptions.find(function(opt) {
-                return opt.value === currentVal;
-            });
-            if (selectedOpt) {
-                var initialGrade = selectedOpt.getAttribute('data-grade');
-                if (initialGrade) {
-                    pills.forEach(function(p) {
-                        if (p.getAttribute('data-grade') === initialGrade) {
-                            pills.forEach(function(x) { x.classList.remove('active'); });
-                            p.classList.add('active');
-                            activeGrade = initialGrade;
-                        }
-                    });
-                    applyGradeFilter();
-                }
-            }
-        }
-        // Expose student options list globally for search validation
-        window.originalStudentOptions = originalOptions;
+
+        // Initialize filter
+        applyFilter();
     }
-});
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initFilter);
+    } else {
+        initFilter();
+    }
+})();
 
 function syncStudentId(val) {
-    // When user types a student ID, clear the dropdown
-    if (val.trim()) {
+    if (val && val.trim()) {
         var sel = document.getElementById('studentSelect');
         if (sel) sel.value = '';
     }
@@ -700,8 +712,6 @@ function mergeStudentId(e) {
 
     var typedVal = typed.value.trim();
     var selVal   = sel.value.trim();
-
-    // Decide which value to use
     var finalId = typedVal || selVal;
 
     if (!finalId) {
@@ -718,49 +728,19 @@ function mergeStudentId(e) {
                 }
             });
         } else {
-            alert('กรุณาเลือกนักเรียน');
+            alert('กรุณาเลือกรายชื่อนักเรียน หรือกรอกรหัสนักเรียน');
         }
         return;
     }
 
-    // Validate if student ID exists
-    var found = false;
-    if (window.originalStudentOptions) {
-        found = window.originalStudentOptions.some(function(opt) {
-            return opt.value === finalId;
-        });
+    // Submit reliably
+    if (typedVal) {
+        typed.name = 'student_id';
+        sel.name = '';
     } else {
-        var options = sel.querySelectorAll('option');
-        for (var i = 0; i < options.length; i++) {
-            if (options[i].value === finalId) {
-                found = true;
-                break;
-            }
-        }
+        sel.name = 'student_id';
+        typed.name = '';
     }
-
-    if (!found) {
-        e.preventDefault();
-        if (typeof Swal !== 'undefined') {
-            Swal.fire({
-                icon: 'error',
-                title: 'ไม่พบรหัสนักเรียน',
-                text: 'ไม่พบรหัสนักเรียน "' + finalId + '" นี้ในระบบ กรุณาตรวจสอบและกรอกข้อมูลใหม่อีกครั้ง',
-                confirmButtonText: 'ตกลง',
-                buttonsStyling: false,
-                customClass: {
-                    confirmButton: 'btn btn-primary btn-swal-confirm'
-                }
-            });
-        } else {
-            alert('ไม่พบรหัสนักเรียนนี้ในระบบ');
-        }
-        return;
-    }
-
-    // Set dropdown value and submit
-    sel.value = finalId;
-    typed.name = ''; 
 }
 </script>
 @endpush

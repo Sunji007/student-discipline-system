@@ -62,6 +62,21 @@ class DashboardController extends Controller
             session(['selected_student_id' => $request->student_id]);
         }
 
+        // If previous URL has student_id parameter, replace it so it reflects the new child
+        $backUrl = url()->previous();
+        if ($backUrl) {
+            $parsed = parse_url($backUrl);
+            if (isset($parsed['query'])) {
+                parse_str($parsed['query'], $queryParams);
+                if (isset($queryParams['student_id'])) {
+                    $queryParams['student_id'] = $request->student_id;
+                    $newQuery = http_build_query($queryParams);
+                    $cleanUrl = ($parsed['scheme'] ?? 'http') . '://' . ($parsed['host'] ?? '') . (isset($parsed['port']) ? ':' . $parsed['port'] : '') . ($parsed['path'] ?? '') . '?' . $newQuery;
+                    return redirect($cleanUrl);
+                }
+            }
+        }
+
         return redirect()->back();
     }
 }

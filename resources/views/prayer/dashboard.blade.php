@@ -96,6 +96,50 @@
     .stat-icon.islamic-primary { background: rgba(13, 92, 58, 0.06); color: var(--islamic-primary); }
     .stat-icon.islamic-gold { background: var(--islamic-gold-pale); color: var(--islamic-gold-dark, #a37d22); }
 
+    /* Interactive Clickable Stat Cards */
+    .stat-card.interactive {
+        cursor: pointer;
+        transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        user-select: none;
+    }
+    .stat-card.interactive:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    }
+    .stat-card.interactive:active {
+        transform: translateY(-1px);
+    }
+
+    /* Active Highlight States */
+    .stat-card.interactive.active {
+        background: #ffffff;
+    }
+    .stat-card.interactive.active.islamic-primary {
+        border: 2px solid var(--islamic-primary) !important;
+        box-shadow: 0 0 0 3px rgba(13, 92, 58, 0.2), 0 8px 20px rgba(13, 92, 58, 0.08);
+    }
+    .stat-card.interactive.active.green {
+        border: 2px solid #10b981 !important;
+        box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2), 0 8px 20px rgba(16, 185, 129, 0.08);
+    }
+    .stat-card.interactive.active.red {
+        border: 2px solid #ef4444 !important;
+        box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2), 0 8px 20px rgba(239, 68, 68, 0.08);
+    }
+    .stat-card.interactive.active.purple {
+        border: 2px solid #7c3aed !important;
+        box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2), 0 8px 20px rgba(124, 58, 237, 0.08);
+    }
+    .stat-card.interactive.active.orange {
+        border: 2px solid #d97706 !important;
+        box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.2), 0 8px 20px rgba(217, 119, 6, 0.08);
+    }
+    .stat-card.interactive.active.islamic-gold {
+        border: 2px solid var(--islamic-gold) !important;
+        box-shadow: 0 0 0 3px rgba(197, 168, 92, 0.2), 0 8px 20px rgba(197, 168, 92, 0.08);
+    }
+
     /* Analytics Chart Grid */
     .analytics-grid {
         display: grid;
@@ -188,7 +232,7 @@
             <h3><i class="fas fa-filter" style="color:var(--islamic-gold);"></i> ตัวกรองรายงาน</h3>
         </div>
         <div class="card-body-pad">
-            <form method="GET" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.85rem; align-items: end;">
+            <form method="GET" id="filterForm" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.85rem; align-items: end;">
                 <div class="form-group" style="margin:0;">
                     <label class="form-label">ระดับชั้น</label>
                     <select name="grade" id="grade" class="form-control">
@@ -229,10 +273,12 @@
 
                 <div class="form-group" style="margin:0;">
                     <label class="form-label">เกณฑ์การละหมาด</label>
-                    <select name="passing_status" class="form-control">
-                        <option value="">ทั้งหมด</option>
+                    <select name="passing_status" id="passingStatusSelect" class="form-control" onchange="document.getElementById('filterForm').submit()">
+                        <option value="" {{ empty($passingStatus) ? 'selected' : '' }}>ทั้งหมด</option>
                         <option value="pass" {{ $passingStatus == 'pass' ? 'selected' : '' }}>ผ่านเกณฑ์ (80% ขึ้นไป)</option>
                         <option value="fail" {{ $passingStatus == 'fail' ? 'selected' : '' }}>ไม่ผ่านเกณฑ์ (ต่ำกว่า 80%)</option>
+                        <option value="exempt" {{ $passingStatus == 'exempt' ? 'selected' : '' }}>ละหมาดไม่ได้ (มีรอบเดือน)</option>
+                        <option value="corrected" {{ $passingStatus == 'corrected' ? 'selected' : '' }}>แก้ละหมาดแล้ว</option>
                     </select>
                 </div>
 
@@ -255,9 +301,9 @@
         </div>
     </div>
 
-    <!-- 3. Enhanced 6 Summary Stat Cards -->
+    <!-- 3. Enhanced 6 Summary Stat Cards (Clickable Filters) -->
     <div class="stat-grid-6">
-        <div class="stat-card islamic-primary">
+        <div class="stat-card islamic-primary interactive {{ empty($passingStatus) ? 'active' : '' }}" onclick="filterByCard('')" title="คลิกเพื่อดูนักเรียนทั้งหมด">
             <div class="stat-icon islamic-primary"><i class="fas fa-users"></i></div>
             <div class="stat-info">
                 <div class="stat-value">{{ $schoolTotalStudents }}</div>
@@ -265,7 +311,7 @@
             </div>
         </div>
 
-        <div class="stat-card green">
+        <div class="stat-card green interactive {{ $passingStatus === 'pass' ? 'active' : '' }}" onclick="filterByCard('pass')" title="คลิกเพื่อดูนักเรียนที่ผ่านเกณฑ์">
             <div class="stat-icon green"><i class="fas fa-check-circle"></i></div>
             <div class="stat-info">
                 <div class="stat-value">{{ $schoolPassCount }}</div>
@@ -273,7 +319,7 @@
             </div>
         </div>
 
-        <div class="stat-card red">
+        <div class="stat-card red interactive {{ $passingStatus === 'fail' ? 'active' : '' }}" onclick="filterByCard('fail')" title="คลิกเพื่อดูนักเรียนที่ไม่ผ่านเกณฑ์">
             <div class="stat-icon red"><i class="fas fa-times-circle"></i></div>
             <div class="stat-info">
                 <div class="stat-value">{{ $schoolFailCount }}</div>
@@ -281,7 +327,7 @@
             </div>
         </div>
 
-        <div class="stat-card purple">
+        <div class="stat-card purple interactive {{ $passingStatus === 'exempt' ? 'active' : '' }}" onclick="filterByCard('exempt')" title="คลิกเพื่อดูนักเรียนที่ละหมาดไม่ได้">
             <div class="stat-icon purple"><i class="fas fa-female"></i></div>
             <div class="stat-info">
                 <div class="stat-value">{{ $schoolExemptStudentsCount }} <span style="font-size:0.75rem; font-weight:normal; color:#6b7280;">({{ $schoolTotalExempt }} คาบ)</span></div>
@@ -289,7 +335,7 @@
             </div>
         </div>
 
-        <div class="stat-card orange">
+        <div class="stat-card orange interactive {{ $passingStatus === 'corrected' ? 'active' : '' }}" onclick="filterByCard('corrected')" title="คลิกเพื่อดูนักเรียนที่แก้ละหมาดแล้ว">
             <div class="stat-icon orange"><i class="fas fa-user-check"></i></div>
             <div class="stat-info">
                 <div class="stat-value">{{ $schoolCorrectedCount }}</div>
@@ -297,7 +343,7 @@
             </div>
         </div>
 
-        <div class="stat-card islamic-gold">
+        <div class="stat-card islamic-gold interactive" onclick="scrollToTable()" title="คลิกเพื่อเลื่อนไปดูตารางสถิติ">
             <div class="stat-icon islamic-gold"><i class="fas fa-percentage"></i></div>
             <div class="stat-info">
                 <div class="stat-value">{{ round($schoolPercentage, 1) }}%</div>
@@ -356,14 +402,35 @@
     </div>
 
     <!-- 5. Export & Individual List -->
-    <div class="card">
+    <div class="card" id="prayerTableCard">
         <div class="card-header-bar" style="flex-wrap:wrap; gap:0.75rem; align-items:center; justify-content:space-between;">
             <div style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;">
-                <h3 style="margin:0; white-space:nowrap;">
-                    <i class="fas fa-clipboard-list" style="color:var(--islamic-gold);"></i> ตารางสรุปผลละหมาดรายบุคคล
-                    <span id="studentCountBadge" class="badge badge-primary" style="font-size:0.8rem; margin-left:0.35rem; font-weight:normal;">
+                <h3 style="margin:0; white-space:nowrap; display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;">
+                    <span><i class="fas fa-clipboard-list" style="color:var(--islamic-gold);"></i> ตารางสรุปผลละหมาดรายบุคคล</span>
+                    <span id="studentCountBadge" class="badge badge-primary" style="font-size:0.8rem; font-weight:normal;">
                         {{ count($studentStats) }} คน
                     </span>
+                    @if($passingStatus === 'pass')
+                        <span class="badge badge-green" style="font-size:0.75rem; display:inline-flex; align-items:center; gap:0.3rem;">
+                            <i class="fas fa-filter"></i> กรอง: ผ่านเกณฑ์ (>= 80%)
+                            <a href="{{ request()->fullUrlWithQuery(['passing_status' => null]) }}" style="color:inherit; margin-left:3px;" title="ยกเลิกการกรองนี้"><i class="fas fa-times"></i></a>
+                        </span>
+                    @elseif($passingStatus === 'fail')
+                        <span class="badge badge-red" style="font-size:0.75rem; display:inline-flex; align-items:center; gap:0.3rem;">
+                            <i class="fas fa-filter"></i> กรอง: ไม่ผ่านเกณฑ์ (< 80%)
+                            <a href="{{ request()->fullUrlWithQuery(['passing_status' => null]) }}" style="color:inherit; margin-left:3px;" title="ยกเลิกการกรองนี้"><i class="fas fa-times"></i></a>
+                        </span>
+                    @elseif($passingStatus === 'exempt')
+                        <span class="badge" style="background:#f3e8ff; color:#7c3aed; border:1px solid #d8b4fe; font-size:0.75rem; display:inline-flex; align-items:center; gap:0.3rem;">
+                            <i class="fas fa-filter"></i> กรอง: ละหมาดไม่ได้ (มีรอบเดือน)
+                            <a href="{{ request()->fullUrlWithQuery(['passing_status' => null]) }}" style="color:inherit; margin-left:3px;" title="ยกเลิกการกรองนี้"><i class="fas fa-times"></i></a>
+                        </span>
+                    @elseif($passingStatus === 'corrected')
+                        <span class="badge" style="background:#fff7ed; color:#c2410c; border:1px solid #fed7aa; font-size:0.75rem; display:inline-flex; align-items:center; gap:0.3rem;">
+                            <i class="fas fa-filter"></i> กรอง: แก้ละหมาดแล้ว
+                            <a href="{{ request()->fullUrlWithQuery(['passing_status' => null]) }}" style="color:inherit; margin-left:3px;" title="ยกเลิกการกรองนี้"><i class="fas fa-times"></i></a>
+                        </span>
+                    @endif
                 </h3>
             </div>
             
@@ -521,7 +588,50 @@
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+// Expose filterByCard and scrollToTable globally for interactive card clicks
+window.filterByCard = function(status) {
+    const form = document.getElementById('filterForm');
+    const select = document.getElementById('passingStatusSelect');
+    
+    // If already filtered to this status, scroll down directly
+    if (select && select.value === status) {
+        window.scrollToTable();
+        return;
+    }
+    
+    // Store scroll flag for after page load
+    sessionStorage.setItem('scrollToPrayerTable', '1');
+
+    if (form && select) {
+        select.value = status;
+        form.submit();
+    } else {
+        const url = new URL(window.location.href);
+        if (status) {
+            url.searchParams.set('passing_status', status);
+        } else {
+            url.searchParams.delete('passing_status');
+        }
+        window.location.href = url.toString();
+    }
+};
+
+window.scrollToTable = function() {
+    const tableCard = document.getElementById('prayerTableCard');
+    if (tableCard) {
+        tableCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+};
+
 document.addEventListener('DOMContentLoaded', function() {
+    // Auto-scroll to student table if triggered from a card click
+    if (sessionStorage.getItem('scrollToPrayerTable') === '1') {
+        sessionStorage.removeItem('scrollToPrayerTable');
+        setTimeout(function() {
+            window.scrollToTable();
+        }, 150);
+    }
+
     // === 1. Live instant search filter by student ID or Name ===
     const searchInput = document.getElementById('searchInput');
     const clearSearchBtn = document.getElementById('clearSearchBtn');

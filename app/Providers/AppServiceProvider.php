@@ -13,12 +13,14 @@ class AppServiceProvider extends ServiceProvider
         // ใช้ Bootstrap 5 สำหรับ Pagination
         Paginator::useBootstrap();
 
-        if (request()->server('HTTP_HOST') && str_contains(request()->server('HTTP_HOST'), 'student.yru.ac.th')) {
-            URL::forceScheme('https');
-        } elseif (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
-            URL::forceScheme('https');
-        } elseif (request()->isSecure()) {
-            URL::forceScheme('https');
+        if (!app()->runningInConsole()) {
+            if (request()->server('HTTP_HOST') && (str_contains(request()->server('HTTP_HOST'), 'site.yru.ac.th') || str_contains(request()->server('HTTP_HOST'), 'student.yru.ac.th'))) {
+                URL::forceScheme('https');
+            } elseif (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
+                URL::forceScheme('https');
+            } elseif (request()->isSecure()) {
+                URL::forceScheme('https');
+            }
         }
 
         if (\Illuminate\Support\Facades\Schema::hasTable('informant_reports')) {

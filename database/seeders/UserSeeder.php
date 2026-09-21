@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use App\Models\User;
 use App\Models\Teacher;
 use App\Models\DisciplineStaff;
+use Illuminate\Support\Facades\DB;
 
 class UserSeeder extends Seeder
 {

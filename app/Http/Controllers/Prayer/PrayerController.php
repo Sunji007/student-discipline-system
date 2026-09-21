@@ -149,7 +149,7 @@ class PrayerController extends Controller
     {
         $user = auth()->user();
         $role = strtolower($user->Role);
-        $studentId = $request->input('student_id');
+        $studentId = trim($request->input('student_id') ?: $request->input('student_id_typed') ?: '');
 
         // Lock Student/Parent filters or block unauthorized access
         $isLocked = false;
@@ -157,7 +157,30 @@ class PrayerController extends Controller
             $studentId = $user->student->StudentID ?? null;
             $isLocked = true;
         } elseif (in_array($role, ['ผู้ปกครอง', 'parent'])) {
-            $studentId = $user->parent->StudentID ?? null;
+            $parentStudents = $user->parentStudents;
+            $selectedId = session('selected_student_id');
+            $selectedChild = null;
+
+            if ($selectedId) {
+                $selectedChild = $parentStudents->firstWhere('StudentID', $selectedId);
+            }
+
+            // If not found in session, check request parameter if belonging to this parent
+            if (!$selectedChild && $request->filled('student_id')) {
+                $selectedChild = $parentStudents->firstWhere('StudentID', $request->input('student_id'));
+            }
+
+            // Fallback to first child
+            if (!$selectedChild) {
+                $selectedChild = $parentStudents->first();
+            }
+
+            $studentId = $selectedChild?->StudentID ?? ($user->parent?->StudentID ?? null);
+
+            if ($studentId && session('selected_student_id') !== $studentId) {
+                session(['selected_student_id' => $studentId]);
+            }
+
             $isLocked = true;
         } elseif (!in_array($role, ['ฝ่ายปกครอง', 'discipline', 'ผู้ดูแลระบบ', 'admin'])) {
             abort(403, 'คุณไม่มีสิทธิ์เข้าใช้งานหน้านี้');
@@ -199,18 +222,46 @@ class PrayerController extends Controller
                         return Carbon::parse($item->RecordDate)->day;
                     });
 
+                // Fetch active sessions conducted by the school in this month
+                // mapped by day number => array of normalized periods ['ซุฮรี', 'อัศรี']
+                $schoolSessions = PrayerRecord::whereYear('RecordDate', $year)
+                    ->whereMonth('RecordDate', $month)
+                    ->select('RecordDate', 'Period')
+                    ->distinct()
+                    ->get()
+                    ->groupBy(function($item) {
+                        return Carbon::parse($item->RecordDate)->day;
+                    })
+                    ->map(function($items) {
+                        return $items->pluck('Period')->map(function($p) {
+                            return in_array($p, ['เที่ยง', 'ซุฮรี']) ? 'ซุฮรี' : (in_array($p, ['บ่าย', 'อัศรี']) ? 'อัศรี' : $p);
+                        })->unique()->toArray();
+                    });
+
                 $calendarDays = [
                     'days_in_month' => $daysInMonth,
                     'first_day_of_week' => $firstDayOfWeek,
                     'records' => $records,
+                    'school_sessions' => $schoolSessions,
                     'month_name' => $startOfMonth->locale('th')->isoFormat('MMMM ') . ($year + 543),
                 ];
 
                 $monthlyStatus = $student->getPrayerMonthlyStatus($month, $year);
+            } else {
+                session()->flash('error', "ไม่พบข้อมูลรหัสนักเรียน \"{$studentId}\" ในระบบ กรุณาตรวจสอบรหัสและลองใหม่อีกครั้ง");
             }
         }
 
         $selectedGrade = $request->input('grade');
+        if (empty($selectedGrade) || $selectedGrade === 'all') {
+            if ($student) {
+                $selectedGrade = $student->GradeLevel;
+                if (!$selectedGrade && $student->classroom_display) {
+                    $parts = explode('/', $student->classroom_display);
+                    $selectedGrade = trim($parts[0]);
+                }
+            }
+        }
         $selectedClassroom = $request->input('classroom');
 
         // Overview data by Classroom & Grade
@@ -249,13 +300,17 @@ class PrayerController extends Controller
                     ];
                 }
 
+                $isNoData = ($stStatus['status'] === 'no_data');
                 $groupedByClass[$cName]['total']++;
-                if ($isPass) $groupedByClass[$cName]['pass']++;
-                else $groupedByClass[$cName]['fail']++;
-                $groupedByClass[$cName]['percent_sum'] += $stStatus['percentage'];
+                if (!$isNoData) {
+                    if ($isPass) $groupedByClass[$cName]['pass']++;
+                    else $groupedByClass[$cName]['fail']++;
+                    $groupedByClass[$cName]['percent_sum'] += ($stStatus['percentage'] ?? 0);
+                }
             }
 
             foreach ($groupedByClass as $cName => $cData) {
+                $activeCount = $cData['pass'] + $cData['fail'];
                 $classroomSummaries[] = [
                     'classroom' => $cName,
                     'grade' => $cData['grade'],
@@ -263,7 +318,7 @@ class PrayerController extends Controller
                     'total' => $cData['total'],
                     'pass' => $cData['pass'],
                     'fail' => $cData['fail'],
-                    'avg_percent' => $cData['total'] > 0 ? round($cData['percent_sum'] / $cData['total'], 1) : 0,
+                    'avg_percent' => $activeCount > 0 ? round($cData['percent_sum'] / $activeCount, 1) : 0,
                 ];
             }
 
@@ -288,12 +343,15 @@ class PrayerController extends Controller
             foreach ($tableStudents as $st) {
                 $stStatus = $st->getPrayerMonthlyStatus($month, $year);
                 $isPass = ($stStatus['status'] === 'pass' || $stStatus['status'] === 'corrected');
-                if ($isPass) {
-                    $passCount++;
-                } else {
-                    $failCount++;
+                $isNoData = ($stStatus['status'] === 'no_data');
+                if (!$isNoData) {
+                    if ($isPass) {
+                        $passCount++;
+                    } else {
+                        $failCount++;
+                    }
+                    $totalPercentSum += ($stStatus['percentage'] ?? 0);
                 }
-                $totalPercentSum += $stStatus['percentage'];
 
                 $studentOverviewList[] = [
                     'student' => $st,
@@ -302,11 +360,12 @@ class PrayerController extends Controller
                 ];
             }
 
+            $activeTotal = $passCount + $failCount;
             $overviewStats = [
                 'total_students' => $totalStudents,
                 'pass_count' => $passCount,
                 'fail_count' => $failCount,
-                'avg_percent' => $totalStudents > 0 ? round($totalPercentSum / $totalStudents, 1) : 0,
+                'avg_percent' => $activeTotal > 0 ? round($totalPercentSum / $activeTotal, 1) : 0,
                 'month_name' => Carbon::create($year, $month, 1)->locale('th')->isoFormat('MMMM YYYY'),
             ];
         }
@@ -428,28 +487,11 @@ class PrayerController extends Controller
             if ($isCorrected) {
                 $schoolCorrectedCount++;
             }
-
-            // Filter by passing status
-            if ($passingStatus === 'pass' && !$isPass) continue;
-            if ($passingStatus === 'fail' && $isPass) continue;
-
             if ($isPass) {
                 $schoolPassCount++;
             } else {
                 $schoolFailCount++;
             }
-
-            $studentStats[] = [
-                'student'      => $s,
-                'prayed'       => $prayedCount,
-                'absent'       => $absentCount,
-                'exempt'       => $exemptCount,
-                'percent'      => $percent,
-                'is_passing'   => $isPassing,
-                'is_corrected' => $isCorrected,
-                'status'       => $statusData['status'],
-                'status_text'  => $statusData['status_text']
-            ];
 
             $schoolTotalPrayed += $prayedCount;
             $schoolTotalAbsent += $absentCount;
@@ -473,6 +515,24 @@ class PrayerController extends Controller
                 $classroomStatsMap[$cName]['fail']++;
             }
             $classroomStatsMap[$cName]['percent_sum'] += $percent;
+
+            // Filter by passing status for the student table
+            if ($passingStatus === 'pass' && !$isPass) continue;
+            if ($passingStatus === 'fail' && $isPass) continue;
+            if ($passingStatus === 'exempt' && $exemptCount <= 0) continue;
+            if ($passingStatus === 'corrected' && !$isCorrected) continue;
+
+            $studentStats[] = [
+                'student'      => $s,
+                'prayed'       => $prayedCount,
+                'absent'       => $absentCount,
+                'exempt'       => $exemptCount,
+                'percent'      => $percent,
+                'is_passing'   => $isPassing,
+                'is_corrected' => $isCorrected,
+                'status'       => $statusData['status'],
+                'status_text'  => $statusData['status_text']
+            ];
         }
 
         // Build Classroom Ranking Array
@@ -543,7 +603,7 @@ class PrayerController extends Controller
             ->all();
 
         // School-Wide Summary Calculations
-        $schoolTotalStudents = count($studentStats);
+        $schoolTotalStudents = count($students);
         $schoolTotalExpected = $schoolTotalStudents * $totalActiveSessions;
         $schoolTotalEligible = max(0, $schoolTotalExpected - $schoolTotalExempt);
         $schoolPercentage = $schoolTotalEligible > 0 ? ($schoolTotalPrayed / $schoolTotalEligible) * 100 : 0;
@@ -698,6 +758,8 @@ class PrayerController extends Controller
             // Apply passing status filter
             if ($passingStatus === 'pass' && !$isPass) continue;
             if ($passingStatus === 'fail' && $isPass) continue;
+            if ($passingStatus === 'exempt' && $exemptCount <= 0) continue;
+            if ($passingStatus === 'corrected' && !$isCorrected) continue;
 
             $stats[] = [
                 'StudentID'    => $s->StudentID,

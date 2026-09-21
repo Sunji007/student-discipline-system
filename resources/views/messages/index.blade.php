@@ -13,9 +13,11 @@
             <p>ไม่มีข้อความใหม่</p>
         @endif
     </div>
+    @if(!request('compose'))
     <a href="{{ url()->current() }}?compose=1" class="btn btn-primary">
         <i class="fas fa-plus"></i> เพิ่ม
     </a>
+    @endif
 </div>
 
 @if(request('compose'))
@@ -37,8 +39,43 @@
         @endphp
         <form method="POST" action="{{ route($storeRoute) }}" enctype="multipart/form-data">
             @csrf
+
+            @if(auth()->user()->Role === 'ผู้ปกครอง' && isset($selectedStudent))
+                <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 1.25rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem;">
+                    <div style="display: flex; align-items: center; gap: 0.6rem;">
+                        <div style="width: 36px; height: 36px; border-radius: 50%; background: #dcfce7; color: #15803d; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0;">
+                            <i class="fas fa-child"></i>
+                        </div>
+                        <div>
+                            <div style="font-size: 0.92rem; font-weight: 700; color: #166534;">
+                                ส่งข้อความเกี่ยวกับบุตรหลาน: {{ $selectedStudent->FullName }}
+                            </div>
+                            <div style="font-size: 0.8rem; color: #15803d;">
+                                ระดับชั้น: <strong>{{ $selectedStudent->classroom_display ?: ($selectedStudent->Classroom ?? '-') }}</strong> | รหัสประจำตัว: <strong>{{ $selectedStudent->StudentID }}</strong>
+                            </div>
+                        </div>
+                    </div>
+                    @if(isset($students) && $students->count() > 1)
+                        <div style="display: flex; align-items: center; gap: 0.4rem;">
+                            <label for="composeChildSwitch" style="font-size: 0.82rem; font-weight: 600; color: #374151; margin: 0; white-space: nowrap;">
+                                สลับบุตรหลาน:
+                            </label>
+                            <select id="composeChildSwitch" class="form-control" style="width: auto; padding: 0.25rem 1.8rem 0.25rem 0.65rem; font-size: 0.82rem; height: 34px; border-radius: 6px;" onchange="window.location.href='{{ url()->current() }}?compose=1&student_id=' + this.value">
+                                @foreach($students as $std)
+                                    <option value="{{ $std->StudentID }}" {{ $selectedStudent->StudentID == $std->StudentID ? 'selected' : '' }}>
+                                        {{ $std->FullName }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    @endif
+                </div>
+            @endif
+
             <div class="form-group">
-                @if(auth()->user()->Role === 'นักเรียน' || auth()->user()->Role === 'ผู้ปกครอง')
+                @if(auth()->user()->Role === 'ผู้ปกครอง' && isset($selectedStudent))
+                    <label class="form-label">ครูประจำชั้นของ {{ $selectedStudent->FullName }} ({{ $selectedStudent->classroom_display ?: ($selectedStudent->Classroom ?? '') }}) <span style="color:var(--red)">*</span></label>
+                @elseif(auth()->user()->Role === 'นักเรียน' || auth()->user()->Role === 'ผู้ปกครอง')
                     <label class="form-label">ครูประจำชั้น <span style="color:var(--red)">*</span></label>
                 @else
                     <label class="form-label">ถึง <span style="color:var(--red)">*</span></label>
@@ -109,7 +146,13 @@
                     @endif
                     <select name="ReceiverID" id="receiverSelect" class="form-control" required>
                         @if(auth()->user()->Role === 'นักเรียน' || auth()->user()->Role === 'ผู้ปกครอง')
-                            <option value="">เลือกครูประจำชั้น</option>
+                            @if($allRecps->isEmpty())
+                                <option value="" disabled selected>ไม่พบข้อมูลครูประจำชั้นของ {{ isset($selectedStudent) ? $selectedStudent->FullName : 'บุตรหลาน' }} ในระบบ</option>
+                            @elseif($allRecps->count() === 1)
+                                <option value="" disabled>เลือกครูประจำชั้น</option>
+                            @else
+                                <option value="">เลือกครูประจำชั้น</option>
+                            @endif
                         @else
                             <option value="">เลือกผู้รับ</option>
                         @endif
@@ -146,7 +189,7 @@
                                             }
                                         }
                                     @endphp
-                                    <option value="{{ $u->UserID }}" data-search="{{ $extraSearch }}">
+                                    <option value="{{ $u->UserID }}" {{ (old('ReceiverID') == $u->UserID || ((auth()->user()->Role === 'นักเรียน' || auth()->user()->Role === 'ผู้ปกครอง') && $allRecps->count() === 1)) ? 'selected' : '' }} data-search="{{ $extraSearch }}">
                                         {{ $displayLabel }}
                                     </option>
                                 @endforeach

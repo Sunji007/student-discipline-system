@@ -1851,7 +1851,7 @@
                 @endif
 
                 <!-- Child/Student Selector for Parents -->
-                @if(in_array(strtolower(auth()->user()->Role), ['ผู้ปกครอง', 'parent']))
+                @if(in_array(strtolower(session('active_role') ?? auth()->user()->Role), ['ผู้ปกครอง', 'parent']))
                     @php
                         $parentStudents = auth()->user()->parentStudents;
                         $selectedStudentId = session('selected_student_id', $parentStudents->first()?->StudentID);
@@ -1900,8 +1900,6 @@
             @yield('content')
         </main>
     </div>
-
-    @stack('scripts')
 
     {{-- Reusable Custom Confirm Modal --}}
     <div id="confirmModal" style="display:none; position:fixed; inset:0; background:rgba(15,14,52,0.55); backdrop-filter:blur(4px); z-index:9999; align-items:center; justify-content:center;">

@@ -1,0 +1,140 @@
+// DFD Level 1 - Student Discipline System
+digraph {
+	nodesep=1.5 rankdir=TB ranksep=1.2 splines=ortho
+	dpi=300 ratio=fill size="16.5,11.7!"
+	fontname=Arial fontsize=14
+	subgraph cluster_external {
+		color=gray fontsize=16 label="External Entities - ผู้ใช้งานระบบ" style=dashed
+		Admin [label="ผู้ดูแลระบบ
+Admin" color="#C92A2A" fillcolor="#FF6B6B" fontcolor=white fontname=Arial fontsize=12 height=0.8 penwidth=2 shape=box style=filled width=1.8]
+		Discipline [label="เจ้าหน้าที่ฝ่ายปกครอง
+Discipline Staff" color="#C92A2A" fillcolor="#FF6B6B" fontcolor=white fontname=Arial fontsize=12 height=0.8 penwidth=2 shape=box style=filled width=1.8]
+		Teacher [label="ครูที่ปรึกษา
+Teacher" color="#C92A2A" fillcolor="#FF6B6B" fontcolor=white fontname=Arial fontsize=12 height=0.8 penwidth=2 shape=box style=filled width=1.8]
+		Student [label="นักเรียน
+Student" color="#C92A2A" fillcolor="#FF6B6B" fontcolor=white fontname=Arial fontsize=12 height=0.8 penwidth=2 shape=box style=filled width=1.8]
+		Parent [label="ผู้ปกครอง
+Parent" color="#C92A2A" fillcolor="#FF6B6B" fontcolor=white fontname=Arial fontsize=12 height=0.8 penwidth=2 shape=box style=filled width=1.8]
+	}
+	subgraph cluster_proc1 {
+		rank=same
+		P1 [label="1.0
+จัดการข้อมูล
+ผู้ใช้และหลัก" color="#2E5C8A" fillcolor="#4A90E2" fixedsize=true fontcolor=white fontname=Arial fontsize=11 height=1.6 penwidth=2 shape=circle style=filled width=1.6]
+		P8 [label="8.0
+รายงานและ
+แดชบอร์ด" color="#2E5C8A" fillcolor="#4A90E2" fixedsize=true fontcolor=white fontname=Arial fontsize=11 height=1.6 penwidth=2 shape=circle style=filled width=1.6]
+	}
+	subgraph cluster_proc2 {
+		rank=same
+		P2 [label="2.0
+เช็กชื่อ
+เข้าแถว" color="#2E5C8A" fillcolor="#4A90E2" fixedsize=true fontcolor=white fontname=Arial fontsize=11 height=1.6 penwidth=2 shape=circle style=filled width=1.6]
+		P6 [label="6.0
+บันทึก
+ละหมาด" color="#2E5C8A" fillcolor="#4A90E2" fixedsize=true fontcolor=white fontname=Arial fontsize=11 height=1.6 penwidth=2 shape=circle style=filled width=1.6]
+		P7 [label="7.0
+ระบบ
+ข้อความ" color="#2E5C8A" fillcolor="#4A90E2" fixedsize=true fontcolor=white fontname=Arial fontsize=11 height=1.6 penwidth=2 shape=circle style=filled width=1.6]
+	}
+	subgraph cluster_proc3 {
+		rank=same
+		P3 [label="3.0
+จัดการคะแนน
+พฤติกรรม" color="#2E5C8A" fillcolor="#4A90E2" fixedsize=true fontcolor=white fontname=Arial fontsize=11 height=1.6 penwidth=2 shape=circle style=filled width=1.6]
+		P4 [label="4.0
+จัดการ
+เบาะแส" color="#2E5C8A" fillcolor="#4A90E2" fixedsize=true fontcolor=white fontname=Arial fontsize=11 height=1.6 penwidth=2 shape=circle style=filled width=1.6]
+		P5 [label="5.0
+จัดการ
+อุทธรณ์" color="#2E5C8A" fillcolor="#4A90E2" fixedsize=true fontcolor=white fontname=Arial fontsize=11 height=1.6 penwidth=2 shape=circle style=filled width=1.6]
+	}
+	subgraph cluster_ds1 {
+		color=green fontsize=12 label="User Data" style=dashed
+		rank=same
+		D1 [label="D1: users" color="#2E8B57" fillcolor="#50C878" fontcolor=white fontname=Arial fontsize=10 height=0.6 penwidth=2 shape=cylinder style=filled width=1.5]
+		D2 [label="D2: students" color="#2E8B57" fillcolor="#50C878" fontcolor=white fontname=Arial fontsize=10 height=0.6 penwidth=2 shape=cylinder style=filled width=1.5]
+		D3 [label="D3: teachers" color="#2E8B57" fillcolor="#50C878" fontcolor=white fontname=Arial fontsize=10 height=0.6 penwidth=2 shape=cylinder style=filled width=1.5]
+		D4 [label="D4: parents" color="#2E8B57" fillcolor="#50C878" fontcolor=white fontname=Arial fontsize=10 height=0.6 penwidth=2 shape=cylinder style=filled width=1.5]
+	}
+	subgraph cluster_ds2 {
+		color=green fontsize=12 label="Activity Data" style=dashed
+		rank=same
+		D5 [label="D5: attendances" color="#2E8B57" fillcolor="#50C878" fontcolor=white fontname=Arial fontsize=10 height=0.6 penwidth=2 shape=cylinder style=filled width=1.5]
+		D10 [label="D10: prayer_records" color="#2E8B57" fillcolor="#50C878" fontcolor=white fontname=Arial fontsize=10 height=0.6 penwidth=2 shape=cylinder style=filled width=1.5]
+		D12 [label="D12: semesters" color="#2E8B57" fillcolor="#50C878" fontcolor=white fontname=Arial fontsize=10 height=0.6 penwidth=2 shape=cylinder style=filled width=1.5]
+	}
+	subgraph cluster_ds3 {
+		color=green fontsize=12 label="Behavior Data" style=dashed
+		rank=same
+		D6 [label="D6: behavior_rules" color="#2E8B57" fillcolor="#50C878" fontcolor=white fontname=Arial fontsize=10 height=0.6 penwidth=2 shape=cylinder style=filled width=1.5]
+		D7 [label="D7: behavior_records" color="#2E8B57" fillcolor="#50C878" fontcolor=white fontname=Arial fontsize=10 height=0.6 penwidth=2 shape=cylinder style=filled width=1.5]
+		D8 [label="D8: informant_reports" color="#2E8B57" fillcolor="#50C878" fontcolor=white fontname=Arial fontsize=10 height=0.6 penwidth=2 shape=cylinder style=filled width=1.5]
+		D9 [label="D9: appeals" color="#2E8B57" fillcolor="#50C878" fontcolor=white fontname=Arial fontsize=10 height=0.6 penwidth=2 shape=cylinder style=filled width=1.5]
+	}
+	subgraph cluster_ds4 {
+		rank=same
+		D11 [label="D11: messages" color="#2E8B57" fillcolor="#50C878" fontcolor=white fontname=Arial fontsize=10 height=0.6 penwidth=2 shape=cylinder style=filled width=1.5]
+	}
+	Admin -> P1 [label="ข้อมูลผู้ใช้" color="#333" fontsize=10]
+	Admin -> P8 [label="ขอรายงาน" color="#333" fontsize=10]
+	Discipline -> P2 [label="บันทึกเช็กชื่อ" color="#333" fontsize=10]
+	Discipline -> P3 [label="ตัด/เพิ่มคะแนน" color="#333" fontsize=10]
+	Discipline -> P4 [label="ตรวจสอบเบาะแส" color="#333" fontsize=10]
+	Discipline -> P5 [label="พิจารณาอุทธรณ์" color="#333" fontsize=10]
+	Discipline -> P6 [label="บันทึกละหมาด" color="#333" fontsize=10]
+	Teacher -> P2 [label="เช็กชื่อแถว" color="#333" fontsize=10]
+	Teacher -> P3 [label="บันทึกพฤติกรรม" color="#333" fontsize=10]
+	Teacher -> P4 [label="แจ้งเบาะแส" color="#333" fontsize=10]
+	Teacher -> P6 [label="เช็กละหมาด" color="#333" fontsize=10]
+	Teacher -> P7 [label="ส่งข้อความ" color="#333" fontsize=10]
+	Teacher -> P8 [label="ขอรายงาน" color="#333" fontsize=10]
+	Student -> P4 [label="แจ้งเบาะแส" color="#333" fontsize=10]
+	Student -> P5 [label="ยื่นอุทธรณ์" color="#333" fontsize=10]
+	Student -> P6 [label="สแกนละหมาด" color="#333" fontsize=10]
+	Student -> P7 [label="ส่งข้อความ" color="#333" fontsize=10]
+	Parent -> P7 [label="ส่งข้อความ" color="#333" fontsize=10]
+	Parent -> P8 [label="ติดตามบุตร" color="#333" fontsize=10]
+	P1 -> Admin [label="สถานะ" color="#666" fontsize=10 style=dashed]
+	P3 -> Student [label="ผลคะแนน" color="#666" fontsize=10 style=dashed]
+	P4 -> Student [label="สถานะเบาะแส" color="#666" fontsize=10 style=dashed]
+	P5 -> Student [label="ผลอุทธรณ์" color="#666" fontsize=10 style=dashed]
+	P6 -> Student [label="สถิติละหมาด" color="#666" fontsize=10 style=dashed]
+	P7 -> Teacher [label="ข้อความ" color="#666" fontsize=10 style=dashed]
+	P7 -> Student [label="ข้อความ" color="#666" fontsize=10 style=dashed]
+	P7 -> Parent [label="ข้อความ" color="#666" fontsize=10 style=dashed]
+	P8 -> Admin [label="รายงาน" color="#666" fontsize=10 style=dashed]
+	P8 -> Discipline [label="รายงาน" color="#666" fontsize=10 style=dashed]
+	P8 -> Teacher [label="รายงาน" color="#666" fontsize=10 style=dashed]
+	P8 -> Student [label="แดชบอร์ด" color="#666" fontsize=10 style=dashed]
+	P8 -> Parent [label="รายงาน" color="#666" fontsize=10 style=dashed]
+	P2 -> P3 [label="ขาด 3 ครั้ง
+ตัดคะแนน -5" color="#FF6B00" fontsize=10 penwidth=2]
+	P4 -> P3 [label="เบาะแสเป็นจริง
+ตัดคะแนน" color="#FF6B00" fontsize=10 penwidth=2]
+	P1 -> D1 [label="R/W" color="#2E8B57" dir=both fontsize=9]
+	P1 -> D2 [label="R/W" color="#2E8B57" dir=both fontsize=9]
+	P1 -> D3 [label="R/W" color="#2E8B57" dir=both fontsize=9]
+	P1 -> D4 [label="R/W" color="#2E8B57" dir=both fontsize=9]
+	P2 -> D5 [label=Write color="#2E8B57" fontsize=9]
+	D2 -> P2 [label=Read color="#2E8B57" fontsize=9 style=dashed]
+	P3 -> D6 [label="R/W" color="#2E8B57" dir=both fontsize=9]
+	P3 -> D7 [label=Write color="#2E8B57" fontsize=9]
+	P3 -> D2 [label=Update color="#2E8B57" dir=both fontsize=9]
+	P4 -> D8 [label="R/W" color="#2E8B57" dir=both fontsize=9]
+	P5 -> D9 [label="R/W" color="#2E8B57" dir=both fontsize=9]
+	D7 -> P5 [label=Read color="#2E8B57" fontsize=9 style=dashed]
+	P5 -> D2 [label="คืนคะแนน" color="#2E8B57" fontsize=9]
+	P6 -> D10 [label="R/W" color="#2E8B57" dir=both fontsize=9]
+	D2 -> P6 [label=Read color="#2E8B57" fontsize=9 style=dashed]
+	P7 -> D11 [label="R/W" color="#2E8B57" dir=both fontsize=9]
+	D1 -> P8 [label=Read color="#2E8B57" fontsize=9 style=dashed]
+	D2 -> P8 [label=Read color="#2E8B57" fontsize=9 style=dashed]
+	D5 -> P8 [label=Read color="#2E8B57" fontsize=9 style=dashed]
+	D7 -> P8 [label=Read color="#2E8B57" fontsize=9 style=dashed]
+	D10 -> P8 [label=Read color="#2E8B57" fontsize=9 style=dashed]
+	D12 -> P1 [label=Check color="#999" fontsize=9 style=dotted]
+	D12 -> P2 [label=Check color="#999" fontsize=9 style=dotted]
+	D12 -> P3 [label=Check color="#999" fontsize=9 style=dotted]
+	D12 -> P6 [label=Check color="#999" fontsize=9 style=dotted]
+}

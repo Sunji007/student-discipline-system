@@ -179,7 +179,7 @@
     $currentYear = now()->year;
     $prayerStatus = $student->getPrayerMonthlyStatus($currentMonth, $currentYear);
 @endphp
-<div class="card" style="margin-bottom: 1.5rem; border-left: 4px solid {{ $prayerStatus['status'] === 'pass' ? '#10b981' : ($prayerStatus['status'] === 'corrected' ? '#3b82f6' : '#ef4444') }};">
+<div class="card" style="margin-bottom: 1.5rem; border-left: 4px solid {{ $prayerStatus['status'] === 'pass' ? '#10b981' : ($prayerStatus['status'] === 'corrected' ? '#3b82f6' : ($prayerStatus['status'] === 'no_data' ? '#94a3b8' : '#ef4444')) }};">
     <div style="padding:1.25rem 1.5rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
         <div>
             <h4 style="color:var(--navy); margin:0; display:flex; align-items:center; gap:0.5rem;">
@@ -192,8 +192,8 @@
         </div>
         <div style="display:flex; align-items:center; gap:1.25rem; flex-wrap:wrap;">
             <div style="text-align:center;">
-                <span style="font-family:'Outfit', sans-serif; font-size:1.5rem; font-weight:800; color: {{ $prayerStatus['percentage'] >= 80 ? '#10b981' : ($prayerStatus['percentage'] >= 60 ? '#f59e0b' : '#ef4444') }}">
-                    {{ $prayerStatus['percentage'] }}%
+                <span style="font-family:'Outfit', sans-serif; font-size:1.5rem; font-weight:800; color: {{ $prayerStatus['status'] === 'no_data' ? '#64748b' : ($prayerStatus['percentage'] >= 80 ? '#10b981' : ($prayerStatus['percentage'] >= 60 ? '#f59e0b' : '#ef4444')) }}">
+                    {{ $prayerStatus['percentage'] !== null ? $prayerStatus['percentage'].'%' : '-' }}
                 </span>
                 <span style="font-size:0.75rem; color:var(--text-muted); display:block;">สถิติละหมาด</span>
             </div>
@@ -202,6 +202,8 @@
                     <span class="badge badge-green" style="padding:0.3rem 0.65rem;"><i class="fas fa-check-circle"></i> ผ่านเกณฑ์</span>
                 @elseif($prayerStatus['status'] === 'corrected')
                     <span class="badge badge-primary" style="padding:0.3rem 0.65rem; background: rgba(59, 130, 246, 0.1); color: #1d4ed8; border: 1px solid rgba(59, 130, 246, 0.2);"><i class="fas fa-user-check"></i> แก้ละหมาดแล้ว (ผ่าน)</span>
+                @elseif($prayerStatus['status'] === 'no_data')
+                    <span class="badge" style="padding:0.3rem 0.65rem; background:#f1f5f9; color:#64748b; border:1px solid #cbd5e1;"><i class="fas fa-calendar-times"></i> ไม่มีการเช็กชื่อ</span>
                 @else
                     <span class="badge badge-red" style="padding:0.3rem 0.65rem;"><i class="fas fa-times-circle"></i> ไม่ผ่านเกณฑ์</span>
                 @endif
