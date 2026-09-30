@@ -126,6 +126,9 @@ class PrayerController extends Controller
             ]);
         }
 
+        $recordDate = Carbon::parse($record->RecordDate);
+        \Illuminate\Support\Facades\Cache::forget("prayer_active_sessions_v2_{$recordDate->year}_{$recordDate->month}");
+
         return response()->json([
             'success'   => true,
             'message'   => 'บันทึกข้อมูลสำเร็จ',
@@ -451,6 +454,17 @@ class PrayerController extends Controller
             ->whereMonth('RecordDate', $month)
             ->select('RecordDate', 'Period')
             ->distinct()
+            ->get()
+            ->map(function ($item) {
+                $period = $item->Period;
+                if (in_array($period, ['เที่ยง', 'ซุฮรี'])) {
+                    $period = 'ซุฮรี';
+                } elseif (in_array($period, ['บ่าย', 'อัศรี'])) {
+                    $period = 'อัศรี';
+                }
+                return Carbon::parse($item->RecordDate)->toDateString() . '_' . $period;
+            })
+            ->unique()
             ->count();
 
         // 3. Build Classroom Comparison Ranking for the Bar Chart (Comparing all classrooms in school / grade)
@@ -736,6 +750,16 @@ class PrayerController extends Controller
             ->select('RecordDate', 'Period')
             ->distinct()
             ->get()
+            ->map(function ($item) {
+                $period = $item->Period;
+                if (in_array($period, ['เที่ยง', 'ซุฮรี'])) {
+                    $period = 'ซุฮรี';
+                } elseif (in_array($period, ['บ่าย', 'อัศรี'])) {
+                    $period = 'อัศรี';
+                }
+                return Carbon::parse($item->RecordDate)->toDateString() . '_' . $period;
+            })
+            ->unique()
             ->count();
 
         // Query students matching filter

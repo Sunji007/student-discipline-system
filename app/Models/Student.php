@@ -176,15 +176,26 @@ class Student extends Model {
 
     public function getPrayerMonthlyStatus($month, $year)
     {
-        // 1. Fetch total check-in sessions in this month (cached for 5 minutes)
+        // 1. Fetch total distinct check-in sessions in this month (cached for 5 minutes)
         $totalActiveSessions = \Illuminate\Support\Facades\Cache::remember(
-            "prayer_active_sessions_{$year}_{$month}",
+            "prayer_active_sessions_v2_{$year}_{$month}",
             300,
             function () use ($month, $year) {
                 return \App\Models\PrayerRecord::whereYear('RecordDate', $year)
                     ->whereMonth('RecordDate', $month)
                     ->select('RecordDate', 'Period')
                     ->distinct()
+                    ->get()
+                    ->map(function ($item) {
+                        $period = $item->Period;
+                        if (in_array($period, ['เที่ยง', 'ซุฮรี'])) {
+                            $period = 'ซุฮรี';
+                        } elseif (in_array($period, ['บ่าย', 'อัศรี'])) {
+                            $period = 'อัศรี';
+                        }
+                        return \Carbon\Carbon::parse($item->RecordDate)->toDateString() . '_' . $period;
+                    })
+                    ->unique()
                     ->count();
             }
         );
@@ -217,7 +228,7 @@ class Student extends Model {
             ];
         }
 
-        $percentage = $eligibleSessions > 0 ? ($prayedCount / $eligibleSessions) * 100 : 100;
+        $percentage = $eligibleSessions > 0 ? min(100, ($prayedCount / $eligibleSessions) * 100) : 100;
         $percent = round($percentage, 1);
         $isPassing = $percent >= 80;
 
