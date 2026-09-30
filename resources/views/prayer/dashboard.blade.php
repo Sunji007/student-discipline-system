@@ -248,7 +248,8 @@
                     <select name="classroom" id="classroom" class="form-control">
                         <option value="">ทั้งหมด</option>
                         @foreach($classrooms as $c)
-                            <option value="{{ $c }}" {{ $classroom == $c ? 'selected' : '' }}>{{ $c }}</option>
+                            @php $displayRoom = preg_match('/^\d+\//', $c) ? 'ม.' . $c : $c; @endphp
+                            <option value="{{ $c }}" {{ $classroom == $c ? 'selected' : '' }}>{{ $displayRoom }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -408,7 +409,7 @@
                 <h3 style="margin:0; white-space:nowrap; display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;">
                     <span><i class="fas fa-clipboard-list" style="color:var(--islamic-gold);"></i> ตารางสรุปผลละหมาดรายบุคคล</span>
                     <span id="studentCountBadge" class="badge badge-primary" style="font-size:0.8rem; font-weight:normal;">
-                        {{ count($studentStats) }} คน
+                        {{ $classroom ? "ห้อง {$classroom} • " : "" }}{{ count($studentStats) }} คน
                     </span>
                     @if($passingStatus === 'pass')
                         <span class="badge badge-green" style="font-size:0.75rem; display:inline-flex; align-items:center; gap:0.3rem;">
@@ -440,7 +441,7 @@
                     <input type="text" id="searchInput" class="form-control" 
                            value="{{ $search ?? request('search') }}" 
                            placeholder="พิมพ์รหัส หรือ ชื่อนักเรียน..." 
-                           autocomplete="off"
+                           autocomplete="off" 
                            style="padding-left:2.2rem; padding-right:2rem; height:36px; font-size:0.85rem; border-radius:8px; border:1px solid #cbd5e1; background:#fff; box-shadow: 0 1px 2px rgba(0,0,0,0.04);">
                     <i class="fas fa-search" style="position:absolute; left:0.75rem; top:50%; transform:translateY(-50%); color:#94a3b8; font-size:0.85rem; pointer-events:none;"></i>
                     <button type="button" id="clearSearchBtn" style="position:absolute; right:0.6rem; top:50%; transform:translateY(-50%); border:none; background:transparent; color:#94a3b8; cursor:pointer; font-size:0.85rem; display:{{ !empty($search ?? request('search')) ? 'block' : 'none' }};" title="ล้างคำค้นหา">
@@ -448,10 +449,30 @@
                     </button>
                 </div>
 
+                <!-- Classroom Filter Dropdown -->
+                <div class="filter-dropdown-wrap">
+                    <label class="filter-dropdown-label" for="prayerClassroomFilter">
+                        <i class="fas fa-layer-group" style="color:var(--islamic-gold);"></i> เลือกห้อง:
+                    </label>
+                    <select id="prayerClassroomFilter" class="filter-dropdown-select" onchange="if(this.value){ window.location.href = this.value; }">
+                        <option value="{{ request()->fullUrlWithQuery(['classroom' => '']) }}" {{ empty($classroom) ? 'selected' : '' }}>
+                            🏫 ทุกห้องเรียน
+                        </option>
+                        @foreach($classrooms as $c)
+                            @php
+                                $displayRoom = preg_match('/^\d+\//', $c) ? 'ม.' . $c : $c;
+                            @endphp
+                            <option value="{{ request()->fullUrlWithQuery(['classroom' => $c]) }}" {{ ($classroom ?? '') == $c ? 'selected' : '' }}>
+                                🏫 ห้อง {{ $displayRoom }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
                 <!-- Gender Quick Filter Dropdown -->
                 <div class="filter-dropdown-wrap">
                     <label class="filter-dropdown-label" for="prayerGenderFilter">
-                        <i class="fas fa-venus-mars"></i> ตัวเลือกเพศ:
+                        <i class="fas fa-venus-mars"></i> เลือกเพศ:
                     </label>
                     <select id="prayerGenderFilter" class="filter-dropdown-select" onchange="if(this.value){ window.location.href = this.value; }">
                         <option value="{{ request()->fullUrlWithQuery(['gender' => '']) }}" {{ empty($gender) ? 'selected' : '' }}>
@@ -465,18 +486,6 @@
                         </option>
                     </select>
                 </div>
-
-                <!-- PDF Export Link (Print View) -->
-                <a href="{{ route('prayer.export', ['type' => 'monthly', 'month' => $month, 'year' => $year, 'grade' => $grade, 'classroom' => $classroom, 'gender' => $gender, 'passing_status' => $passingStatus, 'search' => $search ?? request('search')]) }}" 
-                   target="_blank" class="btn btn-outline btn-sm">
-                    <i class="fas fa-file-pdf" style="color:var(--red);"></i> ส่งออก PDF
-                </a>
-                
-                <!-- Excel Export Link -->
-                <a href="{{ route('prayer.export', ['type' => 'monthly', 'month' => $month, 'year' => $year, 'grade' => $grade, 'classroom' => $classroom, 'gender' => $gender, 'passing_status' => $passingStatus, 'search' => $search ?? request('search'), 'excel' => 1]) }}" 
-                   class="btn btn-outline btn-sm">
-                    <i class="fas fa-file-excel" style="color:var(--green);"></i> ส่งออก Excel
-                </a>
             </div>
         </div>
         
@@ -730,13 +739,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // === 3. Classroom Ranking Bar Chart ===
     const classroomData = @json($classroomRanking);
-    if (classroomData && classroomData.length > 0 && document.getElementById('classroomChart')) {
+    const chartCanvas = document.getElementById('classroomChart');
+    if (classroomData && classroomData.length > 0 && chartCanvas) {
         const labels = classroomData.map(c => c.name);
         const dataValues = classroomData.map(c => c.avg_percentage);
-        const bgColors = dataValues.map(v => v >= 80 ? 'rgba(16, 185, 129, 0.85)' : (v >= 60 ? 'rgba(245, 158, 11, 0.85)' : 'rgba(239, 68, 68, 0.85)'));
-        const borderColors = dataValues.map(v => v >= 80 ? '#059669' : (v >= 60 ? '#d97706' : '#dc2626'));
+        const bgColors = classroomData.map(c => {
+            if (c.is_selected) return 'rgba(13, 92, 58, 0.92)'; // Highlight selected room
+            const v = c.avg_percentage;
+            return v >= 80 ? 'rgba(16, 185, 129, 0.85)' : (v >= 60 ? 'rgba(245, 158, 11, 0.85)' : 'rgba(239, 68, 68, 0.85)');
+        });
+        const borderColors = classroomData.map(c => {
+            if (c.is_selected) return '#c5a85c'; // Golden border for selected room
+            const v = c.avg_percentage;
+            return v >= 80 ? '#059669' : (v >= 60 ? '#d97706' : '#dc2626');
+        });
+        const borderWidths = classroomData.map(c => c.is_selected ? 2.5 : 1);
 
-        new Chart(document.getElementById('classroomChart'), {
+        new Chart(chartCanvas, {
             type: 'bar',
             data: {
                 labels: labels,
@@ -745,9 +764,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     data: dataValues,
                     backgroundColor: bgColors,
                     borderColor: borderColors,
-                    borderWidth: 1.5,
+                    borderWidth: borderWidths,
                     borderRadius: 6,
-                    maxBarThickness: 45
+                    maxBarThickness: 42,
+                    minBarLength: 6 // Ensures bars are always visible even if 0%
                 }]
             },
             options: {
@@ -758,7 +778,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     tooltip: {
                         callbacks: {
                             label: function(ctx) {
-                                return ` ละหมาดเฉลี่ย: ${ctx.parsed.y}%`;
+                                const c = classroomData[ctx.dataIndex];
+                                return [
+                                    ` ละหมาดเฉลี่ย: ${ctx.parsed.y}%`,
+                                    ` นักเรียน: ${c.total} คน (มา: ${c.prayed}, ยกเว้น: ${c.exempt})`
+                                ];
                             }
                         }
                     }
@@ -774,7 +798,12 @@ document.addEventListener('DOMContentLoaded', function() {
                         grid: { color: '#f1f5f9' }
                     },
                     x: {
-                        ticks: { font: { size: 11 } },
+                        ticks: { 
+                            font: { size: 10.5 },
+                            color: function(ctx) {
+                                return classroomData[ctx.index]?.is_selected ? '#0d5c3a' : '#64748b';
+                            }
+                        },
                         grid: { display: false }
                     }
                 }

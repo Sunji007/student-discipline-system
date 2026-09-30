@@ -49,6 +49,8 @@ class SemesterController extends Controller
 
         if ($isActive) {
             session(['selected_semester_id' => $semester->semester_id]);
+            // หากเปิดใช้งานภาคเรียนที่ 1 ของปีการศึกษาใหม่ ให้ตรวจสอบและประมวลผลเลื่อนชั้นอัตโนมัติ
+            Semester::checkAndTriggerPromotion($semester);
         }
 
         $activeText = $isActive ? ' และตั้งเป็นภาคเรียนปัจจุบันเรียบร้อยแล้ว' : '';
@@ -65,6 +67,9 @@ class SemesterController extends Controller
         $semester->update(['is_active' => true]);
 
         session(['selected_semester_id' => $semester->semester_id]);
+
+        // หากเปิดใช้งานภาคเรียนที่ 1 ของปีการศึกษาใหม่ ให้ตรวจสอบและประมวลผลเลื่อนชั้นอัตโนมัติ
+        Semester::checkAndTriggerPromotion($semester);
 
         return redirect()->back()->with('success', "ตั้งปีการศึกษา {$semester->academic_year} ภาคเรียนที่ {$semester->term} เป็นภาคเรียนปัจจุบันเรียบร้อยแล้ว");
     }

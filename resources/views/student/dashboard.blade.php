@@ -6,9 +6,11 @@
 @section('content')
 @php
     $student = auth()->user()->student;
-    $activeSemester = \App\Models\Semester::where('is_active', true)->first();
+    $activeSemester = \App\Models\Semester::current();
     $selectedSemesterId = session('selected_semester_id', $activeSemester?->semester_id);
-    $selectedSemesterObj = \App\Models\Semester::find($selectedSemesterId);
+    $selectedSemesterObj = $selectedSemesterId == $activeSemester?->semester_id 
+        ? $activeSemester 
+        : \App\Models\Semester::allCached()->firstWhere('semester_id', $selectedSemesterId);
     $semesterText = $selectedSemesterObj ? "ภาคเรียนที่ {$selectedSemesterObj->term} ปีการศึกษา {$selectedSemesterObj->academic_year}" : "ปีการศึกษา " . (now()->year + 543);
 
     $recordsQuery = $student->behaviorRecords()->where('semester_id', $selectedSemesterId);
@@ -19,10 +21,16 @@
     $scoreColor = $score >= 80 ? 'var(--green)' : ($score >= 60 ? 'var(--orange)' : 'var(--red)');
     $scoreClass = $score >= 80 ? '' : ($score >= 60 ? ' medium' : ' low');
 
-    $attTotal = (clone $attendancesQuery)->count();
-    $attPresent = (clone $attendancesQuery)->where('Status', 'มา')->count();
-    $attLate = (clone $attendancesQuery)->where('Status', 'สาย')->count();
-    $attAbsent = (clone $attendancesQuery)->where('Status', 'ขาด')->count();
+    $attStats = (clone $attendancesQuery)->selectRaw("
+        COUNT(*) as total,
+        SUM(CASE WHEN Status = 'มา' THEN 1 ELSE 0 END) as present,
+        SUM(CASE WHEN Status = 'สาย' THEN 1 ELSE 0 END) as late,
+        SUM(CASE WHEN Status = 'ขาด' THEN 1 ELSE 0 END) as absent
+    ")->first();
+    $attTotal = (int)($attStats->total ?? 0);
+    $attPresent = (int)($attStats->present ?? 0);
+    $attLate = (int)($attStats->late ?? 0);
+    $attAbsent = (int)($attStats->absent ?? 0);
     $attRate = $attTotal > 0 ? round(($attPresent / $attTotal) * 100) : 100;
     $attColor = $attRate >= 80 ? 'green' : ($attRate >= 60 ? 'gold' : 'red');
 @endphp
@@ -97,11 +105,11 @@
                 </div>
             </div>
         </a>
-        <a href="{{ route('student.appeals.index') }}" class="stat-card gold" style="text-decoration:none; cursor:pointer;" title="ดูคำอุทธรณ์รอพิจารณา">
+        <a href="{{ route('student.appeals.index', ['status' => 'รอตรวจสอบ']) }}" class="stat-card gold" style="text-decoration:none; cursor:pointer;" title="ดูคำอุทธรณ์รอตรวจสอบ">
             <div class="stat-icon gold"><i class="fas fa-balance-scale"></i></div>
             <div class="stat-info">
                 <div class="stat-value">{{ $appealsQuery->where(['Status' => 'รอตรวจสอบ'])->count() }}</div>
-                <div class="stat-label">คำอุทธรณ์รอพิจารณา</div>
+                <div class="stat-label">คำอุทธรณ์รอตรวจสอบ</div>
             </div>
         </a>
     </div>

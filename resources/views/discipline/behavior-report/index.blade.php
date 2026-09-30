@@ -142,7 +142,7 @@
                 <i class="fas fa-undo"></i> ล้างตัวกรอง
             </a>
             <button type="submit" class="btn btn-primary btn-sm">
-                <i class="fas fa-filter"></i> ค้นหา
+                <i class="fas fa-search"></i> ค้นหา
             </button>
         </div>
     </form>

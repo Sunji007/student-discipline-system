@@ -21,9 +21,16 @@ class Student extends Model {
     public function prayerCorrections() { return $this->hasMany(PrayerCorrection::class, 'StudentID', 'StudentID'); }
     public function getAdvisoryTeacherAttribute()
     {
+        if (array_key_exists('advisory_teacher', $this->relations)) {
+            return $this->relations['advisory_teacher'];
+        }
+
         $classroom = $this->Classroom;
         $gradeLevel = $this->GradeLevel;
-        if (!$classroom) return null;
+        if (!$classroom) {
+            $this->setRelation('advisory_teacher', null);
+            return null;
+        }
 
         $rooms = [$classroom];
 
@@ -49,9 +56,12 @@ class Student extends Model {
             $rooms[] = str_replace('ม.', '', $gradeLevel) . '/' . $classroom;
         }
 
-        return Teacher::whereHas('advisoryRooms', function($q) use ($rooms) {
+        $teacher = Teacher::with('user')->whereHas('advisoryRooms', function($q) use ($rooms) {
             $q->whereIn('Classroom', array_unique($rooms));
         })->first();
+
+        $this->setRelation('advisory_teacher', $teacher);
+        return $teacher;
     }
 
     public function getAdvisoryTeachersAttribute()
@@ -166,13 +176,18 @@ class Student extends Model {
 
     public function getPrayerMonthlyStatus($month, $year)
     {
-        // 1. Fetch total check-in sessions in this month
-        $totalActiveSessions = \App\Models\PrayerRecord::whereYear('RecordDate', $year)
-            ->whereMonth('RecordDate', $month)
-            ->select('RecordDate', 'Period')
-            ->distinct()
-            ->get()
-            ->count();
+        // 1. Fetch total check-in sessions in this month (cached for 5 minutes)
+        $totalActiveSessions = \Illuminate\Support\Facades\Cache::remember(
+            "prayer_active_sessions_{$year}_{$month}",
+            300,
+            function () use ($month, $year) {
+                return \App\Models\PrayerRecord::whereYear('RecordDate', $year)
+                    ->whereMonth('RecordDate', $month)
+                    ->select('RecordDate', 'Period')
+                    ->distinct()
+                    ->count();
+            }
+        );
 
         // 2. Fetch student's records for this month
         $records = $this->prayerRecords()
@@ -240,12 +255,25 @@ class Student extends Model {
 
     public function getBehaviorScoreForSemester($semesterId)
     {
+        $hasRestoredCol = \Illuminate\Support\Facades\Schema::hasColumn('appeals', 'RestoredPoints');
+        $restoredSql = $hasRestoredCol
+            ? "COALESCE(appeals.RestoredPoints, ABS(behavior_rules.ScoreModifier))"
+            : "ABS(behavior_rules.ScoreModifier)";
+
         $netModifier = \Illuminate\Support\Facades\DB::table('behavior_records')
             ->join('behavior_rules', 'behavior_records.RuleID', '=', 'behavior_rules.RuleID')
+            ->leftJoin('appeals', 'behavior_records.RecordID', '=', 'appeals.RecordID')
             ->where('behavior_records.StudentID', $this->StudentID)
             ->where('behavior_records.semester_id', $semesterId)
             ->whereIn('behavior_records.Status', ['อนุมัติ', 'อนุมัติแล้ว', 'อยู่ในระหว่างยื่นอุทธรณ์'])
-            ->sum(\Illuminate\Support\Facades\DB::raw("CASE WHEN behavior_rules.RuleType = 'ตัดคะแนน' THEN -ABS(behavior_rules.ScoreModifier) ELSE ABS(behavior_rules.ScoreModifier) END"));
+            ->sum(\Illuminate\Support\Facades\DB::raw("
+                CASE 
+                    WHEN behavior_rules.RuleType = 'ตัดคะแนน' THEN 
+                        -ABS(behavior_rules.ScoreModifier) + (CASE WHEN appeals.Status = 'คืนคะแนน' THEN {$restoredSql} ELSE 0 END)
+                    ELSE 
+                        ABS(behavior_rules.ScoreModifier)
+                END
+            "));
 
         return max(0, min(100, 100 + ($netModifier ?? 0)));
     }

@@ -35,9 +35,19 @@
                     แจ้งเมื่อ {{ $dt->isoFormat('D MMMM ') . ($dt->year + 543) . $dt->isoFormat(' เวลา HH:mm น.') }}
                 </div>
             </div>
-            <span class="badge {{ $sc[0] }}" style="font-size:0.85rem; padding:0.4rem 0.875rem;">
-                {{ $informantReport->Status }}
-            </span>
+            <div style="display:flex; align-items:center; gap:0.5rem; flex-shrink:0;">
+                <span class="badge {{ $sc[0] }}" style="font-size:0.85rem; padding:0.4rem 0.875rem;">
+                    {{ $informantReport->Status }}
+                </span>
+                @if($informantReport->InvestigationResult)
+                @php
+                    $rsCfg = \App\Models\InformantReport::resultStyles()[$informantReport->InvestigationResult] ?? ['badge-gray', 'fa-circle', '#94a3b8'];
+                @endphp
+                <span class="badge {{ $rsCfg[0] }}" style="font-size:0.8rem; padding:0.35rem 0.7rem;">
+                    <i class="fas {{ $rsCfg[1] }}" style="margin-right:0.25rem;"></i> ผลตรวจสอบ: {{ $informantReport->InvestigationResult }}
+                </span>
+                @endif
+            </div>
         </div>
 
         {{-- Content --}}
@@ -133,6 +143,41 @@
                 </div>
             </div>
 
+            @if($reporterStats)
+            {{-- ประวัติการแจ้งของผู้แจ้งรายนี้ --}}
+            <div style="margin-bottom:1.25rem; background:#fffdf7; border:1px solid #ede8e0; padding:1rem; border-radius:4px;">
+                <div style="font-size:0.75rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-muted); margin-bottom:0.5rem;">
+                    <i class="fas fa-chart-bar" style="color:var(--gold); margin-right:0.25rem;"></i> ประวัติการแจ้งเบาะแสของผู้แจ้งรายนี้ (เฉพาะฝ่ายปกครอง)
+                </div>
+                <div style="font-size:0.85rem; color:var(--text); margin-bottom:0.5rem;">
+                    แจ้งมาแล้วทั้งหมด <strong style="color:var(--navy);">{{ $reporterStats['total'] }}</strong> เรื่อง
+                    @if($reporterStats['results']->isEmpty())
+                        — <span style="color:var(--text-muted); font-style:italic;">ยังไม่มีเรื่องที่ปิดสิ้นพร้อมผลการตรวจสอบ</span>
+                    @endif
+                </div>
+                @if($reporterStats['results']->isNotEmpty())
+                <div style="display:flex; flex-wrap:wrap; gap:0.4rem;">
+                    @foreach($reporterStats['results'] as $resultName => $count)
+                    @php
+                        $rsStyle = \App\Models\InformantReport::resultStyles()[$resultName] ?? ['badge-gray', 'fa-circle', '#94a3b8'];
+                    @endphp
+                    <span class="badge {{ $rsStyle[0] }}" style="font-size:0.75rem; padding:0.3rem 0.6rem;">
+                        <i class="fas {{ $rsStyle[1] }}" style="margin-right:0.25rem;"></i>
+                        {{ $resultName }}: {{ $count }} เรื่อง
+                    </span>
+                    @endforeach
+                </div>
+                @endif
+                @if($reporterStats['maliciousCount'] >= 2)
+                <div style="margin-top:0.75rem; background:rgba(189,39,67,0.06); border:1px solid rgba(189,39,67,0.25); border-left:3px solid var(--red); border-radius:4px; padding:0.65rem 0.85rem; font-size:0.82rem; color:#831843;">
+                    <i class="fas fa-triangle-exclamation" style="color:var(--red); margin-right:0.35rem;"></i>
+                    <strong>พบแพทเทิร์นการแจ้งเท็จซ้ำ:</strong> ผู้แจ้งรายนี้ถูกบันทึกผลว่า "แจ้งเท็จโดยเจตนา" แล้ว {{ $reporterStats['maliciousCount'] }} ครั้ง
+                    ควรพิจารณาเรียกตัวพูดคุย แจ้งผู้ปกครอง หรือบันทึกพฤติกรรมการให้ข้อมูลเท็จตามระเบียบโรงเรียน
+                </div>
+                @endif
+            </div>
+            @endif
+
             <div style="font-size:0.75rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-muted); margin-bottom:0.75rem;">
                 รายละเอียดเรื่องแจ้ง
             </div>
@@ -157,6 +202,33 @@
                     </a>
                     @endforeach
                 </div>
+            </div>
+            @endif
+
+            @if($informantReport->Status === 'ปิดเรื่องแล้ว' && ($informantReport->InvestigationResult || $informantReport->Remarks))
+            {{-- สรุปผลการตรวจสอบเมื่อปิดเรื่องแล้ว --}}
+            <div style="margin-top:1.25rem; padding-top:1.25rem; border-top:1px solid #ede8e0;">
+                <div style="font-size:0.75rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-muted); margin-bottom:0.5rem;">
+                    ผลการตรวจสอบและการดำเนินการ
+                </div>
+                @if($informantReport->InvestigationResult)
+                @php
+                    $rsSummary = \App\Models\InformantReport::resultStyles()[$informantReport->InvestigationResult] ?? ['badge-gray', 'fa-circle', '#94a3b8'];
+                @endphp
+                <div style="display:flex; align-items:flex-start; gap:0.65rem; background:#fffdf7; border:1px solid #ede8e0; border-left:3px solid {{ $rsSummary[2] }}; border-radius:4px; padding:0.85rem 1rem;">
+                    <i class="fas {{ $rsSummary[1] }}" style="color:{{ $rsSummary[2] }}; font-size:1.15rem; margin-top:0.15rem;"></i>
+                    <div>
+                        <div style="font-size:0.9rem; font-weight:700; color:var(--navy);">{{ $informantReport->InvestigationResult }}</div>
+                        @if($informantReport->Remarks)
+                        <div style="font-size:0.85rem; color:var(--text); line-height:1.6; margin-top:0.3rem; white-space:pre-wrap;">{{ $informantReport->Remarks }}</div>
+                        @endif
+                    </div>
+                </div>
+                @elseif($informantReport->Remarks)
+                <div style="font-size:0.85rem; color:var(--text); line-height:1.6; background:#fffdf7; border:1px solid #ede8e0; border-radius:4px; padding:0.85rem 1rem; white-space:pre-wrap;">
+                    <strong>หมายเหตุ:</strong> {{ $informantReport->Remarks }}
+                </div>
+                @endif
             </div>
             @endif
         </div>
@@ -238,33 +310,137 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Close report Swal confirmation
+    // Close report Swal with investigation result
     document.querySelectorAll('.btn-close-report').forEach(btn => {
         btn.addEventListener('click', function(e) {
             e.preventDefault();
             const form = this.closest('form');
+            const resultOptions = @json(\App\Models\InformantReport::resultOptions());
+
+            function submitCloseForm(result, remarks, createBehaviorRecord, notifyInvolved) {
+                form.querySelectorAll('input[name="InvestigationResult"], input[name="Remarks"], input[name="CreateBehaviorRecord"], input[name="NotifyInvolved"]').forEach(el => el.remove());
+                const fields = {
+                    InvestigationResult: result,
+                    Remarks: remarks || '',
+                    CreateBehaviorRecord: createBehaviorRecord === '1' ? '1' : '0',
+                    NotifyInvolved: notifyInvolved === '1' ? '1' : '0',
+                };
+                Object.entries(fields).forEach(([name, value]) => {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = name;
+                    input.value = value;
+                    form.appendChild(input);
+                });
+                form.submit();
+            }
+
             if (typeof Swal !== 'undefined') {
+                const optionsHtml = resultOptions.map(r => `<option value="${r}">${r}</option>`).join('');
                 Swal.fire({
-                    title: 'ยืนยันการปิดเรื่องนี้?',
-                    text: 'เมื่อปิดเรื่องแล้ว สถานะเรื่องแจ้งเบาะแสจะเปลี่ยนเป็นปิดเรื่องเรียบร้อย',
+                    title: 'ปิดเรื่องและบันทึกผลการตรวจสอบ',
+                    html: `
+                        <div style="text-align:left; font-size:0.88rem; color:#4b5563;">
+                            <label style="font-weight:700; display:block; margin-bottom:0.4rem;">
+                                ผลการตรวจสอบ <span style="color:#ef4444;">*</span>
+                            </label>
+                            <select id="swal-result-select"
+                                    style="width:100%; padding:0.55rem 0.7rem; border:1px solid #d1d5db; border-radius:8px; font-size:0.9rem; font-family:inherit;">
+                                <option value="">-- กรุณาเลือกผลการตรวจสอบ --</option>
+                                ${optionsHtml}
+                            </select>
+                            <div style="font-size:0.75rem; color:#6b7280; margin-top:0.45rem; line-height:1.5; background:#f9fafb; border:1px solid #e5e7eb; border-radius:6px; padding:0.5rem 0.65rem;">
+                                <i class="fas fa-circle-info" style="color:#f59e0b;"></i>
+                                <strong>แจ้งเท็จโดยเจตนา</strong> = รู้ว่าไม่เป็นความจริงแต่แจ้งเพื่อกลั่นแกล้ง<br>
+                                <strong>แจ้งไม่ถูกต้องโดยไม่เจตนา</strong> = แจ้งด้วยความเข้าใจผิด (ไม่ถือเป็นความผิดของผู้แจ้ง)
+                            </div>
+                            <label style="font-weight:700; display:block; margin:0.85rem 0 0.4rem;">
+                                หมายเหตุการดำเนินการ <span style="font-weight:400; color:#9ca3af;">(ถ้ามี)</span>
+                            </label>
+                            <textarea id="swal-remarks" rows="3" placeholder="ระบุการดำเนินการ เช่น สอบสวนแล้ว, เรียกพูดคุย, แจ้งผู้ปกครอง..."
+                                      style="width:100%; padding:0.55rem 0.7rem; border:1px solid #d1d5db; border-radius:8px; font-size:0.9rem; font-family:inherit; resize:vertical;"></textarea>
+                            <div id="swal-close-options"></div>
+                        </div>`,
                     iconHtml: '<i class="fas fa-lock" style="color:#16a34a; font-size:2.6rem;"></i>',
+                    didOpen: () => {
+                        const optionsBox = document.getElementById('swal-close-options');
+                        const renderOptions = () => {
+                            const selected = document.getElementById('swal-result-select').value;
+                            let html = '';
+                            if (selected === 'แจ้งเท็จโดยเจตนา') {
+                                html += `<label style="display:flex; align-items:flex-start; gap:0.5rem; margin-top:0.85rem; padding:0.65rem 0.75rem; background:#fef2f2; border:1px solid #fecaca; border-radius:8px; font-size:0.82rem; color:#7f1d1d; cursor:pointer; line-height:1.5;">
+                                    <input type="checkbox" id="swal-create-behavior-record" style="margin-top:0.15rem; accent-color:#dc2626; cursor:pointer;">
+                                    <span>บันทึกพฤติกรรมหักคะแนนผู้แจ้ง <strong>(-10 คะแนน สถานะรออนุมัติ)</strong><br>
+                                    <span style="font-size:0.75rem;">เฉพาะเมื่อผู้แจ้งเป็นนักเรียนในระบบ — ครั้งแรกอาจเลือกใช้การพูดคุย/เตือนก่อน</span></span>
+                                </label>`;
+                            }
+                            if (selected && selected !== 'เป็นความจริง') {
+                                html += `<label style="display:flex; align-items:flex-start; gap:0.5rem; margin-top:0.6rem; padding:0.65rem 0.75rem; background:#f0fdf4; border:1px solid #bbf7d0; border-radius:8px; font-size:0.82rem; color:#166534; cursor:pointer; line-height:1.5;">
+                                    <input type="checkbox" id="swal-notify-involved" checked style="margin-top:0.15rem; accent-color:#16a34a; cursor:pointer;">
+                                    <span>แจ้งผู้ที่ถูกระบุชื่อในเรื่องนี้ผ่านระบบข้อความ ว่าเรื่องปิดแล้วและ<strong>ไม่มีผลต่อคะแนนพฤติกรรม/ประวัติของเขา</strong> (จะไม่เปิดเผยตัวผู้แจ้ง)</span>
+                                </label>`;
+                            }
+                            optionsBox.innerHTML = html;
+                        };
+                        document.getElementById('swal-result-select').addEventListener('change', renderOptions);
+                        renderOptions();
+                    },
                     showCancelButton: true,
-                    confirmButtonText: 'ตกลง',
+                    confirmButtonText: 'ยืนยันปิดเรื่อง',
                     cancelButtonText: 'ยกเลิก',
                     customClass: {
                         icon: 'swal2-icon-custom-green',
                         confirmButton: 'swal2-confirm btn-swal-success',
                         cancelButton: 'swal2-cancel btn-swal-cancel'
                     },
-                    buttonsStyling: false
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        form.submit();
+                    buttonsStyling: false,
+                    focusConfirm: false,
+                    preConfirm: () => {
+                        const selected = document.getElementById('swal-result-select').value;
+                        if (!selected) {
+                            Swal.showValidationMessage('กรุณาเลือกผลการตรวจสอบก่อนปิดเรื่อง');
+                            return false;
+                        }
+                        return {
+                            result: selected,
+                            remarks: document.getElementById('swal-remarks').value,
+                            createBehaviorRecord: document.getElementById('swal-create-behavior-record')?.checked ? '1' : '0',
+                            notifyInvolved: document.getElementById('swal-notify-involved')?.checked ? '1' : '0',
+                        };
+                    }
+                }).then(async (swalResult) => {
+                    if (swalResult.isConfirmed && swalResult.value) {
+                        const v = swalResult.value;
+                        // ยืนยันอีกชั้นก่อนหักคะแนนผู้แจ้ง
+                        if (v.createBehaviorRecord === '1') {
+                            const again = await Swal.fire({
+                                title: 'ยืนยันบันทึกพฤติกรรมหักคะแนนผู้แจ้ง?',
+                                text: 'ระบบจะสร้างบันทึกพฤติกรรมตัดคะแนน -10 ให้ผู้แจ้ง (สถานะรออนุมัติ) กรุณาตรวจสอบหลักฐานและดุลยพินิจอีกครั้ง',
+                                iconHtml: '<i class="fas fa-triangle-exclamation" style="color:#ef4444; font-size:2.6rem;"></i>',
+                                showCancelButton: true,
+                                confirmButtonText: 'ยืนยัน',
+                                cancelButtonText: 'ยกเลิก',
+                                customClass: {
+                                    icon: 'swal2-icon-custom-red',
+                                    confirmButton: 'swal2-confirm btn-swal-danger',
+                                    cancelButton: 'swal2-cancel btn-swal-cancel'
+                                },
+                                buttonsStyling: false
+                            });
+                            if (!again.isConfirmed) return;
+                        }
+                        submitCloseForm(v.result, v.remarks, v.createBehaviorRecord, v.notifyInvolved);
                     }
                 });
             } else {
-                if (confirm('ยืนยันการปิดเรื่องนี้?')) {
-                    form.submit();
+                const list = resultOptions.map((r, i) => `${i + 1}. ${r}`).join('\n');
+                const picked = prompt(`เลือกผลการตรวจสอบ (พิมพ์หมายเลข):\n${list}`);
+                const idx = parseInt(picked, 10) - 1;
+                if (idx >= 0 && idx < resultOptions.length) {
+                    const remarks = prompt('หมายเหตุการดำเนินการ (ถ้ามี):') || '';
+                    if (confirm('ยืนยันการปิดเรื่องนี้?')) {
+                        submitCloseForm(resultOptions[idx], remarks);
+                    }
                 }
             }
         });

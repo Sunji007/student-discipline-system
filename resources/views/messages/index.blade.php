@@ -131,13 +131,15 @@
                     </div>
                 @else
                     @if(auth()->user()->Role !== 'นักเรียน' && auth()->user()->Role !== 'ผู้ปกครอง')
-                        <div class="role-filter-container" style="margin-bottom: 0.6rem; display: flex; flex-wrap: wrap; gap: 0.35rem;">
-                            <button type="button" class="btn-role-filter active" data-role="all">ทั้งหมด</button>
-                            <button type="button" class="btn-role-filter" data-role="นักเรียน">นักเรียน</button>
-                            <button type="button" class="btn-role-filter" data-role="ผู้ปกครอง">ผู้ปกครอง</button>
-                            @if(auth()->user()->Role !== 'ครู')
-                            <button type="button" class="btn-role-filter" data-role="ครู">ครู / ฝ่ายปกครอง</button>
-                            @endif
+                        <div style="margin-bottom: 0.5rem;">
+                            <select id="roleFilterSelect" class="form-control" style="cursor: pointer;">
+                                <option value="all">ทั้งหมด</option>
+                                <option value="นักเรียน">นักเรียน</option>
+                                <option value="ผู้ปกครอง">ผู้ปกครอง</option>
+                                @if(auth()->user()->Role !== 'ครู')
+                                <option value="ครู">ครู / ฝ่ายปกครอง</option>
+                                @endif
+                            </select>
                         </div>
                         <div style="margin-bottom: 0.5rem; display: flex; gap: 0.5rem;">
                             <input type="text" id="recipientSearchInput" class="form-control" placeholder="พิมพ์ชื่อ, รหัสนักเรียน หรือชื่อผู้ปกครองเพื่อค้นหา..." style="flex: 1;">
@@ -371,6 +373,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.getElementById('recipientSearchInput');
     const select = document.getElementById('receiverSelect');
     const clearBtn = document.getElementById('clearSearchBtn');
+    const roleFilterSelect = document.getElementById('roleFilterSelect');
     const filterButtons = document.querySelectorAll('.btn-role-filter');
     
     if (select) {
@@ -386,7 +389,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }))
             };
         });
-        let activeRole = 'all';
+        let activeRole = roleFilterSelect ? roleFilterSelect.value : 'all';
         
         function applyFilters() {
             const query = searchInput ? searchInput.value.trim().toLowerCase() : '';
@@ -394,6 +397,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 clearBtn.style.display = query === '' ? 'none' : 'block';
             }
             
+            const prevVal = select.value;
             select.innerHTML = '';
             if (defaultOpt) {
                 select.appendChild(defaultOpt.cloneNode(true));
@@ -429,6 +433,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     select.appendChild(groupEl);
                 }
             });
+
+            if (prevVal && select.querySelector(`option[value="${prevVal}"]`)) {
+                select.value = prevVal;
+            }
         }
         
         if (searchInput) {
@@ -495,11 +503,21 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
         
+        if (roleFilterSelect) {
+            roleFilterSelect.addEventListener('change', function() {
+                activeRole = this.value;
+                applyFilters();
+            });
+        }
+        
         filterButtons.forEach(btn => {
             btn.addEventListener('click', function() {
                 filterButtons.forEach(b => b.classList.remove('active'));
                 this.classList.add('active');
                 activeRole = this.getAttribute('data-role');
+                if (roleFilterSelect) {
+                    roleFilterSelect.value = activeRole;
+                }
                 applyFilters();
             });
         });

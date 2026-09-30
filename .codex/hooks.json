@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -NoProfile -ExecutionPolicy Bypass -File 'C:\\xampp\\htdocs\\student-discipline-system\\.codex\\hooks\\auto-push.ps1'",
+            "timeout": 90
+          }
+        ]
+      }
+    ]
+  }
+}

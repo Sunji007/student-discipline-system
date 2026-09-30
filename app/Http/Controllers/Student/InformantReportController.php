@@ -9,6 +9,9 @@ use Illuminate\Http\Request;
 
 class InformantReportController extends Controller
 {
+    // จำกัดจำนวนเบาะแสที่ผู้ใช้หนึ่งคนแจ้งได้ต่อวัน (กันแจ้งมั่ว/สแปม)
+    public const DAILY_LIMIT = 3;
+
     public function index()
     {
         $role = strtolower(auth()->user()->Role);
@@ -41,7 +44,11 @@ class InformantReportController extends Controller
             default => 'student'
         };
 
-        return view('student.informant-reports.create', compact('students', 'layoutPrefix'));
+        $reportsToday = InformantReport::where('ReporterID', auth()->id())
+            ->whereDate('created_at', today())
+            ->count();
+
+        return view('student.informant-reports.create', compact('students', 'layoutPrefix', 'reportsToday'));
     }
 
     public function store(Request $request)
@@ -54,12 +61,14 @@ class InformantReportController extends Controller
             'evidence' => 'nullable',
             'evidence.*' => 'nullable|file|mimes:pdf,jpg,jpeg,png,webp,heic,heif,gif,bmp|max:20480',
             'IsAnonymous' => 'nullable|boolean',
+            'AcknowledgeTruth' => 'accepted',
         ], [
             'Title.required' => 'กรุณากรอกหัวข้อเบาะแส',
             'Category.required' => 'กรุณาเลือกประเภทพฤติกรรม',
             'Description.required' => 'กรุณากรอกรายละเอียดเบาะแส',
             'evidence.*.mimes' => 'ไฟล์หลักฐานต้องเป็นประเภท PDF, JPG, JPEG, PNG หรือ WEBP เท่านั้น',
             'evidence.*.max' => 'ขนาดไฟล์หลักฐานต้องไม่เกิน 20MB แต่ละไฟล์',
+            'AcknowledgeTruth.accepted' => 'กรุณาติ๊กยืนยันว่าข้อมูลที่แจ้งเป็นความจริงตามที่ได้พบเห็นก่อนส่งเบาะแส',
         ]);
 
         if ($request->filled('StudentID')) {
@@ -74,6 +83,17 @@ class InformantReportController extends Controller
                     ]);
                 }
             }
+        }
+
+        // จำกัดจำนวนเรื่องต่อวัน เพื่อกันการแจ้งมั่วหรือสแปมรายการ
+        $reportsToday = InformantReport::where('ReporterID', auth()->id())
+            ->whereDate('created_at', today())
+            ->count();
+        if ($reportsToday >= self::DAILY_LIMIT) {
+            return back()->withInput()->withErrors([
+                'RateLimit' => 'คุณแจ้งเบาะแสครบ ' . self::DAILY_LIMIT . ' เรื่องในวันนี้แล้ว กรุณาส่งเบาะแสเพิ่มในวันถัดไป '
+                    . 'หากเป็นเรื่องด่วนเกี่ยวกับความปลอดภัย กรุณาติดต่อฝ่ายปกครองโดยตรง'
+            ]);
         }
 
         $role = strtolower(auth()->user()->Role);

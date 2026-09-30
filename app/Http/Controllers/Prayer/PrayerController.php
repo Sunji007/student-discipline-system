@@ -408,6 +408,34 @@ class PrayerController extends Controller
         $gender = $request->input('gender');
         $passingStatus = $request->input('passing_status');
 
+        // Unique classes and grades for filters (naturally sorted so ม.1 precedes ม.2 etc.)
+        $classrooms = Student::select('Classroom')
+            ->distinct()
+            ->whereNotNull('Classroom')
+            ->pluck('Classroom')
+            ->sort(function($a, $b) {
+                $normA = preg_replace('/^ม\./u', '', (string)$a);
+                $normB = preg_replace('/^ม\./u', '', (string)$b);
+                $cmp = strnatcasecmp($normA, $normB);
+                return $cmp === 0 ? strcmp($a, $b) : $cmp;
+            })
+            ->values();
+        $grades = Student::select('GradeLevel')->distinct()->whereNotNull('GradeLevel')->orderBy('GradeLevel')->pluck('GradeLevel');
+
+        // Automatic room filter: If no classroom is specified and no search is active, default to first classroom (or teacher's advisory room)
+        if (empty($classroom) && $search === '') {
+            $user = auth()->user();
+            if (in_array(strtolower($user->Role), ['ครู', 'teacher']) && $user->teacher) {
+                $myRoom = $user->teacher->advisoryRooms()->first()?->Classroom;
+                if ($myRoom) {
+                    $classroom = $myRoom;
+                }
+            }
+            if (empty($classroom)) {
+                $classroom = $classrooms->first() ?? null;
+            }
+        }
+
         // 1. Today's Quick Live Status (สถิติละหมาดวันนี้)
         $todayDate = Carbon::today()->toDateString();
         $todayThai = Carbon::today()->locale('th')->isoFormat('D MMMM ') . (Carbon::today()->year + 543);
@@ -418,33 +446,77 @@ class PrayerController extends Controller
         $todayExemptCount = $todayRecords->where('Status', 'ละหมาดไม่ได้')->unique('StudentID')->count();
         $todayCheckedStudents = $todayRecords->unique('StudentID')->count();
 
-        // 2. Fetch active check-in sessions in this month/year (dates/periods where records exist)
-        $activeSessionsQuery = PrayerRecord::query()
-            ->whereYear('RecordDate', $year)
-            ->whereMonth('RecordDate', $month);
-
-        if ($classroom || $grade || $gender || $search !== '') {
-            $activeSessionsQuery->whereHas('student', function($q) use ($classroom, $grade, $gender, $search) {
-                if ($classroom) $q->where('Classroom', $classroom);
-                if ($grade) $q->where('GradeLevel', $grade);
-                if ($gender) $q->where('Gender', $gender);
-                if ($search !== '') {
-                    $q->where(function($sq) use ($search) {
-                        $sq->where('StudentID', 'like', "%{$search}%")
-                           ->orWhere('FirstName', 'like', "%{$search}%")
-                           ->orWhere('LastName', 'like', "%{$search}%")
-                           ->orWhere(\Illuminate\Support\Facades\DB::raw("CONCAT(FirstName, ' ', LastName)"), 'like', "%{$search}%");
-                    });
-                }
-            });
-        }
-
-        $totalActiveSessions = $activeSessionsQuery->select('RecordDate', 'Period')
+        // 2. Fetch total active check-in sessions in this month/year across the school
+        $totalActiveSessions = PrayerRecord::whereYear('RecordDate', $year)
+            ->whereMonth('RecordDate', $month)
+            ->select('RecordDate', 'Period')
             ->distinct()
-            ->get()
             ->count();
 
-        // 3. Query students matching filter
+        // 3. Build Classroom Comparison Ranking for the Bar Chart (Comparing all classrooms in school / grade)
+        $classroomRankingQuery = \Illuminate\Support\Facades\DB::table('students as s')
+            ->leftJoin('prayer_records as pr', function($join) use ($year, $month) {
+                $join->on('s.StudentID', '=', 'pr.StudentID')
+                     ->whereYear('pr.RecordDate', '=', $year)
+                     ->whereMonth('pr.RecordDate', '=', $month);
+            })
+            ->whereNotNull('s.Classroom')
+            ->select(
+                's.Classroom',
+                's.GradeLevel',
+                \Illuminate\Support\Facades\DB::raw('COUNT(DISTINCT s.StudentID) as student_count'),
+                \Illuminate\Support\Facades\DB::raw("COUNT(CASE WHEN pr.Status IN ('มา', 'ละหมาด', 'มาละหมาด', 'ละหมาดแล้ว', 'present') THEN 1 END) as prayed_count"),
+                \Illuminate\Support\Facades\DB::raw("COUNT(CASE WHEN pr.Status = 'ละหมาดไม่ได้' THEN 1 END) as exempt_count")
+            )
+            ->groupBy('s.Classroom', 's.GradeLevel');
+
+        if ($grade) {
+            $classroomRankingQuery->where('s.GradeLevel', $grade);
+        }
+
+        $rawRankingData = $classroomRankingQuery->get();
+
+        $classroomRanking = [];
+        foreach ($rawRankingData as $row) {
+            $c = $row->Classroom;
+            $gradeNum = preg_replace('/[^0-9]/', '', (string)$row->GradeLevel);
+            if (!$gradeNum && preg_match('/^(ม\.)?(\d)/', $c, $gm)) {
+                $gradeNum = $gm[2];
+            }
+            $gradeDisplay = $gradeNum ? "ม.{$gradeNum}" : ($row->GradeLevel ?: 'ม.1');
+            $parts = explode('/', $c);
+            $roomNum = preg_replace('/[^0-9]/', '', end($parts)) ?: '1';
+            $displayName = "{$gradeDisplay}/{$roomNum}";
+
+            $expected = $row->student_count * $totalActiveSessions;
+            $eligible = max(0, $expected - $row->exempt_count);
+            $avgPct = ($totalActiveSessions > 0 && $eligible > 0)
+                ? round(($row->prayed_count / $eligible) * 100, 1)
+                : 0;
+
+            $isSelected = ($classroom === $c || $classroom === $displayName || $classroom === "{$row->GradeLevel}/{$c}");
+
+            $classroomRanking[] = [
+                'name' => $displayName,
+                'raw_classroom' => $c,
+                'grade' => $row->GradeLevel,
+                'total' => (int) $row->student_count,
+                'prayed' => (int) $row->prayed_count,
+                'exempt' => (int) $row->exempt_count,
+                'avg_percentage' => min(100, $avgPct),
+                'is_selected' => $isSelected,
+            ];
+        }
+
+        // Naturally sort classroom ranking: ม.1/1, ม.1/2, ม.1/3, ม.2/1...
+        usort($classroomRanking, function($a, $b) {
+            $normA = preg_replace('/^ม\./u', '', (string)$a['name']);
+            $normB = preg_replace('/^ม\./u', '', (string)$b['name']);
+            $cmp = strnatcasecmp($normA, $normB);
+            return $cmp === 0 ? strcmp($a['name'], $b['name']) : $cmp;
+        });
+
+        // 4. Query students matching filter (for individual student table)
         $studentQuery = Student::query();
         if ($classroom) $studentQuery->where('Classroom', $classroom);
         if ($grade) $studentQuery->where('GradeLevel', $grade);
@@ -459,7 +531,7 @@ class PrayerController extends Controller
         }
         $students = $studentQuery->orderBy('StudentID')->get();
 
-        // 4. Calculate statistics per student & classroom breakdown
+        // 5. Calculate statistics per student for the individual summary table
         $studentStats = [];
         $schoolTotalPrayed = 0;
         $schoolTotalAbsent = 0;
@@ -468,7 +540,6 @@ class PrayerController extends Controller
         $schoolFailCount = 0;
         $schoolCorrectedCount = 0;
         $exemptStudentsSet = [];
-        $classroomStatsMap = [];
 
         foreach ($students as $s) {
             $statusData = $s->getPrayerMonthlyStatus($month, $year);
@@ -497,25 +568,6 @@ class PrayerController extends Controller
             $schoolTotalAbsent += $absentCount;
             $schoolTotalExempt += $exemptCount;
 
-            // Group by classroom for ranking
-            $cName = $s->classroom_display ?: 'ไม่ระบุห้อง';
-            if (!isset($classroomStatsMap[$cName])) {
-                $classroomStatsMap[$cName] = [
-                    'name' => $cName,
-                    'total' => 0,
-                    'pass' => 0,
-                    'fail' => 0,
-                    'percent_sum' => 0,
-                ];
-            }
-            $classroomStatsMap[$cName]['total']++;
-            if ($isPass) {
-                $classroomStatsMap[$cName]['pass']++;
-            } else {
-                $classroomStatsMap[$cName]['fail']++;
-            }
-            $classroomStatsMap[$cName]['percent_sum'] += $percent;
-
             // Filter by passing status for the student table
             if ($passingStatus === 'pass' && !$isPass) continue;
             if ($passingStatus === 'fail' && $isPass) continue;
@@ -534,22 +586,6 @@ class PrayerController extends Controller
                 'status_text'  => $statusData['status_text']
             ];
         }
-
-        // Build Classroom Ranking Array
-        $classroomRanking = [];
-        foreach ($classroomStatsMap as $cName => $cData) {
-            $avgPct = $cData['total'] > 0 ? round($cData['percent_sum'] / $cData['total'], 1) : 0;
-            $passRate = $cData['total'] > 0 ? round(($cData['pass'] / $cData['total']) * 100, 1) : 0;
-            $classroomRanking[] = [
-                'name' => $cName,
-                'total' => $cData['total'],
-                'pass' => $cData['pass'],
-                'fail' => $cData['fail'],
-                'avg_percentage' => $avgPct,
-                'pass_rate' => $passRate,
-            ];
-        }
-        usort($classroomRanking, fn($a, $b) => $b['avg_percentage'] <=> $a['avg_percentage']);
 
         // 5. Period Analytics (ซุฮรี vs อัศรี)
         $monthlyRecordsQuery = PrayerRecord::whereYear('RecordDate', $year)
@@ -617,10 +653,6 @@ class PrayerController extends Controller
             'asr_count' => $todayAsrCount,
             'exempt_count' => $todayExemptCount,
         ];
-
-        // Unique classes for filters
-        $classrooms = Student::select('Classroom')->distinct()->whereNotNull('Classroom')->orderBy('Classroom')->pluck('Classroom');
-        $grades = Student::select('GradeLevel')->distinct()->whereNotNull('GradeLevel')->orderBy('GradeLevel')->pluck('GradeLevel');
 
         return view('prayer.dashboard', compact(
             'studentStats',

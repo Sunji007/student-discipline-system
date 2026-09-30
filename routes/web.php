@@ -16,91 +16,93 @@ Route::get('/logout', function () {
     return redirect('/login');
 });
 
+// ==========================================
+// Maintenance Routes (Protected: Admin Only)
+// ==========================================
 Route::get('/clear-cache', function() {
-    try {
-        \Illuminate\Support\Facades\DB::statement("ALTER TABLE informant_reports MODIFY ReportID VARCHAR(50) NOT NULL");
-        $reports = \Illuminate\Support\Facades\DB::table('informant_reports')->orderBy('created_at', 'asc')->get();
-        $index = 1;
-        foreach ($reports as $r) {
-            $newId = 'INF-' . str_pad($index, 3, '0', STR_PAD_LEFT);
-            \Illuminate\Support\Facades\DB::table('informant_reports')
-                ->where('ReportID', $r->ReportID)
-                ->update(['ReportID' => $newId, 'IsAnonymous' => 1]);
-            $index++;
-        }
-    } catch (\Throwable $e) {}
+    $isAdmin = auth()->check() && in_array(auth()->user()->Role, ['ผู้ดูแลระบบ', 'admin']);
+    $token = request()->query('token');
+    $configuredToken = env('MAINTENANCE_TOKEN');
+
+    // อนุญาตเฉพาะผู้ดูแลระบบ หรือมี MAINTENANCE_TOKEN ที่ถูกตั้งค่าไว้ใน .env เท่านั้น (ไม่อนุญาตค่า default ในโค้ด)
+    $hasValidToken = !empty($configuredToken) && !empty($token) && hash_equals($configuredToken, $token);
+
+    if (!$isAdmin && !$hasValidToken) {
+        abort(403, 'เข้าถึงได้เฉพาะผู้ดูแลระบบเท่านั้น (Admin Access Required)');
+    }
+
     \Illuminate\Support\Facades\Artisan::call('route:clear');
     \Illuminate\Support\Facades\Artisan::call('config:clear');
     \Illuminate\Support\Facades\Artisan::call('view:clear');
     \Illuminate\Support\Facades\Artisan::call('cache:clear');
-    return 'ระบบทำการล้างแคช (Cache Cleared) อัปเดตรหัสเรื่อง INF-001 เรียบร้อยแล้ว!';
+    return 'ระบบทำการล้างแคช (Cache Cleared) เรียบร้อยแล้ว!';
 });
 
-Route::get('/debug-parents-list', function() {
-    $students = \App\Models\Student::with('user', 'parent')->get();
-    $out = "=== DEBUG PARENTS AND STUDENTS ===\n\n";
-    foreach ($students as $s) {
-        $out .= "----------------------------------------\n";
-        $out .= "Student ID: {$s->StudentID} | Name: {$s->FullName} | Class: {$s->Classroom} | UserID: {$s->UserID} | ParentID: {$s->ParentID}\n";
-        $pByStudId = \App\Models\ParentGuardian::where('StudentID', $s->StudentID)->first();
-        $out .= "Parent (where StudentID={$s->StudentID}): " . ($pByStudId ? "Name: {$pByStudId->FullName} | ParentID: {$pByStudId->ParentID} | UserID: {$pByStudId->UserID}" : "NONE") . "\n";
-        $pByParentId = \App\Models\ParentGuardian::where('ParentID', $s->ParentID)->first();
-        $out .= "Parent (where ParentID={$s->ParentID}): " . ($pByParentId ? "Name: {$pByParentId->FullName} | ParentID: {$pByParentId->ParentID} | UserID: {$pByParentId->UserID}" : "NONE") . "\n";
-    }
-    $out .= "\nALL PARENTS IN DATABASE:\n";
-    $parents = \App\Models\ParentGuardian::with('user')->get();
-    foreach ($parents as $p) {
-        $out .= "ParentID: {$p->ParentID} | UserID: {$p->UserID} | Name: {$p->FullName} | StudentID field: {$p->StudentID}\n";
-    }
-    return response($out, 200, ['Content-Type' => 'text/plain; charset=utf-8']);
-});
+Route::middleware(['auth', 'role:ผู้ดูแลระบบ,admin'])->group(function () {
+    Route::get('/debug-parents-list', function() {
+        $students = \App\Models\Student::with('user', 'parent')->get();
+        $out = "=== DEBUG PARENTS AND STUDENTS ===\n\n";
+        foreach ($students as $s) {
+            $out .= "----------------------------------------\n";
+            $out .= "Student ID: {$s->StudentID} | Name: {$s->FullName} | Class: {$s->Classroom} | UserID: {$s->UserID} | ParentID: {$s->ParentID}\n";
+            $pByStudId = \App\Models\ParentGuardian::where('StudentID', $s->StudentID)->first();
+            $out .= "Parent (where StudentID={$s->StudentID}): " . ($pByStudId ? "Name: {$pByStudId->FullName} | ParentID: {$pByStudId->ParentID} | UserID: {$pByStudId->UserID}" : "NONE") . "\n";
+            $pByParentId = \App\Models\ParentGuardian::where('ParentID', $s->ParentID)->first();
+            $out .= "Parent (where ParentID={$s->ParentID}): " . ($pByParentId ? "Name: {$pByParentId->FullName} | ParentID: {$pByParentId->ParentID} | UserID: {$pByParentId->UserID}" : "NONE") . "\n";
+        }
+        $out .= "\nALL PARENTS IN DATABASE:\n";
+        $parents = \App\Models\ParentGuardian::with('user')->get();
+        foreach ($parents as $p) {
+            $out .= "ParentID: {$p->ParentID} | UserID: {$p->UserID} | Name: {$p->FullName} | StudentID field: {$p->StudentID}\n";
+        }
+        return response($out, 200, ['Content-Type' => 'text/plain; charset=utf-8']);
+    });
 
-Route::get('/seed-classroom-31', function () {
-    $count = \Database\Seeders\Classroom31Seeder::seed40Students();
-    return response()->json([
-        'status' => 'success',
-        'message' => "จำลองเพิ่มนักเรียนห้อง ม.3/1 จำนวน {$count} คน เรียบร้อยแล้ว",
-        'total_31_students' => \App\Models\Student::where('Classroom', 'like', '%3/1%')->orWhere('Classroom', '3/1')->count(),
-    ], 200, ['Content-Type' => 'application/json; charset=utf-8']);
-});
+    Route::get('/seed-classroom-31', function () {
+        $count = \Database\Seeders\Classroom31Seeder::seed40Students();
+        return response()->json([
+            'status' => 'success',
+            'message' => "จำลองเพิ่มนักเรียนห้อง ม.3/1 จำนวน {$count} คน เรียบร้อยแล้ว",
+            'total_31_students' => \App\Models\Student::where('Classroom', 'like', '%3/1%')->orWhere('Classroom', '3/1')->count(),
+        ], 200, ['Content-Type' => 'application/json; charset=utf-8']);
+    });
 
+    Route::get('/fix-storage', function() {
+        $target = storage_path('app/public');
+        $link = public_path('storage');
 
+        $results = [];
+        $results[] = "Target path: " . $target . " (Exists: " . (file_exists($target) ? 'Yes' : 'No') . ")";
+        $results[] = "Link path: " . $link . " (Exists: " . (file_exists($link) ? 'Yes' : 'No') . ")";
 
-Route::get('/fix-storage', function() {
-    $target = storage_path('app/public');
-    $link = public_path('storage');
+        if (file_exists($link)) {
+            if (is_link($link)) {
+                $results[] = "Link path is a symlink pointing to: " . readlink($link);
+                unlink($link);
+                $results[] = "Existing symlink deleted.";
+            } else if (is_dir($link)) {
+                $results[] = "Link path is a real directory! Renaming it to storage_old...";
+                rename($link, $link . '_old_' . time());
+            } else {
+                $results[] = "Link path is a file! Deleting it...";
+                unlink($link);
+            }
+        }
 
-    $results = [];
-    $results[] = "Target path: " . $target . " (Exists: " . (file_exists($target) ? 'Yes' : 'No') . ")";
-    $results[] = "Link path: " . $link . " (Exists: " . (file_exists($link) ? 'Yes' : 'No') . ")";
-
-    if (file_exists($link)) {
-        if (is_link($link)) {
-            $results[] = "Link path is a symlink pointing to: " . readlink($link);
-            unlink($link);
-            $results[] = "Existing symlink deleted.";
-        } else if (is_dir($link)) {
-            $results[] = "Link path is a real directory! Renaming it to storage_old...";
-            rename($link, $link . '_old_' . time());
+        if (symlink($target, $link)) {
+            $results[] = "Successfully created symbolic link from $link to $target!";
         } else {
-            $results[] = "Link path is a file! Deleting it...";
-            unlink($link);
+            $results[] = "Failed to create symbolic link using php symlink(). Attempting Artisan storage:link...";
+            try {
+                \Illuminate\Support\Facades\Artisan::call('storage:link');
+                $results[] = "Artisan storage:link command finished.";
+            } catch (\Exception $e) {
+                $results[] = "Artisan storage:link failed: " . $e->getMessage();
+            }
         }
-    }
 
-    if (symlink($target, $link)) {
-        $results[] = "Successfully created symbolic link from $link to $target!";
-    } else {
-        $results[] = "Failed to create symbolic link using php symlink(). Attempting Artisan storage:link...";
-        try {
-            \Illuminate\Support\Facades\Artisan::call('storage:link');
-            $results[] = "Artisan storage:link command finished.";
-        } catch (\Exception $e) {
-            $results[] = "Artisan storage:link failed: " . $e->getMessage();
-        }
-    }
-
-    return implode("<br>\n", $results);
+        return implode("<br>\n", $results);
+    });
 });
 
 Route::match(['GET', 'POST'], '/semesters/switch', [App\Http\Controllers\SemesterController::class, 'switchSemester'])->name('semesters.switch');
@@ -286,4 +288,23 @@ Route::get('/home', function () {
         default => redirect('/login')
     };
 })->name('home');
+
+// Fallback route to serve files from storage/app/public when symlink is not available (e.g. shared hosting)
+Route::get('/storage/{path}', function ($path) {
+    $fullPath = storage_path('app/public/' . $path);
+    if (!file_exists($fullPath) || is_dir($fullPath)) {
+        abort(404);
+    }
+
+    $realFullPath = realpath($fullPath);
+    $realStoragePath = realpath(storage_path('app/public'));
+    if ($realFullPath === false || !str_starts_with($realFullPath, $realStoragePath)) {
+        abort(403);
+    }
+
+    return response()->file($realFullPath, [
+        'Cache-Control' => 'public, max-age=86400',
+    ]);
+})->where('path', '.*');
+
 

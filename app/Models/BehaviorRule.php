@@ -11,4 +11,6 @@ class BehaviorRule extends Model {
     {
         return 'RuleID';
     }
+
+    public function records() { return $this->hasMany(BehaviorRecord::class, 'RuleID', 'RuleID'); }
 }

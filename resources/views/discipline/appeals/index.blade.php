@@ -35,17 +35,18 @@
         <table>
             <thead>
                 <tr>
-                    <th>นักเรียน</th>
+                    <th style="white-space:nowrap;">นักเรียน</th>
                     <th>เรื่องที่โต้แย้ง</th>
-                    <th>วันที่ยื่น</th>
-                    <th>สถานะ</th>
-                    <th style="text-align:right;">จัดการ</th>
+                    <th style="text-align:center; white-space:nowrap;">คะแนนปัจจุบัน</th>
+                    <th style="white-space:nowrap;">วันที่ยื่น</th>
+                    <th style="text-align:center; white-space:nowrap;">สถานะ</th>
+                    <th style="text-align:right; white-space:nowrap; width:1%;">จัดการ</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($appeals as $appeal)
                 <tr>
-                    <td>
+                    <td style="white-space:nowrap;">
                         <strong>{{ $appeal->student->FullName }}</strong>
                         <div style="font-size:0.75rem; color:var(--text-muted);">{{ $appeal->student->Classroom }}</div>
                     </td>
@@ -55,11 +56,21 @@
                             {{ \Str::limit($appeal->Reason, 60) }}
                         </div>
                     </td>
-                    <td style="font-size:0.82rem; color:var(--text-muted);">
+                    <td style="text-align:center; white-space:nowrap;">
+                        @php
+                            $score = $appeal->student->BehaviorScore ?? 100;
+                            $scoreColor = $score < 60 ? 'var(--red)' : ($score < 80 ? 'var(--orange)' : 'var(--green)');
+                        @endphp
+                        <strong style="color: {{ $scoreColor }}; font-size:0.95rem;">
+                            {{ $score }}
+                        </strong>
+                        <span style="font-size:0.75rem; color:var(--text-muted);">คะแนน</span>
+                    </td>
+                    <td style="font-size:0.82rem; color:var(--text-muted); white-space:nowrap;">
                         @php $ad = \Carbon\Carbon::parse($appeal->created_at ?? $appeal->AppealDate); @endphp
                         {{ $ad->format('d/m/') . ($ad->year + 543) . $ad->format(' H:i') }}
                     </td>
-                    <td>
+                    <td style="text-align:center; white-space:nowrap;">
                         @php
                             $displayStatus = in_array($appeal->Status, ['ยกเลิกคำร้อง', 'ยกเลิกคำร้องยื่นอุทธรณ์']) ? 'ยกเลิกคำร้อง' : $appeal->Status;
                             $sc = match($displayStatus) {
@@ -71,15 +82,15 @@
                         @endphp
                         <span class="badge {{ $sc }}">{{ $displayStatus }}</span>
                     </td>
-                    <td style="text-align:right;">
-                        <a href="{{ route('discipline.appeals.show', $appeal->AppealID) }}" class="btn btn-outline btn-sm">
+                    <td style="text-align:right; white-space:nowrap;">
+                        <a href="{{ route('discipline.appeals.show', $appeal->AppealID) }}" class="btn btn-outline btn-sm" style="white-space:nowrap; padding:0.3rem 0.65rem; font-size:0.8rem; display:inline-flex; align-items:center; gap:0.35rem;">
                             <i class="fas fa-eye"></i> ดูรายละเอียด
                         </a>
                     </td>
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="5" style="text-align:center; color:var(--text-muted); padding:2rem;">ไม่มีคำขออุทธรณ์</td>
+                    <td colspan="6" style="text-align:center; color:var(--text-muted); padding:2rem;">ไม่มีคำขออุทธรณ์</td>
                 </tr>
                 @endforelse
             </tbody>

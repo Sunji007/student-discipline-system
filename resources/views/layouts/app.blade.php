@@ -1758,11 +1758,37 @@
             from { opacity:0; transform: translateY(-8px); }
             to   { opacity:1; transform: translateY(0); }
         }
+
+        /* Instant Top Loader (YouTube/GitHub/Vercel style) */
+        #sys-top-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            width: 0%;
+            background: linear-gradient(90deg, #d97706, #2563eb, #38bdf8);
+            z-index: 9999999;
+            transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease;
+            pointer-events: none;
+            box-shadow: 0 0 10px rgba(37, 99, 235, 0.6);
+            opacity: 0;
+        }
+        #sys-top-loader.active {
+            opacity: 1;
+        }
+        /* Double-click prevention & active click feedback */
+        .btn-submitting {
+            opacity: 0.75 !important;
+            pointer-events: none !important;
+            cursor: wait !important;
+            position: relative;
+        }
     </style>
 
     @stack('styles')
 </head>
 <body>
+    <div id="sys-top-loader"></div>
 
     {{-- SIDEBAR --}}
     @auth
@@ -1831,7 +1857,7 @@
                 @php
                     $activeSemester = \App\Models\Semester::current();
                     $selectedSemesterId = session('selected_semester_id', $activeSemester?->semester_id);
-                    $semestersList = \App\Models\Semester::orderBy('academic_year', 'desc')->orderBy('term', 'desc')->get();
+                    $semestersList = \App\Models\Semester::allCached();
                 @endphp
                 @if($semestersList->count() > 0)
                 <form action="{{ route('semesters.switch') }}" method="POST" id="semester-switch-form" style="margin: 0; display: flex; align-items: center; gap: 0.4rem;">
@@ -2160,6 +2186,7 @@
                 if (confirmPendingForm) {
                     const f = confirmPendingForm;
                     closeConfirmModal();
+                    if (window.sysStartProgress) window.sysStartProgress();
                     f.submit();
                 }
             });
@@ -2196,10 +2223,129 @@
                         submitText: submitText,
                         icon: icon
                     });
+                    return;
+                }
+
+                // Prevent double-submit & start instant loader
+                if (form.dataset.submitting === 'true') {
+                    e.preventDefault();
+                    return;
+                }
+
+                form.dataset.submitting = 'true';
+                if (window.sysStartProgress) window.sysStartProgress();
+
+                const submitBtn = form.querySelector('button[type="submit"], input[type="submit"]');
+                if (submitBtn) {
+                    submitBtn.classList.add('btn-submitting');
                 }
             });
         });
 
+        // =========================================================================
+        // High-Performance UX & Instant Navigation Accelerator
+        // =========================================================================
+        (function() {
+            const loader = document.getElementById('sys-top-loader');
+            let progressInterval = null;
+
+            function startProgress() {
+                if (!loader) return;
+                loader.classList.add('active');
+                loader.style.width = '35%';
+                clearInterval(progressInterval);
+                let current = 35;
+                progressInterval = setInterval(() => {
+                    if (current < 85) {
+                        current += Math.random() * 8;
+                        loader.style.width = current + '%';
+                    }
+                }, 180);
+            }
+
+            function finishProgress() {
+                if (!loader) return;
+                clearInterval(progressInterval);
+                loader.style.width = '100%';
+                setTimeout(() => {
+                    loader.style.opacity = '0';
+                    setTimeout(() => {
+                        loader.classList.remove('active');
+                        loader.style.width = '0%';
+                        loader.style.opacity = '';
+                    }, 250);
+                }, 150);
+            }
+
+            window.sysStartProgress = startProgress;
+            window.sysFinishProgress = finishProgress;
+
+            // Handle browser back/forward cache restore
+            window.addEventListener('pageshow', function(e) {
+                finishProgress();
+                document.querySelectorAll('.btn-submitting').forEach(btn => {
+                    btn.classList.remove('btn-submitting');
+                });
+                document.querySelectorAll('form[data-submitting]').forEach(f => {
+                    f.removeAttribute('data-submitting');
+                });
+            });
+
+            // 1. Instant click response on internal navigation links
+            document.addEventListener('click', function(e) {
+                const link = e.target.closest('a');
+                if (!link) return;
+
+                const href = link.getAttribute('href');
+                if (!href || href.startsWith('#') || href.startsWith('javascript:') || link.target === '_blank' || link.hasAttribute('download')) {
+                    return;
+                }
+
+                if (href.startsWith('/') || href.startsWith(window.location.origin)) {
+                    if (href.includes('logout') || href.endsWith('.pdf') || href.endsWith('.xlsx')) return;
+                    startProgress();
+                }
+            }, { passive: true });
+
+            // 2. Intelligent Link Prefetching on Hover
+            const prefetchedUrls = new Set();
+            function prefetchUrl(url) {
+                if (!url || prefetchedUrls.has(url)) return;
+                if (url.startsWith('#') || url.startsWith('javascript:') || url.includes('logout') || url.includes('/storage/')) return;
+                
+                try {
+                    const u = new URL(url, window.location.origin);
+                    if (u.origin !== window.location.origin) return;
+                    prefetchedUrls.add(url);
+
+                    const prefetchTag = document.createElement('link');
+                    prefetchTag.rel = 'prefetch';
+                    prefetchTag.href = url;
+                    prefetchTag.as = 'document';
+                    document.head.appendChild(prefetchTag);
+                } catch (err) {}
+            }
+
+            let hoverTimeout = null;
+            document.addEventListener('mouseover', function(e) {
+                const link = e.target.closest('.sidebar-menu a, .topbar a, .card a, .quick-actions a, .stat-card');
+                if (!link) return;
+                const href = link.getAttribute('href');
+                if (!href) return;
+
+                clearTimeout(hoverTimeout);
+                hoverTimeout = setTimeout(() => {
+                    prefetchUrl(href);
+                }, 65);
+            }, { passive: true });
+
+            document.addEventListener('touchstart', function(e) {
+                const link = e.target.closest('.sidebar-menu a, .topbar a');
+                if (!link) return;
+                const href = link.getAttribute('href');
+                if (href) prefetchUrl(href);
+            }, { passive: true });
+        })();
     </script>
     @stack('scripts')
 </body>

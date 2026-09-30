@@ -165,15 +165,50 @@
                 </div>
             </div>
 
-            <div style="background:#fffbe0; border:1px solid #fef08a; border-radius:8px; padding:0.85rem 1rem; margin-bottom:1.5rem; font-size:0.82rem; color:#854d0e; display:flex; align-items:flex-start; gap:0.65rem;">
+            <div style="background:#fffbe0; border:1px solid #fef08a; border-radius:8px; padding:0.85rem 1rem; margin-bottom:0.75rem; font-size:0.82rem; color:#854d0e; display:flex; align-items:flex-start; gap:0.65rem;">
                 <i class="fas fa-exclamation-triangle" style="font-size:1.2rem; color:#eab308; flex-shrink:0; margin-top:0.1rem;"></i>
                 <div>
                     <strong style="color:#713f12;">คำเตือนเกี่ยวกับการแจ้งข้อมูล:</strong> แม้ระบบจะปกปิดตัวตนต่อสาธารณะ แต่ระบบมีการบันทึกประวัติการเข้าใช้งานไว้ หากพบการแจ้งข้อมูลเท็จหรือแจ้งกลั่นแกล้งผู้อื่น จะถือเป็นความผิดทางวินัยร้ายแรง และฝ่ายปกครองสามารถตรวจสอบตัวตนผู้แจ้งเพื่อดำเนินการลงโทษได้
                 </div>
             </div>
 
+            {{-- ยืนยันความจริงของข้อมูลก่อนส่ง --}}
+            <div style="background:#fff7f7; border:1px solid #fecaca; border-radius:8px; padding:0.85rem 1rem; margin-bottom:1.5rem;">
+                <label for="AcknowledgeTruth" style="display:flex; align-items:flex-start; gap:0.65rem; cursor:pointer; font-size:0.85rem; color:#7f1d1d; line-height:1.55;">
+                    <input type="checkbox" name="AcknowledgeTruth" id="AcknowledgeTruth" value="1"
+                           {{ old('AcknowledgeTruth') ? 'checked' : '' }}
+                           style="width:1.15rem; height:1.15rem; margin-top:0.15rem; accent-color:#dc2626; cursor:pointer; flex-shrink:0;">
+                    <span>
+                        ข้าพเจ้าขอยืนยันว่าข้อมูลที่แจ้งข้างต้นเป็น<strong>ความจริงตามที่ได้พบเห็น</strong> และรับทราบว่าการแจ้งข้อมูลเท็จเพื่อกลั่นแกล้งผู้อื่น
+                        ถือเป็น<strong>ความผิดทางวินัย</strong> และฝ่ายปกครองสามารถตรวจสอบย้อนหลังได้ <span style="color:var(--red);">*</span>
+                    </span>
+                </label>
+                @error('AcknowledgeTruth')
+                <div style="font-size:0.78rem; color:#dc2626; margin-top:0.4rem;">
+                    <i class="fas fa-exclamation-circle"></i> {{ $message }}
+                </div>
+                @enderror
+            </div>
+
+            {{-- โควตาจำนวนเบาะแสต่อวัน --}}
+            @php
+                $dailyLimit = \App\Http\Controllers\Student\InformantReportController::DAILY_LIMIT;
+                $quotaLeft = max(0, $dailyLimit - ($reportsToday ?? 0));
+            @endphp
+            <div style="background:{{ $quotaLeft > 0 ? '#eff6ff' : '#fef2f2' }}; border:1px solid {{ $quotaLeft > 0 ? '#bfdbfe' : '#fecaca' }}; border-radius:8px; padding:0.85rem 1rem; margin-bottom:1.25rem; font-size:0.85rem; color:{{ $quotaLeft > 0 ? '#1e40af' : '#7f1d1d' }}; display:flex; align-items:center; gap:0.65rem;">
+                <i class="fas fa-{{ $quotaLeft > 0 ? 'circle-check' : 'circle-exclamation' }}" style="font-size:1.3rem; flex-shrink:0; color:{{ $quotaLeft > 0 ? '#3b82f6' : '#ef4444' }};"></i>
+                <div>
+                    <strong>โควตาการแจ้งวันนี้:</strong> แจ้งไปแล้ว {{ $reportsToday ?? 0 }}/{{ $dailyLimit }} เรื่อง
+                    @if($quotaLeft > 0)
+                        — เหลือสิทธิ์อีก <strong>{{ $quotaLeft }}</strong> เรื่อง (จำกัด {{ $dailyLimit }} เรื่อง/วัน เพื่อกันการแจ้งเบาะแสไม่ถูกต้อง และให้ฝ่ายปกครองตรวจสอบได้ทัน)
+                    @else
+                        — ครบโควตาแล้ว สามารถแจ้งเพิ่มได้ในวันถัดไป หากเป็นเรื่องด่วนเรื่องความปลอดภัยกรุณาติดต่อฝ่ายปกครองโดยตรง
+                    @endif
+                </div>
+            </div>
+
             <div style="text-align:right; border-top:1px solid #ede8e0; padding-top:1.25rem; margin-top:1rem;">
-                <button type="button" class="btn btn-primary" id="btnSubmitForm" onclick="confirmAndSubmitForm()">
+                <button type="button" class="btn btn-primary" id="btnSubmitForm" onclick="confirmAndSubmitForm()" {{ $quotaLeft <= 0 ? 'disabled style=opacity:0.5;cursor:not-allowed;' : '' }}>
                     <i class="fas fa-paper-plane"></i> ส่ง
                 </button>
             </div>
@@ -616,6 +651,23 @@ window.confirmAndSubmitForm = function() {
     const reportForm = document.getElementById('informantReportForm');
     if (!reportForm) return;
 
+    const dailyLimit = {{ $dailyLimit }};
+    const reportsToday = {{ $reportsToday ?? 0 }};
+    if (reportsToday >= dailyLimit) {
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                icon: 'error',
+                title: 'ครบโควตาการแจ้งของวันนี้แล้ว',
+                text: 'คุณแจ้งเบาะแสครบ ' + dailyLimit + ' เรื่องในวันนี้แล้ว กรุณาส่งเบาะแสเพิ่มในวันถัดไป',
+                confirmButtonText: 'ตกลง',
+                confirmButtonColor: '#ef4444'
+            });
+        } else {
+            alert('คุณแจ้งเบาะแสครบ ' + dailyLimit + ' เรื่องในวันนี้แล้ว');
+        }
+        return false;
+    }
+
     if (window.syncTitleValue) {
         window.syncTitleValue();
     }
@@ -706,6 +758,23 @@ window.confirmAndSubmitForm = function() {
             });
         } else {
             alert('โปรดระบุข้อมูลที่จำเป็น (*) ให้ครบถ้วนก่อนส่งข้อมูล');
+        }
+        return false;
+    }
+
+    const ackCheckbox = document.getElementById('AcknowledgeTruth');
+    if (ackCheckbox && !ackCheckbox.checked) {
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                icon: 'warning',
+                title: 'กรุณายืนยันความจริงของข้อมูล',
+                html: 'โปรดติ๊กยืนยันว่าข้อมูลที่แจ้งเป็นความจริงตามที่ได้พบเห็น<br>ก่อนส่งเบาะแสทุกครั้ง',
+                confirmButtonText: 'ตกลง',
+                confirmButtonColor: '#ef4444'
+            }).then(() => ackCheckbox.focus());
+        } else {
+            alert('โปรดติ๊กยืนยันว่าข้อมูลที่แจ้งเป็นความจริงก่อนส่ง');
+            ackCheckbox.focus();
         }
         return false;
     }

@@ -137,6 +137,14 @@ class AppealController extends Controller
             ->where('StudentID', $studentId)
             ->firstOrFail();
 
+        // ตรวจสอบว่าเคยยื่นคำร้องสำหรับรายการนี้ไปแล้วหรือไม่
+        $existingAppeal = Appeal::where('RecordID', $validated['RecordID'])->first();
+        if ($existingAppeal) {
+            return redirect()->back()
+                ->withErrors(['RecordID' => 'รายการพฤติกรรมนี้ได้เคยยื่นคำร้องอุทธรณ์ไปแล้ว'])
+                ->withInput();
+        }
+
         $evidencePath = null;
         if ($request->hasFile('evidence')) {
             $evidencePath = $request->file('evidence')

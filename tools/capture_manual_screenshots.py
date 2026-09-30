@@ -100,10 +100,11 @@ def run():
         capture_page(page, "/teacher/messages", "fig_25.png", wait_seconds=1)
 
         # -------------------------------------------------------------
-        # Student Screens (Fig 26 - 29)
+        # Student Screens (Fig 26 - 29 + Attendance)
         # -------------------------------------------------------------
         login(page, "student1")
         capture_page(page, "/student/dashboard", "fig_26.png", wait_seconds=1.5)
+        capture_page(page, "/student/attendance", "fig_student_attendance.png", wait_seconds=1.5)
         capture_page(page, "/student/appeals/create", "fig_27.png", wait_seconds=1)
         capture_page(page, "/student/prayer-checkin", "fig_28.png", wait_seconds=1.5)
         capture_page(page, "/student/informant-reports/create", "fig_29.png", wait_seconds=1)

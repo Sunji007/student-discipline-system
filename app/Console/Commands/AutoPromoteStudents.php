@@ -36,14 +36,19 @@ class AutoPromoteStudents extends Command
             return Command::FAILURE;
         }
 
+        if (!empty($result['already_promoted'])) {
+            $this->warn($result['message'] ?? 'ปีนี้ประมวลผลแล้ว');
+            return Command::SUCCESS;
+        }
+
         $this->info("ประมวลผลสำเร็จเรียบร้อยแล้ว!");
         $this->table(
             ['รายการ', 'จำนวน (คน)'],
             [
-                ['เลื่อนชั้น (ม.1 - ม.5)', $result['promoted_count']],
-                ['สำเร็จการศึกษา (ม.6)', $result['graduated_count']],
-                ['ซ้ำชั้น (คะแนนไม่ผ่านเกณฑ์)', $result['retained_count']],
-                ['รวมนักเรียนทั้งหมดที่ประมวลผล', $result['total']],
+                ['เลื่อนชั้น (ม.1 - ม.5)', $result['promoted_count'] ?? 0],
+                ['สำเร็จการศึกษา (ม.6)', $result['graduated_count'] ?? 0],
+                ['ซ้ำชั้น (คะแนนไม่ผ่านเกณฑ์)', $result['retained_count'] ?? 0],
+                ['รวมนักเรียนทั้งหมดที่ประมวลผล', $result['total'] ?? 0],
             ]
         );
 

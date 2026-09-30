@@ -45,10 +45,17 @@ class AppealController extends Controller
 
         $statusToSave = $request->action === 'คืนคะแนน' ? 'คืนคะแนน' : 'ยกเลิกคำร้อง';
 
-        DB::transaction(function () use ($request, $statusToSave, $appeal) {
+        $resolved = DB::transaction(function () use ($request, $statusToSave, $appeal) {
+            // ล็อกแถว appeal ด้วย lockForUpdate() และตรวจสอบสถานะภายใน Transaction เพื่อป้องกัน Race Condition จากคำขอที่เข้าพร้อมกัน
+            $lockedAppeal = Appeal::where('AppealID', $appeal->AppealID)->lockForUpdate()->first();
+
+            if (!$lockedAppeal || in_array($lockedAppeal->Status, ['คืนคะแนน', 'ยกเลิกคำร้อง', 'อนุมัติ'])) {
+                return false;
+            }
+
             $pointsToReturn = null;
             if ($request->action === 'คืนคะแนน') {
-                $record   = $appeal->behaviorRecord;
+                $record   = $lockedAppeal->behaviorRecord;
                 $defaultPoints = abs($record->rule->ScoreModifier ?? 0);
 
                 // ใช้คะแนนที่ฝ่ายปกครองระบุ หรือใช้คะแนนเต็มเดิมของกฎนั้น
@@ -63,31 +70,41 @@ class AppealController extends Controller
                     $modifier = -abs($pointsToReturn);
                 }
 
-                $student  = $appeal->student;
-                $newScore = max(0, min(100, $student->BehaviorScore + $modifier));
-                $riskStatus = match(true) {
-                    $newScore >= 80 => 'ปกติ',
-                    $newScore >= 60 => 'ตักเตือน',
-                    default         => 'ทัณฑ์บน',
-                };
+                // ล็อกแถวนักเรียนด้วย lockForUpdate() เพื่อป้องกัน race condition ของการคำนวณคะแนน
+                $student = \App\Models\Student::where('StudentID', $lockedAppeal->StudentID)->lockForUpdate()->first();
+                if ($student) {
+                    $newScore = max(0, min(100, $student->BehaviorScore + $modifier));
+                    $riskStatus = match(true) {
+                        $newScore >= 80 => 'ปกติ',
+                        $newScore >= 60 => 'ตักเตือน',
+                        default         => 'ทัณฑ์บน',
+                    };
 
-                $student->update([
-                    'BehaviorScore' => $newScore,
-                    'RiskStatus'    => $riskStatus,
-                ]);
+                    $student->update([
+                        'BehaviorScore' => $newScore,
+                        'RiskStatus'    => $riskStatus,
+                    ]);
+                }
 
                 // เปลี่ยนสถานะ record
                 $record->update(['Status' => 'อนุมัติแล้ว']);
             }
 
-            $appeal->update([
+            $lockedAppeal->update([
                 'Status'         => $statusToSave,
                 'ReviewerID'     => auth()->id(),
                 'ReviewDate'     => now(),
                 'ReviewNotes'    => $request->input('review_notes'),
                 'RestoredPoints' => $pointsToReturn,
             ]);
+
+            return true;
         });
+
+        if (!$resolved) {
+            return redirect()->route('discipline.appeals.index')
+                ->with('error', 'คำร้องนี้ได้รับการพิจารณาไปแล้ว ไม่สามารถดำเนินการซ้ำได้');
+        }
 
         $restoredText = ($request->action === 'คืนคะแนน' && $request->filled('restored_points'))
             ? "จำนวน {$request->restored_points} คะแนน "

@@ -24,8 +24,11 @@
 <div class="card" style="margin-bottom:1rem;">
     <div style="padding:1.5rem; display:flex; align-items:center; gap:1.5rem;">
         @if($student->Photo)
-            <div style="width:64px; height:64px; border-radius:50%; overflow:hidden; border:2px solid #e5e7eb; display:flex; align-items:center; justify-content:center; background:#f3f4f6; flex-shrink:0;">
-                <img src="{{ asset('storage/' . $student->Photo) }}" alt="{{ $student->FullName }}" style="width:100%; height:100%; object-fit:cover;">
+            <div class="student-avatar-wrap" style="width:64px; height:64px; border-radius:50%; overflow:hidden; border:2px solid #e5e7eb; display:flex; align-items:center; justify-content:center; background:#f3f4f6; flex-shrink:0;">
+                <img src="{{ asset('storage/' . $student->Photo) }}" alt="{{ $student->FullName }}" style="width:100%; height:100%; object-fit:cover;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div style="display:none; width:64px; height:64px; background:var(--navy); border-radius:50%; align-items:center; justify-content:center; color:var(--gold); font-size:1.5rem; font-weight:700;">
+                    {{ mb_substr($student->FullName, 0, 1) }}
+                </div>
             </div>
         @else
             <div style="width:64px; height:64px; background:var(--navy); border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--gold); font-size:1.5rem; font-weight:700; flex-shrink:0;">

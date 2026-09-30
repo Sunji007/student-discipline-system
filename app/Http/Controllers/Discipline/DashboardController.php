@@ -16,11 +16,19 @@ class DashboardController extends Controller
 
         $netModifiers = \Illuminate\Support\Facades\DB::table('behavior_records')
             ->join('behavior_rules', 'behavior_records.RuleID', '=', 'behavior_rules.RuleID')
+            ->leftJoin('appeals', 'behavior_records.RecordID', '=', 'appeals.RecordID')
             ->where('behavior_records.semester_id', $selectedSemesterId)
             ->whereIn('behavior_records.Status', ['อนุมัติ', 'อนุมัติแล้ว', 'อยู่ในระหว่างยื่นอุทธรณ์'])
-            ->select('StudentID')
-            ->selectRaw("SUM(CASE WHEN behavior_rules.RuleType = 'ตัดคะแนน' THEN -ABS(behavior_rules.ScoreModifier) ELSE ABS(behavior_rules.ScoreModifier) END) as net_modifier")
-            ->groupBy('StudentID')
+            ->selectRaw('behavior_records.StudentID as StudentID')
+            ->selectRaw("SUM(
+                CASE 
+                    WHEN behavior_rules.RuleType = 'ตัดคะแนน' THEN 
+                        -ABS(behavior_rules.ScoreModifier) + (CASE WHEN appeals.Status = 'คืนคะแนน' THEN COALESCE(appeals.RestoredPoints, ABS(behavior_rules.ScoreModifier)) ELSE 0 END)
+                    ELSE 
+                        ABS(behavior_rules.ScoreModifier)
+                END
+            ) as net_modifier")
+            ->groupBy('behavior_records.StudentID')
             ->pluck('net_modifier', 'StudentID');
 
         $allStudents = Student::all();
@@ -80,11 +88,19 @@ class DashboardController extends Controller
 
         $netModifiers = \Illuminate\Support\Facades\DB::table('behavior_records')
             ->join('behavior_rules', 'behavior_records.RuleID', '=', 'behavior_rules.RuleID')
+            ->leftJoin('appeals', 'behavior_records.RecordID', '=', 'appeals.RecordID')
             ->where('behavior_records.semester_id', $selectedSemesterId)
             ->whereIn('behavior_records.Status', ['อนุมัติ', 'อนุมัติแล้ว', 'อยู่ในระหว่างยื่นอุทธรณ์'])
-            ->select('StudentID')
-            ->selectRaw("SUM(CASE WHEN behavior_rules.RuleType = 'ตัดคะแนน' THEN -ABS(behavior_rules.ScoreModifier) ELSE ABS(behavior_rules.ScoreModifier) END) as net_modifier")
-            ->groupBy('StudentID')
+            ->selectRaw('behavior_records.StudentID as StudentID')
+            ->selectRaw("SUM(
+                CASE 
+                    WHEN behavior_rules.RuleType = 'ตัดคะแนน' THEN 
+                        -ABS(behavior_rules.ScoreModifier) + (CASE WHEN appeals.Status = 'คืนคะแนน' THEN COALESCE(appeals.RestoredPoints, ABS(behavior_rules.ScoreModifier)) ELSE 0 END)
+                    ELSE 
+                        ABS(behavior_rules.ScoreModifier)
+                END
+            ) as net_modifier")
+            ->groupBy('behavior_records.StudentID')
             ->pluck('net_modifier', 'StudentID');
 
         $allStudents = Student::all();

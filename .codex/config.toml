@@ -1,0 +1,9 @@
+[mcp_servers.canva]
+command = "cmd.exe"
+args = [
+    "/c",
+    "npx",
+    "-y",
+    "mcp-remote",
+    "https://mcp.canva.com/mcp",
+]

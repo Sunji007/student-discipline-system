@@ -106,6 +106,16 @@ document.addEventListener('DOMContentLoaded', function() {
                             };
                         @endphp
                         <span class="badge {{ $badgeClass }}">{{ $report->Status }}</span>
+                        @if($report->Status === 'ปิดเรื่องแล้ว' && $report->InvestigationResult)
+                        @php
+                            $rsView = \App\Models\InformantReport::resultStyles()[$report->InvestigationResult] ?? ['badge-gray', 'fa-circle', '#94a3b8'];
+                        @endphp
+                        <div style="margin-top:0.35rem;">
+                            <span class="badge {{ $rsView[0] }}" style="font-size:0.68rem;">
+                                <i class="fas {{ $rsView[1] }}" style="margin-right:0.2rem;"></i>ผลตรวจสอบ: {{ $report->InvestigationResult }}
+                            </span>
+                        </div>
+                        @endif
                     </td>
                 </tr>
                 @empty

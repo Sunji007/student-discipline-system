@@ -45,6 +45,16 @@ class AttendanceController extends Controller
             'attendance.*'=> 'required|in:มา,สาย,ขาด',
         ]);
 
+        $teacher = auth()->user()->teacher;
+        $rooms = $teacher?->advisory_rooms ?? [];
+        $allowedStudentIds = Student::inAdvisoryRoom($rooms)->pluck('StudentID')->map(fn($id) => (string)$id)->toArray();
+
+        foreach (array_keys($request->attendance) as $studentId) {
+            if (!in_array((string) $studentId, $allowedStudentIds)) {
+                return back()->with('error', 'ไม่สามารถบันทึกได้: มีนักเรียนที่อยู่นอกห้องเรียนที่ท่านรับผิดชอบ');
+            }
+        }
+
         $semesterId = $this->getSelectedSemesterId();
         $recordedBy = auth()->user()->UserID;
 

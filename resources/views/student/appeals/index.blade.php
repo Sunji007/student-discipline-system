@@ -40,12 +40,12 @@
         </div>
     </div>
 
-    {{-- Card 2: รอพิจารณา --}}
-    <div class="stat-card gold stat-card-clickable" data-open-modal="true" role="button" tabindex="0" title="คลิกดูสรุปสถิติคำร้องรอพิจารณา (ร้อยละ %)">
+    {{-- Card 2: รอตรวจสอบ --}}
+    <div class="stat-card gold stat-card-clickable" data-open-modal="true" role="button" tabindex="0" title="คลิกดูสรุปสถิติคำร้องรอตรวจสอบ (ร้อยละ %)">
         <div class="stat-icon gold"><i class="fas fa-clock"></i></div>
         <div class="stat-info">
             <div class="stat-value">{{ $stats['pending'] }}</div>
-            <div class="stat-label">รอพิจารณา (รอตรวจสอบ)</div>
+            <div class="stat-label">รอตรวจสอบ</div>
             <div style="margin-top:0.45rem;">
                 <span style="font-size:0.75rem; font-weight:700; color:#78350f; background:#fef3c7; padding:0.25rem 0.65rem; border-radius:6px; display:inline-flex; align-items:center; gap:0.35rem; border:1px solid #fde68a;">
                     <i class="fas fa-chart-pie"></i> คลิกดูสถิติ
@@ -92,8 +92,8 @@
                 <option value="{{ route('student.appeals.index', ['status' => 'คืนคะแนน']) }}" {{ request('status') === 'คืนคะแนน' ? 'selected' : '' }}>
                     ✅ คืนคะแนน ({{ $stats['restored'] }})
                 </option>
-                <option value="{{ route('student.appeals.index', ['status' => 'รอพิจารณา']) }}" {{ in_array(request('status'), ['รอพิจารณา', 'รอตรวจสอบ']) ? 'selected' : '' }}>
-                    ⏳ รอพิจารณา ({{ $stats['pending'] }})
+                <option value="{{ route('student.appeals.index', ['status' => 'รอตรวจสอบ']) }}" {{ in_array(request('status'), ['รอตรวจสอบ', 'รอพิจารณา']) ? 'selected' : '' }}>
+                    ⏳ รอตรวจสอบ ({{ $stats['pending'] }})
                 </option>
                 <option value="{{ route('student.appeals.index', ['status' => 'ยกเลิกคำร้อง']) }}" {{ in_array(request('status'), ['ยกเลิกคำร้อง', 'ยกเลิกคำร้องยื่นอุทธรณ์']) ? 'selected' : '' }}>
                     ❌ ยกเลิกคำร้อง ({{ $stats['cancelled'] }})
@@ -247,7 +247,7 @@
 
                 <div style="background:#fefce8; border:1px solid #fef08a; border-radius:12px; padding:1rem; text-align:center;">
                     <div style="font-size:0.8rem; font-weight:700; color:#854d0e; margin-bottom:0.35rem;">
-                        <i class="fas fa-clock"></i> รอพิจารณา
+                        <i class="fas fa-clock"></i> รอตรวจสอบ
                     </div>
                     <div style="font-size:1.6rem; font-weight:800; color:#b45309; line-height:1.2;">
                         {{ $stats['pending'] }} <span style="font-size:0.95rem; font-weight:600;">รายการ</span>
@@ -287,7 +287,7 @@
                         <tr style="background:#f8fafc; border-bottom:1px solid var(--border); color:var(--text-muted); font-size:0.78rem; text-transform:uppercase; letter-spacing:0.04em;">
                             <th style="padding:0.75rem 1rem; font-weight:700;">เดือน</th>
                             <th style="padding:0.75rem 0.5rem; text-align:center; font-weight:700; color:var(--green);">คืนคะแนน</th>
-                            <th style="padding:0.75rem 0.5rem; text-align:center; font-weight:700; color:var(--orange);">รอพิจารณา</th>
+                            <th style="padding:0.75rem 0.5rem; text-align:center; font-weight:700; color:var(--orange);">รอตรวจสอบ</th>
                             <th style="padding:0.75rem 0.5rem; text-align:center; font-weight:700; color:var(--red);">ยกเลิกคำร้อง</th>
                             <th style="padding:0.75rem 0.75rem; text-align:center; font-weight:700;">รวม</th>
                             <th style="padding:0.75rem 1rem; font-weight:700; min-width:130px;">ร้อยละคืนคะแนน (%)</th>

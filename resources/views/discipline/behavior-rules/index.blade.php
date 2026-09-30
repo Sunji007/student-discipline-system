@@ -85,16 +85,9 @@
                     </td>
                     <td style="text-align:right;">
                         <div style="display:flex; gap:0.35rem; justify-content:flex-end;">
-                            <a href="{{ route('discipline.behavior-rules.edit', $rule->RuleID) }}" class="btn btn-outline btn-sm">
+                            <a href="{{ route('discipline.behavior-rules.edit', $rule->RuleID) }}" class="btn btn-outline btn-sm" title="แก้ไข">
                                 <i class="fas fa-pen"></i>
                             </a>
-                            <form method="POST" action="{{ route('discipline.behavior-rules.destroy', $rule->RuleID) }}"
-                                  data-confirm="ยืนยันการลบกฎเกณฑ์นี้?">
-                                @csrf @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </form>
                         </div>
                     </td>
                 </tr>

@@ -6,13 +6,38 @@ use Illuminate\Database\Eloquent\Model;
 
 class InformantReport extends Model
 {
+    public const RESULT_TRUTH           = 'เป็นความจริง';
+    public const RESULT_INSUFFICIENT    = 'ไม่พบหลักฐานเพียงพอ';
+    public const RESULT_MALICIOUS      = 'แจ้งเท็จโดยเจตนา';
+    public const RESULT_HONEST_MISTAKE = 'แจ้งไม่ถูกต้องโดยไม่เจตนา';
+
     protected $primaryKey = 'ReportID';
     public $incrementing = false;
     protected $keyType = 'string';
     protected $fillable = [
         'ReportID', 'Title', 'Category', 'Description', 'IsAnonymous', 'ReporterName',
-        'ReporterID', 'StudentID', 'EvidencePath', 'Status', 'Remarks', 'ReportDate', 'semester_id'
+        'ReporterID', 'StudentID', 'EvidencePath', 'Status', 'Remarks', 'InvestigationResult', 'ReportDate', 'semester_id'
     ];
+
+    public static function resultOptions(): array
+    {
+        return [
+            self::RESULT_TRUTH,
+            self::RESULT_INSUFFICIENT,
+            self::RESULT_MALICIOUS,
+            self::RESULT_HONEST_MISTAKE,
+        ];
+    }
+
+    public static function resultStyles(): array
+    {
+        return [
+            self::RESULT_TRUTH           => ['badge-green',  'fa-check-circle',        'var(--green)'],
+            self::RESULT_INSUFFICIENT    => ['badge-gray',   'fa-circle-question',     '#94a3b8'],
+            self::RESULT_MALICIOUS      => ['badge-red',    'fa-triangle-exclamation', 'var(--red)'],
+            self::RESULT_HONEST_MISTAKE => ['badge-gold',   'fa-circle-info',         'var(--gold)'],
+        ];
+    }
 
     protected static function boot()
     {

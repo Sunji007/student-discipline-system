@@ -83,6 +83,14 @@
                             <i class="fas {{ $sc[1] }}" style="margin-right:0.25rem;"></i>
                             {{ $report->Status }}
                         </span>
+                        @if($report->InvestigationResult)
+                        @php
+                            $rsIdx = \App\Models\InformantReport::resultStyles()[$report->InvestigationResult] ?? ['badge-gray', 'fa-circle', '#94a3b8'];
+                        @endphp
+                        <span class="badge {{ $rsIdx[0] }}" style="font-size:0.68rem;">
+                            <i class="fas {{ $rsIdx[1] }}"></i> ผลตรวจสอบ: {{ $report->InvestigationResult }}
+                        </span>
+                        @endif
                         <span style="font-size:0.78rem; color:var(--text-muted);">
                             <i class="fas fa-clock" style="margin-right:0.25rem;"></i>
                             @php
@@ -178,33 +186,137 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Close report Swal confirmation
+    // Close report Swal with investigation result
     document.querySelectorAll('.btn-close-report').forEach(btn => {
         btn.addEventListener('click', function(e) {
             e.preventDefault();
             const form = this.closest('form');
+            const resultOptions = @json(\App\Models\InformantReport::resultOptions());
+
+            function submitCloseForm(result, remarks, createBehaviorRecord, notifyInvolved) {
+                form.querySelectorAll('input[name="InvestigationResult"], input[name="Remarks"], input[name="CreateBehaviorRecord"], input[name="NotifyInvolved"]').forEach(el => el.remove());
+                const fields = {
+                    InvestigationResult: result,
+                    Remarks: remarks || '',
+                    CreateBehaviorRecord: createBehaviorRecord === '1' ? '1' : '0',
+                    NotifyInvolved: notifyInvolved === '1' ? '1' : '0',
+                };
+                Object.entries(fields).forEach(([name, value]) => {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = name;
+                    input.value = value;
+                    form.appendChild(input);
+                });
+                form.submit();
+            }
+
             if (typeof Swal !== 'undefined') {
+                const optionsHtml = resultOptions.map(r => `<option value="${r}">${r}</option>`).join('');
                 Swal.fire({
-                    title: 'ยืนยันการปิดเรื่องนี้?',
-                    text: 'เมื่อปิดเรื่องแล้ว สถานะเรื่องแจ้งเบาะแสจะเปลี่ยนเป็นปิดเรื่องเรียบร้อย',
+                    title: 'ปิดเรื่องและบันทึกผลการตรวจสอบ',
+                    html: `
+                        <div style="text-align:left; font-size:0.88rem; color:#4b5563;">
+                            <label style="font-weight:700; display:block; margin-bottom:0.4rem;">
+                                ผลการตรวจสอบ <span style="color:#ef4444;">*</span>
+                            </label>
+                            <select id="swal-result-select"
+                                    style="width:100%; padding:0.55rem 0.7rem; border:1px solid #d1d5db; border-radius:8px; font-size:0.9rem; font-family:inherit;">
+                                <option value="">-- กรุณาเลือกผลการตรวจสอบ --</option>
+                                ${optionsHtml}
+                            </select>
+                            <div style="font-size:0.75rem; color:#6b7280; margin-top:0.45rem; line-height:1.5; background:#f9fafb; border:1px solid #e5e7eb; border-radius:6px; padding:0.5rem 0.65rem;">
+                                <i class="fas fa-circle-info" style="color:#f59e0b;"></i>
+                                <strong>แจ้งเท็จโดยเจตนา</strong> = รู้ว่าไม่เป็นความจริงแต่แจ้งเพื่อกลั่นแกล้ง<br>
+                                <strong>แจ้งไม่ถูกต้องโดยไม่เจตนา</strong> = แจ้งด้วยความเข้าใจผิด (ไม่ถือเป็นความผิดของผู้แจ้ง)
+                            </div>
+                            <label style="font-weight:700; display:block; margin:0.85rem 0 0.4rem;">
+                                หมายเหตุการดำเนินการ <span style="font-weight:400; color:#9ca3af;">(ถ้ามี)</span>
+                            </label>
+                            <textarea id="swal-remarks" rows="3" placeholder="ระบุการดำเนินการ เช่น สอบสวนแล้ว, เรียกพูดคุย, แจ้งผู้ปกครอง..."
+                                      style="width:100%; padding:0.55rem 0.7rem; border:1px solid #d1d5db; border-radius:8px; font-size:0.9rem; font-family:inherit; resize:vertical;"></textarea>
+                            <div id="swal-close-options"></div>
+                        </div>`,
                     iconHtml: '<i class="fas fa-lock" style="color:#16a34a; font-size:2.6rem;"></i>',
+                    didOpen: () => {
+                        const optionsBox = document.getElementById('swal-close-options');
+                        const renderOptions = () => {
+                            const selected = document.getElementById('swal-result-select').value;
+                            let html = '';
+                            if (selected === 'แจ้งเท็จโดยเจตนา') {
+                                html += `<label style="display:flex; align-items:flex-start; gap:0.5rem; margin-top:0.85rem; padding:0.65rem 0.75rem; background:#fef2f2; border:1px solid #fecaca; border-radius:8px; font-size:0.82rem; color:#7f1d1d; cursor:pointer; line-height:1.5;">
+                                    <input type="checkbox" id="swal-create-behavior-record" style="margin-top:0.15rem; accent-color:#dc2626; cursor:pointer;">
+                                    <span>บันทึกพฤติกรรมหักคะแนนผู้แจ้ง <strong>(-10 คะแนน สถานะรออนุมัติ)</strong><br>
+                                    <span style="font-size:0.75rem;">เฉพาะเมื่อผู้แจ้งเป็นนักเรียนในระบบ — ครั้งแรกอาจเลือกใช้การพูดคุย/เตือนก่อน</span></span>
+                                </label>`;
+                            }
+                            if (selected && selected !== 'เป็นความจริง') {
+                                html += `<label style="display:flex; align-items:flex-start; gap:0.5rem; margin-top:0.6rem; padding:0.65rem 0.75rem; background:#f0fdf4; border:1px solid #bbf7d0; border-radius:8px; font-size:0.82rem; color:#166534; cursor:pointer; line-height:1.5;">
+                                    <input type="checkbox" id="swal-notify-involved" checked style="margin-top:0.15rem; accent-color:#16a34a; cursor:pointer;">
+                                    <span>แจ้งผู้ที่ถูกระบุชื่อในเรื่องนี้ผ่านระบบข้อความ ว่าเรื่องปิดแล้วและ<strong>ไม่มีผลต่อคะแนนพฤติกรรม/ประวัติของเขา</strong> (จะไม่เปิดเผยตัวผู้แจ้ง)</span>
+                                </label>`;
+                            }
+                            optionsBox.innerHTML = html;
+                        };
+                        document.getElementById('swal-result-select').addEventListener('change', renderOptions);
+                        renderOptions();
+                    },
                     showCancelButton: true,
-                    confirmButtonText: 'ตกลง',
+                    confirmButtonText: 'ยืนยันปิดเรื่อง',
                     cancelButtonText: 'ยกเลิก',
                     customClass: {
                         icon: 'swal2-icon-custom-green',
                         confirmButton: 'swal2-confirm btn-swal-success',
                         cancelButton: 'swal2-cancel btn-swal-cancel'
                     },
-                    buttonsStyling: false
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        form.submit();
+                    buttonsStyling: false,
+                    focusConfirm: false,
+                    preConfirm: () => {
+                        const selected = document.getElementById('swal-result-select').value;
+                        if (!selected) {
+                            Swal.showValidationMessage('กรุณาเลือกผลการตรวจสอบก่อนปิดเรื่อง');
+                            return false;
+                        }
+                        return {
+                            result: selected,
+                            remarks: document.getElementById('swal-remarks').value,
+                            createBehaviorRecord: document.getElementById('swal-create-behavior-record')?.checked ? '1' : '0',
+                            notifyInvolved: document.getElementById('swal-notify-involved')?.checked ? '1' : '0',
+                        };
+                    }
+                }).then(async (swalResult) => {
+                    if (swalResult.isConfirmed && swalResult.value) {
+                        const v = swalResult.value;
+                        // ยืนยันอีกชั้นก่อนหักคะแนนผู้แจ้ง
+                        if (v.createBehaviorRecord === '1') {
+                            const again = await Swal.fire({
+                                title: 'ยืนยันบันทึกพฤติกรรมหักคะแนนผู้แจ้ง?',
+                                text: 'ระบบจะสร้างบันทึกพฤติกรรมตัดคะแนน -10 ให้ผู้แจ้ง (สถานะรออนุมัติ) กรุณาตรวจสอบหลักฐานและดุลยพินิจอีกครั้ง',
+                                iconHtml: '<i class="fas fa-triangle-exclamation" style="color:#ef4444; font-size:2.6rem;"></i>',
+                                showCancelButton: true,
+                                confirmButtonText: 'ยืนยัน',
+                                cancelButtonText: 'ยกเลิก',
+                                customClass: {
+                                    icon: 'swal2-icon-custom-red',
+                                    confirmButton: 'swal2-confirm btn-swal-danger',
+                                    cancelButton: 'swal2-cancel btn-swal-cancel'
+                                },
+                                buttonsStyling: false
+                            });
+                            if (!again.isConfirmed) return;
+                        }
+                        submitCloseForm(v.result, v.remarks, v.createBehaviorRecord, v.notifyInvolved);
                     }
                 });
             } else {
-                if (confirm('ยืนยันการปิดเรื่องนี้?')) {
-                    form.submit();
+                const list = resultOptions.map((r, i) => `${i + 1}. ${r}`).join('\n');
+                const picked = prompt(`เลือกผลการตรวจสอบ (พิมพ์หมายเลข):\n${list}`);
+                const idx = parseInt(picked, 10) - 1;
+                if (idx >= 0 && idx < resultOptions.length) {
+                    const remarks = prompt('หมายเหตุการดำเนินการ (ถ้ามี):') || '';
+                    if (confirm('ยืนยันการปิดเรื่องนี้?')) {
+                        submitCloseForm(resultOptions[idx], remarks);
+                    }
                 }
             }
         });

@@ -70,9 +70,22 @@ class User extends Authenticatable {
         );
     }
     public function disciplineOfficer() { return $this->hasOne(DisciplineStaff::class, 'UserID', 'UserID'); }
-    
+
+    protected ?array $cachedAvailableRoles = null;
+    protected static array $permissionsCache = [];
+
     public function getAvailableRoles(): array
     {
+        if ($this->cachedAvailableRoles !== null) {
+            return $this->cachedAvailableRoles;
+        }
+
+        $sessionKey = 'user_available_roles_' . $this->UserID;
+        if (session()->has($sessionKey)) {
+            $this->cachedAvailableRoles = session($sessionKey);
+            return $this->cachedAvailableRoles;
+        }
+
         $roles = [];
         $primary = $this->Role;
 
@@ -103,7 +116,17 @@ class User extends Authenticatable {
             }
         }
 
-        return array_values(array_unique($roles));
+        $result = array_values(array_unique($roles));
+        $this->cachedAvailableRoles = $result;
+        session([$sessionKey => $result]);
+
+        return $result;
+    }
+
+    public function clearAvailableRolesCache(): void
+    {
+        $this->cachedAvailableRoles = null;
+        session()->forget('user_available_roles_' . $this->UserID);
     }
 
     public function canAccess(string $module): bool
@@ -128,18 +151,29 @@ class User extends Authenticatable {
             return true;
         }
 
-        try {
-            if (class_exists(\App\Models\RolePermission::class)) {
-                return \App\Models\RolePermission::where('Role', $role)
-                    ->where('ModuleName', $module)
-                    ->where('CanAccess', 1)
-                    ->exists();
+        if (!isset(static::$permissionsCache[$role])) {
+            try {
+                if (class_exists(\App\Models\RolePermission::class)) {
+                    static::$permissionsCache[$role] = \Illuminate\Support\Facades\Cache::remember(
+                        'role_permissions_' . md5($role),
+                        3600,
+                        function () use ($role) {
+                            return \App\Models\RolePermission::where('Role', $role)
+                                ->where('CanAccess', 1)
+                                ->pluck('ModuleName')
+                                ->flip()
+                                ->toArray();
+                        }
+                    );
+                } else {
+                    static::$permissionsCache[$role] = [];
+                }
+            } catch (\Throwable $e) {
+                return true;
             }
-        } catch (\Throwable $e) {
-            return true;
         }
 
-        return true;
+        return isset(static::$permissionsCache[$role][$module]);
     }
 
     public function getEmailForPasswordReset()
