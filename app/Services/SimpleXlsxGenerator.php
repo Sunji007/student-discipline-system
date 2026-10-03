@@ -118,20 +118,22 @@ class SimpleXlsxGenerator
         $sheetData = '<sheetData>';
         $rowIndex = 1;
 
-        // Title rows
-        foreach ($titleRows as $tIdx => $tRow) {
-            $styleId = ($tIdx === 0) ? 2 : 3;
-            $rowHeight = ($tIdx === 0) ? ' ht="26" customHeight="1"' : ' ht="20" customHeight="1"';
-            $sheetData .= '<row r="' . $rowIndex . '"' . $rowHeight . '>';
-            $cleanText = htmlspecialchars($tRow, ENT_QUOTES | ENT_XML1, 'UTF-8');
-            $sheetData .= '<c r="A' . $rowIndex . '" s="' . $styleId . '" t="inlineStr"><is><t>' . $cleanText . '</t></is></c>';
-            $sheetData .= '</row>';
+        // Title rows (if any)
+        if (!empty($titleRows)) {
+            foreach ($titleRows as $tIdx => $tRow) {
+                $styleId = ($tIdx === 0) ? 2 : 3;
+                $rowHeight = ($tIdx === 0) ? ' ht="26" customHeight="1"' : ' ht="20" customHeight="1"';
+                $sheetData .= '<row r="' . $rowIndex . '"' . $rowHeight . '>';
+                $cleanText = htmlspecialchars($tRow, ENT_QUOTES | ENT_XML1, 'UTF-8');
+                $sheetData .= '<c r="A' . $rowIndex . '" s="' . $styleId . '" t="inlineStr"><is><t>' . $cleanText . '</t></is></c>';
+                $sheetData .= '</row>';
+                $rowIndex++;
+            }
+
+            // Empty space row
+            $sheetData .= '<row r="' . $rowIndex . '" ht="14" customHeight="1"/>';
             $rowIndex++;
         }
-
-        // Empty space row
-        $sheetData .= '<row r="' . $rowIndex . '" ht="14" customHeight="1"/>';
-        $rowIndex++;
 
         // Table Header row
         $sheetData .= '<row r="' . $rowIndex . '" ht="26" customHeight="1">';
@@ -154,16 +156,21 @@ class SimpleXlsxGenerator
                 
                 // Determine format/style
                 $style = 0; // Default regular
-                if ($cIdx === 0 || $cIdx === 1 || $cIdx === 2 || $cIdx === 4) {
-                    $style = 4; // Center
-                } elseif ($cIdx === 6) { // Score modifier
-                    $numVal = is_numeric($val) ? (float)$val : 0;
-                    $style = ($numVal < 0) ? 6 : (($numVal > 0) ? 7 : 4);
-                } elseif ($cIdx === 7) { // Remaining score
-                    $style = 5; // Right
+                if (empty($titleRows)) {
+                    // For templates without title rows: center small codes/text
+                    $style = 4; // Clean center alignment
+                } else {
+                    if ($cIdx === 0 || $cIdx === 1 || $cIdx === 2 || $cIdx === 4) {
+                        $style = 4; // Center
+                    } elseif ($cIdx === 6 && is_numeric($val)) { // Score modifier
+                        $numVal = (float)$val;
+                        $style = ($numVal < 0) ? 6 : (($numVal > 0) ? 7 : 4);
+                    } elseif ($cIdx === 7 && is_numeric($val)) { // Remaining score
+                        $style = 5; // Right
+                    }
                 }
 
-                if (is_numeric($val) && !preg_match('/^0\d+/', (string)$val)) {
+                if (is_numeric($val) && !preg_match('/^0\d+/', (string)$val) && strlen((string)$val) < 11) {
                     $sheetData .= '<c r="' . $colLetter . $rowIndex . '" s="' . $style . '"><v>' . $val . '</v></c>';
                 } else {
                     $cleanVal = htmlspecialchars((string)($val ?? '-'), ENT_QUOTES | ENT_XML1, 'UTF-8');

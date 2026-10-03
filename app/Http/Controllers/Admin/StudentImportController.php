@@ -32,25 +32,18 @@ class StudentImportController extends Controller
 
     public function template()
     {
-        $filename = 'student_import_template.csv';
-        $headers = [
-            'Content-Type'        => 'text/csv; charset=UTF-8',
-            'Content-Disposition' => "attachment; filename=\"{$filename}\"",
-            'Pragma'              => 'no-cache',
-            'Cache-Control'       => 'must-revalidate, post-check=0, pre-check=0',
-            'Expires'             => '0',
-        ];
+        $filename = 'student_import_template.xlsx';
 
         $columns = [
-            'รหัสนักเรียน',
-            'รหัสบัตรประชาชน',
-            'คำนำหน้า',
-            'ชื่อจริง',
-            'นามสกุล',
-            'เพศ',
-            'ระดับชั้น',
-            'ห้องเรียน',
-            'เบอร์โทรศัพท์',
+            'รหัสนักเรียน'     => 16,
+            'รหัสบัตรประชาชน' => 20,
+            'คำนำหน้า'        => 12,
+            'ชื่อจริง'          => 20,
+            'นามสกุล'         => 20,
+            'เพศ'             => 10,
+            'ระดับชั้น'        => 12,
+            'ห้องเรียน'        => 12,
+            'เบอร์โทรศัพท์'     => 16,
         ];
 
         $sampleRows = [
@@ -59,19 +52,15 @@ class StudentImportController extends Controller
             ['06002', '3950100069003', 'นาย', 'ฟุรกอน', 'มะยูโซ๊ะ', 'ชาย', 'ม.4', '4/1', '0812345680'],
         ];
 
-        $callback = function () use ($columns, $sampleRows) {
-            $file = fopen('php://output', 'w');
-            // Write UTF-8 BOM so Excel opens Thai characters properly
-            fputs($file, "\xEF\xBB\xBF");
-            fputcsv($file, $columns);
+        $xlsxContent = \App\Services\SimpleXlsxGenerator::create('รายชื่อนักเรียน', [], $columns, $sampleRows);
 
-            foreach ($sampleRows as $row) {
-                fputcsv($file, $row);
-            }
-            fclose($file);
-        };
-
-        return response()->stream($callback, 200, $headers);
+        return response($xlsxContent, 200, [
+            'Content-Type'        => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'Content-Disposition' => "attachment; filename=\"{$filename}\"",
+            'Content-Length'      => strlen($xlsxContent),
+            'Cache-Control'       => 'max-age=0, must-revalidate',
+            'Pragma'              => 'public',
+        ]);
     }
 
     public function store(Request $request)

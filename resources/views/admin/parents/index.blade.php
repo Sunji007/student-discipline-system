@@ -33,10 +33,7 @@
 @if($parents->isEmpty())
 <div class="card" style="text-align:center; padding:3rem; color:var(--text-muted);">
     <i class="fas fa-user-friends" style="font-size:3rem; opacity:0.25; display:block; margin-bottom:1rem;"></i>
-    <p>ยังไม่มีข้อมูลผู้ปกครองของนักเรียนคนนี้</p>
-    <a href="{{ route('admin.students.parents.create', $student->StudentID) }}" class="btn btn-primary" style="margin-top:0.75rem;">
-        <i class="fas fa-plus"></i> เพิ่ม
-    </a>
+    <p style="margin-bottom:0;">ยังไม่มีข้อมูลผู้ปกครองของนักเรียนคนนี้</p>
 </div>
 @else
 <div class="card">

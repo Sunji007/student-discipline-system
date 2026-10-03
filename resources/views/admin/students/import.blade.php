@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'นำเข้าข้อมูลนักเรียนผ่านไฟล์ Excel / CSV')
+@section('title', 'นำเข้าข้อมูลนักเรียนผ่านไฟล์ Excel')
 @section('page-title', 'นำเข้าข้อมูลนักเรียน')
 
 @push('styles')
@@ -107,7 +107,7 @@
         <div>
             <h2 style="margin: 0 0 0.4rem 0; font-size: 1.4rem; display: flex; align-items: center; gap: 0.6rem;">
                 <i class="fas fa-file-excel" style="color: #10b981; margin-right: 0.25rem;"></i>
-                <span>นำเข้าข้อมูลนักเรียนผ่านไฟล์ Excel / CSV</span>
+                <span>นำเข้าข้อมูลนักเรียนผ่านไฟล์ Excel</span>
             </h2>
             <p style="margin: 0; opacity: 0.9; font-size: 0.88rem;">
                 เพิ่มนักเรียนใหม่ หรือ อัปเดตข้อมูลนักเรียนเดิมแบบกลุ่มได้อย่างรวดเร็วและปลอดภัย
@@ -115,7 +115,7 @@
         </div>
         <div style="display: flex; gap: 0.6rem; align-items: center;">
             <a href="{{ route('admin.students.import.template') }}" class="btn btn-sm" style="background: #10b981; color: #fff; font-weight: 600; padding: 0.5rem 1rem; border-radius: 8px; border: none; display: inline-flex; align-items: center; gap: 0.4rem; text-decoration: none;">
-                <i class="fas fa-download"></i> ดาวน์โหลดไฟล์เทมเพลต Excel (.CSV)
+                <i class="fas fa-download"></i> ดาวน์โหลดไฟล์เทมเพลต Excel (.xlsx)
             </a>
             <a href="{{ route('admin.students.index') }}" class="btn btn-sm" style="background: rgba(255,255,255,0.15); color: #fff; font-weight: 500; padding: 0.5rem 0.9rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.3); text-decoration: none;">
                 <i class="fas fa-arrow-left"></i> กลับหน้ารายชื่อ
@@ -130,17 +130,17 @@
         <div class="card" style="padding: 1.25rem; border-radius: 10px; border: 1px solid #e2e8f0;">
             <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 1rem; color: #1e293b; display: flex; align-items: center; gap: 0.4rem;">
                 <i class="fas fa-cloud-upload-alt" style="color: #3b82f6;"></i>
-                <span>1. เลือกหรือลากไฟล์ Excel / CSV ที่นี่</span>
+                <span>1. เลือกหรือลากไฟล์ Excel ที่นี่</span>
             </h3>
 
             <div class="dropzone-box" id="dropZone" onclick="document.getElementById('fileInput').click()">
-                <input type="file" id="fileInput" accept=".xlsx, .xls, .csv, .txt" style="display: none;" onchange="handleFileSelect(event)">
+                <input type="file" id="fileInput" accept=".xlsx, .xls" style="display: none;" onchange="handleFileSelect(event)">
                 <i class="fas fa-file-excel dropzone-icon"></i>
                 <h4 style="margin: 0 0 0.35rem 0; font-size: 1.05rem; font-weight: 700; color: #1e293b;" id="fileNameDisplay">
                     คลิกเพื่อเลือกไฟล์ หรือลากไฟล์มาวางที่นี่
                 </h4>
                 <p style="margin: 0; font-size: 0.82rem; color: #64748b;">
-                    รองรับไฟล์นามสกุล <strong>.xlsx, .xls, .csv</strong> (ขนาดไม่เกิน 10 MB)
+                    รองรับไฟล์นามสกุล <strong>.xlsx, .xls</strong> (ขนาดไม่เกิน 10 MB)
                 </p>
             </div>
 

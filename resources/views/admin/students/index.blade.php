@@ -11,7 +11,7 @@
     </div>
     <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
         <a href="{{ route('admin.students.import') }}" class="btn btn-outline" style="display:inline-flex; align-items:center; gap:0.4rem; font-weight:600; color:#10b981; border-color:#10b981;">
-            <i class="fas fa-file-excel"></i> นำเข้าไฟล์ Excel / CSV
+            <i class="fas fa-file-excel"></i> นำเข้าไฟล์ Excel
         </a>
     </div>
 </div>

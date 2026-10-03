@@ -239,11 +239,18 @@
                 ขั้นตอนการดำเนินการ
             </div>
             <div style="display:flex; align-items:center; gap:0;">
-                @foreach(['เรื่องใหม่','กำลังตรวจสอบ','ปิดเรื่องแล้ว'] as $i => $step)
                 @php
+                    $steps = [
+                        'เรื่องใหม่'     => 'ได้รับแจ้ง',
+                        'กำลังตรวจสอบ'  => 'กำลังตรวจสอบ',
+                        'ปิดเรื่องแล้ว' => 'ปิดเรื่องแล้ว',
+                    ];
                     $statusOrder = ['เรื่องใหม่' => 0, 'กำลังตรวจสอบ' => 1, 'ปิดเรื่องแล้ว' => 2];
                     $currentOrder = $statusOrder[$informantReport->Status] ?? 0;
-                    $stepOrder = $statusOrder[$step];
+                @endphp
+                @foreach($steps as $statusKey => $stepLabel)
+                @php
+                    $stepOrder = $statusOrder[$statusKey];
                     $isDone = $stepOrder <= $currentOrder;
                     $isCurrent = $stepOrder === $currentOrder;
                 @endphp
@@ -260,7 +267,7 @@
                         </div>
                         <div style="font-size:0.72rem; margin-top:0.4rem; color:{{ $isDone ? 'var(--navy)' : 'var(--text-muted)' }};
                             font-weight:{{ $isCurrent ? '600' : '400' }}; text-align:center; white-space:nowrap;">
-                            {{ $step }}
+                            {{ $stepLabel }}
                         </div>
                     </div>
                     @if(!$loop->last)
