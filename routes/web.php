@@ -38,6 +38,80 @@ Route::get('/clear-cache', function() {
     return 'ระบบทำการล้างแคช (Cache Cleared) เรียบร้อยแล้ว!';
 });
 
+Route::get('/fix-student-passwords-live', function() {
+    $token = request()->query('token');
+    if ($token !== 'fixpwd2026') {
+        return response('Unauthorized', 403);
+    }
+
+    try {
+        set_time_limit(300);
+        $report = [];
+
+        $u06001 = \Illuminate\Support\Facades\DB::table('users')->where('Username', '06001')->first();
+        if ($u06001) {
+            $report[] = "Found 06001. Current hash: " . substr($u06001->Password, 0, 20) . "...";
+            $report[] = "Matches Student06001: " . (\Illuminate\Support\Facades\Hash::check('Student06001', $u06001->Password) ? 'YES' : 'NO');
+            $report[] = "Matches password123: " . (\Illuminate\Support\Facades\Hash::check('password123', $u06001->Password) ? 'YES' : 'NO');
+            $report[] = "Matches 123456: " . (\Illuminate\Support\Facades\Hash::check('123456', $u06001->Password) ? 'YES' : 'NO');
+        } else {
+            $report[] = "User 06001 NOT FOUND!";
+        }
+
+        // Check if only checking without update
+        if (request()->has('check_only')) {
+            return response(implode("\n", $report), 200, ['Content-Type' => 'text/plain; charset=utf-8']);
+        }
+
+        if ($specificUser = request()->query('user')) {
+            $stu = \Illuminate\Support\Facades\DB::table('users')->where('Username', $specificUser)->first();
+            if ($stu) {
+                $rawPass = ($stu->Username === 'student1') ? 'password123' : ('Student' . $stu->Username);
+                $hashed = \Illuminate\Support\Facades\Hash::make($rawPass);
+                \Illuminate\Support\Facades\DB::table('users')->where('UserID', $stu->UserID)->update(['Password' => $hashed]);
+                return response("User {$specificUser} password updated to {$rawPass} successfully!", 200, ['Content-Type' => 'text/plain; charset=utf-8']);
+            }
+            return response("User {$specificUser} not found", 404, ['Content-Type' => 'text/plain; charset=utf-8']);
+        }
+
+        $limit = (int)request()->query('limit', 50);
+        $offset = (int)request()->query('offset', 0);
+        $totalStudents = \Illuminate\Support\Facades\DB::table('users')->where('Role', 'นักเรียน')->count();
+        $students = \Illuminate\Support\Facades\DB::table('users')
+            ->where('Role', 'นักเรียน')
+            ->select('UserID', 'Username')
+            ->orderBy('Username')
+            ->offset($offset)
+            ->limit($limit)
+            ->get();
+
+        $count = 0;
+        foreach ($students as $stu) {
+            $rawPass = ($stu->Username === 'student1') ? 'password123' : ('Student' . $stu->Username);
+            $hashed = \Illuminate\Support\Facades\Hash::make($rawPass);
+            \Illuminate\Support\Facades\DB::table('users')->where('UserID', $stu->UserID)->update(['Password' => $hashed]);
+            $count++;
+        }
+
+        $report[] = "Updated batch offset={$offset}, limit={$limit}: {$count} students (Total in DB: {$totalStudents})";
+        $report[] = "Next offset: " . ($offset + $count);
+
+        if ($u06001) {
+            $u06001_after = \Illuminate\Support\Facades\DB::table('users')->where('Username', '06001')->first();
+            if ($u06001_after) {
+                $report[] = "06001 matches Student06001: " . (\Illuminate\Support\Facades\Hash::check('Student06001', $u06001_after->Password) ? 'YES' : 'NO');
+            }
+        }
+
+        return response(implode("\n", $report), 200, ['Content-Type' => 'text/plain; charset=utf-8']);
+
+    } catch (\Throwable $e) {
+        return response("ERROR: " . $e->getMessage() . "\n" . $e->getFile() . ":" . $e->getLine() . "\n" . $e->getTraceAsString(), 500, ['Content-Type' => 'text/plain; charset=utf-8']);
+    }
+});
+
+
+
 Route::middleware(['auth', 'role:ผู้ดูแลระบบ,admin'])->group(function () {
     Route::get('/debug-parents-list', function() {
         $students = \App\Models\Student::with('user', 'parent')->get();
