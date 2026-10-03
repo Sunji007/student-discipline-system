@@ -11,7 +11,7 @@ from reportlab.lib.utils import ImageReader
 from PIL import Image, ImageDraw
 import pymupdf
 
-OUT = ROOT / 'output/pdf/student-discipline-presentation.pdf'
+OUT = ROOT / 'output/pdf/student-discipline-presentation-sdlc.pdf'
 ASSET = ROOT / 'docs/presentation_assets'
 pdfmetrics.registerFont(TTFont('Thai', 'C:/Windows/Fonts/LeelawUI.ttf'))
 pdfmetrics.registerFont(TTFont('ThaiBold', 'C:/Windows/Fonts/LeelaUIb.ttf'))
@@ -109,13 +109,27 @@ for i,(name,filename) in enumerate([('HTML','html5'),('CSS','css'),('JavaScript'
     x=200+i*293;img(ASSET/f'logos/{filename}.png',x-48,438,96,96);txt(name,x,556,27,INK,'ThaiBold','center')
 end()
 
-# 08 typographic process
-start('ขั้นตอนดำเนินงาน','SDLC','ที่มา: Pop del.pdf หน้า 24-25, 58',True)
-steps=[('ศึกษาปัญหา','และความต้องการ'),('วิเคราะห์','และออกแบบ'),('พัฒนาระบบ','และฐานข้อมูล'),('ทดสอบ','และติดตั้ง'),('ประเมิน','และปรับปรุง')]
+# 08 SDLC: seven phases from the research, with project-specific activities
+start('ขั้นตอนดำเนินงานตาม SDLC','7 ขั้นตอน','ที่มา: Pop del.pdf หน้า 24-25, 59-65, 102-104',True)
+txt('ขั้นตอน',133,151,20,GOLD,'ThaiBold')
+txt('การดำเนินงานในวิจัยระบบวินัยนักเรียน',553,151,20,GOLD,'ThaiBold')
+steps=[
+    ('ค้นหาปัญหา','ศึกษาการบันทึกกระดาษและการติดตามพฤติกรรม'),
+    ('ศึกษาความเป็นไปได้','พิจารณาเครื่องมือ บุคลากร งบประมาณ และเวลา'),
+    ('วิเคราะห์ระบบ','สัมภาษณ์ครู นักเรียน ผู้ปกครอง • กำหนดสิทธิ์ 5 บทบาท'),
+    ('ออกแบบระบบ','จัดทำ DFD, ER Diagram ฐานข้อมูล และหน้าจอ'),
+    ('พัฒนาและทดสอบ','ใช้ PHP/MySQL • ทดสอบคะแนน สิทธิ์ และอุทธรณ์'),
+    ('ติดตั้งระบบ','ใช้ XAMPP และเครื่องแม่ข่ายมหาวิทยาลัยเพื่อทดลองใช้'),
+    ('บำรุงรักษาระบบ','รับผลประเมินและข้อเสนอแนะมาปรับปรุงระบบ'),
+]
+line(89,201,89,610,'#6D887C',2)
 for i,(a,b) in enumerate(steps):
-    x=56+i*244;txt(f'0{i+1}',x,223,78,GOLD,'Latin');txt(a,x,371,30,CREAM,'ThaiBold');txt(b,x,426,24,'#C2D2C8')
-line(57,344,1208,344,'#6D887C',1)
-txt('ใช้วงจรการพัฒนาระบบเป็นกรอบดำเนินงาน',56,559,25,'#C2D2C8')
+    y=195+i*62
+    rect(63,y-1,54,43,GREEN)
+    txt(f'0{i+1}',66,y,34,GOLD,'Latin')
+    txt(a,133,y+4,28,CREAM,'ThaiBold')
+    txt(b,553,y+8,24,'#D2DDD2')
+    if i<6:line(133,y+49,1220,y+49,'#34584F',0.6)
 end()
 
 # 09 full DFD, no loss of labels
