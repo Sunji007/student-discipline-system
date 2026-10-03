@@ -1,0 +1,36 @@
+# Domain Docs
+
+How the engineering skills should consume this repo's domain documentation when exploring the codebase.
+
+## Before exploring, read these
+
+- Root `GLOSSARY.md` for the project's domain vocabulary.
+- `docs/adr/`: read ADRs that touch the area you're about to work in.
+
+If any of these files don't exist, proceed silently. Don't flag their absence; don't suggest creating them upfront. The `/domain-modeling` skill creates them lazily when terms or decisions actually get resolved.
+
+## File structure
+
+This is a single-context Laravel repository:
+
+```text
+/
+├── GLOSSARY.md
+├── docs/
+│   └── adr/
+│       └── 0001-<decision-slug>.md
+├── app/
+└── resources/
+```
+
+This layout is a convention, not a claim that glossary or ADR files already exist.
+
+## Use the glossary's vocabulary
+
+When your output names a domain concept, such as in an issue title, refactor proposal, hypothesis, or test name, use the term defined in `GLOSSARY.md`. Don't drift to synonyms the glossary explicitly avoids.
+
+If a needed concept isn't in the glossary yet, reconsider whether the term belongs to this project or note the real gap for `/domain-modeling`.
+
+## Flag ADR conflicts
+
+If your output contradicts an existing ADR, surface it explicitly rather than silently overriding it. Cite the ADR and explain why reopening the decision is warranted.
