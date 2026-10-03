@@ -1,0 +1,67 @@
+{"kind":"deck","id":"pr/0meixp","name":"Deck"}
+{"kind":"layout","layoutId":"3f6c8d24-5e43-4b4c-8481-487cb8201dce","name":"Master","type":"master"}
+{"kind":"layout","layoutId":"610da466-ed0f-4217-a272-30106a9c72d4","name":"Title Slide","type":"title"}
+{"kind":"slide","id":"sl/7fodqj","slide":1,"title":"STUDENT DISCIPLINE / RESEARCH 2569","textShapes":43}
+{"kind":"shape","id":"sh/tsjypsjm","slide":1,"bbox":[0,0,1280,720]}
+{"kind":"textbox","id":"sh/6p8zedkb","slide":1,"text":"STUDENT DISCIPLINE / RESEARCH 2569","textPreview":"STUDENT DISCIPLINE / RESEARCH 2569","textChars":34,"textLines":1,"bbox":[56,27,880,26]}
+{"kind":"textbox","id":"sh/rqhgni1w","slide":1,"text":"ขั้นตอนดำเนินงานตาม SDLC","textPreview":"ขั้นตอนดำเนินงานตาม SDLC","textChars":24,"textLines":1,"bbox":[56,76,1168,58]}
+{"kind":"textbox","id":"sh/4nqhc325","slide":1,"text":"7 ขั้นตอนเพื่อพัฒนาระบบวินัยและติดตามพฤติกรรมนักเรียน","textPreview":"7 ขั้นตอนเพื่อพัฒนาระบบวินัยและติดตามพฤติกรรมนักเรียน","textChars":53,"textLines":1,"bbox":[56,136,1168,35]}
+{"kind":"shape","id":"sh/5ozyl8jq","slide":1,"bbox":[56,179,1168,0]}
+{"kind":"shape","id":"sh/il8zadkz","slide":1,"bbox":[106,213,384,384]}
+{"kind":"shape","id":"sh/jmhgji1k","slide":1,"bbox":[271,186,54,54]}
+{"kind":"textbox","id":"sh/wjqx8329","slide":1,"text":"01","textPreview":"01","textChars":2,"textLines":1,"bbox":[271,191,54,44]}
+{"kind":"textbox","id":"sh/hkzyh8je","slide":1,"text":"ปัญหา","textPreview":"ปัญหา","textChars":5,"textLines":1,"bbox":[203,261,190,44]}
+{"kind":"shape","id":"sh/5wzmxoz2","slide":1,"bbox":[375.31,225.01,12,14]}
+{"kind":"shape","id":"sh/kv65ojyh","slide":1,"bbox":[421.11,258.29,54,54]}
+{"kind":"textbox","id":"sh/jux4vehc","slide":1,"text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[421.11,263.29,54,44]}
+{"kind":"textbox","id":"sh/itonm9gr","slide":1,"text":"ความเป็นไปได้","textPreview":"ความเป็นไปได้","textChars":13,"textLines":1,"bbox":[298.38,306.93,190,44]}
+{"kind":"shape","id":"sh/xsfmt4z6","slide":1,"bbox":[479.19,355.28,12,14]}
+{"kind":"shape","id":"sh/wr65kzyl","slide":1,"bbox":[458.19,420.72,54,54]}
+{"kind":"textbox","id":"sh/vqx4ruh0","slide":1,"text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[458.19,425.72,54,44]}
+{"kind":"textbox","id":"sh/aponi9gf","slide":1,"text":"วิเคราะห์","textPreview":"วิเคราะห์","textChars":9,"textLines":1,"bbox":[321.94,410.15,190,44]}
+{"kind":"shape","id":"sh/9ovmp4zu","slide":1,"bbox":[442.11,517.71,12,14]}
+{"kind":"shape","id":"sh/8nm5gzy9","slide":1,"bbox":[354.31,550.99,54,54]}
+{"kind":"textbox","id":"sh/07q5cz65","slide":1,"text":"04","textPreview":"04","textChars":2,"textLines":1,"bbox":[354.31,555.99,54,44]}
+{"kind":"textbox","id":"sh/18zm547q","slide":1,"text":"ออกแบบ","textPreview":"ออกแบบ","textChars":6,"textLines":1,"bbox":[255.93,492.92,190,44]}
+{"kind":"shape","id":"sh/e58napof","slide":1,"bbox":[292,590,12,14]}
+{"kind":"shape","id":"sh/z6h43up0","slide":1,"bbox":[187.69,550.99,54,54]}
+{"kind":"textbox","id":"sh/c3q58z69","slide":1,"text":"05","textPreview":"05","textChars":2,"textLines":1,"bbox":[187.69,555.99,54,44]}
+{"kind":"textbox","id":"sh/d4zm1k7u","slide":1,"text":"พัฒนา\nและทดสอบ","textPreview":"พัฒนา | และทดสอบ","textChars":14,"textLines":2,"bbox":[150.07,492.92,190,55]}
+{"kind":"shape","id":"sh/qhon6po3","slide":1,"bbox":[141.89,517.71,12,14]}
+{"kind":"shape","id":"sh/r2h4zupo","slide":1,"bbox":[83.81,420.72,54,54]}
+{"kind":"textbox","id":"sh/wza5kj6d","slide":1,"text":"06","textPreview":"06","textChars":2,"textLines":1,"bbox":[83.81,425.72,54,44]}
+{"kind":"textbox","id":"sh/x0j6do7y","slide":1,"text":"ติดตั้ง","textPreview":"ติดตั้ง","textChars":7,"textLines":1,"bbox":[84.06,410.15,190,44]}
+{"kind":"shape","id":"sh/76pgzmdc","slide":1,"bbox":[104.81,355.28,12,14]}
+{"kind":"shape","id":"sh/65wzqhcr","slide":1,"bbox":[120.89,258.29,54,54]}
+{"kind":"textbox","id":"sh/t87i1cvi","slide":1,"text":"07","textPreview":"07","textChars":2,"textLines":1,"bbox":[120.89,263.29,54,44]}
+{"kind":"textbox","id":"sh/s7yhsrux","slide":1,"text":"บำรุงรักษา","textPreview":"บำรุงรักษา","textChars":10,"textLines":1,"bbox":[107.62,306.93,190,44]}
+{"kind":"shape","id":"sh/fap03mdo","slide":1,"bbox":[208.69,225.01,12,14]}
+{"kind":"textbox","id":"sh/u9gzuhc3","slide":1,"text":"SDLC","textPreview":"SDLC","textChars":4,"textLines":1,"bbox":[153,353,290,65]}
+{"kind":"textbox","id":"sh/1c7i5wve","slide":1,"text":"ระบบวินัยนักเรียน","textPreview":"ระบบวินัยนักเรียน","textChars":17,"textLines":1,"bbox":[168,423,260,40]}
+{"kind":"textbox","id":"sh/gbyhwrut","slide":1,"text":"พัฒนาและปรับปรุงอย่างต่อเนื่อง","textPreview":"พัฒนาและปรับปรุงอย่างต่อเนื่อง","textChars":30,"textLines":1,"bbox":[76,618,444,34]}
+{"kind":"shape","id":"sh/velgr2d4","slide":1,"bbox":[557,205,0,424]}
+{"kind":"textbox","id":"sh/adczixcj","slide":1,"text":"01","textPreview":"01","textChars":2,"textLines":1,"bbox":[593,202,48,37]}
+{"kind":"textbox","id":"sh/mxgzyxkf","slide":1,"text":"ค้นหาปัญหา","textPreview":"ค้นหาปัญหา","textChars":10,"textLines":1,"bbox":[657,201,567,35]}
+{"kind":"textbox","id":"sh/nipg72l0","slide":1,"text":"วิเคราะห์การบันทึกกระดาษและติดตามพฤติกรรม","textPreview":"วิเคราะห์การบันทึกกระดาษและติดตามพฤติกรรม","textChars":41,"textLines":1,"bbox":[657,233,567,30]}
+{"kind":"textbox","id":"sh/ojyh072l","slide":1,"text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[593,264,48,37]}
+{"kind":"textbox","id":"sh/9kri9c36","slide":1,"text":"ศึกษาความเป็นไปได้","textPreview":"ศึกษาความเป็นไปได้","textChars":18,"textLines":1,"bbox":[657,263,567,35]}
+{"kind":"textbox","id":"sh/al0z2xkr","slide":1,"text":"พิจารณาเครื่องมือ บุคลากร งบประมาณ และเวลา","textPreview":"พิจารณาเครื่องมือ บุคลากร งบประมาณ และเวลา","textChars":42,"textLines":1,"bbox":[657,295,567,30]}
+{"kind":"textbox","id":"sh/bm90b2lc","slide":1,"text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[593,326,48,37]}
+{"kind":"textbox","id":"sh/wnih472h","slide":1,"text":"วิเคราะห์ระบบ","textPreview":"วิเคราะห์ระบบ","textChars":13,"textLines":1,"bbox":[657,325,567,35]}
+{"kind":"textbox","id":"sh/xoridc32","slide":1,"text":"สัมภาษณ์ผู้ใช้ • กำหนดงานและสิทธิ์ 5 บทบาท","textPreview":"สัมภาษณ์ผู้ใช้ • กำหนดงานและสิทธิ์ 5 บทบาท","textChars":42,"textLines":1,"bbox":[657,357,567,30]}
+{"kind":"textbox","id":"sh/yp0z6hkn","slide":1,"text":"04","textPreview":"04","textChars":2,"textLines":1,"bbox":[593,388,48,37]}
+{"kind":"textbox","id":"sh/jq90fml8","slide":1,"text":"ออกแบบระบบ","textPreview":"ออกแบบระบบ","textChars":10,"textLines":1,"bbox":[657,387,567,35]}
+{"kind":"textbox","id":"sh/tkv25gna","slide":1,"text":"DFD • ER Diagram • ฐานข้อมูล • หน้าจอ","textPreview":"DFD • ER Diagram • ฐานข้อมูล • หน้าจอ","textChars":37,"textLines":1,"bbox":[657,419,567,30]}
+{"kind":"textbox","id":"sh/8jm1wbmp","slide":1,"text":"05","textPreview":"05","textChars":2,"textLines":1,"bbox":[593,450,48,37]}
+{"kind":"textbox","id":"sh/7itk365k","slide":1,"text":"พัฒนาและทดสอบ","textPreview":"พัฒนาและทดสอบ","textChars":13,"textLines":1,"bbox":[657,449,567,35]}
+{"kind":"textbox","id":"sh/6hkju14z","slide":1,"text":"PHP/MySQL • ทดสอบคะแนน สิทธิ์ และอุทธรณ์","textPreview":"PHP/MySQL • ทดสอบคะแนน สิทธิ์ และอุทธรณ์","textChars":40,"textLines":1,"bbox":[657,481,567,30]}
+{"kind":"textbox","id":"sh/h8v29gnm","slide":1,"text":"06","textPreview":"06","textChars":2,"textLines":1,"bbox":[593,512,48,37]}
+{"kind":"textbox","id":"sh/gnml0vm1","slide":1,"text":"ติดตั้งระบบ","textPreview":"ติดตั้งระบบ","textChars":11,"textLines":1,"bbox":[657,511,567,35]}
+{"kind":"textbox","id":"sh/fmdk7q5g","slide":1,"text":"ทดลองใช้ด้วย XAMPP และแม่ข่ายมหาวิทยาลัย","textPreview":"ทดลองใช้ด้วย XAMPP และแม่ข่ายมหาวิทยาลัย","textChars":40,"textLines":1,"bbox":[657,543,567,30]}
+{"kind":"textbox","id":"sh/ul4jyl4v","slide":1,"text":"07","textPreview":"07","textChars":2,"textLines":1,"bbox":[593,574,48,37]}
+{"kind":"textbox","id":"sh/pcf2d0ni","slide":1,"text":"บำรุงรักษาระบบ","textPreview":"บำรุงรักษาระบบ","textChars":14,"textLines":1,"bbox":[657,573,567,35]}
+{"kind":"textbox","id":"sh/4b6l4vmx","slide":1,"text":"ใช้ผลประเมินและข้อเสนอแนะปรับปรุงระบบ","textPreview":"ใช้ผลประเมินและข้อเสนอแนะปรับปรุงระบบ","textChars":37,"textLines":1,"bbox":[657,605,567,30]}
+{"kind":"shape","id":"sh/oredw3yl","slide":1,"bbox":[56,661,1168,0]}
+{"kind":"textbox","id":"sh/9s7ep8z6","slide":1,"text":"ที่มา: Pop del.pdf หน้า 24-25, 59-65, 102-104","textPreview":"ที่มา: Pop del.pdf หน้า 24-25, 59-65, 102-104","textChars":45,"textLines":1,"bbox":[56,673,1060,30]}
+{"kind":"textbox","id":"sh/m5wvutgf","slide":1,"text":"08 / 18","textPreview":"08 / 18","textChars":7,"textLines":1,"bbox":[1145,673,80,30]}
+{"kind":"notes","id":"nt/7fodqj","slide":1,"text":"SDLC 7 ขั้นตาม Pop del.pdf หน้า 24-25 เชื่อมกับกิจกรรมวิจัยจากหน้า 59-65 และ 102-104 ไม่ระบุว่าขั้นใดดำเนินการเสร็จแล้ว หากไม่มีข้อมูลสถานะยืนยัน"}
