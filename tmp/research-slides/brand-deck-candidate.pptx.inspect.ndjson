@@ -1,0 +1,365 @@
+{"kind":"deck","id":"pr/2h25un","name":"Deck"}
+{"kind":"layout","layoutId":"a6422e55-59b7-4b1d-b9bb-54676b822953","name":"Master","type":"master"}
+{"kind":"layout","layoutId":"eae7f4b0-3c28-447f-803c-544be4c6037f","name":"Title Slide","type":"title"}
+{"kind":"slide","id":"sl/pdog8h","slide":1,"title":"โครงงานทางเทคโนโลยีสารสนเทศ 2 | มหาวิทยาลัยราชภัฏยะลา","textShapes":8}
+{"kind":"shape","id":"sh/wzi1szqt","slide":1,"bbox":[0,0,1280,720]}
+{"kind":"shape","id":"sh/vy90ju9o","slide":1,"bbox":[56,661,1168,0]}
+{"kind":"textbox","id":"sh/ux0zqp83","slide":1,"text":"โครงงานทางเทคโนโลยีสารสนเทศ 2 | มหาวิทยาลัยราชภัฏยะลา","textPreview":"โครงงานทางเทคโนโลยีสารสนเทศ 2 | มหาวิทยาลัยราชภัฏยะลา","textChars":53,"textLines":1,"bbox":[56,678,355,20.15]}
+{"kind":"textbox","id":"sh/9wrih4ri","slide":1,"text":"01 / 18","textPreview":"01 / 18","textChars":7,"textLines":1,"bbox":[1158,676,66,24.8]}
+{"kind":"shape","id":"sh/nup0fu9c","slide":1,"bbox":[0,0,826,660]}
+{"kind":"textbox","id":"sh/mtgzmp8r","slide":1,"text":"ระบบสารสนเทศ","textPreview":"ระบบสารสนเทศ","textChars":12,"textLines":1,"bbox":[56,179,369,75.95]}
+{"kind":"textbox","id":"sh/ls7idkr6","slide":1,"text":"การบริหารงานวินัย","textPreview":"การบริหารงานวินัย","textChars":17,"textLines":1,"bbox":[56,254,427,75.95]}
+{"kind":"textbox","id":"sh/0ryhkfql","slide":1,"text":"และติดตามพฤติกรรมนักเรียน","textPreview":"และติดตามพฤติกรรมนักเรียน","textChars":25,"textLines":1,"bbox":[56,329,664,75.95]}
+{"kind":"textbox","id":"sh/qpgny1cv","slide":1,"text":"กรณีศึกษา: โรงเรียนศิริราษฎร์สามัคคี","textPreview":"กรณีศึกษา: โรงเรียนศิริราษฎร์สามัคคี","textChars":36,"textLines":1,"bbox":[60,431,440,43.4]}
+{"kind":"textbox","id":"sh/rqp476tg","slide":1,"text":"จังหวัดปัตตานี","textPreview":"จังหวัดปัตตานี","textChars":14,"textLines":1,"bbox":[60,476,181,43.4]}
+{"kind":"shape","id":"sh/sri50ba1","slide":1,"bbox":[60,551,110,0]}
+{"kind":"textbox","id":"sh/dsrm9wbm","slide":1,"text":"ตอริก ลือแมะ / บุสริน มูซอ","textPreview":"ตอริก ลือแมะ / บุสริน มูซอ","textChars":26,"textLines":1,"bbox":[60,576,291,38.75]}
+{"kind":"image","id":"im/1wjapwvu","slide":1,"name":"","alt":"school_front.jpg","bbox":[826,0,454,650]}
+{"kind":"image","id":"im/d0rux83y","slide":1,"name":"","alt":"ตรามหาวิทยาลัยราชภัฏยะลา","bbox":[56,12,43.4,58]}
+{"kind":"image","id":"im/czitonmd","slide":1,"name":"","alt":"โลโก้สาขาวิชาเทคโนโลยีสารสนเทศ","bbox":[116,12,58,58]}
+{"kind":"notes","id":"nt/pdog8h","slide":1,"text":"โครงงานทางเทคโนโลยีสารสนเทศ 2 | มหาวิทยาลัยราชภัฏยะลา"}
+{"kind":"slide","id":"sl/jnpiws","slide":2,"title":"คณะผู้จัดทำ","textShapes":14}
+{"kind":"shape","id":"sh/dwzidkvq","slide":2,"bbox":[0,0,1280,720]}
+{"kind":"textbox","id":"sh/qtoz25cf","slide":2,"text":"คณะผู้จัดทำ","textPreview":"คณะผู้จัดทำ","textChars":11,"textLines":1,"bbox":[1123,30,101,26.35]}
+{"kind":"textbox","id":"sh/buxgbad0","slide":2,"text":"ผู้วิจัยและอาจารย์ที่ปรึกษา","textPreview":"ผู้วิจัยและอาจารย์ที่ปรึกษา","textChars":27,"textLines":1,"bbox":[56,78,509,65.1]}
+{"kind":"shape","id":"sh/0zqh8fuh","slide":2,"bbox":[56,661,1168,0]}
+{"kind":"textbox","id":"sh/l0zihkv2","slide":2,"text":"ผู้วิจัย: PDF หน้า 205-206 | รูปที่ปรึกษา: YRU Profile","textPreview":"ผู้วิจัย: PDF หน้า 205-206 | รูปที่ปรึกษา: YRU Profile","textChars":54,"textLines":1,"bbox":[56,678,304,20.15]}
+{"kind":"textbox","id":"sh/yx8z6pcb","slide":2,"text":"02 / 18","textPreview":"02 / 18","textChars":7,"textLines":1,"bbox":[1158,676,66,24.8]}
+{"kind":"textbox","id":"sh/zyh0fudw","slide":2,"text":"ผู้วิจัย","textPreview":"ผู้วิจัย","textChars":8,"textLines":1,"bbox":[56,150,76,35.65]}
+{"kind":"textbox","id":"sh/8nahczud","slide":2,"text":"อาจารย์ที่ปรึกษา","textPreview":"อาจารย์ที่ปรึกษา","textChars":16,"textLines":1,"bbox":[674,150,187,35.65]}
+{"kind":"textbox","id":"sh/l0nilc7y","slide":2,"text":"นายตอริก ลือแมะ","textPreview":"นายตอริก ลือแมะ","textChars":15,"textLines":1,"bbox":[56,530,203,37.2]}
+{"kind":"textbox","id":"sh/0zehc76d","slide":2,"text":"406665012","textPreview":"406665012","textChars":9,"textLines":1,"bbox":[56,575,117,31]}
+{"kind":"textbox","id":"sh/yxwzaho7","slide":2,"text":"นายบุสริน มูซอ","textPreview":"นายบุสริน มูซอ","textChars":14,"textLines":1,"bbox":[353,530,180,37.2]}
+{"kind":"textbox","id":"sh/9o7ipw7u","slide":2,"text":"406665027","textPreview":"406665027","textChars":9,"textLines":1,"bbox":[353,575,117,31]}
+{"kind":"textbox","id":"sh/n250nmpo","slide":2,"text":"อ.แพรวศรี เดิมราช","textPreview":"อ.แพรวศรี เดิมราช","textChars":17,"textLines":1,"bbox":[674,530,223,37.2]}
+{"kind":"textbox","id":"sh/m1wzehoj","slide":2,"text":"อาจารย์ที่ปรึกษา","textPreview":"อาจารย์ที่ปรึกษา","textChars":16,"textLines":1,"bbox":[674,575,155,31]}
+{"kind":"textbox","id":"sh/o7uh4n65","slide":2,"text":"อ.รุสนี กาแมแล","textPreview":"อ.รุสนี กาแมแล","textChars":14,"textLines":1,"bbox":[971,530,182,37.2]}
+{"kind":"textbox","id":"sh/gbyh07e1","slide":2,"text":"อาจารย์ที่ปรึกษา","textPreview":"อาจารย์ที่ปรึกษา","textChars":16,"textLines":1,"bbox":[971,575,155,31]}
+{"kind":"shape","id":"sh/hc7itsfm","slide":2,"bbox":[639,185,0,425]}
+{"kind":"image","id":"im/kbutcvmx","slide":2,"name":"","alt":"portrait205.png","bbox":[56,197,253,312]}
+{"kind":"image","id":"im/wrml0net","slide":2,"name":"","alt":"portrait206.png","bbox":[353,197,253,312]}
+{"kind":"image","id":"im/7mtknydc","slide":2,"name":"","alt":"advisor0.jpg","bbox":[674,197,253,312]}
+{"kind":"image","id":"im/6ho36xwb","slide":2,"name":"","alt":"advisor1.jpg","bbox":[971,197,253,312]}
+{"kind":"image","id":"im/po7it4by","slide":2,"name":"","alt":"ตรามหาวิทยาลัยราชภัฏยะลา","bbox":[56,12,43.4,58]}
+{"kind":"image","id":"im/onyh0zud","slide":2,"name":"","alt":"โลโก้สาขาวิชาเทคโนโลยีสารสนเทศ","bbox":[116,12,58,58]}
+{"kind":"notes","id":"nt/jnpiws","slide":2,"text":"ผู้วิจัย: PDF หน้า 205-206 | รูปที่ปรึกษา: YRU Profile"}
+{"kind":"slide","id":"sl/xuhlwb","slide":3,"title":"บทนำ","textShapes":13}
+{"kind":"shape","id":"sh/sj21wryp","slide":3,"bbox":[0,0,1280,720]}
+{"kind":"textbox","id":"sh/rit03mh4","slide":3,"text":"บทนำ","textPreview":"บทนำ","textChars":4,"textLines":1,"bbox":[1165,30,59,26.35]}
+{"kind":"textbox","id":"sh/6hkjuhgj","slide":3,"text":"ความเป็นมาและปัญหา","textPreview":"ความเป็นมาและปัญหา","textChars":18,"textLines":1,"bbox":[56,78,436,65.1]}
+{"kind":"shape","id":"sh/5gbi1czy","slide":3,"bbox":[56,661,1168,0]}
+{"kind":"textbox","id":"sh/4v21s7yd","slide":3,"text":"ที่มา: Pop del.pdf หน้า 16-17, 59","textPreview":"ที่มา: Pop del.pdf หน้า 16-17, 59","textChars":33,"textLines":1,"bbox":[56,678,200,20.15]}
+{"kind":"textbox","id":"sh/jut0z2hs","slide":3,"text":"03 / 18","textPreview":"03 / 18","textChars":7,"textLines":1,"bbox":[1158,676,66,24.8]}
+{"kind":"textbox","id":"sh/hsrixsz2","slide":3,"text":"01","textPreview":"01","textChars":2,"textLines":1,"bbox":[644,185,58,55.8]}
+{"kind":"textbox","id":"sh/wri1onyh","slide":3,"text":"ข้อมูลกระจัดกระจาย","textPreview":"ข้อมูลกระจัดกระจาย","textChars":18,"textLines":1,"bbox":[724,185,301,48.05]}
+{"kind":"textbox","id":"sh/ud8b2tkj","slide":3,"text":"จดบันทึกลงกระดาษ","textPreview":"จดบันทึกลงกระดาษ","textChars":16,"textLines":1,"bbox":[724,241,221,38.75]}
+{"kind":"textbox","id":"sh/fehsvel4","slide":3,"text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[644,329,58,55.8]}
+{"kind":"textbox","id":"sh/gzqt4j2p","slide":3,"text":"สืบค้นและสรุปผลล่าช้า","textPreview":"สืบค้นและสรุปผลล่าช้า","textChars":21,"textLines":1,"bbox":[724,329,331,48.05]}
+{"kind":"textbox","id":"sh/h0zaxo3a","slide":3,"text":"รวบรวมข้อมูลจากหลายแฟ้ม","textPreview":"รวบรวมข้อมูลจากหลายแฟ้ม","textChars":23,"textLines":1,"bbox":[724,385,301,38.75]}
+{"kind":"textbox","id":"sh/69ory9kn","slide":3,"text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[644,473,58,55.8]}
+{"kind":"textbox","id":"sh/7axsrel8","slide":3,"text":"ติดตามกิจกรรมได้ไม่ทั่วถึง","textPreview":"ติดตามกิจกรรมได้ไม่ทั่วถึง","textChars":26,"textLines":1,"bbox":[724,473,383,48.05]}
+{"kind":"textbox","id":"sh/sbq90j2d","slide":3,"text":"ขาดหลักฐานที่ตรวจสอบได้","textPreview":"ขาดหลักฐานที่ตรวจสอบได้","textChars":23,"textLines":1,"bbox":[724,529,292,38.75]}
+{"kind":"image","id":"im/32pcvahs","slide":3,"name":"","alt":"school_front.jpg","bbox":[56,170,540,438]}
+{"kind":"image","id":"im/up8zip4b","slide":3,"name":"","alt":"ตรามหาวิทยาลัยราชภัฏยะลา","bbox":[56,12,43.4,58]}
+{"kind":"image","id":"im/9ozipk36","slide":3,"name":"","alt":"โลโก้สาขาวิชาเทคโนโลยีสารสนเทศ","bbox":[116,12,58,58]}
+{"kind":"notes","id":"nt/xuhlwb","slide":3,"text":"ที่มา: Pop del.pdf หน้า 16-17, 59"}
+{"kind":"slide","id":"sl/cy4un5","slide":4,"title":"วิเคราะห์ปัญหา","textShapes":4}
+{"kind":"shape","id":"sh/cfax4j65","slide":4,"bbox":[0,0,1280,720]}
+{"kind":"textbox","id":"sh/bu1gbepk","slide":4,"text":"วิเคราะห์ปัญหา","textPreview":"วิเคราะห์ปัญหา","textChars":14,"textLines":1,"bbox":[1104,30,120,26.35]}
+{"kind":"textbox","id":"sh/atsf29oz","slide":4,"text":"แผนผังก้างปลา","textPreview":"แผนผังก้างปลา","textChars":13,"textLines":1,"bbox":[56,78,311,65.1]}
+{"kind":"shape","id":"sh/lk3yho7m","slide":4,"bbox":[56,661,1168,0]}
+{"kind":"textbox","id":"sh/kjux8j61","slide":4,"text":"ที่มา: แผนภาพประกอบโครงงานระบบวินัยนักเรียน","textPreview":"ที่มา: แผนภาพประกอบโครงงานระบบวินัยนักเรียน","textChars":43,"textLines":1,"bbox":[56,678,279,20.15]}
+{"kind":"textbox","id":"sh/zilgfepw","slide":4,"text":"04 / 18","textPreview":"04 / 18","textChars":7,"textLines":1,"bbox":[1158,676,66,24.8]}
+{"kind":"shape","id":"sh/yhsf6tob","slide":4,"bbox":[40,176,1200,470]}
+{"kind":"image","id":"im/c36tk7y9","slide":4,"name":"","alt":"fishbone.png","bbox":[54,192,1172,430]}
+{"kind":"image","id":"im/d4fudczu","slide":4,"name":"","alt":"ตรามหาวิทยาลัยราชภัฏยะลา","bbox":[56,12,43.4,58]}
+{"kind":"image","id":"im/lkri90bu","slide":4,"name":"","alt":"โลโก้สาขาวิชาเทคโนโลยีสารสนเทศ","bbox":[116,12,58,58]}
+{"kind":"notes","id":"nt/cy4un5","slide":4,"text":"ที่มา: แผนภาพประกอบโครงงานระบบวินัยนักเรียน"}
+{"kind":"slide","id":"sl/pucrm9","slide":5,"title":"การวิจัย","textShapes":13}
+{"kind":"shape","id":"sh/6xg3mhgv","slide":5,"bbox":[0,0,1280,720]}
+{"kind":"textbox","id":"sh/d07mhwf6","slide":5,"text":"การวิจัย","textPreview":"การวิจัย","textChars":8,"textLines":1,"bbox":[1154,30,70,26.35]}
+{"kind":"textbox","id":"sh/szyloryl","slide":5,"text":"วัตถุประสงค์","textPreview":"วัตถุประสงค์","textChars":12,"textLines":1,"bbox":[56,78,248,65.1]}
+{"kind":"shape","id":"sh/ja54b2x4","slide":5,"bbox":[56,661,1168,0]}
+{"kind":"textbox","id":"sh/i9w3ihgj","slide":5,"text":"ที่มา: Pop del.pdf หน้า 17","textPreview":"ที่มา: Pop del.pdf หน้า 17","textChars":26,"textLines":1,"bbox":[56,678,159,20.15]}
+{"kind":"textbox","id":"sh/5wnmdcfa","slide":5,"text":"05 / 18","textPreview":"05 / 18","textChars":7,"textLines":1,"bbox":[1158,676,66,24.8]}
+{"kind":"textbox","id":"sh/4velk7yp","slide":5,"text":"01","textPreview":"01","textChars":2,"textLines":1,"bbox":[60,191,86,96.1]}
+{"kind":"textbox","id":"sh/v65kn2x8","slide":5,"text":"วิเคราะห์ ออกแบบ และพัฒนาระบบ","textPreview":"วิเคราะห์ ออกแบบ และพัฒนาระบบ","textChars":29,"textLines":1,"bbox":[213,194,577,55.8]}
+{"kind":"textbox","id":"sh/u5c3exgn","slide":5,"text":"บริหารงานวินัยและติดตามพฤติกรรมนักเรียน","textPreview":"บริหารงานวินัยและติดตามพฤติกรรมนักเรียน","textChars":39,"textLines":1,"bbox":[216,258,498,41.85]}
+{"kind":"shape","id":"sh/kj2p0bit","slide":5,"bbox":[213,310,967,0]}
+{"kind":"textbox","id":"sh/lkbqtgje","slide":5,"text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[60,335,86,96.1]}
+{"kind":"textbox","id":"sh/yxk7y10n","slide":5,"text":"ประเมินคุณภาพระบบ","textPreview":"ประเมินคุณภาพระบบ","textChars":17,"textLines":1,"bbox":[213,338,360,55.8]}
+{"kind":"textbox","id":"sh/jyt8r618","slide":5,"text":"โดยผู้เชี่ยวชาญ","textPreview":"โดยผู้เชี่ยวชาญ","textChars":15,"textLines":1,"bbox":[216,402,188,41.85]}
+{"kind":"shape","id":"sh/wv2pwrih","slide":5,"bbox":[213,454,967,0]}
+{"kind":"textbox","id":"sh/xwbqpwj2","slide":5,"text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[60,479,86,96.1]}
+{"kind":"textbox","id":"sh/at07u10r","slide":5,"text":"ประเมินความพึงพอใจ","textPreview":"ประเมินความพึงพอใจ","textChars":18,"textLines":1,"bbox":[213,482,366,55.8]}
+{"kind":"textbox","id":"sh/bu98nm1w","slide":5,"text":"ของผู้ใช้งานระบบ","textPreview":"ของผู้ใช้งานระบบ","textChars":16,"textLines":1,"bbox":[216,546,211,41.85]}
+{"kind":"image","id":"im/36p8ry9g","slide":5,"name":"","alt":"ตรามหาวิทยาลัยราชภัฏยะลา","bbox":[56,12,43.4,58]}
+{"kind":"image","id":"im/25gritsv","slide":5,"name":"","alt":"โลโก้สาขาวิชาเทคโนโลยีสารสนเทศ","bbox":[116,12,58,58]}
+{"kind":"notes","id":"nt/pucrm9","slide":5,"text":"ที่มา: Pop del.pdf หน้า 17"}
+{"kind":"slide","id":"sl/gt0r8c","slide":6,"title":"5 บทบาท","textShapes":19}
+{"kind":"shape","id":"sh/6hgr2h43","slide":6,"bbox":[0,0,1280,720]}
+{"kind":"textbox","id":"sh/t4rqxw3e","slide":6,"text":"5 บทบาท","textPreview":"5 บทบาท","textChars":7,"textLines":1,"bbox":[1138,30,86,26.35]}
+{"kind":"textbox","id":"sh/83y94rm9","slide":6,"text":"ขอบเขตผู้ใช้งาน","textPreview":"ขอบเขตผู้ใช้งาน","textChars":15,"textLines":1,"bbox":[56,78,331,65.1]}
+{"kind":"shape","id":"sh/v698zmlk","slide":6,"bbox":[56,661,1168,0]}
+{"kind":"textbox","id":"sh/u50r6h4z","slide":6,"text":"ที่มา: Pop del.pdf หน้า 18-19","textPreview":"ที่มา: Pop del.pdf หน้า 18-19","textChars":29,"textLines":1,"bbox":[56,678,178,20.15]}
+{"kind":"textbox","id":"sh/h8rq1w3q","slide":6,"text":"06 / 18","textPreview":"06 / 18","textChars":7,"textLines":1,"bbox":[1158,676,66,24.8]}
+{"kind":"textbox","id":"sh/g7i98rm5","slide":6,"text":"01","textPreview":"01","textChars":2,"textLines":1,"bbox":[70,167,58,55.8]}
+{"kind":"textbox","id":"sh/3a9s36lw","slide":6,"text":"ผู้ดูแลระบบ","textPreview":"ผู้ดูแลระบบ","textChars":11,"textLines":1,"bbox":[218,169,169,46.5]}
+{"kind":"textbox","id":"sh/i90ra1kb","slide":6,"text":"ข้อมูลและสิทธิ์","textPreview":"ข้อมูลและสิทธิ์","textChars":15,"textLines":1,"bbox":[788,174,173,40.3]}
+{"kind":"shape","id":"sh/onu9kjad","slide":6,"bbox":[218,235,962,0]}
+{"kind":"textbox","id":"sh/po3atory","slide":6,"text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[70,256,58,55.8]}
+{"kind":"textbox","id":"sh/2lcri9s7","slide":6,"text":"ฝ่ายปกครอง","textPreview":"ฝ่ายปกครอง","textChars":10,"textLines":1,"bbox":[218,258,188,46.5]}
+{"kind":"textbox","id":"sh/nmlsre9s","slide":6,"text":"พฤติกรรมและรายงาน","textPreview":"พฤติกรรมและรายงาน","textChars":17,"textLines":1,"bbox":[788,263,244,40.3]}
+{"kind":"shape","id":"sh/cbe9ojap","slide":6,"bbox":[218,324,962,0]}
+{"kind":"textbox","id":"sh/xcnaxoru","slide":6,"text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[70,345,58,55.8]}
+{"kind":"textbox","id":"sh/apcrmtsj","slide":6,"text":"ครูประจำชั้น","textPreview":"ครูประจำชั้น","textChars":12,"textLines":1,"bbox":[218,347,182,46.5]}
+{"kind":"textbox","id":"sh/bq5sve94","slide":6,"text":"เช็กชื่อและบันทึก","textPreview":"เช็กชื่อและบันทึก","textChars":17,"textLines":1,"bbox":[788,352,198,40.3]}
+{"kind":"shape","id":"sh/kfets3al","slide":6,"bbox":[218,413,962,0]}
+{"kind":"textbox","id":"sh/lgna18r6","slide":6,"text":"04","textPreview":"04","textChars":2,"textLines":1,"bbox":[70,434,58,55.8]}
+{"kind":"textbox","id":"sh/twja58ja","slide":6,"text":"นักเรียน","textPreview":"นักเรียน","textChars":8,"textLines":1,"bbox":[218,436,124,46.5]}
+{"kind":"textbox","id":"sh/sba9c32p","slide":6,"text":"ประวัติและอุทธรณ์","textPreview":"ประวัติและอุทธรณ์","textChars":17,"textLines":1,"bbox":[788,441,210,40.3]}
+{"kind":"shape","id":"sh/7a1s3y14","slide":6,"bbox":[218,502,962,0]}
+{"kind":"textbox","id":"sh/69sratkj","slide":6,"text":"05","textPreview":"05","textChars":2,"textLines":1,"bbox":[70,523,58,55.8]}
+{"kind":"textbox","id":"sh/h03a98j6","slide":6,"text":"ผู้ปกครอง","textPreview":"ผู้ปกครอง","textChars":9,"textLines":1,"bbox":[218,525,152,46.5]}
+{"kind":"textbox","id":"sh/gzu9g321","slide":6,"text":"ติดตามบุตรหลาน","textPreview":"ติดตามบุตรหลาน","textChars":14,"textLines":1,"bbox":[788,530,200,40.3]}
+{"kind":"image","id":"im/ovqpknqd","slide":6,"name":"","alt":"ตรามหาวิทยาลัยราชภัฏยะลา","bbox":[56,12,43.4,58]}
+{"kind":"image","id":"im/9gzqts7y","slide":6,"name":"","alt":"โลโก้สาขาวิชาเทคโนโลยีสารสนเทศ","bbox":[116,12,58,58]}
+{"kind":"notes","id":"nt/gt0r8c","slide":6,"text":"ที่มา: Pop del.pdf หน้า 18-19"}
+{"kind":"slide","id":"sl/bie09d","slide":7,"title":"ซอฟต์แวร์และภาษา","textShapes":14}
+{"kind":"shape","id":"sh/twjado3a","slide":7,"bbox":[0,0,1280,720]}
+{"kind":"textbox","id":"sh/69sbi94j","slide":7,"text":"ซอฟต์แวร์และภาษา","textPreview":"ซอฟต์แวร์และภาษา","textChars":16,"textLines":1,"bbox":[1069,30,155,26.35]}
+{"kind":"textbox","id":"sh/7a1sbel4","slide":7,"text":"เครื่องมือที่ใช้พัฒนา","textPreview":"เครื่องมือที่ใช้พัฒนา","textChars":21,"textLines":1,"bbox":[56,78,397,65.1]}
+{"kind":"shape","id":"sh/gzutoj2l","slide":7,"bbox":[56,661,1168,0]}
+{"kind":"textbox","id":"sh/h03uho36","slide":7,"text":"ที่มา: Pop del.pdf หน้า 4, 20-21 | โลโก้: ไฟล์ต้นฉบับในโครงงาน","textPreview":"ที่มา: Pop del.pdf หน้า 4, 20-21 | โลโก้: ไฟล์ต้นฉบับในโครงงาน","textChars":62,"textLines":1,"bbox":[56,678,367,20.15]}
+{"kind":"textbox","id":"sh/uxcbmtkv","slide":7,"text":"07 / 18","textPreview":"07 / 18","textChars":7,"textLines":1,"bbox":[1158,676,66,24.8]}
+{"kind":"textbox","id":"sh/43uts32x","slide":7,"text":"VS Code","textPreview":"VS Code","textChars":7,"textLines":1,"bbox":[158,298,134,43.4]}
+{"kind":"textbox","id":"sh/543ul83i","slide":7,"text":"เขียนโปรแกรม","textPreview":"เขียนโปรแกรม","textChars":12,"textLines":1,"bbox":[152,342,146,34.1]}
+{"kind":"textbox","id":"sh/cvqxkn2t","slide":7,"text":"MySQL","textPreview":"MySQL","textChars":5,"textLines":1,"bbox":[581.5,298,115,43.4]}
+{"kind":"textbox","id":"sh/buxgri18","slide":7,"text":"ฐานข้อมูล","textPreview":"ฐานข้อมูล","textChars":9,"textLines":1,"bbox":[585.5,342,107,34.1]}
+{"kind":"textbox","id":"sh/l0zyxsjq","slide":7,"text":"PHP","textPreview":"PHP","textChars":3,"textLines":1,"bbox":[1015.5,298,75,43.4]}
+{"kind":"textbox","id":"sh/0zqxon25","slide":7,"text":"ประมวลผลระบบ","textPreview":"ประมวลผลระบบ","textChars":12,"textLines":1,"bbox":[971,342,164,34.1]}
+{"kind":"shape","id":"sh/zyhgvi1k","slide":7,"bbox":[100,398,1080,0]}
+{"kind":"textbox","id":"sh/14fel8j6","slide":7,"text":"HTML","textPreview":"HTML","textChars":4,"textLines":1,"bbox":[152.5,556,95,41.85]}
+{"kind":"textbox","id":"sh/szaponet","slide":7,"text":"CSS","textPreview":"CSS","textChars":3,"textLines":1,"bbox":[458,556,70,41.85]}
+{"kind":"textbox","id":"sh/6xs7mxwn","slide":7,"text":"JavaScript","textPreview":"JavaScript","textChars":10,"textLines":1,"bbox":[706.5,556,159,41.85]}
+{"kind":"textbox","id":"sh/gnups7ep","slide":7,"text":"React","textPreview":"React","textChars":5,"textLines":1,"bbox":[1031.5,556,95,41.85]}
+{"kind":"image","id":"im/m9sz2twf","slide":7,"name":"","alt":"vscode.png","bbox":[158,175,134,105]}
+{"kind":"image","id":"im/utsbypc3","slide":7,"name":"","alt":"mysql.png","bbox":[572,175,134,105]}
+{"kind":"image","id":"im/hwju94vu","slide":7,"name":"","alt":"php.png","bbox":[986,175,134,105]}
+{"kind":"image","id":"im/tsju5kvi","slide":7,"name":"","alt":"html5.png","bbox":[152,438,96,96]}
+{"kind":"image","id":"im/jmhczadg","slide":7,"name":"","alt":"css.png","bbox":[445,438,96,96]}
+{"kind":"image","id":"im/m54ry1sn","slide":7,"name":"","alt":"javascript.png","bbox":[738,438,96,96]}
+{"kind":"image","id":"im/87m90bat","slide":7,"name":"","alt":"react.png","bbox":[1031,438,96,96]}
+{"kind":"image","id":"im/ator2lsz","slide":7,"name":"","alt":"ตรามหาวิทยาลัยราชภัฏยะลา","bbox":[56,12,43.4,58]}
+{"kind":"image","id":"im/xwfaxgba","slide":7,"name":"","alt":"โลโก้สาขาวิชาเทคโนโลยีสารสนเทศ","bbox":[116,12,58,58]}
+{"kind":"notes","id":"nt/bie09d","slide":7,"text":"ที่มา: Pop del.pdf หน้า 4, 20-21 | โลโก้: ไฟล์ต้นฉบับในโครงงาน"}
+{"kind":"slide","id":"sl/6folv9","slide":8,"title":"ขั้นตอนดำเนินงานตาม SDLC","textShapes":42}
+{"kind":"shape","id":"sh/gzyl4bmp","slide":8,"bbox":[0,0,1280,720]}
+{"kind":"textbox","id":"sh/fyp4vq54","slide":8,"text":"ขั้นตอนดำเนินงานตาม SDLC","textPreview":"ขั้นตอนดำเนินงานตาม SDLC","textChars":24,"textLines":1,"bbox":[56,76,1168,58]}
+{"kind":"textbox","id":"sh/exg32l4j","slide":8,"text":"7 ขั้นตอนเพื่อพัฒนาระบบวินัยและติดตามพฤติกรรมนักเรียน","textPreview":"7 ขั้นตอนเพื่อพัฒนาระบบวินัยและติดตามพฤติกรรมนักเรียน","textChars":53,"textLines":1,"bbox":[56,136,1168,35]}
+{"kind":"shape","id":"sh/porm1036","slide":8,"bbox":[56,179,1168,0]}
+{"kind":"shape","id":"sh/onil8vm1","slide":8,"bbox":[106,213,384,384]}
+{"kind":"shape","id":"sh/3294zqlg","slide":8,"bbox":[271,186,54,54]}
+{"kind":"textbox","id":"sh/21036l4v","slide":8,"text":"01","textPreview":"01","textChars":2,"textLines":1,"bbox":[271,191,54,44]}
+{"kind":"textbox","id":"sh/dsrm503i","slide":8,"text":"ปัญหา","textPreview":"ปัญหา","textChars":5,"textLines":1,"bbox":[203,261,190,44]}
+{"kind":"shape","id":"sh/crilcvmx","slide":8,"bbox":[375.31,225.01,12,14]}
+{"kind":"shape","id":"sh/algjmxcv","slide":8,"bbox":[421.11,258.29,54,54]}
+{"kind":"textbox","id":"sh/bmp0f2tg","slide":8,"text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[421.11,263.29,54,44]}
+{"kind":"textbox","id":"sh/wny1o7u1","slide":8,"text":"ความเป็นไปได้","textPreview":"ความเป็นไปได้","textChars":13,"textLines":1,"bbox":[298.38,306.93,190,44]}
+{"kind":"shape","id":"sh/xo7ihcbm","slide":8,"bbox":[479.19,355.28,12,14]}
+{"kind":"shape","id":"sh/yp0jqxc7","slide":8,"bbox":[458.19,420.72,54,54]}
+{"kind":"textbox","id":"sh/ja90j2ts","slide":8,"text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[458.19,425.72,54,44]}
+{"kind":"textbox","id":"sh/kbi1s7ux","slide":8,"text":"วิเคราะห์","textPreview":"วิเคราะห์","textChars":9,"textLines":1,"bbox":[321.94,410.15,190,44]}
+{"kind":"shape","id":"sh/5crilcbi","slide":8,"bbox":[442.11,517.71,12,14]}
+{"kind":"shape","id":"sh/etwzedcn","slide":8,"bbox":[354.31,550.99,54,54]}
+{"kind":"textbox","id":"sh/zu507it8","slide":8,"text":"04","textPreview":"04","textChars":2,"textLines":1,"bbox":[354.31,555.99,54,44]}
+{"kind":"textbox","id":"sh/3m1oza5o","slide":8,"text":"ออกแบบ","textPreview":"ออกแบบ","textChars":6,"textLines":1,"bbox":[255.93,492.92,190,44]}
+{"kind":"shape","id":"sh/ils7q5oj","slide":8,"bbox":[292,590,12,14]}
+{"kind":"shape","id":"sh/5oj61knu","slide":8,"bbox":[187.69,550.99,54,54]}
+{"kind":"textbox","id":"sh/4napsf69","slide":8,"text":"05","textPreview":"05","textChars":2,"textLines":1,"bbox":[187.69,555.99,54,44]}
+{"kind":"textbox","id":"sh/vihova5s","slide":8,"text":"พัฒนา\nและทดสอบ","textPreview":"พัฒนา | และทดสอบ","textChars":14,"textLines":2,"bbox":[150.07,492.92,190,55]}
+{"kind":"shape","id":"sh/uh8nm5o7","slide":8,"bbox":[141.89,517.71,12,14]}
+{"kind":"shape","id":"sh/hkz6xkny","slide":8,"bbox":[83.81,420.72,54,54]}
+{"kind":"textbox","id":"sh/gjqpof6d","slide":8,"text":"06","textPreview":"06","textChars":2,"textLines":1,"bbox":[83.81,425.72,54,44]}
+{"kind":"textbox","id":"sh/felo7u5w","slide":8,"text":"ติดตั้ง","textPreview":"ติดตั้ง","textChars":7,"textLines":1,"bbox":[84.06,410.15,190,44]}
+{"kind":"shape","id":"sh/edc7ypob","slide":8,"bbox":[104.81,355.28,12,14]}
+{"kind":"shape","id":"sh/czmlsrmt","slide":8,"bbox":[120.89,258.29,54,54]}
+{"kind":"textbox","id":"sh/xkvmlw3e","slide":8,"text":"07","textPreview":"07","textChars":2,"textLines":1,"bbox":[120.89,263.29,54,44]}
+{"kind":"textbox","id":"sh/ax43qh43","slide":8,"text":"บำรุงรักษา","textPreview":"บำรุงรักษา","textChars":10,"textLines":1,"bbox":[107.62,306.93,190,44]}
+{"kind":"shape","id":"sh/byd4jmlo","slide":8,"bbox":[208.69,225.01,12,14]}
+{"kind":"textbox","id":"sh/kn6lwbm5","slide":8,"text":"SDLC","textPreview":"SDLC","textChars":4,"textLines":1,"bbox":[153,353,290,65]}
+{"kind":"textbox","id":"sh/lofmpg3q","slide":8,"text":"ระบบวินัยนักเรียน","textPreview":"ระบบวินัยนักเรียน","textChars":17,"textLines":1,"bbox":[168,423,260,40]}
+{"kind":"textbox","id":"sh/yl43u14z","slide":8,"text":"พัฒนาและปรับปรุงอย่างต่อเนื่อง","textPreview":"พัฒนาและปรับปรุงอย่างต่อเนื่อง","textChars":30,"textLines":1,"bbox":[76,618,444,34]}
+{"kind":"shape","id":"sh/jmx4n6lk","slide":8,"bbox":[557,205,0,424]}
+{"kind":"textbox","id":"sh/8r6l0bm1","slide":8,"text":"01","textPreview":"01","textChars":2,"textLines":1,"bbox":[593,202,48,37]}
+{"kind":"textbox","id":"sh/tsfmtg3m","slide":8,"text":"ค้นหาปัญหา","textPreview":"ค้นหาปัญหา","textChars":10,"textLines":1,"bbox":[657,201,567,35]}
+{"kind":"textbox","id":"sh/t07m9g72","slide":8,"text":"วิเคราะห์การบันทึกกระดาษและติดตามพฤติกรรม","textPreview":"วิเคราะห์การบันทึกกระดาษและติดตามพฤติกรรม","textChars":41,"textLines":1,"bbox":[657,233,567,30]}
+{"kind":"textbox","id":"sh/szylgbqh","slide":8,"text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[593,264,48,37]}
+{"kind":"textbox","id":"sh/ryp476pw","slide":8,"text":"ศึกษาความเป็นไปได้","textPreview":"ศึกษาความเป็นไปได้","textChars":18,"textLines":1,"bbox":[657,263,567,35]}
+{"kind":"textbox","id":"sh/6xg3e18b","slide":8,"text":"พิจารณาเครื่องมือ บุคลากร งบประมาณ และเวลา","textPreview":"พิจารณาเครื่องมือ บุคลากร งบประมาณ และเวลา","textChars":42,"textLines":1,"bbox":[657,295,567,30]}
+{"kind":"textbox","id":"sh/5w7m5w7q","slide":8,"text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[593,326,48,37]}
+{"kind":"textbox","id":"sh/4velcrq5","slide":8,"text":"วิเคราะห์ระบบ","textPreview":"วิเคราะห์ระบบ","textChars":13,"textLines":1,"bbox":[657,325,567,35]}
+{"kind":"textbox","id":"sh/ju543mpk","slide":8,"text":"สัมภาษณ์ผู้ใช้ • กำหนดงานและสิทธิ์ 5 บทบาท","textPreview":"สัมภาษณ์ผู้ใช้ • กำหนดงานและสิทธิ์ 5 บทบาท","textChars":42,"textLines":1,"bbox":[657,357,567,30]}
+{"kind":"textbox","id":"sh/itw3ah8f","slide":8,"text":"04","textPreview":"04","textChars":2,"textLines":1,"bbox":[593,388,48,37]}
+{"kind":"textbox","id":"sh/psrmh07a","slide":8,"text":"ออกแบบระบบ","textPreview":"ออกแบบระบบ","textChars":10,"textLines":1,"bbox":[657,387,567,35]}
+{"kind":"textbox","id":"sh/ori5ovqp","slide":8,"text":"DFD • ER Diagram • ฐานข้อมูล • หน้าจอ","textPreview":"DFD • ER Diagram • ฐานข้อมูล • หน้าจอ","textChars":37,"textLines":1,"bbox":[657,419,567,30]}
+{"kind":"textbox","id":"sh/m1srmtkv","slide":8,"text":"05","textPreview":"05","textChars":2,"textLines":1,"bbox":[593,450,48,37]}
+{"kind":"textbox","id":"sh/nm1svy1g","slide":8,"text":"พัฒนาและทดสอบ","textPreview":"พัฒนาและทดสอบ","textChars":13,"textLines":1,"bbox":[657,449,567,35]}
+{"kind":"textbox","id":"sh/onato321","slide":8,"text":"PHP/MySQL • ทดสอบคะแนน สิทธิ์ และอุทธรณ์","textPreview":"PHP/MySQL • ทดสอบคะแนน สิทธิ์ และอุทธรณ์","textChars":40,"textLines":1,"bbox":[657,481,567,30]}
+{"kind":"textbox","id":"sh/9ojax8j6","slide":8,"text":"06","textPreview":"06","textChars":2,"textLines":1,"bbox":[593,512,48,37]}
+{"kind":"textbox","id":"sh/ex8ri9kj","slide":8,"text":"ติดตั้งระบบ","textPreview":"ติดตั้งระบบ","textChars":11,"textLines":1,"bbox":[657,511,567,35]}
+{"kind":"textbox","id":"sh/zyhsre14","slide":8,"text":"ทดลองใช้ด้วย XAMPP และแม่ข่ายมหาวิทยาลัย","textPreview":"ทดลองใช้ด้วย XAMPP และแม่ข่ายมหาวิทยาลัย","textChars":40,"textLines":1,"bbox":[657,543,567,30]}
+{"kind":"textbox","id":"sh/0zq9kj2p","slide":8,"text":"07","textPreview":"07","textChars":2,"textLines":1,"bbox":[593,574,48,37]}
+{"kind":"textbox","id":"sh/10jatoja","slide":8,"text":"บำรุงรักษาระบบ","textPreview":"บำรุงรักษาระบบ","textChars":14,"textLines":1,"bbox":[657,573,567,35]}
+{"kind":"textbox","id":"sh/ytcbudk3","slide":8,"text":"ใช้ผลประเมินและข้อเสนอแนะปรับปรุงระบบ","textPreview":"ใช้ผลประเมินและข้อเสนอแนะปรับปรุงระบบ","textChars":37,"textLines":1,"bbox":[657,605,567,30]}
+{"kind":"shape","id":"sh/juls3i1o","slide":8,"bbox":[56,661,1168,0]}
+{"kind":"textbox","id":"sh/fyd8vah0","slide":8,"text":"ที่มา: Pop del.pdf หน้า 24-25, 59-65, 102-104","textPreview":"ที่มา: Pop del.pdf หน้า 24-25, 59-65, 102-104","textChars":45,"textLines":1,"bbox":[56,673,1060,30]}
+{"kind":"textbox","id":"sh/ux47m50f","slide":8,"text":"08 / 18","textPreview":"08 / 18","textChars":7,"textLines":1,"bbox":[1145,673,80,30]}
+{"kind":"image","id":"im/itk7m1gj","slide":8,"name":"","alt":"ตรามหาวิทยาลัยราชภัฏยะลา","bbox":[56,12,43.4,58]}
+{"kind":"image","id":"im/jutof6x4","slide":8,"name":"","alt":"โลโก้สาขาวิชาเทคโนโลยีสารสนเทศ","bbox":[116,12,58,58]}
+{"kind":"notes","id":"nt/6folv9","slide":8,"text":"SDLC 7 ขั้นตาม Pop del.pdf หน้า 24-25 เชื่อมกับกิจกรรมวิจัยจากหน้า 59-65 และ 102-104 ไม่ระบุว่าขั้นใดดำเนินการเสร็จแล้ว หากไม่มีข้อมูลสถานะยืนยัน"}
+{"kind":"slide","id":"sl/aq41pr","slide":9,"title":"DFD LEVEL 0","textShapes":4}
+{"kind":"shape","id":"sh/fm90nm98","slide":9,"bbox":[0,0,1280,720]}
+{"kind":"textbox","id":"sh/gnihwrat","slide":9,"text":"DFD LEVEL 0","textPreview":"DFD LEVEL 0","textChars":11,"textLines":1,"bbox":[1108,30,116,26.35]}
+{"kind":"textbox","id":"sh/horipwre","slide":9,"text":"แผนภาพกระแสข้อมูล","textPreview":"แผนภาพกระแสข้อมูล","textChars":17,"textLines":1,"bbox":[56,78,426,65.1]}
+{"kind":"shape","id":"sh/2p0zy1sz","slide":9,"bbox":[56,661,1168,0]}
+{"kind":"textbox","id":"sh/3q90rm94","slide":9,"text":"ที่มา: แผนภาพประกอบโครงงานระบบวินัยนักเรียน","textPreview":"ที่มา: แผนภาพประกอบโครงงานระบบวินัยนักเรียน","textChars":43,"textLines":1,"bbox":[56,678,279,20.15]}
+{"kind":"textbox","id":"sh/4rih0rap","slide":9,"text":"09 / 18","textPreview":"09 / 18","textChars":7,"textLines":1,"bbox":[1158,676,66,24.8]}
+{"kind":"shape","id":"sh/pcritwra","slide":9,"bbox":[28,142,1224,506]}
+{"kind":"image","id":"im/z2hgrytg","slide":9,"name":"","alt":"dfd_level0.png","bbox":[37,151,1206,488]}
+{"kind":"image","id":"im/y18zitsv","slide":9,"name":"","alt":"ตรามหาวิทยาลัยราชภัฏยะลา","bbox":[56,12,43.4,58]}
+{"kind":"image","id":"im/0bqhwb2x","slide":9,"name":"","alt":"โลโก้สาขาวิชาเทคโนโลยีสารสนเทศ","bbox":[116,12,58,58]}
+{"kind":"notes","id":"nt/aq41pr","slide":9,"text":"ที่มา: แผนภาพประกอบโครงงานระบบวินัยนักเรียน"}
+{"kind":"slide","id":"sl/blbjfc","slide":10,"title":"ผลการพัฒนา","textShapes":5}
+{"kind":"shape","id":"sh/xk32h4ry","slide":10,"bbox":[0,0,1280,720]}
+{"kind":"textbox","id":"sh/axs3mp8n","slide":10,"text":"ผลการพัฒนา","textPreview":"ผลการพัฒนา","textChars":10,"textLines":1,"bbox":[1115,30,109,26.35]}
+{"kind":"textbox","id":"sh/bylkfu98","slide":10,"text":"ภาพรวมระบบ","textPreview":"ภาพรวมระบบ","textChars":10,"textLines":1,"bbox":[56,78,275,65.1]}
+{"kind":"shape","id":"sh/knulsjqp","slide":10,"bbox":[56,661,1168,0]}
+{"kind":"textbox","id":"sh/lo32lora","slide":10,"text":"ที่มา: Pop del.pdf หน้า 144 ภาพที่ 4.16","textPreview":"ที่มา: Pop del.pdf หน้า 144 ภาพที่ 4.16","textChars":39,"textLines":1,"bbox":[56,678,231,20.15]}
+{"kind":"textbox","id":"sh/ylc3q98j","slide":10,"text":"10 / 18","textPreview":"10 / 18","textChars":7,"textLines":1,"bbox":[1158,676,66,24.8]}
+{"kind":"textbox","id":"sh/8relwjql","slide":10,"text":"ดูคะแนน พฤติกรรม และสถิติในหน้าเดียว","textPreview":"ดูคะแนน พฤติกรรม และสถิติในหน้าเดียว","textChars":36,"textLines":1,"bbox":[56,617,415,37.2]}
+{"kind":"image","id":"im/uxwzulon","slide":10,"name":"","alt":"screen144_0.png","bbox":[56,166,1168,440]}
+{"kind":"image","id":"im/8vehsbqh","slide":10,"name":"","alt":"ตรามหาวิทยาลัยราชภัฏยะลา","bbox":[56,12,43.4,58]}
+{"kind":"image","id":"im/ex8nmhgn","slide":10,"name":"","alt":"โลโก้สาขาวิชาเทคโนโลยีสารสนเทศ","bbox":[116,12,58,58]}
+{"kind":"notes","id":"nt/blbjfc","slide":10,"text":"ที่มา: Pop del.pdf หน้า 144 ภาพที่ 4.16"}
+{"kind":"slide","id":"sl/eg93xy","slide":11,"title":"ผลการพัฒนา","textShapes":8}
+{"kind":"shape","id":"sh/vytobeho","slide":11,"bbox":[0,0,1280,720]}
+{"kind":"textbox","id":"sh/wz25kjy9","slide":11,"text":"ผลการพัฒนา","textPreview":"ผลการพัฒนา","textChars":10,"textLines":1,"bbox":[1115,30,109,26.35]}
+{"kind":"textbox","id":"sh/x0v6d4zu","slide":11,"text":"บันทึกพฤติกรรมนักเรียน","textPreview":"บันทึกพฤติกรรมนักเรียน","textChars":22,"textLines":1,"bbox":[56,78,480,65.1]}
+{"kind":"shape","id":"sh/mtknepg7","slide":11,"bbox":[56,661,1168,0]}
+{"kind":"textbox","id":"sh/nuto7uhc","slide":11,"text":"ที่มา: Pop del.pdf หน้า 145 ภาพที่ 4.18-4.19","textPreview":"ที่มา: Pop del.pdf หน้า 145 ภาพที่ 4.18-4.19","textChars":44,"textLines":1,"bbox":[56,678,261,20.15]}
+{"kind":"textbox","id":"sh/8v25gzyx","slide":11,"text":"11 / 18","textPreview":"11 / 18","textChars":7,"textLines":1,"bbox":[1158.02,676,65.98,24.8]}
+{"kind":"textbox","id":"sh/9wb694zi","slide":11,"text":"บันทึกพฤติกรรม","textPreview":"บันทึกพฤติกรรม","textChars":14,"textLines":1,"bbox":[60,169,223,43.4]}
+{"kind":"textbox","id":"sh/y50nap0v","slide":11,"text":"ด้านบวก / ด้านลบ","textPreview":"ด้านบวก / ด้านลบ","textChars":16,"textLines":1,"bbox":[60,258,227,43.4]}
+{"kind":"textbox","id":"sh/z69o3uhg","slide":11,"text":"อ้างอิงเกณฑ์คะแนน","textPreview":"อ้างอิงเกณฑ์คะแนน","textChars":17,"textLines":1,"bbox":[60,332,248,43.4]}
+{"kind":"textbox","id":"sh/7a1szmh4","slide":11,"text":"แนบหลักฐานประกอบ","textPreview":"แนบหลักฐานประกอบ","textChars":16,"textLines":1,"bbox":[60,406,265,43.4]}
+{"kind":"image","id":"im/9gnq1kra","slide":11,"name":"","alt":"screen145_0.png","bbox":[445,158,371,482]}
+{"kind":"image","id":"im/mdwrq5sj","slide":11,"name":"","alt":"screen145_1.png","bbox":[852,158,372,482]}
+{"kind":"image","id":"im/ne58za94","slide":11,"name":"","alt":"ตรามหาวิทยาลัยราชภัฏยะลา","bbox":[56,12,43.4,58]}
+{"kind":"image","id":"im/0rupofad","slide":11,"name":"","alt":"โลโก้สาขาวิชาเทคโนโลยีสารสนเทศ","bbox":[116,12,58,58]}
+{"kind":"notes","id":"nt/eg93xy","slide":11,"text":"ที่มา: Pop del.pdf หน้า 145 ภาพที่ 4.18-4.19"}
+{"kind":"slide","id":"sl/ki1jjq","slide":12,"title":"ผลการพัฒนา","textShapes":5}
+{"kind":"shape","id":"sh/4vydwr2l","slide":12,"bbox":[0,0,1280,720]}
+{"kind":"textbox","id":"sh/jupwnm10","slide":12,"text":"ผลการพัฒนา","textPreview":"ผลการพัฒนา","textChars":10,"textLines":1,"bbox":[1115,30,109,26.35]}
+{"kind":"textbox","id":"sh/itgvuhkf","slide":12,"text":"พิจารณาคำอุทธรณ์","textPreview":"พิจารณาคำอุทธรณ์","textChars":16,"textLines":1,"bbox":[56,78,386,65.1]}
+{"kind":"shape","id":"sh/dkretwj2","slide":12,"bbox":[56,661,1168,0]}
+{"kind":"textbox","id":"sh/szix0b2h","slide":12,"text":"ที่มา: Pop del.pdf หน้า 148 ภาพที่ 4.24","textPreview":"ที่มา: Pop del.pdf หน้า 148 ภาพที่ 4.24","textChars":39,"textLines":1,"bbox":[56,678,231,20.15]}
+{"kind":"textbox","id":"sh/ry9wr61w","slide":12,"text":"12 / 18","textPreview":"12 / 18","textChars":7,"textLines":1,"bbox":[1158,676,66,24.8]}
+{"kind":"textbox","id":"sh/1orexgje","slide":12,"text":"ยื่นคำร้อง • ตรวจสอบหลักฐาน • ติดตามสถานะ","textPreview":"ยื่นคำร้อง • ตรวจสอบหลักฐาน • ติดตามสถานะ","textChars":41,"textLines":1,"bbox":[56,617,481,37.2]}
+{"kind":"image","id":"im/j61cre14","slide":12,"name":"","alt":"screen148_0.png","bbox":[56,166,1168,440]}
+{"kind":"image","id":"im/twjuxoz6","slide":12,"name":"","alt":"ตรามหาวิทยาลัยราชภัฏยะลา","bbox":[56,12,43.4,58]}
+{"kind":"image","id":"im/x4zyhk3i","slide":12,"name":"","alt":"โลโก้สาขาวิชาเทคโนโลยีสารสนเทศ","bbox":[116,12,58,58]}
+{"kind":"notes","id":"nt/ki1jjq","slide":12,"text":"ที่มา: Pop del.pdf หน้า 148 ภาพที่ 4.24"}
+{"kind":"slide","id":"sl/0yuhnu","slide":13,"title":"ผลการพัฒนา","textShapes":5}
+{"kind":"shape","id":"sh/3m50vilc","slide":13,"bbox":[0,0,1280,720]}
+{"kind":"textbox","id":"sh/4nyhon2x","slide":13,"text":"ผลการพัฒนา","textPreview":"ผลการพัฒนา","textChars":10,"textLines":1,"bbox":[1115,30,109,26.35]}
+{"kind":"textbox","id":"sh/5o7ixs3i","slide":13,"text":"เช็กชื่อเข้าแถว","textPreview":"เช็กชื่อเข้าแถว","textChars":15,"textLines":1,"bbox":[56,78,293,65.1]}
+{"kind":"shape","id":"sh/qpgzqxk3","slide":13,"bbox":[56,661,1168,0]}
+{"kind":"textbox","id":"sh/rqp0z2lo","slide":13,"text":"ที่มา: Pop del.pdf หน้า 156 ภาพที่ 4.38","textPreview":"ที่มา: Pop del.pdf หน้า 156 ภาพที่ 4.38","textChars":39,"textLines":1,"bbox":[56,678,231,20.15]}
+{"kind":"textbox","id":"sh/sryhsn29","slide":13,"text":"13 / 18","textPreview":"13 / 18","textChars":7,"textLines":1,"bbox":[1158,676,66,24.8]}
+{"kind":"textbox","id":"sh/edgzuxkz","slide":13,"text":"บันทึกการมาเรียน และตรวจสอบประวัติย้อนหลัง","textPreview":"บันทึกการมาเรียน และตรวจสอบประวัติย้อนหลัง","textChars":42,"textLines":1,"bbox":[56,617,479,37.2]}
+{"kind":"image","id":"im/onaxsvex","slide":13,"name":"","alt":"screen156_0.png","bbox":[56,166,1168,440]}
+{"kind":"image","id":"im/ipofehw7","slide":13,"name":"","alt":"ตรามหาวิทยาลัยราชภัฏยะลา","bbox":[56,12,43.4,58]}
+{"kind":"image","id":"im/w72d4fy1","slide":13,"name":"","alt":"โลโก้สาขาวิชาเทคโนโลยีสารสนเทศ","bbox":[116,12,58,58]}
+{"kind":"notes","id":"nt/0yuhnu","slide":13,"text":"ที่มา: Pop del.pdf หน้า 156 ภาพที่ 4.38"}
+{"kind":"slide","id":"sl/fb2244","slide":14,"title":"ผลการพัฒนา","textShapes":5}
+{"kind":"shape","id":"sh/axcnq5o7","slide":14,"bbox":[0,0,1280,720]}
+{"kind":"textbox","id":"sh/x0361kny","slide":14,"text":"ผลการพัฒนา","textPreview":"ผลการพัฒนา","textChars":10,"textLines":1,"bbox":[1115,30,109,26.35]}
+{"kind":"textbox","id":"sh/wzupsf6d","slide":14,"text":"ติดตามการละหมาด","textPreview":"ติดตามการละหมาด","textChars":15,"textLines":1,"bbox":[56,78,384,65.1]}
+{"kind":"shape","id":"sh/nulovq5g","slide":14,"bbox":[56,661,1168,0]}
+{"kind":"textbox","id":"sh/2tcnmlob","slide":14,"text":"ที่มา: Pop del.pdf หน้า 152 ภาพที่ 4.33","textPreview":"ที่มา: Pop del.pdf หน้า 152 ภาพที่ 4.33","textChars":39,"textLines":1,"bbox":[56,678,231,20.15]}
+{"kind":"textbox","id":"sh/pw36x0nm","slide":14,"text":"14 / 18","textPreview":"14 / 18","textChars":7,"textLines":1,"bbox":[1158,676,66,24.8]}
+{"kind":"textbox","id":"sh/f61orqpk","slide":14,"text":"สรุปการเข้าร่วมกิจกรรม และตรวจสอบรายบุคคล","textPreview":"สรุปการเข้าร่วมกิจกรรม และตรวจสอบรายบุคคล","textChars":41,"textLines":1,"bbox":[56,617,478,37.2]}
+{"kind":"image","id":"im/5gnytczi","slide":14,"name":"","alt":"screen152_1.png","bbox":[56,166,1168,440]}
+{"kind":"image","id":"im/3ap036hg","slide":14,"name":"","alt":"ตรามหาวิทยาลัยราชภัฏยะลา","bbox":[56,12,43.4,58]}
+{"kind":"image","id":"im/n6xcz6t8","slide":14,"name":"","alt":"โลโก้สาขาวิชาเทคโนโลยีสารสนเทศ","bbox":[116,12,58,58]}
+{"kind":"notes","id":"nt/fb2244","slide":14,"text":"ที่มา: Pop del.pdf หน้า 152 ภาพที่ 4.33"}
+{"kind":"slide","id":"sl/1vwff6","slide":15,"title":"ผลการพัฒนา","textShapes":5}
+{"kind":"shape","id":"sh/cre1cjqp","slide":15,"bbox":[0,0,1280,720]}
+{"kind":"textbox","id":"sh/bq503ep4","slide":15,"text":"ผลการพัฒนา","textPreview":"ผลการพัฒนา","textChars":10,"textLines":1,"bbox":[1115,30,109,26.35]}
+{"kind":"textbox","id":"sh/apwja98j","slide":15,"text":"ผู้ปกครองติดตามบุตรหลาน","textPreview":"ผู้ปกครองติดตามบุตรหลาน","textChars":23,"textLines":1,"bbox":[56,78,533,65.1]}
+{"kind":"shape","id":"sh/lg729o76","slide":15,"bbox":[56,661,1168,0]}
+{"kind":"textbox","id":"sh/kfy1gjql","slide":15,"text":"ที่มา: Pop del.pdf หน้า 165 ภาพที่ 4.55","textPreview":"ที่มา: Pop del.pdf หน้า 165 ภาพที่ 4.55","textChars":39,"textLines":1,"bbox":[56,678,231,20.15]}
+{"kind":"textbox","id":"sh/zupk7ep0","slide":15,"text":"15 / 18","textPreview":"15 / 18","textChars":7,"textLines":1,"bbox":[1158,676,66,24.8]}
+{"kind":"textbox","id":"sh/tkr2d872","slide":15,"text":"ดูประวัติพฤติกรรม และร่วมดูแลกับโรงเรียน","textPreview":"ดูประวัติพฤติกรรม และร่วมดูแลกับโรงเรียน","textChars":40,"textLines":1,"bbox":[56,617,428,37.2]}
+{"kind":"image","id":"im/nit03mt0","slide":15,"name":"","alt":"screen165_0.png","bbox":[56,166,1168,440]}
+{"kind":"image","id":"im/xovi9wb2","slide":15,"name":"","alt":"ตรามหาวิทยาลัยราชภัฏยะลา","bbox":[56,12,43.4,58]}
+{"kind":"image","id":"im/xcr21k7a","slide":15,"name":"","alt":"โลโก้สาขาวิชาเทคโนโลยีสารสนเทศ","bbox":[116,12,58,58]}
+{"kind":"notes","id":"nt/1vwff6","slide":15,"text":"ที่มา: Pop del.pdf หน้า 165 ภาพที่ 4.55"}
+{"kind":"slide","id":"sl/prubf7","slide":16,"title":"กลุ่มตัวอย่าง","textShapes":20}
+{"kind":"shape","id":"sh/k365wny1","slide":16,"bbox":[0,0,1280,720]}
+{"kind":"textbox","id":"sh/j2donixg","slide":16,"text":"กลุ่มตัวอย่าง","textPreview":"กลุ่มตัวอย่าง","textChars":13,"textLines":1,"bbox":[1122,30,102,26.35]}
+{"kind":"textbox","id":"sh/y14nudgv","slide":16,"text":"การประเมินระบบ","textPreview":"การประเมินระบบ","textChars":14,"textLines":1,"bbox":[56,78,333,65.1]}
+{"kind":"shape","id":"sh/t8f6tsfi","slide":16,"bbox":[56,661,1168,0]}
+{"kind":"textbox","id":"sh/87650nex","slide":16,"text":"ที่มา: Pop del.pdf หน้า 58, 168-171","textPreview":"ที่มา: Pop del.pdf หน้า 58, 168-171","textChars":35,"textLines":1,"bbox":[56,678,214,20.15]}
+{"kind":"textbox","id":"sh/76xorixc","slide":16,"text":"16 / 18","textPreview":"16 / 18","textChars":7,"textLines":1,"bbox":[1158,676,66,24.8]}
+{"kind":"textbox","id":"sh/65onyxgr","slide":16,"text":"30","textPreview":"30","textChars":2,"textLines":1,"bbox":[56,166,152,186]}
+{"kind":"textbox","id":"sh/hwz6xcfe","slide":16,"text":"คน","textPreview":"คน","textChars":2,"textLines":1,"bbox":[215,235,66,54.25]}
+{"kind":"textbox","id":"sh/gvq547et","slide":16,"text":"เลือกแบบเจาะจง","textPreview":"เลือกแบบเจาะจง","textChars":14,"textLines":1,"bbox":[60,340,203,41.85]}
+{"kind":"textbox","id":"sh/md4365w7","slide":16,"text":"12","textPreview":"12","textChars":2,"textLines":1,"bbox":[413,180,94,106.95]}
+{"kind":"textbox","id":"sh/7ed4faxs","slide":16,"text":"นักเรียน","textPreview":"นักเรียน","textChars":8,"textLines":1,"bbox":[413,292,112,40.3]}
+{"kind":"textbox","id":"sh/8zml8fex","slide":16,"text":"12","textPreview":"12","textChars":2,"textLines":1,"bbox":[615,180,94,106.95]}
+{"kind":"textbox","id":"sh/90vmhkfi","slide":16,"text":"ผู้ปกครอง","textPreview":"ผู้ปกครอง","textChars":9,"textLines":1,"bbox":[615,292,135,40.3]}
+{"kind":"textbox","id":"sh/u143apw3","slide":16,"text":"3","textPreview":"3","textChars":1,"textLines":1,"bbox":[817,180,56,106.95]}
+{"kind":"textbox","id":"sh/v2d4jaxo","slide":16,"text":"ครูประจำชั้น","textPreview":"ครูประจำชั้น","textChars":12,"textLines":1,"bbox":[817,292,161,40.3]}
+{"kind":"textbox","id":"sh/w3mlcfe9","slide":16,"text":"3","textPreview":"3","textChars":1,"textLines":1,"bbox":[1019,180,56,106.95]}
+{"kind":"textbox","id":"sh/h4fmlkfu","slide":16,"text":"ฝ่ายปกครอง","textPreview":"ฝ่ายปกครอง","textChars":10,"textLines":1,"bbox":[1019,292,166,40.3]}
+{"kind":"shape","id":"sh/q5k3ylwz","slide":16,"bbox":[60,407,1160,0]}
+{"kind":"textbox","id":"sh/b6tk7qxk","slide":16,"text":"คุณภาพระบบ","textPreview":"คุณภาพระบบ","textChars":10,"textLines":1,"bbox":[60,446,207,48.05]}
+{"kind":"textbox","id":"sh/fap0fmdc","slide":16,"text":"ประเมินโดยผู้เชี่ยวชาญ","textPreview":"ประเมินโดยผู้เชี่ยวชาญ","textChars":22,"textLines":1,"bbox":[60,499,250,38.75]}
+{"kind":"textbox","id":"sh/e9gj6hcr","slide":16,"text":"ความพึงพอใจ","textPreview":"ความพึงพอใจ","textChars":11,"textLines":1,"bbox":[674,446,213,48.05]}
+{"kind":"textbox","id":"sh/1c7ihwv2","slide":16,"text":"ประเมินโดยผู้ใช้งาน","textPreview":"ประเมินโดยผู้ใช้งาน","textChars":19,"textLines":1,"bbox":[674,499,217,38.75]}
+{"kind":"textbox","id":"sh/gby18rux","slide":16,"text":"รายงานแนบยังไม่ระบุค่าคะแนนผลประเมิน","textPreview":"รายงานแนบยังไม่ระบุค่าคะแนนผลประเมิน","textChars":36,"textLines":1,"bbox":[60,594,437,38.75]}
+{"kind":"image","id":"im/8bi5krid","slide":16,"name":"","alt":"ตรามหาวิทยาลัยราชภัฏยะลา","bbox":[56,12,43.4,58]}
+{"kind":"image","id":"im/9cb6twzy","slide":16,"name":"","alt":"โลโก้สาขาวิชาเทคโนโลยีสารสนเทศ","bbox":[116,12,58,58]}
+{"kind":"notes","id":"nt/prubf7","slide":16,"text":"ที่มา: Pop del.pdf หน้า 58, 168-171"}
+{"kind":"slide","id":"sl/069r5b","slide":17,"title":"สรุป","textShapes":13}
+{"kind":"shape","id":"sh/kz21cfi9","slide":17,"bbox":[0,0,1280,720]}
+{"kind":"textbox","id":"sh/zytk3uho","slide":17,"text":"สรุป","textPreview":"สรุป","textChars":4,"textLines":1,"bbox":[1178,30,46,26.35]}
+{"kind":"textbox","id":"sh/yxkjap03","slide":17,"text":"ประโยชน์ที่คาดว่าจะได้รับ","textPreview":"ประโยชน์ที่คาดว่าจะได้รับ","textChars":25,"textLines":1,"bbox":[56,78,500,65.1]}
+{"kind":"shape","id":"sh/xwb21kzi","slide":17,"bbox":[56,661,1168,0]}
+{"kind":"textbox","id":"sh/cv218fix","slide":17,"text":"ที่มา: Pop del.pdf หน้า 21","textPreview":"ที่มา: Pop del.pdf หน้า 21","textChars":26,"textLines":1,"bbox":[56,678,159,20.15]}
+{"kind":"textbox","id":"sh/butkzahc","slide":17,"text":"17 / 18","textPreview":"17 / 18","textChars":7,"textLines":1,"bbox":[1158,676,66,24.8]}
+{"kind":"textbox","id":"sh/atkj6507","slide":17,"text":"01","textPreview":"01","textChars":2,"textLines":1,"bbox":[58,191,76,82.15]}
+{"kind":"textbox","id":"sh/psr2x0zm","slide":17,"text":"โรงเรียน","textPreview":"โรงเรียน","textChars":8,"textLines":1,"bbox":[218,194,147,52.7]}
+{"kind":"textbox","id":"sh/o7i14vi1","slide":17,"text":"ข้อมูลวินัยเป็นระบบและตรวจสอบได้","textPreview":"ข้อมูลวินัยเป็นระบบและตรวจสอบได้","textChars":32,"textLines":1,"bbox":[220,255,427,43.4]}
+{"kind":"textbox","id":"sh/uhsbmhoz","slide":17,"text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[58,334,76,82.15]}
+{"kind":"textbox","id":"sh/f21cvmpk","slide":17,"text":"ครู","textPreview":"ครู","textChars":3,"textLines":1,"bbox":[218,337,59,52.7]}
+{"kind":"textbox","id":"sh/g3ator65","slide":17,"text":"ลดภาระเอกสารและติดตามได้ต่อเนื่อง","textPreview":"ลดภาระเอกสารและติดตามได้ต่อเนื่อง","textChars":33,"textLines":1,"bbox":[220,398,445,43.4]}
+{"kind":"textbox","id":"sh/h4juxw7q","slide":17,"text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[58,477,76,82.15]}
+{"kind":"textbox","id":"sh/6d8bix83","slide":17,"text":"นักเรียนและผู้ปกครอง","textPreview":"นักเรียนและผู้ปกครอง","textChars":20,"textLines":1,"bbox":[218,480,352,52.7]}
+{"kind":"textbox","id":"sh/7e1cr2po","slide":17,"text":"รับรู้ข้อมูลและร่วมปรับพฤติกรรม","textPreview":"รับรู้ข้อมูลและร่วมปรับพฤติกรรม","textChars":31,"textLines":1,"bbox":[220,541,377,43.4]}
+{"kind":"image","id":"im/jip47a9o","slide":17,"name":"","alt":"ตรามหาวิทยาลัยราชภัฏยะลา","bbox":[56,12,43.4,58]}
+{"kind":"image","id":"im/ihg3y583","slide":17,"name":"","alt":"โลโก้สาขาวิชาเทคโนโลยีสารสนเทศ","bbox":[116,12,58,58]}
+{"kind":"notes","id":"nt/069r5b","slide":17,"text":"ที่มา: Pop del.pdf หน้า 21"}
+{"kind":"slide","id":"sl/db7ov1","slide":18,"title":"ตอริก ลือแมะ / บุสริน มูซอ | สาขาเทคโนโลยีสารสนเทศ มหาวิทยาลัยราชภัฏยะลา","textShapes":4}
+{"kind":"shape","id":"sh/l4fups3y","slide":18,"bbox":[0,0,1280,720]}
+{"kind":"shape","id":"sh/yhobed47","slide":18,"bbox":[56,661,1168,0]}
+{"kind":"textbox","id":"sh/z2xcnils","slide":18,"text":"ตอริก ลือแมะ / บุสริน มูซอ | สาขาเทคโนโลยีสารสนเทศ มหาวิทยาลัยราชภัฏยะลา","textPreview":"ตอริก ลือแมะ / บุสริน มูซอ | สาขาเทคโนโลยีสารสนเทศ มหาวิทยาลัยราชภัฏยะลา","textChars":72,"textLines":1,"bbox":[56,678,453,20.15]}
+{"kind":"textbox","id":"sh/cfmtc3mh","slide":18,"text":"18 / 18","textPreview":"18 / 18","textChars":7,"textLines":1,"bbox":[1158,676,66,24.8]}
+{"kind":"textbox","id":"sh/dgful832","slide":18,"text":"ขอบคุณครับ","textPreview":"ขอบคุณครับ","textChars":10,"textLines":1,"bbox":[448.5,246,383,100.75]}
+{"kind":"shape","id":"sh/qd4bad4b","slide":18,"bbox":[523,370,234,0]}
+{"kind":"textbox","id":"sh/bedcjy5w","slide":18,"text":"ยินดีรับคำถามและข้อเสนอแนะ","textPreview":"ยินดีรับคำถามและข้อเสนอแนะ","textChars":26,"textLines":1,"bbox":[428,414,424,51.15]}
+{"kind":"image","id":"im/h8vi90zy","slide":18,"name":"","alt":"ตรามหาวิทยาลัยราชภัฏยะลา","bbox":[56,12,43.4,58]}
+{"kind":"image","id":"im/g7m1gvyd","slide":18,"name":"","alt":"โลโก้สาขาวิชาเทคโนโลยีสารสนเทศ","bbox":[116,12,58,58]}
+{"kind":"notes","id":"nt/db7ov1","slide":18,"text":"ตอริก ลือแมะ  /  บุสริน มูซอ | สาขาเทคโนโลยีสารสนเทศ มหาวิทยาลัยราชภัฏยะลา"}
