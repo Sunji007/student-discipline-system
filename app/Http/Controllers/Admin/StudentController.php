@@ -82,7 +82,7 @@ class StudentController extends Controller
             'CitizenID' => $validated['CitizenID'],
             'FirstName' => $validated['FirstName'],
             'LastName'  => $validated['LastName'],
-            'Password'  => Hash::make("Student" . $validated['StudentID']), // e.g. Student10007 (secure mixed case + digits, no symbols)
+            'Password'  => Hash::make($validated['CitizenID']), // เลขประจำตัวประชาชน 13 หลัก
             'Role'      => 'นักเรียน',
             'Status'    => 'ปกติ',
         ]);
@@ -111,7 +111,7 @@ class StudentController extends Controller
         ]);
 
         return redirect()->route('admin.students.index')
-            ->with('success', 'เพิ่มนักเรียนใหม่เรียบร้อยแล้ว (ชื่อผู้ใช้คือ ' . $stdUsername . ' รหัสผ่านเริ่มต้นคือ Student' . $validated['StudentID'] . ')');
+            ->with('success', 'เพิ่มนักเรียนใหม่เรียบร้อยแล้ว (ชื่อผู้ใช้คือ ' . $stdUsername . ' รหัสผ่านเริ่มต้นคือ เลขประจำตัวประชาชน ' . $validated['CitizenID'] . ')');
     }
 
     public function edit($id)

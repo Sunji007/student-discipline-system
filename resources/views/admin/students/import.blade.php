@@ -146,9 +146,10 @@
 
             <div style="margin-top: 1rem; background: #f8fafc; border-radius: 8px; padding: 0.85rem; font-size: 0.8rem; color: #475569; border: 1px solid #e2e8f0;">
                 <strong style="color: #1e293b;"><i class="fas fa-lightbulb" style="color: #eab308;"></i> คำแนะนำ:</strong>
-                <ul style="margin: 0.3rem 0 0 1.2rem; padding: 0;">
+                <ul style="margin: 0.3rem 0 0 1.2rem; padding: 0; line-height: 1.6;">
                     <li>ใช้ไฟล์เทมเพลตที่ดาวน์โหลดจากระบบ เพื่อความถูกต้องของชื่อคอลัมน์</li>
                     <li>คอลัมน์ที่จำเป็น: <code>รหัสนักเรียน</code>, <code>ชื่อจริง</code>, <code>นามสกุล</code>, <code>ระดับชั้น</code>, <code>ห้องเรียน</code></li>
+                    <li>บัญชีนักเรียนใหม่จะใช้ <strong>รหัสนักเรียน</strong> เป็นชื่อผู้ใช้ และรหัสผ่านเริ่มต้นคือ <strong>เลขประจำตัวประชาชน 13 หลัก</strong> (ตามที่ระบุในคอลัมน์ Excel)</li>
                 </ul>
             </div>
         </div>

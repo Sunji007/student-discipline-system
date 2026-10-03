@@ -156,7 +156,7 @@ class StudentImportController extends Controller
                         'UserID'    => (string) Str::uuid(),
                         'Username'  => $studentId,
                         'CitizenID' => $citizenId,
-                        'Password'  => Hash::make("Student{$studentId}"),
+                        'Password'  => Hash::make($citizenId),
                         'FirstName' => $prefix ? ($prefix . ' ' . $firstName) : $firstName,
                         'LastName'  => $lastName,
                         'Role'      => 'นักเรียน',
@@ -186,7 +186,7 @@ class StudentImportController extends Controller
 
             $msg = "นำเข้าข้อมูลนักเรียนสำเร็จ! ";
             $parts = [];
-            if ($insertedCount > 0) $parts[] = "เพิ่มนักเรียนใหม่: {$insertedCount} คน";
+            if ($insertedCount > 0) $parts[] = "เพิ่มนักเรียนใหม่: {$insertedCount} คน (รหัสผ่านเริ่มต้นคือ เลขประจำตัวประชาชน 13 หลัก)";
             if ($updatedCount > 0)  $parts[] = "อัปเดตข้อมูลเดิม: {$updatedCount} คน";
             if ($skippedCount > 0)  $parts[] = "ข้าม (ไม่เปลี่ยนแปลง): {$skippedCount} คน";
             $msg .= "(" . implode(', ', $parts) . ")";
