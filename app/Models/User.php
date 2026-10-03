@@ -176,6 +176,11 @@ class User extends Authenticatable {
         return isset(static::$permissionsCache[$role][$module]);
     }
 
+    public static function flushPermissionsCache(): void
+    {
+        static::$permissionsCache = [];
+    }
+
     public function getEmailForPasswordReset()
     {
         return $this->Email;

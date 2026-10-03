@@ -109,26 +109,77 @@
 @section('content')
 {{-- ===== HEADER ===== --}}
 <div class="page-header">
-    <h2><i class="fas fa-door-open" style="color:var(--primary); margin-right:0.5rem;"></i>ห้อง {{ $classroom ?? 'ยังไม่ได้รับมอบหมาย' }}</h2>
-    <p>นักเรียนในความดูแลทั้งหมด {{ $students->count() }} คน &nbsp;|&nbsp; {{ now()->locale('th')->isoFormat('D MMMM ') . (now()->year + 543) }}</p>
+    <h2>
+        <i class="fas fa-door-open" style="color:var(--primary); margin-right:0.5rem;"></i>
+        @if($classroom === 'all')
+            ทุกห้องที่คุณปรึกษา ({{ implode(', ', $rooms) }})
+        @else
+            ห้อง {{ $classroom ?? 'ยังไม่ได้รับมอบหมาย' }}
+        @endif
+    </h2>
+    <p>
+        @if($statusFilter === 'risk' || $statusFilter === 'เสี่ยง')
+            นักเรียนกลุ่มเสี่ยง <strong>{{ $students->count() }}</strong> คน (จากทั้งหมด {{ $statusCounts['all'] ?? $students->count() }} คน)
+        @elseif($statusFilter)
+            นักเรียนสถานะ "{{ $statusFilter }}" <strong>{{ $students->count() }}</strong> คน (จากทั้งหมด {{ $statusCounts['all'] ?? $students->count() }} คน)
+        @else
+            นักเรียนในความดูแลทั้งหมด {{ $students->count() }} คน
+        @endif
+        &nbsp;|&nbsp; {{ now()->locale('th')->isoFormat('D MMMM ') . (now()->year + 543) }}
+    </p>
 </div>
 
-@if(isset($rooms) && count($rooms) > 1)
-<div style="margin-bottom: 1.25rem; display:flex; align-items:center;">
+<div style="display:flex; flex-wrap:wrap; align-items:center; gap:0.75rem; margin-bottom:1.25rem;">
+    @if(isset($rooms) && count($rooms) > 1)
     <div class="filter-dropdown-wrap">
         <label class="filter-dropdown-label" for="teacherClassroomFilter">
             <i class="fas fa-door-open"></i> เลือกห้องเรียน:
         </label>
         <select id="teacherClassroomFilter" class="filter-dropdown-select" onchange="if(this.value){ window.location.href = this.value; }">
+            <option value="{{ route('teacher.classroom.index', array_filter(['room' => 'all', 'status' => $statusFilter], fn($v) => !is_null($v) && $v !== '')) }}" {{ $classroom === 'all' ? 'selected' : '' }}>
+                ทุกห้องที่คุณปรึกษา ({{ implode(', ', $rooms) }})
+            </option>
             @foreach($rooms as $r)
-                <option value="{{ route('teacher.classroom.index', ['room' => $r]) }}" {{ $classroom === $r ? 'selected' : '' }}>
+                <option value="{{ route('teacher.classroom.index', array_filter(['room' => $r, 'status' => $statusFilter], fn($v) => !is_null($v) && $v !== '')) }}" {{ $classroom === $r ? 'selected' : '' }}>
                     ห้อง {{ $r }}
                 </option>
             @endforeach
         </select>
     </div>
+    @endif
+
+    {{-- Status Filter Dropdown --}}
+    <div class="filter-dropdown-wrap">
+        <label class="filter-dropdown-label" for="teacherStatusFilter">
+            <i class="fas fa-filter"></i> สถานะนักเรียน:
+        </label>
+        <select id="teacherStatusFilter" class="filter-dropdown-select" onchange="if(this.value){ window.location.href = this.value; }">
+            <option value="{{ route('teacher.classroom.index', array_filter(['room' => $classroom], fn($v) => !is_null($v) && $v !== '')) }}" {{ !$statusFilter ? 'selected' : '' }}>
+                ทั้งหมด ({{ $statusCounts['all'] ?? 0 }})
+            </option>
+            <option value="{{ route('teacher.classroom.index', array_filter(['room' => $classroom, 'status' => 'risk'], fn($v) => !is_null($v) && $v !== '')) }}" {{ ($statusFilter === 'risk' || $statusFilter === 'เสี่ยง') ? 'selected' : '' }}>
+                นักเรียนเสี่ยง ({{ $statusCounts['risk'] ?? 0 }})
+            </option>
+            <option value="{{ route('teacher.classroom.index', array_filter(['room' => $classroom, 'status' => 'ปกติ'], fn($v) => !is_null($v) && $v !== '')) }}" {{ $statusFilter === 'ปกติ' ? 'selected' : '' }}>
+                ปกติ ({{ $statusCounts['ปกติ'] ?? 0 }})
+            </option>
+            <option value="{{ route('teacher.classroom.index', array_filter(['room' => $classroom, 'status' => 'ตักเตือน'], fn($v) => !is_null($v) && $v !== '')) }}" {{ $statusFilter === 'ตักเตือน' ? 'selected' : '' }}>
+                ตักเตือน ({{ $statusCounts['ตักเตือน'] ?? 0 }})
+            </option>
+            <option value="{{ route('teacher.classroom.index', array_filter(['room' => $classroom, 'status' => 'ทัณฑ์บน'], fn($v) => !is_null($v) && $v !== '')) }}" {{ $statusFilter === 'ทัณฑ์บน' ? 'selected' : '' }}>
+                ทัณฑ์บน ({{ $statusCounts['ทัณฑ์บน'] ?? 0 }})
+            </option>
+        </select>
+    </div>
+
+    @if($statusFilter)
+    <a href="{{ route('teacher.classroom.index', array_filter(['room' => $classroom], fn($v) => !is_null($v) && $v !== '')) }}" class="btn btn-sm" style="background: white; border: 1px solid var(--border); color: var(--text-muted); font-size: 0.8rem; font-weight: 600; padding: 0.35rem 0.75rem; border-radius: 8px; text-decoration: none; display: inline-flex; align-items: center; gap: 0.35rem;" title="ล้างตัวกรอง">
+        <i class="fas fa-times"></i> ล้างตัวกรอง
+    </a>
+    @endif
 </div>
-@endif
+
+
 
 {{-- ===== STUDENT GRID ===== --}}
 <div class="student-grid">
@@ -160,8 +211,9 @@
             <div class="sc-info">
                 <div class="sc-name">{{ $s->FullName }}</div>
                 <div class="sc-id">รหัส: {{ $s->StudentID }} &bull; ชั้น {{ $s->classroom_display }}</div>
-                <div style="font-size: 0.8rem; font-weight: 700; margin-top: 0.35rem; color: {{ $s->BehaviorScore >= 80 ? 'var(--green)' : ($s->BehaviorScore >= 60 ? 'var(--orange)' : 'var(--red)') }}; display: flex; align-items: center; gap: 0.3rem;">
-                    <i class="fas fa-star" style="color: var(--yellow);"></i> คะแนนพฤติกรรม: {{ $s->BehaviorScore }} คะแนน
+                @php $curScore = $s->BehaviorScore ?? 100; @endphp
+                <div style="font-size: 0.8rem; font-weight: 700; margin-top: 0.35rem; color: {{ $curScore >= 80 ? 'var(--green)' : ($curScore >= 60 ? 'var(--orange)' : 'var(--red)') }}; display: flex; align-items: center; gap: 0.3rem;">
+                    <i class="fas fa-star" style="color: var(--yellow);"></i> คะแนนพฤติกรรม: {{ $curScore }} คะแนน
                 </div>
             </div>
         </div>
@@ -196,9 +248,21 @@
         </div>
     </div>
     @empty
-    <div style="grid-column:1/-1; text-align:center; padding:4rem; background:white; border-radius:16px; border:1px solid var(--border); color:var(--text-muted);">
-        <i class="fas fa-users-slash" style="font-size:2.5rem; margin-bottom:1rem; display:block; color:#ccc;"></i>
-        ไม่มีนักเรียนในห้องที่ปรึกษาของคุณ
+    <div style="grid-column:1/-1; text-align:center; padding:3.5rem 2rem; background:white; border-radius:16px; border:1px solid var(--border); color:var(--text-muted);">
+        <i class="fas {{ $statusFilter ? 'fa-user-check' : 'fa-users-slash' }}" style="font-size:2.5rem; margin-bottom:1rem; display:block; color:{{ $statusFilter ? 'var(--green)' : '#ccc' }};"></i>
+        <h4 style="color:var(--text); margin-bottom:0.5rem; font-size:1.05rem;">
+            @if($statusFilter)
+                ไม่พบนักเรียนในสถานะ "{{ ($statusFilter === 'risk' || $statusFilter === 'เสี่ยง') ? 'กลุ่มเสี่ยง' : $statusFilter }}" {{ $classroom === 'all' ? 'ในทุกห้องที่คุณปรึกษา' : 'ในห้องนี้' }}
+            @else
+                ไม่มีนักเรียนในห้องที่ปรึกษาของคุณ
+            @endif
+        </h4>
+        @if($statusFilter)
+            <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1.25rem;">นักเรียนทุกคนมีสถานะปกติ หรือไม่มีข้อมูลตรงตามเงื่อนไขที่เลือก</p>
+            <a href="{{ route('teacher.classroom.index', array_filter(['room' => $classroom], fn($v) => !is_null($v) && $v !== '')) }}" class="btn btn-primary btn-sm">
+                <i class="fas fa-users"></i> ดูนักเรียนทั้งหมด ({{ $statusCounts['all'] ?? 0 }} คน)
+            </a>
+        @endif
     </div>
     @endforelse
 </div>

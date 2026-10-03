@@ -86,6 +86,7 @@ class RolePermissionController extends Controller
         foreach ($this->roles as $roleName) {
             \Illuminate\Support\Facades\Cache::forget('role_permissions_' . md5($roleName));
         }
+        \App\Models\User::flushPermissionsCache();
 
         return back()->with('success', 'บันทึกการตั้งค่าสิทธิ์เรียบร้อยแล้ว');
     }

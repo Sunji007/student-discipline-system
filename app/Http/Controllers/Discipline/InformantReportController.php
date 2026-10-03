@@ -153,7 +153,8 @@ class InformantReportController extends Controller
             return null;
         }
 
-        $rule = BehaviorRule::find('f4a7c2d9-8e3b-4c6a-9d5e-1b2f3a4c5d6e');
+        $rule = BehaviorRule::find('f4a7c2d9-8e3b-4c6a-9d5e-1b2f3a4c5d6e')
+            ?: BehaviorRule::where('RuleName', 'like', '%แจ้งข้อมูลอันเป็นเท็จต่อฝ่ายปกครอง%')->first();
         if (!$rule) {
             return null;
         }

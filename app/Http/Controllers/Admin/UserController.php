@@ -41,20 +41,10 @@ class UserController extends Controller
     {
         switch ($role) {
             case 'นักเรียน':
-                $last = User::get()
-                    ->filter(fn($u) => preg_match('/^10\d+$/', $u->Username))
-                    ->sortByDesc(fn($u) => (int)$u->Username)
-                    ->first();
-                $nextNum = $last ? ((int)$last->Username + 1) : 10007; // Legacy max is 10006
-                while (
-                    User::where('Username', (string)$nextNum)->exists() ||
-                    Student::where('StudentID', (string)$nextNum)->exists()
-                ) {
-                    $nextNum++;
-                }
+                $nextId = Student::generateNextStudentId();
                 return [
-                    'username' => (string) $nextNum,
-                    'role_id' => (string) $nextNum,
+                    'username' => $nextId,
+                    'role_id'  => $nextId,
                 ];
 
             case 'ผู้ปกครอง':
@@ -153,6 +143,15 @@ class UserController extends Controller
             if (!$request->filled('Password') && $request->filled('CitizenID')) {
                 $request->merge(['Password' => $request->input('CitizenID')]);
             }
+        } elseif ($request->input('Role') === 'นักเรียน') {
+            $stdId = $request->input('StudentID') ?: ($request->input('Username') ?: Student::generateNextStudentId());
+            $request->merge([
+                'Username'  => $stdId,
+                'StudentID' => $stdId,
+            ]);
+            if (!$request->filled('Password')) {
+                $request->merge(['Password' => $request->input('CitizenID') ?: 'Student' . $stdId]);
+            }
         }
 
         $validated = $request->validate([
@@ -186,7 +185,7 @@ class UserController extends Controller
             'advisory_rooms.*' => 'nullable|string|max:15|regex:/^(ม\.)?\s*\d+\s*[\/\-]\s*\d+$/',
             'Position'       => 'nullable|string|max:100',
             'Level'          => 'nullable|in:บันทึกได้,อนุมัติผล/ตั้งค่า',
-            'StudentID'      => 'nullable|string|max:10',
+            'StudentID'      => 'nullable|string|max:10|unique:students,StudentID',
             'GradeLevel'     => 'nullable|string|max:10',
             'Classroom'      => 'nullable|string|max:10',
         ], [

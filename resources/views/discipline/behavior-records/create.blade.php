@@ -32,7 +32,7 @@
                         </div>
                         <div style="flex:2;">
                             <label class="form-label">ค้นหานักเรียน (รหัส หรือ ชื่อ-นามสกุล)</label>
-                            <input type="text" id="studentSearchInput" class="form-control" placeholder="พิมพ์เพื่อค้นหา เช่น 6910103 หรือ เด็กดื้อ..." style="background:#f8fafc; border-color:#cbd5e1; padding: 0.75rem 1rem; line-height: 1.5;">
+                            <input type="text" id="studentSearchInput" class="form-control" placeholder="พิมพ์เพื่อค้นหา เช่น 06000 หรือ เด็กดื้อ..." style="background:#f8fafc; border-color:#cbd5e1; padding: 0.75rem 1rem; line-height: 1.5;">
                         </div>
                     </div>
 

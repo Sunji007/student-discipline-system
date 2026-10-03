@@ -348,29 +348,25 @@
         const role = roleSelect.value;
         if (role !== 'นักเรียน') return;
 
-        const grade = studentGradeSelect.value;
-        const classroom = studentClassInput.value;
-
-        if (!grade || !classroom) {
-            studentIDInput.value = '';
-            usernameInput.value = '';
+        if (nextIds['นักเรียน'] && nextIds['นักเรียน'].role_id) {
+            studentIDInput.value = nextIds['นักเรียน'].role_id;
+            usernameInput.value = nextIds['นักเรียน'].username;
             return;
         }
 
         try {
-            const url = `{{ route('admin.students.get-next-id') }}?grade=${encodeURIComponent(grade)}&classroom=${encodeURIComponent(classroom)}`;
+            const url = `{{ route('admin.students.get-next-id') }}`;
             const response = await fetch(url);
             const data = await response.json();
             
-            studentIDInput.value = data.StudentID;
-            usernameInput.value = data.StudentID; // For student, username is their student ID
+            if (data.StudentID) {
+                studentIDInput.value = data.StudentID;
+                usernameInput.value = data.StudentID;
+            }
         } catch (error) {
             console.error('Error fetching student ID:', error);
         }
     }
-
-    studentGradeSelect.addEventListener('change', fetchNextStudentIDForUser);
-    studentClassInput.addEventListener('input', fetchNextStudentIDForUser);
 
     async function updateTeacherIDForUser() {
         const role = roleSelect.value;
@@ -467,7 +463,12 @@
         }
 
         if (role === 'นักเรียน') {
-            fetchNextStudentIDForUser();
+            if (cfg && cfg.username) {
+                usernameInput.value = cfg.username;
+                studentIDInput.value = cfg.role_id;
+            } else {
+                fetchNextStudentIDForUser();
+            }
             passwordInput.value = citizenId || getGeneratedPassword();
         } else if (role === 'ผู้ปกครอง') {
             usernameInput.value = citizenId;

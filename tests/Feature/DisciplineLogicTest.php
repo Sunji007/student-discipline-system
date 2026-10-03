@@ -22,7 +22,7 @@ class DisciplineLogicTest extends TestCase
         $studentUser = User::factory()->create(['Role' => 'นักเรียน']);
         
         $student = Student::create([
-            'StudentID'     => '6910101',
+            'StudentID'     => '06000',
             'UserID'        => $studentUser->UserID,
             'FirstName'     => 'สมชาย',
             'LastName'      => 'ใจดี',
@@ -104,7 +104,7 @@ class DisciplineLogicTest extends TestCase
 
         $studentUser = User::factory()->create(['Role' => 'นักเรียน']);
         $student = Student::create([
-            'StudentID'     => '6910102',
+            'StudentID'     => '06001',
             'UserID'        => $studentUser->UserID,
             'FirstName'     => 'สมหญิง',
             'LastName'      => 'รักเรียน',
@@ -143,7 +143,7 @@ class DisciplineLogicTest extends TestCase
 
         $studentUser = User::factory()->create(['Role' => 'นักเรียน']);
         $student = Student::create([
-            'StudentID'     => '6910103',
+            'StudentID'     => '06002',
             'UserID'        => $studentUser->UserID,
             'FirstName'     => 'สมศักดิ์',
             'LastName'      => 'คงที่',

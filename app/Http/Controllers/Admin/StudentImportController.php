@@ -54,9 +54,9 @@ class StudentImportController extends Controller
         ];
 
         $sampleRows = [
-            ['69010101', '3950100069001', 'ด.ช.', 'อับดุลเลาะ', 'แวนาแว', 'ชาย', 'ม.1', '1/1', '0812345678'],
-            ['69010102', '3950100069002', 'ด.ญ.', 'ซารีฟา', 'ดอเลาะ', 'หญิง', 'ม.1', '1/1', '0812345679'],
-            ['69010103', '3950100069003', 'นาย', 'ฟุรกอน', 'มะยูโซ๊ะ', 'ชาย', 'ม.4', '4/1', '0812345680'],
+            ['06000', '3950100069001', 'ด.ช.', 'อับดุลเลาะ', 'แวนาแว', 'ชาย', 'ม.1', '1/1', '0812345678'],
+            ['06001', '3950100069002', 'ด.ญ.', 'ซารีฟา', 'ดอเลาะ', 'หญิง', 'ม.1', '1/1', '0812345679'],
+            ['06002', '3950100069003', 'นาย', 'ฟุรกอน', 'มะยูโซ๊ะ', 'ชาย', 'ม.4', '4/1', '0812345680'],
         ];
 
         $callback = function () use ($columns, $sampleRows) {
@@ -96,7 +96,10 @@ class StudentImportController extends Controller
         DB::beginTransaction();
         try {
             foreach ($rows as $r) {
-                $studentId = trim($r['student_id']);
+                $studentId = trim($r['student_id'] ?? '');
+                if (empty($studentId)) {
+                    $studentId = Student::generateNextStudentId();
+                }
                 $citizenId = isset($r['citizen_id']) ? trim($r['citizen_id']) : null;
                 $prefix    = isset($r['prefix']) ? trim($r['prefix']) : '';
                 $firstName = trim($r['first_name']);

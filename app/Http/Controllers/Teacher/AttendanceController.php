@@ -62,7 +62,6 @@ class AttendanceController extends Controller
             Attendance::updateOrCreate(
                 ['StudentID' => $studentId, 'Date' => $request->date],
                 [
-                    'AttendanceID' => (string) Str::uuid(),
                     'RecordedBy'   => $recordedBy,
                     'Status'       => $status,
                     'semester_id'  => $semesterId,

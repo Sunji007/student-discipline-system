@@ -19,7 +19,7 @@ class PrayerStatusTest extends TestCase
 
         // Create 2 students
         $student1 = Student::create([
-            'StudentID'     => '6910101',
+            'StudentID'     => '06000',
             'UserID'        => $user->UserID,
             'FirstName'     => 'สมชาย',
             'LastName'      => 'ใจดี',
@@ -31,7 +31,7 @@ class PrayerStatusTest extends TestCase
 
         $user2 = User::factory()->create(['Role' => 'นักเรียน']);
         $student2 = Student::create([
-            'StudentID'     => '6910102',
+            'StudentID'     => '06001',
             'UserID'        => $user2->UserID,
             'FirstName'     => 'สมหญิง',
             'LastName'      => 'รักเรียน',

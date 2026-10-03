@@ -218,7 +218,7 @@
                                id="studentIdInput"
                                name="student_id_typed"
                                class="form-control"
-                               placeholder="หรือกรอกรหัสนักเรียน เช่น 6910101"
+                               placeholder="หรือกรอกรหัสนักเรียน เช่น 06000"
                                maxlength="20"
                                value="{{ $studentId }}"
                                oninput="if(this.value){ document.getElementById('studentSelect').value=''; }"

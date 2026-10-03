@@ -5,15 +5,6 @@ if (-not (Test-Path $localBase)) {
 
 $servers = @(
     @{
-        Name       = "student.yru.ac.th"
-        Host       = "ftp://ftp.student.yru.ac.th"
-        User       = "S406665027"
-        Pass       = "1969900475054"
-        RemoteBase = "/web/406665027.student.yru.ac.th/private/student-discipline-system"
-        WebBase    = "/web/406665027.student.yru.ac.th/public_html"
-        StateFile  = ".deploy_state_student.json"
-    },
-    @{
         Name       = "site.yru.ac.th"
         Host       = "ftp://host.site.yru.ac.th"
         User       = "s406665027"
@@ -46,6 +37,7 @@ $excludePatterns = @(
     "bootstrap/cache",
     "bootstrap\\cache",
     "^\.deploy_state",
+    "^\.phpunit",
     "^temp_",
     "\.ps1$",
     "\.html$",
@@ -177,15 +169,6 @@ foreach ($server in $servers) {
 
     $state | ConvertTo-Json | Set-Content $stateFilePath
     Write-Host "Completed sync for $($server.Name)! $uploadedCount files uploaded." -ForegroundColor Green
-}
-
-# Auto-clear view cache on student server
-try {
-    [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12
-    $null = Invoke-WebRequest -Uri "https://406665027.student.yru.ac.th/clear-cache.php" -UseBasicParsing -TimeoutSec 10
-    Write-Host "View & app cache cleared on 406665027.student.yru.ac.th!" -ForegroundColor Green
-} catch {
-    # Ignore if timeout
 }
 
 Write-Host "`nAll servers are synchronized!" -ForegroundColor Green

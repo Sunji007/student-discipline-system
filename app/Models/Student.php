@@ -298,4 +298,37 @@ class Student extends Model {
             default      => 'ทัณฑ์บน',
         };
     }
+
+    public static function generateNextStudentId(): string
+    {
+        $minNum = 6000;
+
+        $studentIds = static::pluck('StudentID');
+        $userIds = User::where('Role', 'นักเรียน')->pluck('Username');
+        $allIds = $studentIds->concat($userIds)->unique();
+
+        $numbers = $allIds->filter(function ($id) {
+            if (!is_string($id) && !is_numeric($id)) {
+                return false;
+            }
+            $str = (string)$id;
+            return preg_match('/^0[6-9]\d{3}$/', $str)
+                || preg_match('/^06\d+$/', $str)
+                || preg_match('/^[6-9]\d{3}$/', $str);
+        })->map(fn($id) => (int)$id);
+
+        $maxNum = $numbers->max();
+        $next = $maxNum ? max($minNum, $maxNum + 1) : $minNum;
+
+        $candidate = str_pad($next, 5, '0', STR_PAD_LEFT);
+        while (
+            static::where('StudentID', $candidate)->exists() ||
+            User::where('Username', $candidate)->exists()
+        ) {
+            $next++;
+            $candidate = str_pad($next, 5, '0', STR_PAD_LEFT);
+        }
+
+        return $candidate;
+    }
 }

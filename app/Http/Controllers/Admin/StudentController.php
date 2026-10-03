@@ -37,45 +37,23 @@ class StudentController extends Controller
 
     public function getNextId(Request $request)
     {
-        $grade = $request->input('grade'); // e.g. "ม.1"
-        $classroom = $request->input('classroom'); // e.g. "1"
-
-        if (!$grade || !$classroom) {
-            return response()->json(['StudentID' => '']);
-        }
-
-        // 1. Year prefix: last 2 digits of Buddhist Era (e.g. 2569 -> 69)
-        $yearPrefix = substr((string)((int)date('Y') + 543), -2);
-
-        // 2. Grade digit: "ม.1" -> "1"
-        $gradeDigit = preg_replace('/[^0-9]/', '', $grade);
-
-        // 3. Classroom: "1" -> "01" (padded to 2 digits)
-        $classroomPadded = str_pad(preg_replace('/[^0-9]/', '', $classroom), 2, '0', STR_PAD_LEFT);
-
-        // Base search prefix: e.g. "69101"
-        $prefix = $yearPrefix . $gradeDigit . $classroomPadded;
-
-        // Find existing students whose StudentID starts with this prefix
-        $count = Student::where('StudentID', 'like', $prefix . '%')->count();
-        $nextSeq = str_pad($count + 1, 2, '0', STR_PAD_LEFT);
-
-        $nextStudentId = $prefix . $nextSeq;
-
-        return response()->json(['StudentID' => $nextStudentId]);
+        return response()->json(['StudentID' => Student::generateNextStudentId()]);
     }
 
     public function create()
     {
-        $nextStudentId = '';
+        $nextStudentId = Student::generateNextStudentId();
         return view('admin.students.create', compact('nextStudentId'));
     }
 
     public function store(Request $request)
     {
+        if (!$request->filled('StudentID')) {
+            $request->merge(['StudentID' => Student::generateNextStudentId()]);
+        }
 
         $validated = $request->validate([
-            'StudentID'  => 'required|string|max:10|unique:students,StudentID|regex:/^\d+$/',
+            'StudentID'  => 'required|string|max:10|unique:students,StudentID|unique:users,Username|regex:/^\d+$/',
             'CitizenID'  => 'required|string|digits:13|unique:users,CitizenID',
             'FirstName'  => 'required|string|max:50',
             'LastName'   => 'required|string|max:50',

@@ -18,7 +18,7 @@
             <div class="stat-label">นักเรียนทั้งหมด</div>
         </div>
     </a>
-    <a href="{{ route('teacher.classroom.index') }}" class="stat-card red" style="text-decoration:none; cursor:pointer;" title="ดูนักเรียนกลุ่มเสี่ยง">
+    <a href="{{ route('teacher.classroom.index', ['status' => 'risk']) }}" class="stat-card red" style="text-decoration:none; cursor:pointer;" title="ดูนักเรียนกลุ่มเสี่ยง">
         <div class="stat-icon red"><i class="fas fa-exclamation-triangle"></i></div>
         <div class="stat-info">
             <div class="stat-value">{{ $stats['risk'] }}</div>
@@ -100,13 +100,16 @@
             <div style="padding:1.25rem;">
                 @foreach(['ปกติ' => ['green','check', ['ปกติ']], 'ตักเตือน' => ['orange','exclamation', ['ตักเตือน', 'เฝ้าระวัง']], 'ทัณฑ์บน' => ['red','times', ['ทัณฑ์บน', 'วิกฤต']]] as $status => [$color, $icon, $matchList])
                 @php $count = $students->whereIn('RiskStatus', $matchList)->count(); @endphp
-                <div style="display:flex; align-items:center; justify-content:space-between; padding:0.5rem 0; border-bottom:1px solid #f0ece4;">
+                <a href="{{ route('teacher.classroom.index', ['status' => $status]) }}" style="text-decoration:none; color:inherit; display:flex; align-items:center; justify-content:space-between; padding:0.6rem 0.5rem; border-bottom:1px solid #f0ece4; border-radius:8px; transition:all 0.15s ease;" onmouseover="this.style.background='#f8fafc'; this.style.paddingLeft='0.75rem';" onmouseout="this.style.background='transparent'; this.style.paddingLeft='0.5rem';" title="ดูนักเรียนสถานะ {{ $status }}">
                     <span style="display:flex; align-items:center; gap:0.5rem; font-size:0.875rem;">
                         <i class="fas fa-{{ $icon }}-circle" style="color:var(--{{ $color }}); width:16px;"></i>
                         {{ $status }}
                     </span>
-                    <span style="font-weight:700; font-size:1rem; color:var(--{{ $color }})">{{ $count }}</span>
-                </div>
+                    <span style="font-weight:700; font-size:1rem; color:var(--{{ $color }}); display:flex; align-items:center; gap:0.4rem;">
+                        {{ $count }}
+                        <i class="fas fa-chevron-right" style="font-size:0.7rem; color:#cbd5e1;"></i>
+                    </span>
+                </a>
                 @endforeach
 
                 <a href="{{ route('teacher.classroom.index') }}" class="btn btn-outline btn-sm" style="width:100%; margin-top:1rem; justify-content:center;">

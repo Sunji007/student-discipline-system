@@ -119,30 +119,24 @@
 
 @push('scripts')
 <script>
-    const gradeLevelSelect = document.getElementById('GradeLevel');
-    const classroomInput = document.getElementById('Classroom');
     const studentIDInput = document.getElementById('StudentID');
 
     async function fetchNextStudentID() {
-        const grade = gradeLevelSelect.value;
-        const classroom = classroomInput.value;
-
-        if (!grade || !classroom) {
-            studentIDInput.value = '';
-            return;
-        }
-
+        if (studentIDInput.value) return;
         try {
-            const url = `{{ route('admin.students.get-next-id') }}?grade=${encodeURIComponent(grade)}&classroom=${encodeURIComponent(classroom)}`;
+            const url = `{{ route('admin.students.get-next-id') }}`;
             const response = await fetch(url);
             const data = await response.json();
-            studentIDInput.value = data.StudentID;
+            if (data.StudentID) {
+                studentIDInput.value = data.StudentID;
+            }
         } catch (error) {
             console.error('Error fetching student ID:', error);
         }
     }
 
-    gradeLevelSelect.addEventListener('change', fetchNextStudentID);
-    classroomInput.addEventListener('input', fetchNextStudentID);
+    if (!studentIDInput.value) {
+        fetchNextStudentID();
+    }
 </script>
 @endpush

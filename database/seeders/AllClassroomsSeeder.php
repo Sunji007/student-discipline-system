@@ -101,6 +101,7 @@ class AllClassroomsSeeder extends Seeder
         $nowStr = Carbon::now()->toDateTimeString();
 
         // 2. Loop through Grades ม.1 to ม.6, Rooms 1 to 4 (Total 24 Classrooms, 20 students each)
+        $studentCounter = 6000;
         for ($gradeNum = 1; $gradeNum <= 6; $gradeNum++) {
             $gradeLevel = "ม.{$gradeNum}";
 
@@ -108,7 +109,7 @@ class AllClassroomsSeeder extends Seeder
                 $classroom = "ม.{$gradeNum}/{$roomNum}";
 
                 for ($s = 1; $s <= 20; $s++) {
-                    $studentId = sprintf("69%d%02d%02d", $gradeNum, $roomNum, $s);
+                    $studentId = sprintf("%05d", $studentCounter++);
                     $parentUsername = sprintf("50%d%02d%02d", $gradeNum, $roomNum, $s);
 
                     $isMale = ($s % 2 === 1);
