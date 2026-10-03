@@ -96,12 +96,13 @@
             </div>
 
             <div class="form-group">
-                <label class="form-label" for="evidence">แนบหลักฐาน <span style="font-weight:400; color:var(--text-muted); font-size:0.8rem;">(ถ้ามี)</span> (รองรับรูปภาพ หรือ PDF - แนบได้หลายไฟล์พร้อมกัน)</label>
-                <input type="file" name="evidence[]" id="evidence" class="form-control @error('evidence') is-invalid @enderror @error('evidence.*') is-invalid @enderror" accept=".jpg,.jpeg,.png,.pdf,.webp,.heic,.heif,.gif,.bmp" multiple>
+                <label class="form-label" for="evidence">แนบหลักฐานรูปภาพ <span style="font-weight:400; color:var(--text-muted); font-size:0.8rem;">(ถ้ามี)</span> (รองรับเฉพาะไฟล์รูปภาพ JPG หรือ PNG - แนบได้หลายรูปพร้อมกัน)</label>
+                <input type="file" name="evidence[]" id="evidence" class="form-control @error('evidence') is-invalid @enderror @error('evidence.*') is-invalid @enderror" accept=".jpg,.jpeg,.png,image/jpeg,image/png" multiple>
                 <small style="color:var(--text-muted); display:block; margin-top:0.35rem; font-size:0.78rem;">
-                    <i class="fas fa-info-circle" style="color:var(--gold);"></i> สามารถเลือกและแนบไฟล์หลักฐานได้มากกว่า 1 ไฟล์พร้อมกัน (ขนาดไฟล์ละไม่เกิน 20MB หรือสามารถเว้นว่างได้)
+                    <i class="fas fa-info-circle" style="color:var(--gold);"></i> สามารถแนบได้เฉพาะรูปภาพ (.jpg, .jpeg, .png) เท่านั้น สามารถเลือกได้มากกว่า 1 รูปพร้อมกัน (ขนาดไฟล์ละไม่เกิน 20MB หรือสามารถเว้นว่างได้)
                 </small>
                 <div id="file-size-feedback" style="margin-top:0.4rem;"></div>
+                <div id="evidence-preview-container" style="margin-top:0.5rem; display:none;"></div>
                 @error('evidence')<div class="invalid-feedback">{{ $message }}</div>@enderror
                 @error('evidence.*')<div class="invalid-feedback">{{ $message }}</div>@enderror
             </div>
@@ -608,38 +609,188 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const evidenceInput = document.getElementById('evidence');
     const fileSizeFeedback = document.getElementById('file-size-feedback');
+    const previewContainer = document.getElementById('evidence-preview-container');
+
+    let selectedEvidenceFiles = [];
+    let evidencePreviewUrls = [];
+
+    function revokePreviewUrls() {
+        evidencePreviewUrls.forEach(url => {
+            if (url) {
+                try { URL.revokeObjectURL(url); } catch (e) {}
+            }
+        });
+        evidencePreviewUrls = [];
+    }
+
+    window.clearAllEvidence = function(notify = true) {
+        revokePreviewUrls();
+        selectedEvidenceFiles = [];
+        if (evidenceInput) {
+            evidenceInput.value = '';
+            evidenceInput.classList.remove('is-invalid');
+        }
+        if (previewContainer) {
+            previewContainer.innerHTML = '';
+            previewContainer.style.display = 'none';
+        }
+        if (fileSizeFeedback) {
+            if (notify) {
+                fileSizeFeedback.innerHTML = `<div style="display:inline-flex; align-items:center; gap:0.35rem; background:#f1f5f9; color:#475569; border:1px solid #cbd5e1; padding:0.35rem 0.75rem; border-radius:8px; font-size:0.8rem; font-weight:500;">
+                    <i class="fas fa-check-circle" style="color:#10b981;"></i> ลบรูปภาพที่เลือกออกเรียบร้อยแล้ว (ไม่มีการแนบไฟล์รูปภาพ)
+                </div>`;
+            } else {
+                fileSizeFeedback.innerHTML = '';
+            }
+        }
+    };
+
+    window.removeEvidenceAt = function(index) {
+        if (index < 0 || index >= selectedEvidenceFiles.length) return;
+
+        if (evidencePreviewUrls[index]) {
+            try { URL.revokeObjectURL(evidencePreviewUrls[index]); } catch (e) {}
+        }
+        selectedEvidenceFiles.splice(index, 1);
+        evidencePreviewUrls.splice(index, 1);
+
+        if (selectedEvidenceFiles.length === 0) {
+            window.clearAllEvidence(true);
+            return;
+        }
+
+        try {
+            const dt = new DataTransfer();
+            selectedEvidenceFiles.forEach(f => dt.items.add(f));
+            if (evidenceInput) evidenceInput.files = dt.files;
+        } catch (e) {
+            console.error(e);
+        }
+
+        renderEvidenceList();
+    };
+
+    function renderEvidenceList() {
+        if (selectedEvidenceFiles.length === 0) {
+            window.clearAllEvidence(false);
+            return;
+        }
+
+        let totalBytes = 0;
+        selectedEvidenceFiles.forEach(f => totalBytes += f.size);
+        const totalMb = (totalBytes / (1024 * 1024)).toFixed(2);
+        const fileCount = selectedEvidenceFiles.length;
+
+        fileSizeFeedback.innerHTML = `
+            <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.5rem; background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.25); padding:0.45rem 0.85rem; border-radius:10px;">
+                <div style="display:inline-flex; align-items:center; gap:0.35rem; color:#047857; font-size:0.82rem; font-weight:600;">
+                    <i class="fas fa-check-circle" style="color:#10b981;"></i> เลือกรูปภาพ ${fileCount} ภาพ (ขนาดรวม ${totalMb} MB) พร้อมสำหรับการอัปโหลด ✨
+                </div>
+                <button type="button" onclick="window.clearAllEvidence(true)" style="background:#fee2e2; color:#b91c1c; border:1px solid #fca5a5; border-radius:6px; padding:0.25rem 0.65rem; font-size:0.75rem; font-weight:600; cursor:pointer; display:inline-flex; align-items:center; gap:0.3rem;" title="ลบรูปภาพทั้งหมด">
+                    <i class="fas fa-trash-alt"></i> ลบรูปทั้งหมด
+                </button>
+            </div>
+        `;
+
+        if (previewContainer) {
+            previewContainer.style.display = 'block';
+            let cardsHtml = '<div style="display:flex; flex-wrap:wrap; gap:0.75rem; padding-top:0.4rem;">';
+
+            selectedEvidenceFiles.forEach((file, idx) => {
+                let url = evidencePreviewUrls[idx];
+                if (!url) {
+                    url = URL.createObjectURL(file);
+                    evidencePreviewUrls[idx] = url;
+                }
+                const sizeKb = (file.size / 1024).toFixed(0);
+                cardsHtml += `
+                    <div style="position:relative; width:92px; background:#fff; border:1px solid #e2e8f0; border-radius:10px; padding:5px; box-shadow:0 1px 3px rgba(0,0,0,0.07); text-align:center;">
+                        <img src="${url}" alt="หลักฐาน ${idx+1}" style="width:100%; height:76px; object-fit:cover; border-radius:6px; border:1px solid #f1f5f9;">
+                        <div style="font-size:0.68rem; color:#475569; margin-top:4px; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${file.name}">
+                            ${file.name}
+                        </div>
+                        <div style="font-size:0.64rem; color:#94a3b8;">${sizeKb} KB</div>
+                        <button type="button" onclick="window.removeEvidenceAt(${idx})" title="ลบภาพนี้ออก" style="position:absolute; top:-7px; right:-7px; width:22px; height:22px; background:#ef4444; color:#fff; border:2px solid #fff; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:0.72rem; box-shadow:0 2px 4px rgba(0,0,0,0.2); transition:transform 0.15s ease;" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='scale(1)'">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                `;
+            });
+
+            cardsHtml += '</div>';
+            previewContainer.innerHTML = cardsHtml;
+        }
+    }
+
     if (evidenceInput && fileSizeFeedback) {
         evidenceInput.addEventListener('change', async function() {
-            fileSizeFeedback.innerHTML = '';
             evidenceInput.classList.remove('is-invalid');
-            if (!this.files || this.files.length === 0) return;
+            if (!this.files || this.files.length === 0) {
+                if (selectedEvidenceFiles.length === 0) {
+                    window.clearAllEvidence(false);
+                } else {
+                    try {
+                        const dt = new DataTransfer();
+                        selectedEvidenceFiles.forEach(f => dt.items.add(f));
+                        this.files = dt.files;
+                    } catch (e) {}
+                }
+                return;
+            }
+
+            const allowedExts = ['jpg', 'jpeg', 'png'];
+            let invalidFiles = [];
+            for (let i = 0; i < this.files.length; i++) {
+                const f = this.files[i];
+                const ext = f.name.split('.').pop().toLowerCase();
+                if (!allowedExts.includes(ext)) {
+                    invalidFiles.push(f.name);
+                }
+            }
+
+            if (invalidFiles.length > 0) {
+                window.clearAllEvidence(false);
+                evidenceInput.classList.add('is-invalid');
+                fileSizeFeedback.innerHTML = `<div style="display:inline-flex; align-items:center; gap:0.35rem; background:rgba(239,68,68,0.1); color:#b91c1c; border:1px solid rgba(239,68,68,0.25); padding:0.4rem 0.85rem; border-radius:8px; font-size:0.8rem; font-weight:600;">
+                    <i class="fas fa-exclamation-circle" style="color:#ef4444;"></i> ระบบอนุญาตเฉพาะไฟล์รูปภาพ .png และ .jpg (.jpeg) เท่านั้น ไม่อนุญาตไฟล์ประเภทอื่น (พบ: ${invalidFiles.join(', ')})
+                </div>`;
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'รูปแบบไฟล์ไม่ถูกต้อง',
+                        html: `ระบบรองรับการส่งหลักฐาน<strong>เฉพาะไฟล์รูปภาพ (PNG หรือ JPG) เท่านั้น</strong><br><span style="color:#ef4444; font-size:0.85rem;">ไม่อนุญาตให้ส่งไฟล์ประเภทอื่น เช่น PDF หรือเอกสาร</span>`,
+                        confirmButtonText: 'ตกลง',
+                        confirmButtonColor: '#ef4444'
+                    });
+                } else {
+                    alert('ระบบอนุญาตเฉพาะไฟล์รูปภาพนามสกุล .png และ .jpg เท่านั้น');
+                }
+                return;
+            }
 
             fileSizeFeedback.innerHTML = `<div style="display:inline-flex; align-items:center; gap:0.3rem; background:rgba(59,130,246,0.1); color:#1d4ed8; border:1px solid rgba(59,130,246,0.25); padding:0.3rem 0.75rem; border-radius:20px; font-size:0.8rem; font-weight:600;">
                 <i class="fas fa-spinner fa-spin" style="color:#3b82f6;"></i> กำลังประมวลผลรูปภาพสำหรับอัปโหลด...
             </div>`;
 
             try {
+                revokePreviewUrls();
+                const procFiles = [];
                 const dt = new DataTransfer();
-                let totalSize = 0;
 
                 for (let i = 0; i < this.files.length; i++) {
                     const origFile = this.files[i];
                     const procFile = await compressImageFile(origFile);
+                    procFiles.push(procFile);
                     dt.items.add(procFile);
-                    totalSize += procFile.size;
                 }
 
                 this.files = dt.files;
-
-                const fileCount = this.files.length;
-                const totalMb = (totalSize / (1024 * 1024)).toFixed(2);
-                fileSizeFeedback.innerHTML = `<div style="display:inline-flex; align-items:center; gap:0.3rem; background:rgba(16,185,129,0.1); color:#047857; border:1px solid rgba(16,185,129,0.25); padding:0.3rem 0.75rem; border-radius:20px; font-size:0.8rem; font-weight:600;">
-                    <i class="fas fa-check-circle" style="color:#10b981;"></i> เลือกทั้งหมด ${fileCount} ไฟล์ (ขนาดรวม ${totalMb} MB) พร้อมสำหรับการอัปโหลด ✨
-                </div>`;
+                selectedEvidenceFiles = procFiles;
+                renderEvidenceList();
             } catch (err) {
                 console.error(err);
                 fileSizeFeedback.innerHTML = `<div style="display:inline-flex; align-items:center; gap:0.3rem; background:rgba(16,185,129,0.1); color:#047857; border:1px solid rgba(16,185,129,0.25); padding:0.3rem 0.75rem; border-radius:20px; font-size:0.8rem; font-weight:600;">
-                    <i class="fas fa-check-circle" style="color:#10b981;"></i> เลือกไฟล์เรียบร้อยแล้ว พร้อมสำหรับการอัปโหลด
+                    <i class="fas fa-check-circle" style="color:#10b981;"></i> เลือกรูปภาพเรียบร้อยแล้ว พร้อมสำหรับการอัปโหลด
                 </div>`;
             }
         });
@@ -780,7 +931,7 @@ window.confirmAndSubmitForm = function() {
     }
 
     if (typeof Swal !== 'undefined') {
-        const fileText = fileCount > 0 ? `${fileCount} ไฟล์` : 'ไม่มีแนบไฟล์';
+        const fileText = fileCount > 0 ? `${fileCount} รูปภาพ` : 'ไม่มีแนบรูปภาพ';
         const isAnonChecked = document.querySelector('input[name="IsAnonymous"]:checked')?.value === '1';
         const anonText = isAnonChecked 
             ? '<span style="color:#059669; font-weight:600;"><i class="fas fa-user-secret"></i> ปกปิดตัวตน</span>' 
@@ -796,7 +947,7 @@ window.confirmAndSubmitForm = function() {
                      <div style="margin-bottom:0.3rem;"><strong>📝 หัวข้อ:</strong> ${title}</div>
                      ${suspectText}
                      <div style="margin-bottom:0.3rem;"><strong>👤 สถานะตัวตน:</strong> ${anonText}</div>
-                     <div style="margin-bottom:0.3rem;"><strong>📁 ไฟล์หลักฐาน:</strong> ${fileText}</div>
+                     <div style="margin-bottom:0.3rem;"><strong>📷 รูปภาพหลักฐาน:</strong> ${fileText}</div>
                      <div style="margin-top:0.5rem; font-size:0.82rem; color:#059669; font-weight:600;">
                        <i class="fas fa-shield-alt"></i> ข้อมูลของท่านจะถูกส่งตรงถึงฝ่ายปกครองเพื่อเข้าตรวจสอบ
                      </div>

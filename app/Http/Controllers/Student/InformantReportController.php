@@ -59,14 +59,14 @@ class InformantReportController extends Controller
             'Description' => 'required|string',
             'StudentID' => 'nullable|string|max:1000',
             'evidence' => 'nullable',
-            'evidence.*' => 'nullable|file|mimes:pdf,jpg,jpeg,png,webp,heic,heif,gif,bmp|max:20480',
+            'evidence.*' => 'nullable|file|mimes:jpg,jpeg,png|max:20480',
             'IsAnonymous' => 'nullable|boolean',
             'AcknowledgeTruth' => 'accepted',
         ], [
             'Title.required' => 'กรุณากรอกหัวข้อเบาะแส',
             'Category.required' => 'กรุณาเลือกประเภทพฤติกรรม',
             'Description.required' => 'กรุณากรอกรายละเอียดเบาะแส',
-            'evidence.*.mimes' => 'ไฟล์หลักฐานต้องเป็นประเภท PDF, JPG, JPEG, PNG หรือ WEBP เท่านั้น',
+            'evidence.*.mimes' => 'ไฟล์หลักฐานต้องเป็นไฟล์รูปภาพนามสกุล JPG หรือ PNG เท่านั้น (ไม่อนุญาตไฟล์ประเภทอื่น เช่น PDF หรือเอกสาร)',
             'evidence.*.max' => 'ขนาดไฟล์หลักฐานต้องไม่เกิน 20MB แต่ละไฟล์',
             'AcknowledgeTruth.accepted' => 'กรุณาติ๊กยืนยันว่าข้อมูลที่แจ้งเป็นความจริงตามที่ได้พบเห็นก่อนส่งเบาะแส',
         ]);

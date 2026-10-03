@@ -162,7 +162,7 @@ def verify():
         raise ValueError('\n'.join(problems))
     print(f'Verified: 21 original nodes, 38 original links, {len(routes)} drawn routes; zero intersections, overlapping labels or masks hiding connectors.')
 
-def build():
+def build_separated():
     groups=[];offset=160
     for i in range(1,9):
         group,height=process_group(f'P{i}',offset)
@@ -211,6 +211,10 @@ def build():
               'พรีวิวผ่านเบราว์เซอร์ยังไม่ได้ยืนยัน เนื่องจากนโยบายเครื่องมือบล็อก URL file:// จึงใช้การตรวจพิกัดและขนาดข้อความแทน', '']
     (ROOT / 'docs' / 'dfd-level0-design-notes.md').write_text('\n'.join(notes),encoding='utf-8')
     print(f'Created {OUTPUT}')
+
+def build():
+    from build_dfd_level0_unified import build as build_unified
+    build_unified()
 
 if __name__=='__main__':
     build()
