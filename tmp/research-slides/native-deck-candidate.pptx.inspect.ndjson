@@ -1,0 +1,348 @@
+{"kind":"deck","id":"pr/i678vm","name":"Deck"}
+{"kind":"layout","layoutId":"66183675-628b-4f36-947e-a41988189c10","name":"Master","type":"master"}
+{"kind":"layout","layoutId":"f334d077-2c75-48b3-a3b0-10940060380c","name":"Title Slide","type":"title"}
+{"kind":"slide","id":"sl/ztyyrw","slide":1,"title":"STUDENT DISCIPLINE / RESEARCH 2569","textShapes":10}
+{"kind":"shape","id":"sh/7q5obqp4","slide":1,"bbox":[0,0,1280,720]}
+{"kind":"textbox","id":"sh/srepkv6p","slide":1,"text":"STUDENT DISCIPLINE / RESEARCH 2569","textPreview":"STUDENT DISCIPLINE / RESEARCH 2569","textChars":34,"textLines":1,"bbox":[56,30,334,24.8]}
+{"kind":"shape","id":"sh/tsn6dg7a","slide":1,"bbox":[56,661,1168,0]}
+{"kind":"textbox","id":"sh/utw76lov","slide":1,"text":"โครงงานทางเทคโนโลยีสารสนเทศ 2 | มหาวิทยาลัยราชภัฏยะลา","textPreview":"โครงงานทางเทคโนโลยีสารสนเทศ 2 | มหาวิทยาลัยราชภัฏยะลา","textChars":53,"textLines":1,"bbox":[56,678,355,20.15]}
+{"kind":"textbox","id":"sh/fu5ofqpg","slide":1,"text":"01 / 18","textPreview":"01 / 18","textChars":7,"textLines":1,"bbox":[1158,676,66,24.8]}
+{"kind":"shape","id":"sh/hw76h0nm","slide":1,"bbox":[0,0,826,660]}
+{"kind":"textbox","id":"sh/2xg7a5or","slide":1,"text":"โครงงานวิจัย • ปีการศึกษา 2569","textPreview":"โครงงานวิจัย • ปีการศึกษา 2569","textChars":30,"textLines":1,"bbox":[56,55,325,35.65]}
+{"kind":"textbox","id":"sh/3yp8ja5c","slide":1,"text":"ระบบสารสนเทศ","textPreview":"ระบบสารสนเทศ","textChars":12,"textLines":1,"bbox":[56,179,369,75.95]}
+{"kind":"textbox","id":"sh/f6lsfmx4","slide":1,"text":"การบริหารงานวินัย","textPreview":"การบริหารงานวินัย","textChars":17,"textLines":1,"bbox":[56,254,427,75.95]}
+{"kind":"textbox","id":"sh/e5crmhgz","slide":1,"text":"และติดตามพฤติกรรมนักเรียน","textPreview":"และติดตามพฤติกรรมนักเรียน","textChars":25,"textLines":1,"bbox":[56,329,664,75.95]}
+{"kind":"textbox","id":"sh/183ahwfa","slide":1,"text":"กรณีศึกษา: โรงเรียนศิริราษฎร์สามัคคี","textPreview":"กรณีศึกษา: โรงเรียนศิริราษฎร์สามัคคี","textChars":36,"textLines":1,"bbox":[60,431,440,43.4]}
+{"kind":"textbox","id":"sh/g7u9oryp","slide":1,"text":"จังหวัดปัตตานี","textPreview":"จังหวัดปัตตานี","textChars":14,"textLines":1,"bbox":[60,476,181,43.4]}
+{"kind":"shape","id":"sh/rilsb2x8","slide":1,"bbox":[60,551,110,0]}
+{"kind":"textbox","id":"sh/6hcrixgn","slide":1,"text":"ตอริก ลือแมะ / บุสริน มูซอ","textPreview":"ตอริก ลือแมะ / บุสริน มูซอ","textChars":26,"textLines":1,"bbox":[60,576,291,38.75]}
+{"kind":"image","id":"im/9wfexovi","slide":1,"name":"","alt":"school_front.jpg","bbox":[826,0,454,650]}
+{"kind":"notes","id":"nt/ztyyrw","slide":1,"text":"โครงงานทางเทคโนโลยีสารสนเทศ 2 | มหาวิทยาลัยราชภัฏยะลา"}
+{"kind":"slide","id":"sl/x1s2lk","slide":2,"title":"STUDENT DISCIPLINE / RESEARCH 2569","textShapes":15}
+{"kind":"shape","id":"sh/fqp0bah8","slide":2,"bbox":[0,0,1280,720]}
+{"kind":"textbox","id":"sh/gri14fyt","slide":2,"text":"STUDENT DISCIPLINE / RESEARCH 2569","textPreview":"STUDENT DISCIPLINE / RESEARCH 2569","textChars":34,"textLines":1,"bbox":[56,30,334,24.8]}
+{"kind":"textbox","id":"sh/1sridkze","slide":2,"text":"คณะผู้จัดทำ","textPreview":"คณะผู้จัดทำ","textChars":11,"textLines":1,"bbox":[1123,30,101,26.35]}
+{"kind":"textbox","id":"sh/2t0j6pgj","slide":2,"text":"ผู้วิจัยและอาจารย์ที่ปรึกษา","textPreview":"ผู้วิจัยและอาจารย์ที่ปรึกษา","textChars":27,"textLines":1,"bbox":[56,78,509,65.1]}
+{"kind":"shape","id":"sh/3e90fah4","slide":2,"bbox":[56,661,1168,0]}
+{"kind":"textbox","id":"sh/ofi18fyp","slide":2,"text":"ผู้วิจัย: PDF หน้า 205-206 | รูปที่ปรึกษา: YRU Profile","textPreview":"ผู้วิจัย: PDF หน้า 205-206 | รูปที่ปรึกษา: YRU Profile","textChars":54,"textLines":1,"bbox":[56,678,304,20.15]}
+{"kind":"textbox","id":"sh/pgrihkza","slide":2,"text":"02 / 18","textPreview":"02 / 18","textChars":7,"textLines":1,"bbox":[1158,676,66,24.8]}
+{"kind":"textbox","id":"sh/qh0japgv","slide":2,"text":"ผู้วิจัย","textPreview":"ผู้วิจัย","textChars":8,"textLines":1,"bbox":[56,150,76,35.65]}
+{"kind":"textbox","id":"sh/bit0juhg","slide":2,"text":"อาจารย์ที่ปรึกษา","textPreview":"อาจารย์ที่ปรึกษา","textChars":16,"textLines":1,"bbox":[674,150,187,35.65]}
+{"kind":"textbox","id":"sh/a9ojad0f","slide":2,"text":"นายตอริก ลือแมะ","textPreview":"นายตอริก ลือแมะ","textChars":15,"textLines":1,"bbox":[56,530,203,37.2]}
+{"kind":"textbox","id":"sh/xcfilsz6","slide":2,"text":"406665012","textPreview":"406665012","textChars":9,"textLines":1,"bbox":[56,575,117,31]}
+{"kind":"textbox","id":"sh/n6d0fih4","slide":2,"text":"นายบุสริน มูซอ","textPreview":"นายบุสริน มูซอ","textChars":14,"textLines":1,"bbox":[353,530,180,37.2]}
+{"kind":"textbox","id":"sh/254j6d0j","slide":2,"text":"406665027","textPreview":"406665027","textChars":9,"textLines":1,"bbox":[353,575,117,31]}
+{"kind":"textbox","id":"sh/o7618nip","slide":2,"text":"อ.แพรวศรี เดิมราช","textPreview":"อ.แพรวศรี เดิมราช","textChars":17,"textLines":1,"bbox":[674,530,223,37.2]}
+{"kind":"textbox","id":"sh/72hkr2h8","slide":2,"text":"อาจารย์ที่ปรึกษา","textPreview":"อาจารย์ที่ปรึกษา","textChars":16,"textLines":1,"bbox":[674,575,155,31]}
+{"kind":"textbox","id":"sh/ixs3a1kv","slide":2,"text":"อ.รุสนี กาแมแล","textPreview":"อ.รุสนี กาแมแล","textChars":14,"textLines":1,"bbox":[971,530,182,37.2]}
+{"kind":"textbox","id":"sh/jyl4j61g","slide":2,"text":"อาจารย์ที่ปรึกษา","textPreview":"อาจารย์ที่ปรึกษา","textChars":16,"textLines":1,"bbox":[971,575,155,31]}
+{"kind":"shape","id":"sh/4zulcb21","slide":2,"bbox":[639,185,0,425]}
+{"kind":"image","id":"im/k3m18b2l","slide":2,"name":"","alt":"portrait205.png","bbox":[56,197,253,312]}
+{"kind":"image","id":"im/j2d0fql0","slide":2,"name":"","alt":"portrait206.png","bbox":[353,197,253,312]}
+{"kind":"image","id":"im/654jalkb","slide":2,"name":"","alt":"advisor0.jpg","bbox":[674,197,253,312]}
+{"kind":"image","id":"im/hcf2p03y","slide":2,"name":"","alt":"advisor1.jpg","bbox":[971,197,253,312]}
+{"kind":"notes","id":"nt/x1s2lk","slide":2,"text":"ผู้วิจัย: PDF หน้า 205-206 | รูปที่ปรึกษา: YRU Profile"}
+{"kind":"slide","id":"sl/qxbuqc","slide":3,"title":"STUDENT DISCIPLINE / RESEARCH 2569","textShapes":14}
+{"kind":"shape","id":"sh/29cb2x4v","slide":3,"bbox":[0,0,1280,720]}
+{"kind":"textbox","id":"sh/pwnadcnm","slide":3,"text":"STUDENT DISCIPLINE / RESEARCH 2569","textPreview":"STUDENT DISCIPLINE / RESEARCH 2569","textChars":34,"textLines":1,"bbox":[56,30,334,24.8]}
+{"kind":"textbox","id":"sh/4vet47m1","slide":3,"text":"บทนำ","textPreview":"บทนำ","textChars":4,"textLines":1,"bbox":[1165,30,59,26.35]}
+{"kind":"textbox","id":"sh/f6ls7i5k","slide":3,"text":"ความเป็นมาและปัญหา","textPreview":"ความเป็นมาและปัญหา","textChars":18,"textLines":1,"bbox":[56,78,436,65.1]}
+{"kind":"shape","id":"sh/u5cbyx4z","slide":3,"bbox":[56,661,1168,0]}
+{"kind":"textbox","id":"sh/h83a9sna","slide":3,"text":"ที่มา: Pop del.pdf หน้า 16-17, 59","textPreview":"ที่มา: Pop del.pdf หน้า 16-17, 59","textChars":33,"textLines":1,"bbox":[56,678,200,20.15]}
+{"kind":"textbox","id":"sh/g7ut0nmp","slide":3,"text":"03 / 18","textPreview":"03 / 18","textChars":7,"textLines":1,"bbox":[1158,676,66,24.8]}
+{"kind":"textbox","id":"sh/61srud4n","slide":3,"text":"01","textPreview":"01","textChars":2,"textLines":1,"bbox":[644,185,58,55.8]}
+{"kind":"textbox","id":"sh/wbmdkj61","slide":3,"text":"ข้อมูลกระจัดกระจาย","textPreview":"ข้อมูลกระจัดกระจาย","textChars":18,"textLines":1,"bbox":[724,185,301,48.05]}
+{"kind":"textbox","id":"sh/xcvudonm","slide":3,"text":"จดบันทึกลงกระดาษ","textPreview":"จดบันทึกลงกระดาษ","textChars":16,"textLines":1,"bbox":[724,241,221,38.75]}
+{"kind":"textbox","id":"sh/a94vitob","slide":3,"text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[644,329,58,55.8]}
+{"kind":"textbox","id":"sh/vadcby5g","slide":3,"text":"สืบค้นและสรุปผลล่าช้า","textPreview":"สืบค้นและสรุปผลล่าช้า","textChars":21,"textLines":1,"bbox":[724,329,331,48.05]}
+{"kind":"textbox","id":"sh/87mdgj65","slide":3,"text":"รวบรวมข้อมูลจากหลายแฟ้ม","textPreview":"รวบรวมข้อมูลจากหลายแฟ้ม","textChars":23,"textLines":1,"bbox":[724,385,301,38.75]}
+{"kind":"textbox","id":"sh/98vu9onq","slide":3,"text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[644,473,58,55.8]}
+{"kind":"textbox","id":"sh/m5kbe9oz","slide":3,"text":"ติดตามกิจกรรมได้ไม่ทั่วถึง","textPreview":"ติดตามกิจกรรมได้ไม่ทั่วถึง","textChars":26,"textLines":1,"bbox":[724,473,383,48.05]}
+{"kind":"textbox","id":"sh/n6dc7e5k","slide":3,"text":"ขาดหลักฐานที่ตรวจสอบได้","textPreview":"ขาดหลักฐานที่ตรวจสอบได้","textChars":23,"textLines":1,"bbox":[724,529,292,38.75]}
+{"kind":"image","id":"im/at4vu103","slide":3,"name":"","alt":"school_front.jpg","bbox":[56,170,540,438]}
+{"kind":"notes","id":"nt/qxbuqc","slide":3,"text":"ที่มา: Pop del.pdf หน้า 16-17, 59"}
+{"kind":"slide","id":"sl/mk2nf2","slide":4,"title":"STUDENT DISCIPLINE / RESEARCH 2569","textShapes":5}
+{"kind":"shape","id":"sh/a9crih0z","slide":4,"bbox":[0,0,1280,720]}
+{"kind":"textbox","id":"sh/xwnqtwzq","slide":4,"text":"STUDENT DISCIPLINE / RESEARCH 2569","textPreview":"STUDENT DISCIPLINE / RESEARCH 2569","textChars":34,"textLines":1,"bbox":[56,30,334,24.8]}
+{"kind":"textbox","id":"sh/wbe9kri5","slide":4,"text":"วิเคราะห์ปัญหา","textPreview":"วิเคราะห์ปัญหา","textChars":14,"textLines":1,"bbox":[1104,30,120,26.35]}
+{"kind":"textbox","id":"sh/n6l8nmho","slide":4,"text":"แผนผังก้างปลา","textPreview":"แผนผังก้างปลา","textChars":13,"textLines":1,"bbox":[56,78,311,65.1]}
+{"kind":"shape","id":"sh/m5c7eh03","slide":4,"bbox":[56,661,1168,0]}
+{"kind":"textbox","id":"sh/983qpwze","slide":4,"text":"ที่มา: แผนภาพประกอบโครงงานระบบวินัยนักเรียน","textPreview":"ที่มา: แผนภาพประกอบโครงงานระบบวินัยนักเรียน","textChars":43,"textLines":1,"bbox":[56,678,279,20.15]}
+{"kind":"textbox","id":"sh/87u9gri9","slide":4,"text":"04 / 18","textPreview":"04 / 18","textChars":7,"textLines":1,"bbox":[1158,676,66,24.8]}
+{"kind":"shape","id":"sh/72p8z6hs","slide":4,"bbox":[40,176,1200,470]}
+{"kind":"image","id":"im/bmh03yhw","slide":4,"name":"","alt":"fishbone.png","bbox":[54,192,1172,430]}
+{"kind":"notes","id":"nt/mk2nf2","slide":4,"text":"ที่มา: แผนภาพประกอบโครงงานระบบวินัยนักเรียน"}
+{"kind":"slide","id":"sl/gmyc2c","slide":5,"title":"STUDENT DISCIPLINE / RESEARCH 2569","textShapes":14}
+{"kind":"shape","id":"sh/fql4b6t4","slide":5,"bbox":[0,0,1280,720]}
+{"kind":"textbox","id":"sh/grulkbap","slide":5,"text":"STUDENT DISCIPLINE / RESEARCH 2569","textPreview":"STUDENT DISCIPLINE / RESEARCH 2569","textChars":34,"textLines":1,"bbox":[56,30,334,24.8]}
+{"kind":"textbox","id":"sh/hcnmdgba","slide":5,"text":"การวิจัย","textPreview":"การวิจัย","textChars":8,"textLines":1,"bbox":[1154,30,70,26.35]}
+{"kind":"textbox","id":"sh/2dw3mlsv","slide":5,"text":"วัตถุประสงค์","textPreview":"วัตถุประสงค์","textChars":12,"textLines":1,"bbox":[56,78,248,65.1]}
+{"kind":"shape","id":"sh/3e54f6t0","slide":5,"bbox":[56,661,1168,0]}
+{"kind":"textbox","id":"sh/4fe5obal","slide":5,"text":"ที่มา: Pop del.pdf หน้า 17","textPreview":"ที่มา: Pop del.pdf หน้า 17","textChars":26,"textLines":1,"bbox":[56,678,159,20.15]}
+{"kind":"textbox","id":"sh/pgnmhgb6","slide":5,"text":"05 / 18","textPreview":"05 / 18","textChars":7,"textLines":1,"bbox":[1158,676,66,24.8]}
+{"kind":"textbox","id":"sh/qhwnqlsr","slide":5,"text":"01","textPreview":"01","textChars":2,"textLines":1,"bbox":[60,191,86,96.1]}
+{"kind":"textbox","id":"sh/ri54jqtc","slide":5,"text":"วิเคราะห์ ออกแบบ และพัฒนาระบบ","textPreview":"วิเคราะห์ ออกแบบ และพัฒนาระบบ","textChars":29,"textLines":1,"bbox":[213,194,577,55.8]}
+{"kind":"textbox","id":"sh/nytobulk","slide":5,"text":"บริหารงานวินัยและติดตามพฤติกรรมนักเรียน","textPreview":"บริหารงานวินัยและติดตามพฤติกรรมนักเรียน","textChars":39,"textLines":1,"bbox":[216,258,498,41.85]}
+{"kind":"shape","id":"sh/mxkn2p4z","slide":5,"bbox":[213,310,967,0]}
+{"kind":"textbox","id":"sh/90b6dk3q","slide":5,"text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[60,335,86,96.1]}
+{"kind":"textbox","id":"sh/8z254fm5","slide":5,"text":"ประเมินคุณภาพระบบ","textPreview":"ประเมินคุณภาพระบบ","textChars":17,"textLines":1,"bbox":[213,338,360,55.8]}
+{"kind":"textbox","id":"sh/za9o7al8","slide":5,"text":"โดยผู้เชี่ยวชาญ","textPreview":"โดยผู้เชี่ยวชาญ","textChars":15,"textLines":1,"bbox":[216,402,188,41.85]}
+{"kind":"shape","id":"sh/y90ny543","slide":5,"bbox":[213,454,967,0]}
+{"kind":"textbox","id":"sh/lwb69k3e","slide":5,"text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[60,479,86,96.1]}
+{"kind":"textbox","id":"sh/0bi50fmt","slide":5,"text":"ประเมินความพึงพอใจ","textPreview":"ประเมินความพึงพอใจ","textChars":18,"textLines":1,"bbox":[213,482,366,55.8]}
+{"kind":"textbox","id":"sh/j6do3els","slide":5,"text":"ของผู้ใช้งานระบบ","textPreview":"ของผู้ใช้งานระบบ","textChars":16,"textLines":1,"bbox":[216,546,211,41.85]}
+{"kind":"notes","id":"nt/gmyc2c","slide":5,"text":"ที่มา: Pop del.pdf หน้า 17"}
+{"kind":"slide","id":"sl/wcp0ww","slide":6,"title":"STUDENT DISCIPLINE / RESEARCH 2569","textShapes":20}
+{"kind":"shape","id":"sh/698faxgj","slide":6,"bbox":[0,0,1280,720]}
+{"kind":"textbox","id":"sh/tczylszu","slide":6,"text":"STUDENT DISCIPLINE / RESEARCH 2569","textPreview":"STUDENT DISCIPLINE / RESEARCH 2569","textChars":34,"textLines":1,"bbox":[56,30,334,24.8]}
+{"kind":"textbox","id":"sh/8bqxc7y9","slide":6,"text":"5 บทบาท","textPreview":"5 บทบาท","textChars":7,"textLines":1,"bbox":[1138,30,86,26.35]}
+{"kind":"textbox","id":"sh/vehgn2h0","slide":6,"text":"ขอบเขตผู้ใช้งาน","textPreview":"ขอบเขตผู้ใช้งาน","textChars":15,"textLines":1,"bbox":[56,78,331,65.1]}
+{"kind":"shape","id":"sh/ud8fexgf","slide":6,"bbox":[56,661,1168,0]}
+{"kind":"textbox","id":"sh/hgzypcz6","slide":6,"text":"ที่มา: Pop del.pdf หน้า 18-19","textPreview":"ที่มา: Pop del.pdf หน้า 18-19","textChars":29,"textLines":1,"bbox":[56,678,178,20.15]}
+{"kind":"textbox","id":"sh/gfqxg7yl","slide":6,"text":"06 / 18","textPreview":"06 / 18","textChars":7,"textLines":1,"bbox":[1158,676,66,24.8]}
+{"kind":"textbox","id":"sh/bixwbihw","slide":6,"text":"01","textPreview":"01","textChars":2,"textLines":1,"bbox":[70,167,58,55.8]}
+{"kind":"textbox","id":"sh/ah4fid0b","slide":6,"text":"ผู้ดูแลระบบ","textPreview":"ผู้ดูแลระบบ","textChars":11,"textLines":1,"bbox":[218,169,169,46.5]}
+{"kind":"textbox","id":"sh/sv2t0bax","slide":6,"text":"ข้อมูลและสิทธิ์","textPreview":"ข้อมูลและสิทธิ์","textChars":15,"textLines":1,"bbox":[788,174,173,40.3]}
+{"kind":"shape","id":"sh/twbu9wbi","slide":6,"bbox":[218,235,962,0]}
+{"kind":"textbox","id":"sh/69kby1sr","slide":6,"text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[70,256,58,55.8]}
+{"kind":"textbox","id":"sh/ratc76tc","slide":6,"text":"ฝ่ายปกครอง","textPreview":"ฝ่ายปกครอง","textChars":10,"textLines":1,"bbox":[218,258,188,46.5]}
+{"kind":"textbox","id":"sh/gzmt4bat","slide":6,"text":"พฤติกรรมและรายงาน","textPreview":"พฤติกรรมและรายงาน","textChars":17,"textLines":1,"bbox":[788,263,244,40.3]}
+{"kind":"shape","id":"sh/10vudgbe","slide":6,"bbox":[218,324,962,0]}
+{"kind":"textbox","id":"sh/exkb21sn","slide":6,"text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[70,345,58,55.8]}
+{"kind":"textbox","id":"sh/fydcb6t8","slide":6,"text":"ครูประจำชั้น","textPreview":"ครูประจำชั้น","textChars":12,"textLines":1,"bbox":[218,347,182,46.5]}
+{"kind":"textbox","id":"sh/w3itsrap","slide":6,"text":"เช็กชื่อและบันทึก","textPreview":"เช็กชื่อและบันทึก","textChars":17,"textLines":1,"bbox":[788,352,198,40.3]}
+{"kind":"shape","id":"sh/h4ru1cba","slide":6,"bbox":[218,413,962,0]}
+{"kind":"textbox","id":"sh/x0ja583y","slide":6,"text":"04","textPreview":"04","textChars":2,"textLines":1,"bbox":[70,434,58,55.8]}
+{"kind":"textbox","id":"sh/wza9w32d","slide":6,"text":"นักเรียน","textPreview":"นักเรียน","textChars":8,"textLines":1,"bbox":[218,436,124,46.5]}
+{"kind":"textbox","id":"sh/by1s3yls","slide":6,"text":"ประวัติและอุทธรณ์","textPreview":"ประวัติและอุทธรณ์","textChars":17,"textLines":1,"bbox":[788,441,210,40.3]}
+{"kind":"shape","id":"sh/axsrutk7","slide":6,"bbox":[218,502,962,0]}
+{"kind":"textbox","id":"sh/lo3a9s3a","slide":6,"text":"05","textPreview":"05","textChars":2,"textLines":1,"bbox":[70,523,58,55.8]}
+{"kind":"textbox","id":"sh/k3u90n2p","slide":6,"text":"ผู้ปกครอง","textPreview":"ผู้ปกครอง","textChars":9,"textLines":1,"bbox":[218,525,152,46.5]}
+{"kind":"textbox","id":"sh/j21s7il4","slide":6,"text":"ติดตามบุตรหลาน","textPreview":"ติดตามบุตรหลาน","textChars":14,"textLines":1,"bbox":[788,530,200,40.3]}
+{"kind":"notes","id":"nt/wcp0ww","slide":6,"text":"ที่มา: Pop del.pdf หน้า 18-19"}
+{"kind":"slide","id":"sl/jc2s7p","slide":7,"title":"STUDENT DISCIPLINE / RESEARCH 2569","textShapes":15}
+{"kind":"shape","id":"sh/fqlkz6to","slide":7,"bbox":[0,0,1280,720]}
+{"kind":"textbox","id":"sh/grul8ra9","slide":7,"text":"STUDENT DISCIPLINE / RESEARCH 2569","textPreview":"STUDENT DISCIPLINE / RESEARCH 2569","textChars":34,"textLines":1,"bbox":[56,30,334,24.8]}
+{"kind":"textbox","id":"sh/1s321wbu","slide":7,"text":"ซอฟต์แวร์และภาษา","textPreview":"ซอฟต์แวร์และภาษา","textChars":16,"textLines":1,"bbox":[1069,30,155,26.35]}
+{"kind":"textbox","id":"sh/61s32hs7","slide":7,"text":"เครื่องมือที่ใช้พัฒนา","textPreview":"เครื่องมือที่ใช้พัฒนา","textChars":21,"textLines":1,"bbox":[56,78,397,65.1]}
+{"kind":"shape","id":"sh/r2lkvmts","slide":7,"bbox":[56,661,1168,0]}
+{"kind":"textbox","id":"sh/snul4rad","slide":7,"text":"ที่มา: Pop del.pdf หน้า 4, 20-21 | โลโก้: ไฟล์ต้นฉบับในโครงงาน","textPreview":"ที่มา: Pop del.pdf หน้า 4, 20-21 | โลโก้: ไฟล์ต้นฉบับในโครงงาน","textChars":62,"textLines":1,"bbox":[56,678,367,20.15]}
+{"kind":"textbox","id":"sh/to32xwbi","slide":7,"text":"07 / 18","textPreview":"07 / 18","textChars":7,"textLines":1,"bbox":[1158,676,66,24.8]}
+{"kind":"textbox","id":"sh/jy1kr2tg","slide":7,"text":"VS Code","textPreview":"VS Code","textChars":7,"textLines":1,"bbox":[158,298,134,43.4]}
+{"kind":"textbox","id":"sh/jelwb2pw","slide":7,"text":"เขียนโปรแกรม","textPreview":"เขียนโปรแกรม","textChars":12,"textLines":1,"bbox":[152,342,146,34.1]}
+{"kind":"textbox","id":"sh/lg3ydc72","slide":7,"text":"MySQL","textPreview":"MySQL","textChars":5,"textLines":1,"bbox":[581.5,298,115,43.4]}
+{"kind":"textbox","id":"sh/kfux47qh","slide":7,"text":"ฐานข้อมูล","textPreview":"ฐานข้อมูล","textChars":9,"textLines":1,"bbox":[585.5,342,107,34.1]}
+{"kind":"textbox","id":"sh/6hcf6h8n","slide":7,"text":"PHP","textPreview":"PHP","textChars":3,"textLines":1,"bbox":[1015.5,298,75,43.4]}
+{"kind":"textbox","id":"sh/tk3yhw7e","slide":7,"text":"ประมวลผลระบบ","textPreview":"ประมวลผลระบบ","textChars":12,"textLines":1,"bbox":[971,342,164,34.1]}
+{"kind":"shape","id":"sh/8jux8rqt","slide":7,"bbox":[100,398,1080,0]}
+{"kind":"textbox","id":"sh/ml8fud8j","slide":7,"text":"HTML","textPreview":"HTML","textChars":4,"textLines":1,"bbox":[152.5,556,95,41.85]}
+{"kind":"textbox","id":"sh/r2p0bq9c","slide":7,"text":"CSS","textPreview":"CSS","textChars":3,"textLines":1,"bbox":[458,556,70,41.85]}
+{"kind":"textbox","id":"sh/d47id0ri","slide":7,"text":"JavaScript","textPreview":"JavaScript","textChars":10,"textLines":1,"bbox":[706.5,556,159,41.85]}
+{"kind":"textbox","id":"sh/3ep07q9g","slide":7,"text":"React","textPreview":"React","textChars":5,"textLines":1,"bbox":[1031.5,556,95,41.85]}
+{"kind":"image","id":"im/721on6l8","slide":7,"name":"","alt":"vscode.png","bbox":[158,175,134,105]}
+{"kind":"image","id":"im/tcvuh0zy","slide":7,"name":"","alt":"mysql.png","bbox":[572,175,134,105]}
+{"kind":"image","id":"im/k72dkvy1","slide":7,"name":"","alt":"php.png","bbox":[986,175,134,105]}
+{"kind":"image","id":"im/c3itgby5","slide":7,"name":"","alt":"html5.png","bbox":[152,438,96,96]}
+{"kind":"image","id":"im/doj2x8n2","slide":7,"name":"","alt":"css.png","bbox":[445,438,96,96]}
+{"kind":"image","id":"im/rmh0vy5c","slide":7,"name":"","alt":"javascript.png","bbox":[738,438,96,96]}
+{"kind":"image","id":"im/50zit8n6","slide":7,"name":"","alt":"react.png","bbox":[1031,438,96,96]}
+{"kind":"notes","id":"nt/jc2s7p","slide":7,"text":"ที่มา: Pop del.pdf หน้า 4, 20-21 | โลโก้: ไฟล์ต้นฉบับในโครงงาน"}
+{"kind":"slide","id":"sl/jqymoe","slide":8,"title":"STUDENT DISCIPLINE / RESEARCH 2569","textShapes":43}
+{"kind":"shape","id":"sh/nyx4belg","slide":8,"bbox":[0,0,1280,720]}
+{"kind":"textbox","id":"sh/ozq54jm1","slide":8,"text":"STUDENT DISCIPLINE / RESEARCH 2569","textPreview":"STUDENT DISCIPLINE / RESEARCH 2569","textChars":34,"textLines":1,"bbox":[56,27,880,26]}
+{"kind":"textbox","id":"sh/p0z6d43m","slide":8,"text":"ขั้นตอนดำเนินงานตาม SDLC","textPreview":"ขั้นตอนดำเนินงานตาม SDLC","textChars":24,"textLines":1,"bbox":[56,76,1168,58]}
+{"kind":"textbox","id":"sh/etonyp4z","slide":8,"text":"7 ขั้นตอนเพื่อพัฒนาระบบวินัยและติดตามพฤติกรรมนักเรียน","textPreview":"7 ขั้นตอนเพื่อพัฒนาระบบวินัยและติดตามพฤติกรรมนักเรียน","textChars":53,"textLines":1,"bbox":[56,136,1168,35]}
+{"kind":"shape","id":"sh/fux47ulk","slide":8,"bbox":[56,179,1168,0]}
+{"kind":"shape","id":"sh/0v650zm5","slide":8,"bbox":[106,213,384,384]}
+{"kind":"shape","id":"sh/1wfm943q","slide":8,"bbox":[271,186,54,54]}
+{"kind":"textbox","id":"sh/yp8nat43","slide":8,"text":"01","textPreview":"01","textChars":2,"textLines":1,"bbox":[271,191,54,44]}
+{"kind":"textbox","id":"sh/zq1ojylo","slide":8,"text":"ปัญหา","textPreview":"ปัญหา","textChars":5,"textLines":1,"bbox":[203,261,190,44]}
+{"kind":"shape","id":"sh/zyd4nqhw","slide":8,"bbox":[375.31,225.01,12,14]}
+{"kind":"shape","id":"sh/yx43ul0b","slide":8,"bbox":[421.11,258.29,54,54]}
+{"kind":"textbox","id":"sh/l0vmp0zm","slide":8,"text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[421.11,263.29,54,44]}
+{"kind":"textbox","id":"sh/0zmlwvih","slide":8,"text":"ความเป็นไปได้","textPreview":"ความเป็นไปได้","textChars":13,"textLines":1,"bbox":[298.38,306.93,190,44]}
+{"kind":"shape","id":"sh/n2d4rahs","slide":8,"bbox":[479.19,355.28,12,14]}
+{"kind":"shape","id":"sh/m143y507","slide":8,"bbox":[458.19,420.72,54,54]}
+{"kind":"textbox","id":"sh/94vmtkzy","slide":8,"text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[458.19,425.72,54,44]}
+{"kind":"textbox","id":"sh/83ml0fid","slide":8,"text":"วิเคราะห์","textPreview":"วิเคราะห์","textChars":9,"textLines":1,"bbox":[321.94,410.15,190,44]}
+{"kind":"shape","id":"sh/v6x4vah4","slide":8,"bbox":[442.11,517.71,12,14]}
+{"kind":"shape","id":"sh/a5o3250j","slide":8,"bbox":[354.31,550.99,54,54]}
+{"kind":"textbox","id":"sh/6xsfado3","slide":8,"text":"04","textPreview":"04","textChars":2,"textLines":1,"bbox":[354.31,555.99,54,44]}
+{"kind":"textbox","id":"sh/ry1gji58","slide":8,"text":"ออกแบบ","textPreview":"ออกแบบ","textChars":6,"textLines":1,"bbox":[255.93,492.92,190,44]}
+{"kind":"shape","id":"sh/szaxcn6t","slide":8,"bbox":[292,590,12,14]}
+{"kind":"shape","id":"sh/t0jyl8ne","slide":8,"bbox":[187.69,550.99,54,54]}
+{"kind":"textbox","id":"sh/i98f6tor","slide":8,"text":"05","textPreview":"05","textChars":2,"textLines":1,"bbox":[187.69,555.99,54,44]}
+{"kind":"textbox","id":"sh/ja1gfy5c","slide":8,"text":"พัฒนา\nและทดสอบ","textPreview":"พัฒนา | และทดสอบ","textChars":14,"textLines":2,"bbox":[150.07,492.92,190,55]}
+{"kind":"shape","id":"sh/4bax836x","slide":8,"bbox":[141.89,517.71,12,14]}
+{"kind":"shape","id":"sh/5cjyh8ni","slide":8,"bbox":[83.81,420.72,54,54]}
+{"kind":"textbox","id":"sh/25cfixov","slide":8,"text":"06","textPreview":"06","textChars":2,"textLines":1,"bbox":[83.81,425.72,54,44]}
+{"kind":"textbox","id":"sh/n6lgr25g","slide":8,"text":"ติดตั้ง","textPreview":"ติดตั้ง","textChars":7,"textLines":1,"bbox":[84.06,410.15,190,44]}
+{"kind":"shape","id":"sh/x07ihw7y","slide":8,"bbox":[104.81,355.28,12,14]}
+{"kind":"shape","id":"sh/cze1orqd","slide":8,"bbox":[120.89,258.29,54,54]}
+{"kind":"textbox","id":"sh/by50fmps","slide":8,"text":"07","textPreview":"07","textChars":2,"textLines":1,"bbox":[120.89,263.29,54,44]}
+{"kind":"textbox","id":"sh/axwjmh87","slide":8,"text":"บำรุงรักษา","textPreview":"บำรุงรักษา","textChars":10,"textLines":1,"bbox":[107.62,306.93,190,44]}
+{"kind":"shape","id":"sh/pwnidc7m","slide":8,"bbox":[208.69,225.01,12,14]}
+{"kind":"textbox","id":"sh/ovehkrq1","slide":8,"text":"SDLC","textPreview":"SDLC","textChars":4,"textLines":1,"bbox":[153,353,290,65]}
+{"kind":"textbox","id":"sh/nu50bmpg","slide":8,"text":"ระบบวินัยนักเรียน","textPreview":"ระบบวินัยนักเรียน","textChars":17,"textLines":1,"bbox":[168,423,260,40]}
+{"kind":"textbox","id":"sh/2twzih8b","slide":8,"text":"พัฒนาและปรับปรุงอย่างต่อเนื่อง","textPreview":"พัฒนาและปรับปรุงอย่างต่อเนื่อง","textChars":30,"textLines":1,"bbox":[76,618,444,34]}
+{"kind":"shape","id":"sh/9sripg7q","slide":8,"bbox":[557,205,0,424]}
+{"kind":"textbox","id":"sh/8ry1wbql","slide":8,"text":"01","textPreview":"01","textChars":2,"textLines":1,"bbox":[593,202,48,37]}
+{"kind":"textbox","id":"sh/gzmh0rmp","slide":8,"text":"ค้นหาปัญหา","textPreview":"ค้นหาปัญหา","textChars":10,"textLines":1,"bbox":[657,201,567,35]}
+{"kind":"textbox","id":"sh/hkvitc3a","slide":8,"text":"วิเคราะห์การบันทึกกระดาษและติดตามพฤติกรรม","textPreview":"วิเคราะห์การบันทึกกระดาษและติดตามพฤติกรรม","textChars":41,"textLines":1,"bbox":[657,233,567,30]}
+{"kind":"textbox","id":"sh/uxkzyh4z","slide":8,"text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[593,264,48,37]}
+{"kind":"textbox","id":"sh/fyt0rmlk","slide":8,"text":"ศึกษาความเป็นไปได้","textPreview":"ศึกษาความเป็นไปได้","textChars":18,"textLines":1,"bbox":[657,263,567,35]}
+{"kind":"textbox","id":"sh/4nmh4rm1","slide":8,"text":"พิจารณาเครื่องมือ บุคลากร งบประมาณ และเวลา","textPreview":"พิจารณาเครื่องมือ บุคลากร งบประมาณ และเวลา","textChars":42,"textLines":1,"bbox":[657,295,567,30]}
+{"kind":"textbox","id":"sh/povixw3m","slide":8,"text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[593,326,48,37]}
+{"kind":"textbox","id":"sh/2l4z2h4v","slide":8,"text":"วิเคราะห์ระบบ","textPreview":"วิเคราะห์ระบบ","textChars":13,"textLines":1,"bbox":[657,325,567,35]}
+{"kind":"textbox","id":"sh/3md0vmlg","slide":8,"text":"สัมภาษณ์ผู้ใช้ • กำหนดงานและสิทธิ์ 5 บทบาท","textPreview":"สัมภาษณ์ผู้ใช้ • กำหนดงานและสิทธิ์ 5 บทบาท","textChars":42,"textLines":1,"bbox":[657,357,567,30]}
+{"kind":"textbox","id":"sh/cr618bmx","slide":8,"text":"04","textPreview":"04","textChars":2,"textLines":1,"bbox":[593,388,48,37]}
+{"kind":"textbox","id":"sh/dsfi1w3i","slide":8,"text":"ออกแบบระบบ","textPreview":"ออกแบบระบบ","textChars":10,"textLines":1,"bbox":[657,387,567,35]}
+{"kind":"textbox","id":"sh/ny1cnu9w","slide":8,"text":"DFD • ER Diagram • ฐานข้อมูล • หน้าจอ","textPreview":"DFD • ER Diagram • ฐานข้อมูล • หน้าจอ","textChars":37,"textLines":1,"bbox":[657,419,567,30]}
+{"kind":"textbox","id":"sh/mxsbepsb","slide":8,"text":"05","textPreview":"05","textChars":2,"textLines":1,"bbox":[593,450,48,37]}
+{"kind":"textbox","id":"sh/90jup4r2","slide":8,"text":"พัฒนาและทดสอบ","textPreview":"พัฒนาและทดสอบ","textChars":13,"textLines":1,"bbox":[657,449,567,35]}
+{"kind":"textbox","id":"sh/8zatgzah","slide":8,"text":"PHP/MySQL • ทดสอบคะแนน สิทธิ์ และอุทธรณ์","textPreview":"PHP/MySQL • ทดสอบคะแนน สิทธิ์ และอุทธรณ์","textChars":40,"textLines":1,"bbox":[657,481,567,30]}
+{"kind":"textbox","id":"sh/zuhcju90","slide":8,"text":"06","textPreview":"06","textChars":2,"textLines":1,"bbox":[593,512,48,37]}
+{"kind":"textbox","id":"sh/yt8bapsf","slide":8,"text":"ติดตั้งระบบ","textPreview":"ติดตั้งระบบ","textChars":11,"textLines":1,"bbox":[657,511,567,35]}
+{"kind":"textbox","id":"sh/lwjulkrq","slide":8,"text":"ทดลองใช้ด้วย XAMPP และแม่ข่ายมหาวิทยาลัย","textPreview":"ทดลองใช้ด้วย XAMPP และแม่ข่ายมหาวิทยาลัย","textChars":40,"textLines":1,"bbox":[657,543,567,30]}
+{"kind":"textbox","id":"sh/0vatczal","slide":8,"text":"07","textPreview":"07","textChars":2,"textLines":1,"bbox":[593,574,48,37]}
+{"kind":"textbox","id":"sh/jqlcve94","slide":8,"text":"บำรุงรักษาระบบ","textPreview":"บำรุงรักษาระบบ","textChars":14,"textLines":1,"bbox":[657,573,567,35]}
+{"kind":"textbox","id":"sh/ipcvm9sj","slide":8,"text":"ใช้ผลประเมินและข้อเสนอแนะปรับปรุงระบบ","textPreview":"ใช้ผลประเมินและข้อเสนอแนะปรับปรุงระบบ","textChars":37,"textLines":1,"bbox":[657,605,567,30]}
+{"kind":"shape","id":"sh/ulwfedcr","slide":8,"bbox":[56,661,1168,0]}
+{"kind":"textbox","id":"sh/fmpwnitc","slide":8,"text":"ที่มา: Pop del.pdf หน้า 24-25, 59-65, 102-104","textPreview":"ที่มา: Pop del.pdf หน้า 24-25, 59-65, 102-104","textChars":45,"textLines":1,"bbox":[56,673,1060,30]}
+{"kind":"textbox","id":"sh/gnyxgnux","slide":8,"text":"08 / 18","textPreview":"08 / 18","textChars":7,"textLines":1,"bbox":[1145,673,80,30]}
+{"kind":"notes","id":"nt/jqymoe","slide":8,"text":"SDLC 7 ขั้นตาม Pop del.pdf หน้า 24-25 เชื่อมกับกิจกรรมวิจัยจากหน้า 59-65 และ 102-104 ไม่ระบุว่าขั้นใดดำเนินการเสร็จแล้ว หากไม่มีข้อมูลสถานะยืนยัน"}
+{"kind":"slide","id":"sl/sl8s1h","slide":9,"title":"STUDENT DISCIPLINE / RESEARCH 2569","textShapes":5}
+{"kind":"shape","id":"sh/v2lgb2dg","slide":9,"bbox":[0,0,1280,720]}
+{"kind":"textbox","id":"sh/g3uhk7e1","slide":9,"text":"STUDENT DISCIPLINE / RESEARCH 2569","textPreview":"STUDENT DISCIPLINE / RESEARCH 2569","textChars":34,"textLines":1,"bbox":[56,30,334,24.8]}
+{"kind":"textbox","id":"sh/h43ydcv6","slide":9,"text":"DFD LEVEL 0","textPreview":"DFD LEVEL 0","textChars":11,"textLines":1,"bbox":[1108,30,116,26.35]}
+{"kind":"textbox","id":"sh/6dsfexwj","slide":9,"text":"แผนภาพกระแสข้อมูล","textPreview":"แผนภาพกระแสข้อมูล","textChars":17,"textLines":1,"bbox":[56,78,426,65.1]}
+{"kind":"shape","id":"sh/7e1g72d4","slide":9,"bbox":[56,661,1168,0]}
+{"kind":"textbox","id":"sh/8zahg7ep","slide":9,"text":"ที่มา: แผนภาพประกอบโครงงานระบบวินัยนักเรียน","textPreview":"ที่มา: แผนภาพประกอบโครงงานระบบวินัยนักเรียน","textChars":43,"textLines":1,"bbox":[56,678,279,20.15]}
+{"kind":"textbox","id":"sh/t0jy9cva","slide":9,"text":"09 / 18","textPreview":"09 / 18","textChars":7,"textLines":1,"bbox":[1158,676,66,24.8]}
+{"kind":"shape","id":"sh/q9czq1w3","slide":9,"bbox":[28,142,1224,506]}
+{"kind":"image","id":"im/axkv2hcv","slide":9,"name":"","alt":"dfd_level0.png","bbox":[37,151,1206,488]}
+{"kind":"notes","id":"nt/sl8s1h","slide":9,"text":"ที่มา: แผนภาพประกอบโครงงานระบบวินัยนักเรียน"}
+{"kind":"slide","id":"sl/mbuc13","slide":10,"title":"STUDENT DISCIPLINE / RESEARCH 2569","textShapes":6}
+{"kind":"shape","id":"sh/fqp8ze5o","slide":10,"bbox":[0,0,1280,720]}
+{"kind":"textbox","id":"sh/gry98jm9","slide":10,"text":"STUDENT DISCIPLINE / RESEARCH 2569","textPreview":"STUDENT DISCIPLINE / RESEARCH 2569","textChars":34,"textLines":1,"bbox":[56,30,334,24.8]}
+{"kind":"textbox","id":"sh/1s7q1onu","slide":10,"text":"ผลการพัฒนา","textPreview":"ผลการพัฒนา","textChars":10,"textLines":1,"bbox":[1115,30,109,26.35]}
+{"kind":"textbox","id":"sh/61wr2p47","slide":10,"text":"ภาพรวมระบบ","textPreview":"ภาพรวมระบบ","textChars":10,"textLines":1,"bbox":[56,78,275,65.1]}
+{"kind":"shape","id":"sh/r258vu5s","slide":10,"bbox":[56,661,1168,0]}
+{"kind":"textbox","id":"sh/s3e94zmd","slide":10,"text":"ที่มา: Pop del.pdf หน้า 144 ภาพที่ 4.16","textPreview":"ที่มา: Pop del.pdf หน้า 144 ภาพที่ 4.16","textChars":39,"textLines":1,"bbox":[56,678,231,20.15]}
+{"kind":"textbox","id":"sh/t4nqx4ni","slide":10,"text":"10 / 18","textPreview":"10 / 18","textChars":7,"textLines":1,"bbox":[1158,676,66,24.8]}
+{"kind":"textbox","id":"sh/jy58ru5g","slide":10,"text":"ดูคะแนน พฤติกรรม และสถิติในหน้าเดียว","textPreview":"ดูคะแนน พฤติกรรม และสถิติในหน้าเดียว","textChars":36,"textLines":1,"bbox":[56,617,415,37.2]}
+{"kind":"image","id":"im/r2947i5c","slide":10,"name":"","alt":"screen144_0.png","bbox":[56,166,1168,440]}
+{"kind":"notes","id":"nt/mbuc13","slide":10,"text":"ที่มา: Pop del.pdf หน้า 144 ภาพที่ 4.16"}
+{"kind":"slide","id":"sl/eqkc8b","slide":11,"title":"STUDENT DISCIPLINE / RESEARCH 2569","textShapes":9}
+{"kind":"shape","id":"sh/wjuhozix","slide":11,"bbox":[0,0,1280,720]}
+{"kind":"textbox","id":"sh/bi1gfu1c","slide":11,"text":"STUDENT DISCIPLINE / RESEARCH 2569","textPreview":"STUDENT DISCIPLINE / RESEARCH 2569","textChars":34,"textLines":1,"bbox":[56,30,334,24.8]}
+{"kind":"textbox","id":"sh/ahsfmp0r","slide":11,"text":"ผลการพัฒนา","textPreview":"ผลการพัฒนา","textChars":10,"textLines":1,"bbox":[1115,30,109,26.35]}
+{"kind":"textbox","id":"sh/lo3yl4ze","slide":11,"text":"บันทึกพฤติกรรมนักเรียน","textPreview":"บันทึกพฤติกรรมนักเรียน","textChars":22,"textLines":1,"bbox":[56,78,480,65.1]}
+{"kind":"shape","id":"sh/knuhczit","slide":11,"bbox":[56,661,1168,0]}
+{"kind":"textbox","id":"sh/jmlgjuh8","slide":11,"text":"ที่มา: Pop del.pdf หน้า 145 ภาพที่ 4.18-4.19","textPreview":"ที่มา: Pop del.pdf หน้า 145 ภาพที่ 4.18-4.19","textChars":44,"textLines":1,"bbox":[56,678,261,20.15]}
+{"kind":"textbox","id":"sh/ylczap03","slide":11,"text":"11 / 18","textPreview":"11 / 18","textChars":7,"textLines":1,"bbox":[1158.02,676,65.98,24.8]}
+{"kind":"textbox","id":"sh/1sjy90ja","slide":11,"text":"บันทึกพฤติกรรม","textPreview":"บันทึกพฤติกรรม","textChars":14,"textLines":1,"bbox":[60,169,223,43.4]}
+{"kind":"textbox","id":"sh/0raxgfip","slide":11,"text":"ด้านบวก / ด้านลบ","textPreview":"ด้านบวก / ด้านลบ","textChars":16,"textLines":1,"bbox":[60,258,227,43.4]}
+{"kind":"textbox","id":"sh/2xk3idkv","slide":11,"text":"อ้างอิงเกณฑ์คะแนน","textPreview":"อ้างอิงเกณฑ์คะแนน","textChars":17,"textLines":1,"bbox":[60,332,248,43.4]}
+{"kind":"textbox","id":"sh/nytkbi1g","slide":11,"text":"แนบหลักฐานประกอบ","textPreview":"แนบหลักฐานประกอบ","textChars":16,"textLines":1,"bbox":[60,406,265,43.4]}
+{"kind":"image","id":"im/v294jups","slide":11,"name":"","alt":"screen145_0.png","bbox":[445,158,371,482]}
+{"kind":"image","id":"im/u10nap8n","slide":11,"name":"","alt":"screen145_1.png","bbox":[852,158,372,482]}
+{"kind":"notes","id":"nt/eqkc8b","slide":11,"text":"ที่มา: Pop del.pdf หน้า 145 ภาพที่ 4.18-4.19"}
+{"kind":"slide","id":"sl/ca8u86","slide":12,"title":"STUDENT DISCIPLINE / RESEARCH 2569","textShapes":6}
+{"kind":"shape","id":"sh/54n6xkjy","slide":12,"bbox":[0,0,1280,720]}
+{"kind":"textbox","id":"sh/i1c725k7","slide":12,"text":"STUDENT DISCIPLINE / RESEARCH 2569","textPreview":"STUDENT DISCIPLINE / RESEARCH 2569","textChars":34,"textLines":1,"bbox":[56,30,334,24.8]}
+{"kind":"textbox","id":"sh/j25ova1s","slide":12,"text":"ผลการพัฒนา","textPreview":"ผลการพัฒนา","textChars":10,"textLines":1,"bbox":[1115,30,109,26.35]}
+{"kind":"textbox","id":"sh/wzup0v2h","slide":12,"text":"พิจารณาคำอุทธรณ์","textPreview":"พิจารณาคำอุทธรณ์","textChars":16,"textLines":1,"bbox":[56,78,386,65.1]}
+{"kind":"shape","id":"sh/x036t0jm","slide":12,"bbox":[56,661,1168,0]}
+{"kind":"textbox","id":"sh/axc7y5kb","slide":12,"text":"ที่มา: Pop del.pdf หน้า 148 ภาพที่ 4.24","textPreview":"ที่มา: Pop del.pdf หน้า 148 ภาพที่ 4.24","textChars":39,"textLines":1,"bbox":[56,678,231,20.15]}
+{"kind":"textbox","id":"sh/vylorq1w","slide":12,"text":"12 / 18","textPreview":"12 / 18","textChars":7,"textLines":1,"bbox":[1158,676,66,24.8]}
+{"kind":"textbox","id":"sh/9w36p0jq","slide":12,"text":"ยื่นคำร้อง • ตรวจสอบหลักฐาน • ติดตามสถานะ","textPreview":"ยื่นคำร้อง • ตรวจสอบหลักฐาน • ติดตามสถานะ","textChars":41,"textLines":1,"bbox":[56,617,481,37.2]}
+{"kind":"image","id":"im/5onq14vi","slide":12,"name":"","alt":"screen148_0.png","bbox":[56,166,1168,440]}
+{"kind":"notes","id":"nt/ca8u86","slide":12,"text":"ที่มา: Pop del.pdf หน้า 148 ภาพที่ 4.24"}
+{"kind":"slide","id":"sl/gufjka","slide":13,"title":"STUDENT DISCIPLINE / RESEARCH 2569","textShapes":6}
+{"kind":"shape","id":"sh/y90bi1cb","slide":13,"bbox":[0,0,1280,720]}
+{"kind":"textbox","id":"sh/lcbatwv2","slide":13,"text":"STUDENT DISCIPLINE / RESEARCH 2569","textPreview":"STUDENT DISCIPLINE / RESEARCH 2569","textChars":34,"textLines":1,"bbox":[56,30,334,24.8]}
+{"kind":"textbox","id":"sh/kb2tkbuh","slide":13,"text":"ผลการพัฒนา","textPreview":"ผลการพัฒนา","textChars":10,"textLines":1,"bbox":[1115,30,109,26.35]}
+{"kind":"textbox","id":"sh/7ytsv6d8","slide":13,"text":"เช็กชื่อเข้าแถว","textPreview":"เช็กชื่อเข้าแถว","textChars":15,"textLines":1,"bbox":[56,78,293,65.1]}
+{"kind":"shape","id":"sh/6dkbm1cn","slide":13,"bbox":[56,661,1168,0]}
+{"kind":"textbox","id":"sh/t0baxgvy","slide":13,"text":"ที่มา: Pop del.pdf หน้า 156 ภาพที่ 4.38","textPreview":"ที่มา: Pop del.pdf หน้า 156 ภาพที่ 4.38","textChars":39,"textLines":1,"bbox":[56,678,231,20.15]}
+{"kind":"textbox","id":"sh/8z2tobud","slide":13,"text":"13 / 18","textPreview":"13 / 18","textChars":7,"textLines":1,"bbox":[1158,676,66,24.8]}
+{"kind":"textbox","id":"sh/mhgrahw3","slide":13,"text":"บันทึกการมาเรียน และตรวจสอบประวัติย้อนหลัง","textPreview":"บันทึกการมาเรียน และตรวจสอบประวัติย้อนหลัง","textChars":42,"textLines":1,"bbox":[56,617,479,37.2]}
+{"kind":"image","id":"im/e9c7250r","slide":13,"name":"","alt":"screen156_0.png","bbox":[56,166,1168,440]}
+{"kind":"notes","id":"nt/gufjka","slide":13,"text":"ที่มา: Pop del.pdf หน้า 156 ภาพที่ 4.38"}
+{"kind":"slide","id":"sl/495yya","slide":14,"title":"STUDENT DISCIPLINE / RESEARCH 2569","textShapes":6}
+{"kind":"shape","id":"sh/zedgfilg","slide":14,"bbox":[0,0,1280,720]}
+{"kind":"textbox","id":"sh/0fmxon21","slide":14,"text":"STUDENT DISCIPLINE / RESEARCH 2569","textPreview":"STUDENT DISCIPLINE / RESEARCH 2569","textChars":34,"textLines":1,"bbox":[56,30,334,24.8]}
+{"kind":"textbox","id":"sh/1gfyhs3m","slide":14,"text":"ผลการพัฒนา","textPreview":"ผลการพัฒนา","textChars":10,"textLines":1,"bbox":[1115,30,109,26.35]}
+{"kind":"textbox","id":"sh/mhofqxk7","slide":14,"text":"ติดตามการละหมาด","textPreview":"ติดตามการละหมาด","textChars":15,"textLines":1,"bbox":[56,78,384,65.1]}
+{"kind":"shape","id":"sh/nixgjils","slide":14,"bbox":[56,661,1168,0]}
+{"kind":"textbox","id":"sh/oj6xsn2d","slide":14,"text":"ที่มา: Pop del.pdf หน้า 152 ภาพที่ 4.33","textPreview":"ที่มา: Pop del.pdf หน้า 152 ภาพที่ 4.33","textChars":39,"textLines":1,"bbox":[56,678,231,20.15]}
+{"kind":"textbox","id":"sh/9kfyls3i","slide":14,"text":"14 / 18","textPreview":"14 / 18","textChars":7,"textLines":1,"bbox":[1158,676,66,24.8]}
+{"kind":"textbox","id":"sh/bmxgn2lo","slide":14,"text":"สรุปการเข้าร่วมกิจกรรม และตรวจสอบรายบุคคล","textPreview":"สรุปการเข้าร่วมกิจกรรม และตรวจสอบรายบุคคล","textChars":41,"textLines":1,"bbox":[56,617,478,37.2]}
+{"kind":"image","id":"im/n2p0be5c","slide":14,"name":"","alt":"screen152_1.png","bbox":[56,166,1168,440]}
+{"kind":"notes","id":"nt/495yya","slide":14,"text":"ที่มา: Pop del.pdf หน้า 152 ภาพที่ 4.33"}
+{"kind":"slide","id":"sl/bdcvdj","slide":15,"title":"STUDENT DISCIPLINE / RESEARCH 2569","textShapes":6}
+{"kind":"shape","id":"sh/1szid432","slide":15,"bbox":[0,0,1280,720]}
+{"kind":"textbox","id":"sh/e58j2pkb","slide":15,"text":"STUDENT DISCIPLINE / RESEARCH 2569","textPreview":"STUDENT DISCIPLINE / RESEARCH 2569","textChars":34,"textLines":1,"bbox":[56,30,334,24.8]}
+{"kind":"textbox","id":"sh/fqh0bulw","slide":15,"text":"ผลการพัฒนา","textPreview":"ผลการพัฒนา","textChars":10,"textLines":1,"bbox":[1115,30,109,26.35]}
+{"kind":"textbox","id":"sh/ovq18z2t","slide":15,"text":"ผู้ปกครองติดตามบุตรหลาน","textPreview":"ผู้ปกครองติดตามบุตรหลาน","textChars":23,"textLines":1,"bbox":[56,78,533,65.1]}
+{"kind":"shape","id":"sh/pwjih43y","slide":15,"bbox":[56,661,1168,0]}
+{"kind":"textbox","id":"sh/2t8j69kn","slide":15,"text":"ที่มา: Pop del.pdf หน้า 165 ภาพที่ 4.55","textPreview":"ที่มา: Pop del.pdf หน้า 165 ภาพที่ 4.55","textChars":39,"textLines":1,"bbox":[56,678,231,20.15]}
+{"kind":"textbox","id":"sh/3uh0ful8","slide":15,"text":"15 / 18","textPreview":"15 / 18","textChars":7,"textLines":1,"bbox":[1158,676,66,24.8]}
+{"kind":"textbox","id":"sh/50fi5k3u","slide":15,"text":"ดูประวัติพฤติกรรม และร่วมดูแลกับโรงเรียน","textPreview":"ดูประวัติพฤติกรรม และร่วมดูแลกับโรงเรียน","textChars":40,"textLines":1,"bbox":[56,617,428,37.2]}
+{"kind":"image","id":"im/1kz6lgv2","slide":15,"name":"","alt":"screen165_0.png","bbox":[56,166,1168,440]}
+{"kind":"notes","id":"nt/bdcvdj","slide":15,"text":"ที่มา: Pop del.pdf หน้า 165 ภาพที่ 4.55"}
+{"kind":"slide","id":"sl/sfwv11","slide":16,"title":"STUDENT DISCIPLINE / RESEARCH 2569","textShapes":21}
+{"kind":"shape","id":"sh/gzy1cr6x","slide":16,"bbox":[0,0,1280,720]}
+{"kind":"textbox","id":"sh/fyp0jmpc","slide":16,"text":"STUDENT DISCIPLINE / RESEARCH 2569","textPreview":"STUDENT DISCIPLINE / RESEARCH 2569","textChars":34,"textLines":1,"bbox":[56,30,334,24.8]}
+{"kind":"textbox","id":"sh/uxgjahor","slide":16,"text":"กลุ่มตัวอย่าง","textPreview":"กลุ่มตัวอย่าง","textChars":13,"textLines":1,"bbox":[1122,30,102,26.35]}
+{"kind":"textbox","id":"sh/p4ripw7e","slide":16,"text":"การประเมินระบบ","textPreview":"การประเมินระบบ","textChars":14,"textLines":1,"bbox":[56,78,333,65.1]}
+{"kind":"shape","id":"sh/43i1gr6t","slide":16,"bbox":[56,661,1168,0]}
+{"kind":"textbox","id":"sh/3290nmp8","slide":16,"text":"ที่มา: Pop del.pdf หน้า 58, 168-171","textPreview":"ที่มา: Pop del.pdf หน้า 58, 168-171","textChars":35,"textLines":1,"bbox":[56,678,214,20.15]}
+{"kind":"textbox","id":"sh/210jehon","slide":16,"text":"16 / 18","textPreview":"16 / 18","textChars":7,"textLines":1,"bbox":[1158,676,66,24.8]}
+{"kind":"textbox","id":"sh/587ids7a","slide":16,"text":"30","textPreview":"30","textChars":2,"textLines":1,"bbox":[56,166,152,186]}
+{"kind":"textbox","id":"sh/k7eh4n6p","slide":16,"text":"คน","textPreview":"คน","textChars":2,"textLines":1,"bbox":[215,235,66,54.25]}
+{"kind":"textbox","id":"sh/i94zedwb","slide":16,"text":"เลือกแบบเจาะจง","textPreview":"เลือกแบบเจาะจง","textChars":14,"textLines":1,"bbox":[60,340,203,41.85]}
+{"kind":"textbox","id":"sh/3ad0nidw","slide":16,"text":"12","textPreview":"12","textChars":2,"textLines":1,"bbox":[413,180,94,106.95]}
+{"kind":"textbox","id":"sh/4bmhgneh","slide":16,"text":"นักเรียน","textPreview":"นักเรียน","textChars":8,"textLines":1,"bbox":[413,292,112,40.3]}
+{"kind":"textbox","id":"sh/5cvipsv2","slide":16,"text":"12","textPreview":"12","textChars":2,"textLines":1,"bbox":[615,180,94,106.95]}
+{"kind":"textbox","id":"sh/qd4zidwn","slide":16,"text":"ผู้ปกครอง","textPreview":"ผู้ปกครอง","textChars":9,"textLines":1,"bbox":[615,292,135,40.3]}
+{"kind":"textbox","id":"sh/rex0rid8","slide":16,"text":"3","textPreview":"3","textChars":1,"textLines":1,"bbox":[817,180,56,106.95]}
+{"kind":"textbox","id":"sh/sf6hknet","slide":16,"text":"ครูประจำชั้น","textPreview":"ครูประจำชั้น","textChars":12,"textLines":1,"bbox":[817,292,161,40.3]}
+{"kind":"textbox","id":"sh/dgfitsvy","slide":16,"text":"3","textPreview":"3","textChars":1,"textLines":1,"bbox":[1019,180,56,106.95]}
+{"kind":"textbox","id":"sh/e1ozmxcj","slide":16,"text":"ฝ่ายปกครอง","textPreview":"ฝ่ายปกครอง","textChars":10,"textLines":1,"bbox":[1019,292,166,40.3]}
+{"kind":"shape","id":"sh/f2x0v2d4","slide":16,"bbox":[60,407,1160,0]}
+{"kind":"textbox","id":"sh/b6hgj2tc","slide":16,"text":"คุณภาพระบบ","textPreview":"คุณภาพระบบ","textChars":10,"textLines":1,"bbox":[60,446,207,48.05]}
+{"kind":"textbox","id":"sh/a58zaxsr","slide":16,"text":"ประเมินโดยผู้เชี่ยวชาญ","textPreview":"ประเมินโดยผู้เชี่ยวชาญ","textChars":22,"textLines":1,"bbox":[60,499,250,38.75]}
+{"kind":"textbox","id":"sh/x8zylcbi","slide":16,"text":"ความพึงพอใจ","textPreview":"ความพึงพอใจ","textChars":11,"textLines":1,"bbox":[674,446,213,48.05]}
+{"kind":"textbox","id":"sh/c7qhc7ax","slide":16,"text":"ประเมินโดยผู้ใช้งาน","textPreview":"ประเมินโดยผู้ใช้งาน","textChars":19,"textLines":1,"bbox":[674,499,217,38.75]}
+{"kind":"textbox","id":"sh/nixgfitg","slide":16,"text":"รายงานแนบยังไม่ระบุค่าคะแนนผลประเมิน","textPreview":"รายงานแนบยังไม่ระบุค่าคะแนนผลประเมิน","textChars":36,"textLines":1,"bbox":[60,594,437,38.75]}
+{"kind":"notes","id":"nt/sfwv11","slide":16,"text":"ที่มา: Pop del.pdf หน้า 58, 168-171"}
+{"kind":"slide","id":"sl/fqg1aa","slide":17,"title":"STUDENT DISCIPLINE / RESEARCH 2569","textShapes":14}
+{"kind":"shape","id":"sh/faxkfmt0","slide":17,"bbox":[0,0,1280,720]}
+{"kind":"textbox","id":"sh/gb6l8ral","slide":17,"text":"STUDENT DISCIPLINE / RESEARCH 2569","textPreview":"STUDENT DISCIPLINE / RESEARCH 2569","textChars":34,"textLines":1,"bbox":[56,30,334,24.8]}
+{"kind":"textbox","id":"sh/1cf2hwb6","slide":17,"text":"สรุป","textPreview":"สรุป","textChars":4,"textLines":1,"bbox":[1178,30,46,26.35]}
+{"kind":"textbox","id":"sh/6l4j2hsj","slide":17,"text":"ประโยชน์ที่คาดว่าจะได้รับ","textPreview":"ประโยชน์ที่คาดว่าจะได้รับ","textChars":25,"textLines":1,"bbox":[56,78,500,65.1]}
+{"kind":"shape","id":"sh/rmdkbmt4","slide":17,"bbox":[56,661,1168,0]}
+{"kind":"textbox","id":"sh/snml4rap","slide":17,"text":"ที่มา: Pop del.pdf หน้า 21","textPreview":"ที่มา: Pop del.pdf หน้า 21","textChars":26,"textLines":1,"bbox":[56,678,159,20.15]}
+{"kind":"textbox","id":"sh/t8v2dcba","slide":17,"text":"17 / 18","textPreview":"17 / 18","textChars":7,"textLines":1,"bbox":[1158,676,66,24.8]}
+{"kind":"textbox","id":"sh/ihkjyxsn","slide":17,"text":"01","textPreview":"01","textChars":2,"textLines":1,"bbox":[58,191,76,82.15]}
+{"kind":"textbox","id":"sh/jidk72t8","slide":17,"text":"โรงเรียน","textPreview":"โรงเรียน","textChars":8,"textLines":1,"bbox":[218,194,147,52.7]}
+{"kind":"textbox","id":"sh/r2tkjyx8","slide":17,"text":"ข้อมูลวินัยเป็นระบบและตรวจสอบได้","textPreview":"ข้อมูลวินัยเป็นระบบและตรวจสอบได้","textChars":32,"textLines":1,"bbox":[220,255,427,43.4]}
+{"kind":"textbox","id":"sh/61k3adgn","slide":17,"text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[58,334,76,82.15]}
+{"kind":"textbox","id":"sh/tov2l8fe","slide":17,"text":"ครู","textPreview":"ครู","textChars":3,"textLines":1,"bbox":[218,337,59,52.7]}
+{"kind":"textbox","id":"sh/snmlc3yt","slide":17,"text":"ลดภาระเอกสารและติดตามได้ต่อเนื่อง","textPreview":"ลดภาระเอกสารและติดตามได้ต่อเนื่อง","textChars":33,"textLines":1,"bbox":[220,398,445,43.4]}
+{"kind":"textbox","id":"sh/fqd4nixk","slide":17,"text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[58,477,76,82.15]}
+{"kind":"textbox","id":"sh/ep43edgz","slide":17,"text":"นักเรียนและผู้ปกครอง","textPreview":"นักเรียนและผู้ปกครอง","textChars":20,"textLines":1,"bbox":[218,480,352,52.7]}
+{"kind":"textbox","id":"sh/1svmpsfa","slide":17,"text":"รับรู้ข้อมูลและร่วมปรับพฤติกรรม","textPreview":"รับรู้ข้อมูลและร่วมปรับพฤติกรรม","textChars":31,"textLines":1,"bbox":[220,541,377,43.4]}
+{"kind":"notes","id":"nt/fqg1aa","slide":17,"text":"ที่มา: Pop del.pdf หน้า 21"}
+{"kind":"slide","id":"sl/zzh9ts","slide":18,"title":"STUDENT DISCIPLINE / RESEARCH 2569","textShapes":5}
+{"kind":"shape","id":"sh/szu9k3ip","slide":18,"bbox":[0,0,1280,720]}
+{"kind":"textbox","id":"sh/7yl8byh4","slide":18,"text":"STUDENT DISCIPLINE / RESEARCH 2569","textPreview":"STUDENT DISCIPLINE / RESEARCH 2569","textChars":34,"textLines":1,"bbox":[56,30,334,24.8]}
+{"kind":"shape","id":"sh/6xcrit0j","slide":18,"bbox":[56,661,1168,0]}
+{"kind":"textbox","id":"sh/h4nqh8z6","slide":18,"text":"ตอริก ลือแมะ / บุสริน มูซอ | สาขาเทคโนโลยีสารสนเทศ มหาวิทยาลัยราชภัฏยะลา","textPreview":"ตอริก ลือแมะ / บุสริน มูซอ | สาขาเทคโนโลยีสารสนเทศ มหาวิทยาลัยราชภัฏยะลา","textChars":72,"textLines":1,"bbox":[56,678,453,20.15]}
+{"kind":"textbox","id":"sh/g3u9o3yl","slide":18,"text":"18 / 18","textPreview":"18 / 18","textChars":7,"textLines":1,"bbox":[1158,676,66,24.8]}
+{"kind":"textbox","id":"sh/f2l8fyhg","slide":18,"text":"ขอบคุณครับ","textPreview":"ขอบคุณครับ","textChars":10,"textLines":1,"bbox":[448.5,246,383,100.75]}
+{"kind":"shape","id":"sh/u1crmd0v","slide":18,"bbox":[523,370,234,0]}
+{"kind":"textbox","id":"sh/psnalszi","slide":18,"text":"ยินดีรับคำถามและข้อเสนอแนะ","textPreview":"ยินดีรับคำถามและข้อเสนอแนะ","textChars":26,"textLines":1,"bbox":[428,414,424,51.15]}
+{"kind":"notes","id":"nt/zzh9ts","slide":18,"text":"ตอริก ลือแมะ  /  บุสริน มูซอ | สาขาเทคโนโลยีสารสนเทศ มหาวิทยาลัยราชภัฏยะลา"}
