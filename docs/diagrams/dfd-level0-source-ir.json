@@ -1,0 +1,751 @@
+{
+  "source": "docs\\diagrams\\dfd-level0-source.mmd",
+  "diagrams_total": 1,
+  "diagrams": [
+    {
+      "index": 0,
+      "kind": "flowchart",
+      "source_line": 1,
+      "direction": "TB",
+      "analysis": {
+        "nodes_total": 21,
+        "nodes_drawable": 21,
+        "containers": 0,
+        "leaves": 21,
+        "edges_total": 38,
+        "edges_labeled": 38,
+        "edges_dangling": 0,
+        "max_depth": 0,
+        "shapes": {
+          "circle": 8,
+          "cylinder": 8,
+          "rect": 5
+        },
+        "has_cycle": true,
+        "hubs": [
+          {
+            "id": "STU",
+            "label": "นักเรียน · (Student)",
+            "degree": 8
+          },
+          {
+            "id": "P8",
+            "label": "8.0 · รายงานสรุป · และแดชบอร์ด · (Report)",
+            "degree": 8
+          },
+          {
+            "id": "P2",
+            "label": "2.0 · บันทึก/อนุมัติพฤติกรรม · และคำนวณคะแนน · (Behavior)",
+            "degree": 8
+          },
+          {
+            "id": "P7",
+            "label": "7.0 · ส่งข้อความ · และแจ้งเตือน · (Message)",
+            "degree": 7
+          },
+          {
+            "id": "P6",
+            "label": "6.0 · รับ/สอบสวนข้อมูลแจ้ง · (Informant)",
+            "degree": 6
+          }
+        ],
+        "entry_points": [
+          "ผู้ดูแลระบบ · (Admin)"
+        ],
+        "terminals": [
+          "D1 บัญชีผู้ใช้และสิทธิ์ · (Users & Permissions)",
+          "D6 คำร้องอุทธรณ์ · (Appeals)",
+          "D7 ข้อมูลแจ้งเบาะแส · (Informant Reports)",
+          "D8 ข้อความ · (Messages)"
+        ],
+        "orphans": [],
+        "type_candidates": [
+          "architecture"
+        ],
+        "collapsible_groups": [],
+        "over_node_budget": true,
+        "over_edge_budget": true
+      },
+      "discarded": {
+        "style_directives": 6,
+        "click_handlers": 0
+      },
+      "fragments": [],
+      "notes": [],
+      "nodes": [
+        {
+          "id": "ADMIN",
+          "label": "ผู้ดูแลระบบ\n(Admin)",
+          "shape": "rect",
+          "parent": null,
+          "depth": 0,
+          "container": false,
+          "children": [],
+          "fields": [],
+          "in_degree": 0,
+          "out_degree": 1
+        },
+        {
+          "id": "DISC",
+          "label": "ฝ่ายปกครอง\n(Discipline Staff)",
+          "shape": "rect",
+          "parent": null,
+          "depth": 0,
+          "container": false,
+          "children": [],
+          "fields": [],
+          "in_degree": 1,
+          "out_degree": 5
+        },
+        {
+          "id": "TEACH",
+          "label": "ครูที่ปรึกษา\n(Teacher)",
+          "shape": "rect",
+          "parent": null,
+          "depth": 0,
+          "container": false,
+          "children": [],
+          "fields": [],
+          "in_degree": 1,
+          "out_degree": 3
+        },
+        {
+          "id": "STU",
+          "label": "นักเรียน\n(Student)",
+          "shape": "rect",
+          "parent": null,
+          "depth": 0,
+          "container": false,
+          "children": [],
+          "fields": [],
+          "in_degree": 4,
+          "out_degree": 4
+        },
+        {
+          "id": "PAR",
+          "label": "ผู้ปกครอง\n(Parent)",
+          "shape": "rect",
+          "parent": null,
+          "depth": 0,
+          "container": false,
+          "children": [],
+          "fields": [],
+          "in_degree": 2,
+          "out_degree": 1
+        },
+        {
+          "id": "P1",
+          "label": "1.0\nจัดการบัญชีผู้ใช้\nและสิทธิ์เข้าถึง\n(User Mgmt)",
+          "shape": "circle",
+          "parent": null,
+          "depth": 0,
+          "container": false,
+          "children": [],
+          "fields": [],
+          "in_degree": 1,
+          "out_degree": 1
+        },
+        {
+          "id": "P2",
+          "label": "2.0\nบันทึก/อนุมัติพฤติกรรม\nและคำนวณคะแนน\n(Behavior)",
+          "shape": "circle",
+          "parent": null,
+          "depth": 0,
+          "container": false,
+          "children": [],
+          "fields": [],
+          "in_degree": 5,
+          "out_degree": 3
+        },
+        {
+          "id": "P3",
+          "label": "3.0\nเช็คชื่อเข้าแถว\n(Attendance)",
+          "shape": "circle",
+          "parent": null,
+          "depth": 0,
+          "container": false,
+          "children": [],
+          "fields": [],
+          "in_degree": 1,
+          "out_degree": 2
+        },
+        {
+          "id": "P4",
+          "label": "4.0\nบันทึกการละหมาด\n(Prayer QR)",
+          "shape": "circle",
+          "parent": null,
+          "depth": 0,
+          "container": false,
+          "children": [],
+          "fields": [],
+          "in_degree": 2,
+          "out_degree": 1
+        },
+        {
+          "id": "P5",
+          "label": "5.0\nพิจารณาอุทธรณ์\n(Appeal)",
+          "shape": "circle",
+          "parent": null,
+          "depth": 0,
+          "container": false,
+          "children": [],
+          "fields": [],
+          "in_degree": 2,
+          "out_degree": 3
+        },
+        {
+          "id": "P6",
+          "label": "6.0\nรับ/สอบสวนข้อมูลแจ้ง\n(Informant)",
+          "shape": "circle",
+          "parent": null,
+          "depth": 0,
+          "container": false,
+          "children": [],
+          "fields": [],
+          "in_degree": 2,
+          "out_degree": 4
+        },
+        {
+          "id": "P7",
+          "label": "7.0\nส่งข้อความ\nและแจ้งเตือน\n(Message)",
+          "shape": "circle",
+          "parent": null,
+          "depth": 0,
+          "container": false,
+          "children": [],
+          "fields": [],
+          "in_degree": 4,
+          "out_degree": 3
+        },
+        {
+          "id": "P8",
+          "label": "8.0\nรายงานสรุป\nและแดชบอร์ด\n(Report)",
+          "shape": "circle",
+          "parent": null,
+          "depth": 0,
+          "container": false,
+          "children": [],
+          "fields": [],
+          "in_degree": 5,
+          "out_degree": 3
+        },
+        {
+          "id": "D1",
+          "label": "D1 บัญชีผู้ใช้และสิทธิ์\n(Users & Permissions)",
+          "shape": "cylinder",
+          "parent": null,
+          "depth": 0,
+          "container": false,
+          "children": [],
+          "fields": [],
+          "in_degree": 1,
+          "out_degree": 0
+        },
+        {
+          "id": "D2",
+          "label": "D2 ข้อมูลนักเรียนและ\nคะแนนพฤติกรรม\n(Students & Scores)",
+          "shape": "cylinder",
+          "parent": null,
+          "depth": 0,
+          "container": false,
+          "children": [],
+          "fields": [],
+          "in_degree": 1,
+          "out_degree": 1
+        },
+        {
+          "id": "D3",
+          "label": "D3 บันทึกพฤติกรรมและ\nเกณฑ์การตัด/เพิ่มคะแนน\n(Records & Rules)",
+          "shape": "cylinder",
+          "parent": null,
+          "depth": 0,
+          "container": false,
+          "children": [],
+          "fields": [],
+          "in_degree": 1,
+          "out_degree": 1
+        },
+        {
+          "id": "D4",
+          "label": "D4 การเช็คชื่อเข้าแถว\n(Attendance)",
+          "shape": "cylinder",
+          "parent": null,
+          "depth": 0,
+          "container": false,
+          "children": [],
+          "fields": [],
+          "in_degree": 1,
+          "out_degree": 1
+        },
+        {
+          "id": "D5",
+          "label": "D5 บันทึกการละหมาด\n(Prayer Records)",
+          "shape": "cylinder",
+          "parent": null,
+          "depth": 0,
+          "container": false,
+          "children": [],
+          "fields": [],
+          "in_degree": 1,
+          "out_degree": 1
+        },
+        {
+          "id": "D6",
+          "label": "D6 คำร้องอุทธรณ์\n(Appeals)",
+          "shape": "cylinder",
+          "parent": null,
+          "depth": 0,
+          "container": false,
+          "children": [],
+          "fields": [],
+          "in_degree": 1,
+          "out_degree": 0
+        },
+        {
+          "id": "D7",
+          "label": "D7 ข้อมูลแจ้งเบาะแส\n(Informant Reports)",
+          "shape": "cylinder",
+          "parent": null,
+          "depth": 0,
+          "container": false,
+          "children": [],
+          "fields": [],
+          "in_degree": 1,
+          "out_degree": 0
+        },
+        {
+          "id": "D8",
+          "label": "D8 ข้อความ\n(Messages)",
+          "shape": "cylinder",
+          "parent": null,
+          "depth": 0,
+          "container": false,
+          "children": [],
+          "fields": [],
+          "in_degree": 1,
+          "out_degree": 0
+        }
+      ],
+      "edges": [
+        {
+          "id": "e1",
+          "source": "ADMIN",
+          "target": "P1",
+          "label": "เพิ่ม/แก้ไขบัญชี สิทธิ์ ภาคเรียน",
+          "style": "solid",
+          "arrowhead": "arrow",
+          "bidirectional": false,
+          "undirected": false,
+          "order": 1
+        },
+        {
+          "id": "e2",
+          "source": "P1",
+          "target": "D1",
+          "label": "บัญชีผู้ใช้/สิทธิ์",
+          "style": "solid",
+          "arrowhead": "arrow",
+          "bidirectional": true,
+          "undirected": false,
+          "order": 2
+        },
+        {
+          "id": "e3",
+          "source": "DISC",
+          "target": "P2",
+          "label": "บันทึก/อนุมัติพฤติกรรม กำหนดเกณฑ์",
+          "style": "solid",
+          "arrowhead": "arrow",
+          "bidirectional": false,
+          "undirected": false,
+          "order": 3
+        },
+        {
+          "id": "e4",
+          "source": "TEACH",
+          "target": "P2",
+          "label": "รายงานพฤติกรรมนักเรียน",
+          "style": "solid",
+          "arrowhead": "arrow",
+          "bidirectional": false,
+          "undirected": false,
+          "order": 4
+        },
+        {
+          "id": "e5",
+          "source": "P2",
+          "target": "D2",
+          "label": "คะแนน/สถานะเสี่ยง",
+          "style": "solid",
+          "arrowhead": "arrow",
+          "bidirectional": true,
+          "undirected": false,
+          "order": 5
+        },
+        {
+          "id": "e6",
+          "source": "P2",
+          "target": "D3",
+          "label": "พฤติกรรม/เกณฑ์",
+          "style": "solid",
+          "arrowhead": "arrow",
+          "bidirectional": true,
+          "undirected": false,
+          "order": 6
+        },
+        {
+          "id": "e7",
+          "source": "P2",
+          "target": "STU",
+          "label": "คะแนน/สถานะความเสี่ยง",
+          "style": "solid",
+          "arrowhead": "arrow",
+          "bidirectional": false,
+          "undirected": false,
+          "order": 7
+        },
+        {
+          "id": "e8",
+          "source": "TEACH",
+          "target": "P3",
+          "label": "บันทึกเข้าแถว (มา/สาย/ขาด)",
+          "style": "solid",
+          "arrowhead": "arrow",
+          "bidirectional": false,
+          "undirected": false,
+          "order": 8
+        },
+        {
+          "id": "e9",
+          "source": "P3",
+          "target": "D4",
+          "label": "บันทึกการเข้าแถว",
+          "style": "solid",
+          "arrowhead": "arrow",
+          "bidirectional": false,
+          "undirected": false,
+          "order": 9
+        },
+        {
+          "id": "e10",
+          "source": "P3",
+          "target": "P2",
+          "label": "ข้อมูลขาด/สายเกินเกณฑ์",
+          "style": "solid",
+          "arrowhead": "arrow",
+          "bidirectional": false,
+          "undirected": false,
+          "order": 10
+        },
+        {
+          "id": "e11",
+          "source": "STU",
+          "target": "P4",
+          "label": "แสดง QR ละหมาด",
+          "style": "solid",
+          "arrowhead": "arrow",
+          "bidirectional": false,
+          "undirected": false,
+          "order": 11
+        },
+        {
+          "id": "e12",
+          "source": "DISC",
+          "target": "P4",
+          "label": "สแกน QR/บันทึกสถานะ",
+          "style": "solid",
+          "arrowhead": "arrow",
+          "bidirectional": false,
+          "undirected": false,
+          "order": 12
+        },
+        {
+          "id": "e13",
+          "source": "P4",
+          "target": "D5",
+          "label": "บันทึกการละหมาด",
+          "style": "solid",
+          "arrowhead": "arrow",
+          "bidirectional": false,
+          "undirected": false,
+          "order": 13
+        },
+        {
+          "id": "e14",
+          "source": "STU",
+          "target": "P5",
+          "label": "ยื่นอุทธรณ์+หลักฐาน",
+          "style": "solid",
+          "arrowhead": "arrow",
+          "bidirectional": false,
+          "undirected": false,
+          "order": 14
+        },
+        {
+          "id": "e15",
+          "source": "P5",
+          "target": "D6",
+          "label": "คำร้องอุทธรณ์/สถานะ",
+          "style": "solid",
+          "arrowhead": "arrow",
+          "bidirectional": true,
+          "undirected": false,
+          "order": 15
+        },
+        {
+          "id": "e16",
+          "source": "DISC",
+          "target": "P5",
+          "label": "ผลการพิจารณา (คืนคะแนน)",
+          "style": "solid",
+          "arrowhead": "arrow",
+          "bidirectional": false,
+          "undirected": false,
+          "order": 16
+        },
+        {
+          "id": "e17",
+          "source": "P5",
+          "target": "STU",
+          "label": "สถานะ/ผลอุทธรณ์",
+          "style": "solid",
+          "arrowhead": "arrow",
+          "bidirectional": false,
+          "undirected": false,
+          "order": 17
+        },
+        {
+          "id": "e18",
+          "source": "P5",
+          "target": "P2",
+          "label": "ข้อมูลคืนคะแนน",
+          "style": "solid",
+          "arrowhead": "arrow",
+          "bidirectional": false,
+          "undirected": false,
+          "order": 18
+        },
+        {
+          "id": "e19",
+          "source": "STU",
+          "target": "P6",
+          "label": "แจ้งเบาะแส (ไม่เกิน 3 ครั้ง/วัน)",
+          "style": "solid",
+          "arrowhead": "arrow",
+          "bidirectional": false,
+          "undirected": false,
+          "order": 19
+        },
+        {
+          "id": "e20",
+          "source": "P6",
+          "target": "D7",
+          "label": "เรื่องแจ้ง/ผลสอบสวน",
+          "style": "solid",
+          "arrowhead": "arrow",
+          "bidirectional": true,
+          "undirected": false,
+          "order": 20
+        },
+        {
+          "id": "e21",
+          "source": "DISC",
+          "target": "P6",
+          "label": "ผลการสอบสวน",
+          "style": "solid",
+          "arrowhead": "arrow",
+          "bidirectional": false,
+          "undirected": false,
+          "order": 21
+        },
+        {
+          "id": "e22",
+          "source": "P6",
+          "target": "STU",
+          "label": "สถานะเรื่องแจ้ง",
+          "style": "solid",
+          "arrowhead": "arrow",
+          "bidirectional": false,
+          "undirected": false,
+          "order": 22
+        },
+        {
+          "id": "e23",
+          "source": "P6",
+          "target": "P2",
+          "label": "ตัดคะแนนผู้แจ้งเท็จ",
+          "style": "solid",
+          "arrowhead": "arrow",
+          "bidirectional": false,
+          "undirected": false,
+          "order": 23
+        },
+        {
+          "id": "e24",
+          "source": "P6",
+          "target": "P7",
+          "label": "แจ้งผู้ถูกกล่าวหา",
+          "style": "solid",
+          "arrowhead": "arrow",
+          "bidirectional": false,
+          "undirected": false,
+          "order": 24
+        },
+        {
+          "id": "e25",
+          "source": "STU",
+          "target": "P7",
+          "label": "ส่งข้อความ",
+          "style": "solid",
+          "arrowhead": "arrow",
+          "bidirectional": false,
+          "undirected": false,
+          "order": 25
+        },
+        {
+          "id": "e26",
+          "source": "TEACH",
+          "target": "P7",
+          "label": "ส่งข้อความ",
+          "style": "solid",
+          "arrowhead": "arrow",
+          "bidirectional": false,
+          "undirected": false,
+          "order": 26
+        },
+        {
+          "id": "e27",
+          "source": "DISC",
+          "target": "P7",
+          "label": "ส่งข้อความ (CC ผู้ปกครอง)",
+          "style": "solid",
+          "arrowhead": "arrow",
+          "bidirectional": false,
+          "undirected": false,
+          "order": 27
+        },
+        {
+          "id": "e28",
+          "source": "P7",
+          "target": "D8",
+          "label": "ข้อความ",
+          "style": "solid",
+          "arrowhead": "arrow",
+          "bidirectional": true,
+          "undirected": false,
+          "order": 28
+        },
+        {
+          "id": "e29",
+          "source": "P7",
+          "target": "STU",
+          "label": "กล่องข้อความ/แจ้งเตือน",
+          "style": "solid",
+          "arrowhead": "arrow",
+          "bidirectional": false,
+          "undirected": false,
+          "order": 29
+        },
+        {
+          "id": "e30",
+          "source": "P7",
+          "target": "PAR",
+          "label": "ข้อความ/แจ้งเตือน",
+          "style": "solid",
+          "arrowhead": "arrow",
+          "bidirectional": false,
+          "undirected": false,
+          "order": 30
+        },
+        {
+          "id": "e31",
+          "source": "PAR",
+          "target": "P8",
+          "label": "เรียกดูข้อมูลบุตร",
+          "style": "solid",
+          "arrowhead": "arrow",
+          "bidirectional": false,
+          "undirected": false,
+          "order": 31
+        },
+        {
+          "id": "e32",
+          "source": "D2",
+          "target": "P8",
+          "label": "ข้อมูลคะแนน/ความเสี่ยง",
+          "style": "solid",
+          "arrowhead": "arrow",
+          "bidirectional": false,
+          "undirected": false,
+          "order": 32
+        },
+        {
+          "id": "e33",
+          "source": "D3",
+          "target": "P8",
+          "label": "ข้อมูลพฤติกรรม",
+          "style": "solid",
+          "arrowhead": "arrow",
+          "bidirectional": false,
+          "undirected": false,
+          "order": 33
+        },
+        {
+          "id": "e34",
+          "source": "D4",
+          "target": "P8",
+          "label": "ข้อมูลการเข้าแถว",
+          "style": "solid",
+          "arrowhead": "arrow",
+          "bidirectional": false,
+          "undirected": false,
+          "order": 34
+        },
+        {
+          "id": "e35",
+          "source": "D5",
+          "target": "P8",
+          "label": "ข้อมูลการละหมาด",
+          "style": "solid",
+          "arrowhead": "arrow",
+          "bidirectional": false,
+          "undirected": false,
+          "order": 35
+        },
+        {
+          "id": "e36",
+          "source": "P8",
+          "target": "DISC",
+          "label": "รายงานสรุป/นักเรียนเสี่ยง",
+          "style": "solid",
+          "arrowhead": "arrow",
+          "bidirectional": false,
+          "undirected": false,
+          "order": 36
+        },
+        {
+          "id": "e37",
+          "source": "P8",
+          "target": "PAR",
+          "label": "พฤติกรรม/การมาเรียนของบุตร",
+          "style": "solid",
+          "arrowhead": "arrow",
+          "bidirectional": false,
+          "undirected": false,
+          "order": 37
+        },
+        {
+          "id": "e38",
+          "source": "P8",
+          "target": "TEACH",
+          "label": "สถิติห้องเรียนที่ปรึกษา",
+          "style": "solid",
+          "arrowhead": "arrow",
+          "bidirectional": false,
+          "undirected": false,
+          "order": 38
+        }
+      ]
+    }
+  ]
+}

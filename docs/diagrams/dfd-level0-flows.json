@@ -1,820 +1,420 @@
 [
   {
-    "id": "1.0",
-    "title": [
-      "จัดการข้อมูลหลัก",
-      "บัญชีผู้ใช้และสิทธิ์"
-    ],
-    "sources": [
-      "routes/web.php",
-      "app/Http/Controllers/Auth/LoginController.php",
-      "app/Http/Controllers/Admin",
-      "app/Models/Semester.php"
-    ],
-    "inputs": [
-      {
-        "node": "E1",
-        "label": [
-          "ข้อมูลเข้าสู่ระบบ / ข้อมูลหลัก",
-          "บัญชี สิทธิ์ และภาคเรียน"
-        ]
-      },
-      {
-        "node": "E2",
-        "label": [
-          "ข้อมูลเข้าสู่ระบบ / บทบาท"
-        ]
-      },
-      {
-        "node": "E3",
-        "label": [
-          "ข้อมูลเข้าสู่ระบบ / บทบาท"
-        ]
-      },
-      {
-        "node": "E4",
-        "label": [
-          "ข้อมูลเข้าสู่ระบบ / บทบาท"
-        ]
-      },
-      {
-        "node": "E5",
-        "label": [
-          "ข้อมูลเข้าสู่ระบบ / บทบาท"
-        ]
-      },
-      {
-        "node": "D1",
-        "label": [
-          "บัญชีผู้ใช้และสิทธิ์เดิม"
-        ]
-      },
-      {
-        "node": "D2",
-        "label": [
-          "ข้อมูลนักเรียนเดิม"
-        ]
-      },
-      {
-        "node": "D9",
-        "label": [
-          "ข้อมูลหลักและภาคเรียนเดิม"
-        ]
-      },
-      {
-        "node": "C2",
-        "label": [
-          "สรุปผลประมวลผลเลื่อนชั้น"
-        ]
-      }
-    ],
-    "outputs": [
-      {
-        "node": "E1",
-        "label": [
-          "ผลตรวจสอบสิทธิ์ / ผลจัดการข้อมูล"
-        ]
-      },
-      {
-        "node": "E2",
-        "label": [
-          "ผลเข้าสู่ระบบและสิทธิ์ใช้งาน"
-        ]
-      },
-      {
-        "node": "E3",
-        "label": [
-          "ผลเข้าสู่ระบบและสิทธิ์ใช้งาน"
-        ]
-      },
-      {
-        "node": "E4",
-        "label": [
-          "ผลเข้าสู่ระบบและสิทธิ์ใช้งาน"
-        ]
-      },
-      {
-        "node": "E5",
-        "label": [
-          "ผลเข้าสู่ระบบและสิทธิ์ใช้งาน"
-        ]
-      },
-      {
-        "node": "D1",
-        "label": [
-          "บัญชีผู้ใช้และสิทธิ์ที่ปรับปรุง"
-        ]
-      },
-      {
-        "node": "D2",
-        "label": [
-          "ข้อมูลนักเรียนที่ปรับปรุง"
-        ]
-      },
-      {
-        "node": "D9",
-        "label": [
-          "ข้อมูลหลักและภาคเรียนที่ปรับปรุง"
-        ]
-      },
-      {
-        "node": "C1",
-        "label": [
-          "ข้อมูลภาคเรียนใหม่"
-        ]
-      }
-    ],
-    "note": "ข้อมูลหลักครอบคลุมครู ผู้ปกครอง ฝ่ายปกครอง หน่วยงาน ห้องที่ปรึกษา และภาคเรียน"
+    "id": "e1",
+    "source": "ADMIN",
+    "target": "P1",
+    "label": "เพิ่ม/แก้ไขบัญชี สิทธิ์ ภาคเรียน",
+    "style": "solid",
+    "arrowhead": "arrow",
+    "bidirectional": false,
+    "undirected": false,
+    "order": 1
   },
   {
-    "id": "2.0",
-    "title": [
-      "จัดการพฤติกรรม",
-      "และคะแนนวินัย"
-    ],
-    "sources": [
-      "app/Http/Controllers/Teacher/BehaviorRecordController.php",
-      "app/Http/Controllers/Discipline/BehaviorRecordController.php",
-      "app/Http/Controllers/Discipline/BehaviorRuleController.php"
-    ],
-    "inputs": [
-      {
-        "node": "E3",
-        "label": [
-          "ข้อมูลพฤติกรรมและหลักฐาน"
-        ]
-      },
-      {
-        "node": "E2",
-        "label": [
-          "ข้อมูลพฤติกรรม / ผลอนุมัติ",
-          "เกณฑ์ตัดและเพิ่มคะแนน"
-        ]
-      },
-      {
-        "node": "D2",
-        "label": [
-          "ข้อมูลนักเรียนและคะแนนเดิม"
-        ]
-      },
-      {
-        "node": "D3",
-        "label": [
-          "บันทึกพฤติกรรมและเกณฑ์คะแนน"
-        ]
-      },
-      {
-        "node": "D9",
-        "label": [
-          "ภาคเรียนและห้องที่ปรึกษา"
-        ]
-      },
-      {
-        "node": "D6",
-        "label": [
-          "ผลอุทธรณ์ที่ใช้คำนวณคะแนน"
-        ]
-      }
-    ],
-    "outputs": [
-      {
-        "node": "E3",
-        "label": [
-          "ผลบันทึกและสถานะอนุมัติ"
-        ]
-      },
-      {
-        "node": "E2",
-        "label": [
-          "รายการพฤติกรรมและผลดำเนินการ"
-        ]
-      },
-      {
-        "node": "D2",
-        "label": [
-          "คะแนนและความเสี่ยงที่ปรับปรุง"
-        ]
-      },
-      {
-        "node": "D3",
-        "label": [
-          "บันทึกพฤติกรรม / เกณฑ์",
-          "และสถานะอนุมัติที่ปรับปรุง"
-        ]
-      }
-    ],
-    "note": "ครูบันทึกพฤติกรรมเพื่อรอฝ่ายปกครองอนุมัติ ข้อมูลที่อนุมัติใช้คำนวณคะแนน"
+    "id": "e2",
+    "source": "P1",
+    "target": "D1",
+    "label": "บัญชีผู้ใช้/สิทธิ์",
+    "style": "solid",
+    "arrowhead": "arrow",
+    "bidirectional": true,
+    "undirected": false,
+    "order": 2
   },
   {
-    "id": "3.0",
-    "title": [
-      "บันทึกการเข้าแถว",
-      "และตัดคะแนนอัตโนมัติ"
-    ],
-    "sources": [
-      "app/Http/Controllers/Teacher/AttendanceController.php",
-      "app/Services/AttendanceDeductionService.php"
-    ],
-    "inputs": [
-      {
-        "node": "E3",
-        "label": [
-          "ข้อมูลมา / สาย / ขาด"
-        ]
-      },
-      {
-        "node": "D2",
-        "label": [
-          "รายชื่อนักเรียนและคะแนนเดิม"
-        ]
-      },
-      {
-        "node": "D4",
-        "label": [
-          "ประวัติการเข้าแถวสะสม"
-        ]
-      },
-      {
-        "node": "D3",
-        "label": [
-          "เกณฑ์และรายการตัดคะแนนเดิม"
-        ]
-      },
-      {
-        "node": "D9",
-        "label": [
-          "ภาคเรียนและห้องที่ปรึกษา"
-        ]
-      },
-      {
-        "node": "D6",
-        "label": [
-          "ผลอุทธรณ์ที่ใช้คำนวณคะแนน"
-        ]
-      }
-    ],
-    "outputs": [
-      {
-        "node": "E3",
-        "label": [
-          "ผลบันทึกการเข้าแถว"
-        ]
-      },
-      {
-        "node": "D4",
-        "label": [
-          "รายการเข้าแถวที่ปรับปรุง"
-        ]
-      },
-      {
-        "node": "D3",
-        "label": [
-          "เกณฑ์และบันทึกตัดคะแนนอัตโนมัติ"
-        ]
-      },
-      {
-        "node": "D2",
-        "label": [
-          "คะแนนและความเสี่ยงที่ปรับปรุง"
-        ]
-      }
-    ],
-    "note": "มาสายสะสม 3 ครั้งเท่ากับขาด 1 ครั้ง และขาดสะสมทุก 3 ครั้งตัด 5 คะแนน"
+    "id": "e3",
+    "source": "DISC",
+    "target": "P2",
+    "label": "บันทึก/อนุมัติพฤติกรรม กำหนดเกณฑ์",
+    "style": "solid",
+    "arrowhead": "arrow",
+    "bidirectional": false,
+    "undirected": false,
+    "order": 3
   },
   {
-    "id": "4.0",
-    "title": [
-      "บันทึกและติดตาม",
-      "การละหมาด"
-    ],
-    "sources": [
-      "app/Http/Controllers/Prayer/PrayerController.php",
-      "routes/web.php"
-    ],
-    "inputs": [
-      {
-        "node": "E4",
-        "label": [
-          "ข้อมูล QR / Barcode",
-          "และสถานะละหมาดของตน"
-        ]
-      },
-      {
-        "node": "E2",
-        "label": [
-          "ข้อมูลสแกน / สถานะละหมาด",
-          "และรายการแก้ไข"
-        ]
-      },
-      {
-        "node": "D2",
-        "label": [
-          "ข้อมูลนักเรียน"
-        ]
-      },
-      {
-        "node": "D5",
-        "label": [
-          "ประวัติละหมาดและการแก้ไข"
-        ]
-      },
-      {
-        "node": "D9",
-        "label": [
-          "ข้อมูลภาคเรียน"
-        ]
-      }
-    ],
-    "outputs": [
-      {
-        "node": "E4",
-        "label": [
-          "ผลบันทึกละหมาดของตน"
-        ]
-      },
-      {
-        "node": "E2",
-        "label": [
-          "ผลบันทึกและผลแก้ไขละหมาด"
-        ]
-      },
-      {
-        "node": "D5",
-        "label": [
-          "รายการละหมาดและการแก้ไข"
-        ]
-      }
-    ],
-    "note": "การบันทึกตรวจสอบบทบาทและรหัสนักเรียน ส่วนรายงานสรุปแสดงในกระบวนการ 8.0"
+    "id": "e4",
+    "source": "TEACH",
+    "target": "P2",
+    "label": "รายงานพฤติกรรมนักเรียน",
+    "style": "solid",
+    "arrowhead": "arrow",
+    "bidirectional": false,
+    "undirected": false,
+    "order": 4
   },
   {
-    "id": "5.0",
-    "title": [
-      "รับและพิจารณา",
-      "คำร้องอุทธรณ์"
-    ],
-    "sources": [
-      "app/Http/Controllers/Student/AppealController.php",
-      "app/Http/Controllers/Discipline/AppealController.php"
-    ],
-    "inputs": [
-      {
-        "node": "E4",
-        "label": [
-          "คำร้องอุทธรณ์และหลักฐาน",
-          "หรือข้อมูลยกเลิกคำร้อง"
-        ]
-      },
-      {
-        "node": "E2",
-        "label": [
-          "ผลพิจารณา / จำนวนคะแนนคืน"
-        ]
-      },
-      {
-        "node": "D6",
-        "label": [
-          "คำร้องและสถานะเดิม"
-        ]
-      },
-      {
-        "node": "D3",
-        "label": [
-          "รายการพฤติกรรมและเกณฑ์คะแนน"
-        ]
-      },
-      {
-        "node": "D2",
-        "label": [
-          "ข้อมูลนักเรียนและคะแนนเดิม"
-        ]
-      }
-    ],
-    "outputs": [
-      {
-        "node": "E4",
-        "label": [
-          "สถานะและผลพิจารณาอุทธรณ์"
-        ]
-      },
-      {
-        "node": "E2",
-        "label": [
-          "รายการคำร้องและผลพิจารณา"
-        ]
-      },
-      {
-        "node": "D6",
-        "label": [
-          "คำร้องและผลพิจารณาที่ปรับปรุง"
-        ]
-      },
-      {
-        "node": "D3",
-        "label": [
-          "สถานะรายการพฤติกรรมที่ปรับปรุง"
-        ]
-      },
-      {
-        "node": "D2",
-        "label": [
-          "คะแนนคืนและความเสี่ยงที่ปรับปรุง"
-        ]
-      }
-    ],
-    "note": "ฝ่ายปกครองคืนคะแนนหรือยกเลิกคำร้อง การคืนคะแนนปรับ D2 และสถานะใน D3 โดยตรง"
+    "id": "e5",
+    "source": "P2",
+    "target": "D2",
+    "label": "คะแนน/สถานะเสี่ยง",
+    "style": "solid",
+    "arrowhead": "arrow",
+    "bidirectional": true,
+    "undirected": false,
+    "order": 5
   },
   {
-    "id": "6.0",
-    "title": [
-      "รับและตรวจสอบ",
-      "ข้อมูลแจ้งเบาะแส"
-    ],
-    "sources": [
-      "app/Http/Controllers/Student/InformantReportController.php",
-      "app/Http/Controllers/Discipline/InformantReportController.php"
-    ],
-    "inputs": [
-      {
-        "node": "E4",
-        "label": [
-          "ข้อมูลแจ้งเบาะแสและหลักฐาน"
-        ]
-      },
-      {
-        "node": "E2",
-        "label": [
-          "ผลตรวจสอบ / ผลปิดเรื่อง",
-          "ตัวเลือกบันทึกพฤติกรรมและแจ้งผล"
-        ]
-      },
-      {
-        "node": "D7",
-        "label": [
-          "เรื่องแจ้งและสถานะเดิม"
-        ]
-      },
-      {
-        "node": "D2",
-        "label": [
-          "ข้อมูลนักเรียนที่เกี่ยวข้อง"
-        ]
-      },
-      {
-        "node": "D3",
-        "label": [
-          "เกณฑ์คะแนนกรณีแจ้งเท็จ"
-        ]
-      },
-      {
-        "node": "D9",
-        "label": [
-          "ข้อมูลภาคเรียน"
-        ]
-      }
-    ],
-    "outputs": [
-      {
-        "node": "E4",
-        "label": [
-          "สถานะเรื่องแจ้งของตน"
-        ]
-      },
-      {
-        "node": "E2",
-        "label": [
-          "รายการเรื่องแจ้งและผลตรวจสอบ"
-        ]
-      },
-      {
-        "node": "D7",
-        "label": [
-          "เรื่องแจ้ง / ผลตรวจสอบ / สถานะ"
-        ]
-      },
-      {
-        "node": "D3",
-        "label": [
-          "บันทึกพฤติกรรมแจ้งเท็จ",
-          "สถานะรออนุมัติ เมื่อเลือกดำเนินการ"
-        ]
-      },
-      {
-        "node": "D8",
-        "label": [
-          "ข้อความแจ้งผู้เกี่ยวข้อง",
-          "เมื่อเลือกแจ้งผล"
-        ]
-      }
-    ],
-    "note": "การบันทึกพฤติกรรมแจ้งเท็จและข้อความเป็นทางเลือกหลังตรวจสอบ ไม่เกิดขึ้นกับทุกเรื่อง"
+    "id": "e6",
+    "source": "P2",
+    "target": "D3",
+    "label": "พฤติกรรม/เกณฑ์",
+    "style": "solid",
+    "arrowhead": "arrow",
+    "bidirectional": true,
+    "undirected": false,
+    "order": 6
   },
   {
-    "id": "7.0",
-    "title": [
-      "รับส่งข้อความ",
-      "และติดตามการอ่าน"
-    ],
-    "sources": [
-      "app/Http/Controllers/Admin/MessageController.php",
-      "app/Http/Controllers/Discipline/MessageController.php",
-      "app/Http/Controllers/Teacher/MessageController.php",
-      "app/Http/Controllers/Student/MessageController.php",
-      "app/Http/Controllers/ParentGuardian/MessageController.php"
-    ],
-    "inputs": [
-      {
-        "node": "E1",
-        "label": [
-          "ข้อความ / ผู้รับ / ไฟล์แนบ"
-        ]
-      },
-      {
-        "node": "E2",
-        "label": [
-          "ข้อความ / ผู้รับ / ไฟล์แนบ"
-        ]
-      },
-      {
-        "node": "E3",
-        "label": [
-          "ข้อความ / ผู้รับ / ไฟล์แนบ"
-        ]
-      },
-      {
-        "node": "E4",
-        "label": [
-          "ข้อความ / ผู้รับ / ไฟล์แนบ"
-        ]
-      },
-      {
-        "node": "E5",
-        "label": [
-          "ข้อความ / ผู้รับ / ไฟล์แนบ"
-        ]
-      },
-      {
-        "node": "D1",
-        "label": [
-          "ข้อมูลบัญชีผู้ส่งและผู้รับ"
-        ]
-      },
-      {
-        "node": "D9",
-        "label": [
-          "ความสัมพันธ์นักเรียน–ผู้ปกครอง"
-        ]
-      },
-      {
-        "node": "D2",
-        "label": [
-          "ข้อมูลนักเรียนที่สัมพันธ์กับบัญชี"
-        ]
-      },
-      {
-        "node": "D8",
-        "label": [
-          "ข้อความและสถานะการอ่านเดิม"
-        ]
-      }
-    ],
-    "outputs": [
-      {
-        "node": "E1",
-        "label": [
-          "กล่องข้อความและผลการส่ง"
-        ]
-      },
-      {
-        "node": "E2",
-        "label": [
-          "กล่องข้อความและผลการส่ง"
-        ]
-      },
-      {
-        "node": "E3",
-        "label": [
-          "กล่องข้อความและผลการส่ง"
-        ]
-      },
-      {
-        "node": "E4",
-        "label": [
-          "กล่องข้อความและผลการส่ง"
-        ]
-      },
-      {
-        "node": "E5",
-        "label": [
-          "ข้อความ / สำเนาถึงผู้ปกครอง",
-          "และผลการส่ง"
-        ]
-      },
-      {
-        "node": "D8",
-        "label": [
-          "ข้อความใหม่และสถานะการอ่าน"
-        ]
-      }
-    ],
-    "note": "ผู้รับขึ้นกับสิทธิ์ของแต่ละบทบาท ฝ่ายปกครองส่งข้อความถึงนักเรียนพร้อมสำเนาถึงผู้ปกครองได้"
+    "id": "e7",
+    "source": "P2",
+    "target": "STU",
+    "label": "คะแนน/สถานะความเสี่ยง",
+    "style": "solid",
+    "arrowhead": "arrow",
+    "bidirectional": false,
+    "undirected": false,
+    "order": 7
   },
   {
-    "id": "8.0",
-    "title": [
-      "แสดงข้อมูลติดตาม",
-      "รายงานและแดชบอร์ด"
-    ],
-    "sources": [
-      "app/Http/Controllers/Admin/DashboardController.php",
-      "app/Http/Controllers/Discipline/BehaviorReportController.php",
-      "app/Http/Controllers/Teacher/DashboardController.php",
-      "app/Http/Controllers/Student/DashboardController.php",
-      "app/Http/Controllers/ParentGuardian/DashboardController.php",
-      "app/Http/Controllers/Prayer/PrayerController.php"
-    ],
-    "inputs": [
-      {
-        "node": "D1",
-        "label": [
-          "บัญชีและสถิติผู้ใช้งาน"
-        ]
-      },
-      {
-        "node": "D2",
-        "label": [
-          "ข้อมูลนักเรียน คะแนน และความเสี่ยง"
-        ]
-      },
-      {
-        "node": "D3",
-        "label": [
-          "พฤติกรรมและเกณฑ์คะแนน"
-        ]
-      },
-      {
-        "node": "D4",
-        "label": [
-          "ประวัติการเข้าแถว"
-        ]
-      },
-      {
-        "node": "D5",
-        "label": [
-          "ประวัติละหมาดและการแก้ไข"
-        ]
-      },
-      {
-        "node": "D6",
-        "label": [
-          "ผลอุทธรณ์และคะแนนคืน"
-        ]
-      },
-      {
-        "node": "D7",
-        "label": [
-          "จำนวนเรื่องแจ้งและสถานะ"
-        ]
-      },
-      {
-        "node": "D8",
-        "label": [
-          "จำนวนข้อความที่ยังไม่อ่าน"
-        ]
-      },
-      {
-        "node": "D9",
-        "label": [
-          "ภาคเรียน / ห้องที่ปรึกษา",
-          "และความสัมพันธ์ผู้ปกครอง"
-        ]
-      }
-    ],
-    "outputs": [
-      {
-        "node": "E1",
-        "label": [
-          "ภาพรวมระบบและสถิติ"
-        ]
-      },
-      {
-        "node": "E2",
-        "label": [
-          "รายงานพฤติกรรม / นักเรียนเสี่ยง",
-          "รายงานเข้าแถวและละหมาด"
-        ]
-      },
-      {
-        "node": "E3",
-        "label": [
-          "ข้อมูลนักเรียนและสถิติห้องที่ปรึกษา"
-        ]
-      },
-      {
-        "node": "E4",
-        "label": [
-          "คะแนน / พฤติกรรม / เข้าแถว",
-          "ละหมาดและผลอุทธรณ์ของตน"
-        ]
-      },
-      {
-        "node": "E5",
-        "label": [
-          "คะแนน / พฤติกรรม / เข้าแถว",
-          "และละหมาดของบุตร"
-        ]
-      }
-    ],
-    "requests": [
-      "E1",
-      "E2",
-      "E3",
-      "E4",
-      "E5"
-    ],
-    "note": "คำขอรายงานระบุภาคเรียน ตัวกรอง และนักเรียนที่มีสิทธิ์ดู การส่งออกขึ้นกับสิทธิ์ของบทบาท"
+    "id": "e8",
+    "source": "TEACH",
+    "target": "P3",
+    "label": "บันทึกเข้าแถว (มา/สาย/ขาด)",
+    "style": "solid",
+    "arrowhead": "arrow",
+    "bidirectional": false,
+    "undirected": false,
+    "order": 8
   },
   {
-    "id": "9.0",
-    "title": [
-      "ประเมินคะแนนวินัย",
-      "และเลื่อนชั้นอัตโนมัติ"
-    ],
-    "sources": [
-      "app/Models/Semester.php",
-      "app/Services/StudentPromotionService.php",
-      "app/Console/Commands/AutoPromoteStudents.php"
-    ],
-    "inputs": [
-      {
-        "node": "C1",
-        "label": [
-          "ข้อมูลภาคเรียนใหม่"
-        ]
-      },
-      {
-        "node": "D9",
-        "label": [
-          "ปีการศึกษาและภาคเรียนประเมิน"
-        ]
-      },
-      {
-        "node": "D1",
-        "label": [
-          "สถานะบัญชีนักเรียน"
-        ]
-      },
-      {
-        "node": "D2",
-        "label": [
-          "ข้อมูลนักเรียน ชั้น และห้องเดิม"
-        ]
-      },
-      {
-        "node": "D3",
-        "label": [
-          "พฤติกรรมและเกณฑ์คะแนน"
-        ]
-      },
-      {
-        "node": "D6",
-        "label": [
-          "คะแนนคืนจากผลอุทธรณ์"
-        ]
-      },
-      {
-        "node": "D10",
-        "label": [
-          "ปีการศึกษาที่ประมวลผลแล้ว"
-        ]
-      }
-    ],
-    "outputs": [
-      {
-        "node": "D2",
-        "label": [
-          "ระดับชั้นและห้องที่ปรับปรุง"
-        ]
-      },
-      {
-        "node": "D1",
-        "label": [
-          "สถานะกำลังศึกษา / สำเร็จการศึกษา"
-        ]
-      },
-      {
-        "node": "D10",
-        "label": [
-          "ปีที่ประมวลผลและผลสรุปเลื่อนชั้น"
-        ]
-      },
-      {
-        "node": "C2",
-        "label": [
-          "สรุปผลประมวลผลเลื่อนชั้น"
-        ]
-      }
-    ],
-    "note": "คะแนนอย่างน้อย 50 จึงผ่านเกณฑ์วินัย: ม.1–ม.5 เลื่อนชั้น ม.6 สำเร็จการศึกษา; ต่ำกว่าเกณฑ์คงชั้นเดิม"
+    "id": "e9",
+    "source": "P3",
+    "target": "D4",
+    "label": "บันทึกการเข้าแถว",
+    "style": "solid",
+    "arrowhead": "arrow",
+    "bidirectional": false,
+    "undirected": false,
+    "order": 9
+  },
+  {
+    "id": "e10",
+    "source": "P3",
+    "target": "P2",
+    "label": "ข้อมูลขาด/สายเกินเกณฑ์",
+    "style": "solid",
+    "arrowhead": "arrow",
+    "bidirectional": false,
+    "undirected": false,
+    "order": 10
+  },
+  {
+    "id": "e11",
+    "source": "STU",
+    "target": "P4",
+    "label": "แสดง QR ละหมาด",
+    "style": "solid",
+    "arrowhead": "arrow",
+    "bidirectional": false,
+    "undirected": false,
+    "order": 11
+  },
+  {
+    "id": "e12",
+    "source": "DISC",
+    "target": "P4",
+    "label": "สแกน QR/บันทึกสถานะ",
+    "style": "solid",
+    "arrowhead": "arrow",
+    "bidirectional": false,
+    "undirected": false,
+    "order": 12
+  },
+  {
+    "id": "e13",
+    "source": "P4",
+    "target": "D5",
+    "label": "บันทึกการละหมาด",
+    "style": "solid",
+    "arrowhead": "arrow",
+    "bidirectional": false,
+    "undirected": false,
+    "order": 13
+  },
+  {
+    "id": "e14",
+    "source": "STU",
+    "target": "P5",
+    "label": "ยื่นอุทธรณ์+หลักฐาน",
+    "style": "solid",
+    "arrowhead": "arrow",
+    "bidirectional": false,
+    "undirected": false,
+    "order": 14
+  },
+  {
+    "id": "e15",
+    "source": "P5",
+    "target": "D6",
+    "label": "คำร้องอุทธรณ์/สถานะ",
+    "style": "solid",
+    "arrowhead": "arrow",
+    "bidirectional": true,
+    "undirected": false,
+    "order": 15
+  },
+  {
+    "id": "e16",
+    "source": "DISC",
+    "target": "P5",
+    "label": "ผลการพิจารณา (คืนคะแนน)",
+    "style": "solid",
+    "arrowhead": "arrow",
+    "bidirectional": false,
+    "undirected": false,
+    "order": 16
+  },
+  {
+    "id": "e17",
+    "source": "P5",
+    "target": "STU",
+    "label": "สถานะ/ผลอุทธรณ์",
+    "style": "solid",
+    "arrowhead": "arrow",
+    "bidirectional": false,
+    "undirected": false,
+    "order": 17
+  },
+  {
+    "id": "e18",
+    "source": "P5",
+    "target": "P2",
+    "label": "ข้อมูลคืนคะแนน",
+    "style": "solid",
+    "arrowhead": "arrow",
+    "bidirectional": false,
+    "undirected": false,
+    "order": 18
+  },
+  {
+    "id": "e19",
+    "source": "STU",
+    "target": "P6",
+    "label": "แจ้งเบาะแส (ไม่เกิน 3 ครั้ง/วัน)",
+    "style": "solid",
+    "arrowhead": "arrow",
+    "bidirectional": false,
+    "undirected": false,
+    "order": 19
+  },
+  {
+    "id": "e20",
+    "source": "P6",
+    "target": "D7",
+    "label": "เรื่องแจ้ง/ผลสอบสวน",
+    "style": "solid",
+    "arrowhead": "arrow",
+    "bidirectional": true,
+    "undirected": false,
+    "order": 20
+  },
+  {
+    "id": "e21",
+    "source": "DISC",
+    "target": "P6",
+    "label": "ผลการสอบสวน",
+    "style": "solid",
+    "arrowhead": "arrow",
+    "bidirectional": false,
+    "undirected": false,
+    "order": 21
+  },
+  {
+    "id": "e22",
+    "source": "P6",
+    "target": "STU",
+    "label": "สถานะเรื่องแจ้ง",
+    "style": "solid",
+    "arrowhead": "arrow",
+    "bidirectional": false,
+    "undirected": false,
+    "order": 22
+  },
+  {
+    "id": "e23",
+    "source": "P6",
+    "target": "P2",
+    "label": "ตัดคะแนนผู้แจ้งเท็จ",
+    "style": "solid",
+    "arrowhead": "arrow",
+    "bidirectional": false,
+    "undirected": false,
+    "order": 23
+  },
+  {
+    "id": "e24",
+    "source": "P6",
+    "target": "P7",
+    "label": "แจ้งผู้ถูกกล่าวหา",
+    "style": "solid",
+    "arrowhead": "arrow",
+    "bidirectional": false,
+    "undirected": false,
+    "order": 24
+  },
+  {
+    "id": "e25",
+    "source": "STU",
+    "target": "P7",
+    "label": "ส่งข้อความ",
+    "style": "solid",
+    "arrowhead": "arrow",
+    "bidirectional": false,
+    "undirected": false,
+    "order": 25
+  },
+  {
+    "id": "e26",
+    "source": "TEACH",
+    "target": "P7",
+    "label": "ส่งข้อความ",
+    "style": "solid",
+    "arrowhead": "arrow",
+    "bidirectional": false,
+    "undirected": false,
+    "order": 26
+  },
+  {
+    "id": "e27",
+    "source": "DISC",
+    "target": "P7",
+    "label": "ส่งข้อความ (CC ผู้ปกครอง)",
+    "style": "solid",
+    "arrowhead": "arrow",
+    "bidirectional": false,
+    "undirected": false,
+    "order": 27
+  },
+  {
+    "id": "e28",
+    "source": "P7",
+    "target": "D8",
+    "label": "ข้อความ",
+    "style": "solid",
+    "arrowhead": "arrow",
+    "bidirectional": true,
+    "undirected": false,
+    "order": 28
+  },
+  {
+    "id": "e29",
+    "source": "P7",
+    "target": "STU",
+    "label": "กล่องข้อความ/แจ้งเตือน",
+    "style": "solid",
+    "arrowhead": "arrow",
+    "bidirectional": false,
+    "undirected": false,
+    "order": 29
+  },
+  {
+    "id": "e30",
+    "source": "P7",
+    "target": "PAR",
+    "label": "ข้อความ/แจ้งเตือน",
+    "style": "solid",
+    "arrowhead": "arrow",
+    "bidirectional": false,
+    "undirected": false,
+    "order": 30
+  },
+  {
+    "id": "e31",
+    "source": "PAR",
+    "target": "P8",
+    "label": "เรียกดูข้อมูลบุตร",
+    "style": "solid",
+    "arrowhead": "arrow",
+    "bidirectional": false,
+    "undirected": false,
+    "order": 31
+  },
+  {
+    "id": "e32",
+    "source": "D2",
+    "target": "P8",
+    "label": "ข้อมูลคะแนน/ความเสี่ยง",
+    "style": "solid",
+    "arrowhead": "arrow",
+    "bidirectional": false,
+    "undirected": false,
+    "order": 32
+  },
+  {
+    "id": "e33",
+    "source": "D3",
+    "target": "P8",
+    "label": "ข้อมูลพฤติกรรม",
+    "style": "solid",
+    "arrowhead": "arrow",
+    "bidirectional": false,
+    "undirected": false,
+    "order": 33
+  },
+  {
+    "id": "e34",
+    "source": "D4",
+    "target": "P8",
+    "label": "ข้อมูลการเข้าแถว",
+    "style": "solid",
+    "arrowhead": "arrow",
+    "bidirectional": false,
+    "undirected": false,
+    "order": 34
+  },
+  {
+    "id": "e35",
+    "source": "D5",
+    "target": "P8",
+    "label": "ข้อมูลการละหมาด",
+    "style": "solid",
+    "arrowhead": "arrow",
+    "bidirectional": false,
+    "undirected": false,
+    "order": 35
+  },
+  {
+    "id": "e36",
+    "source": "P8",
+    "target": "DISC",
+    "label": "รายงานสรุป/นักเรียนเสี่ยง",
+    "style": "solid",
+    "arrowhead": "arrow",
+    "bidirectional": false,
+    "undirected": false,
+    "order": 36
+  },
+  {
+    "id": "e37",
+    "source": "P8",
+    "target": "PAR",
+    "label": "พฤติกรรม/การมาเรียนของบุตร",
+    "style": "solid",
+    "arrowhead": "arrow",
+    "bidirectional": false,
+    "undirected": false,
+    "order": 37
+  },
+  {
+    "id": "e38",
+    "source": "P8",
+    "target": "TEACH",
+    "label": "สถิติห้องเรียนที่ปรึกษา",
+    "style": "solid",
+    "arrowhead": "arrow",
+    "bidirectional": false,
+    "undirected": false,
+    "order": 38
   }
 ]
