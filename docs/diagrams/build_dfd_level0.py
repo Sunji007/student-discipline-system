@@ -39,12 +39,15 @@ def leaf(node_id,x,cy,uid,cross=None):
     if cross:
         shape = f'<rect class="continuation" x="{x}" y="{y}" width="{w}" height="{h}" rx="8"/>'
         content = text(x+128,cy-16,[cross['id']],'continuation-code')
-        content += text(x+128,cy+8,[f'{cross["source"][1:]}.0 → {cross["target"][1:]}.0','จุดเชื่อมกระแสข้อมูล'],'node-label')
+        route = cross.get('route', f'{cross["source"][1:]}.0 → {cross["target"][1:]}.0')
+        content += text(x+128,cy+8,[route,cross.get('hint','จุดเชื่อมกระแสข้อมูล')],'node-label')
     else:
         n = NODES[node_id]
         lines = n['label'].split('\n')
         if n['shape']=='cylinder':
             shape = f'<path class="store" d="M{x} {cy-32} C{x} {cy-40} {x+w} {cy-40} {x+w} {cy-32} V{cy+32} C{x+w} {cy+40} {x} {cy+40} {x} {cy+32} Z"/><ellipse class="store-top" cx="{x+128}" cy="{cy-32}" rx="128" ry="8"/>'
+        elif n['shape']=='continuation':
+            shape = f'<rect class="continuation" x="{x}" y="{y}" width="{w}" height="{h}" rx="8"/>'
         else:
             shape = f'<rect class="entity" x="{x}" y="{y}" width="{w}" height="{h}"/>'
         first_y = cy + 8 - (len(lines)-1)*12
