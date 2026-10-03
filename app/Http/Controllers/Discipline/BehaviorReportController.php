@@ -9,6 +9,7 @@ use App\Models\BehaviorRule;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use App\Services\SimpleXlsxGenerator;
 
 class BehaviorReportController extends Controller
 {
@@ -217,58 +218,64 @@ class BehaviorReportController extends Controller
 
         $records = $query->orderBy('RecordDate', 'desc')->get();
 
-        // 1. Export as Excel/CSV
+        // 1. Export as Excel (.xlsx)
         if ($request->has('excel')) {
-            $fileName = "behavior_report_" . ($startDate ?: 'all') . "_to_" . ($endDate ?: 'all') . ".csv";
-            $headers = [
-                "Content-type"        => "text/csv; charset=UTF-8",
-                "Content-Disposition" => "attachment; filename={$fileName}",
-                "Pragma"              => "no-cache",
-                "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
-                "Expires"             => "0"
+            $sheetName = 'รายงานพฤติกรรม';
+            $titleRows = [
+                'รายงานสรุปพฤติกรรมนักเรียน ฝ่ายปกครอง โรงเรียนศิริราษฎร์สามัคคี',
+                'ช่วงวันที่: ' . ($startDate ? Carbon::parse($startDate)->locale('th')->isoFormat('D MMMM YYYY') : 'ทั้งหมด') . 
+                ' ถึง ' . ($endDate ? Carbon::parse($endDate)->locale('th')->isoFormat('D MMMM YYYY') : 'ทั้งหมด'),
+                'ระดับชั้น: ' . ($grade ?: 'ทั้งหมด') . ' | ห้องเรียน: ' . ($classroom ?: 'ทั้งหมด') . ' (จำนวน ' . $records->count() . ' รายการ)'
             ];
 
-            $callback = function () use ($records, $startDate, $endDate, $grade, $classroom) {
-                $file = fopen('php://output', 'w');
-                // Write UTF-8 BOM so Excel opens it with correct Thai characters
-                fprintf($file, chr(0xEF).chr(0xBB).chr(0xBF));
+            $columns = [
+                'ลำดับ' => 8,
+                'วันที่บันทึก' => 14,
+                'รหัสนักเรียน' => 14,
+                'ชื่อ-สกุล' => 25,
+                'ระดับชั้น/ห้อง' => 15,
+                'ประเภทพฤติกรรม' => 30,
+                'คะแนน' => 10,
+                'คะแนนคงเหลือ' => 14,
+                'รายละเอียด' => 35,
+                'ครูประจำชั้น' => 25
+            ];
 
-                // Title header
-                fputcsv($file, ["รายงานสรุปพฤติกรรมนักเรียน ฝ่ายปกครอง"]);
-                fputcsv($file, ["ช่วงวันที่: " . ($startDate ?: 'ทั้งหมด') . " ถึง " . ($endDate ?: 'ทั้งหมด')]);
-                fputcsv($file, ["ระดับชั้น: " . ($grade ?: 'ทั้งหมด') . " | ห้องเรียน: " . ($classroom ?: 'ทั้งหมด')]);
-                fputcsv($file, []);
-
-                // Column Headers
-                fputcsv($file, ["ลำดับ", "วันที่บันทึก", "รหัสนักเรียน", "ชื่อ-สกุล", "ระดับชั้น/ห้อง", "ประเภทพฤติกรรม", "คะแนน", "คะแนนคงเหลือ", "รายละเอียด", "ครูประจำชั้น"]);
-
-                // Data Rows
-                $i = 1;
-                foreach ($records as $row) {
-                    $modifier = $row->rule->ScoreModifier;
-                    if ($row->rule->RuleType === 'ตัดคะแนน') {
-                        $modifier = -abs($modifier);
-                    } else {
-                        $modifier = abs($modifier);
-                    }
-
-                    fputcsv($file, [
-                        $i++,
-                        Carbon::parse($row->RecordDate)->format('d/m/Y'),
-                        $row->student->StudentID,
-                        $row->student->FullName,
-                        $row->student->classroom_display,
-                        $row->rule->RuleName . " (" . $row->rule->RuleType . ")",
-                        $modifier,
-                        $row->student->BehaviorScore,
-                        $row->Description ?: '-',
-                        $row->student->advisory_teacher->user->FullName ?? '-'
-                    ]);
+            $dataRows = [];
+            $i = 1;
+            foreach ($records as $row) {
+                $modifier = $row->rule->ScoreModifier;
+                if ($row->rule->RuleType === 'ตัดคะแนน') {
+                    $modifier = -abs($modifier);
+                } else {
+                    $modifier = abs($modifier);
                 }
-                fclose($file);
-            };
 
-            return response()->stream($callback, 200, $headers);
+                $dataRows[] = [
+                    $i++,
+                    Carbon::parse($row->RecordDate)->format('d/m/Y'),
+                    $row->student->StudentID,
+                    $row->student->FullName,
+                    $row->student->classroom_display,
+                    $row->rule->RuleName . " (" . $row->rule->RuleType . ")",
+                    $modifier,
+                    $row->student->BehaviorScore,
+                    $row->Description ?: '-',
+                    $row->student->advisory_teacher->user->FullName ?? '-'
+                ];
+            }
+
+            $xlsxBinary = SimpleXlsxGenerator::create($sheetName, $titleRows, $columns, $dataRows);
+            $fileName = "behavior_report_" . ($startDate ?: 'all') . "_to_" . ($endDate ?: 'all') . ".xlsx";
+
+            return response($xlsxBinary, 200, [
+                'Content-Type'        => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'Content-Disposition' => "attachment; filename=\"{$fileName}\"",
+                'Content-Length'      => strlen($xlsxBinary),
+                'Pragma'              => 'no-cache',
+                'Cache-Control'       => 'must-revalidate, post-check=0, pre-check=0',
+                'Expires'             => '0'
+            ]);
         }
 
         // 2. Export as Printable HTML

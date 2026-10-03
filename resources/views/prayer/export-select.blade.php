@@ -265,8 +265,8 @@
                     <button type="submit" class="btn-islamic">
                         <i class="fas fa-print"></i> พิมพ์ / บันทึก PDF
                     </button>
-                    <button type="submit" name="excel" value="1" class="btn-csv">
-                        <i class="fas fa-file-csv"></i> ดาวน์โหลด CSV (Excel)
+                    <button type="submit" name="excel" value="1" class="btn-csv" style="background:#16a34a; border-color:#15803d;">
+                        <i class="fas fa-file-excel"></i> ดาวน์โหลด Excel (.xlsx)
                     </button>
                 </div>
             </form>

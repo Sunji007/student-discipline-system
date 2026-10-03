@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
+use App\Services\SimpleXlsxGenerator;
 
 class PrayerController extends Controller
 {
@@ -831,46 +832,50 @@ class PrayerController extends Controller
             ];
         }
 
-        // Handle CSV Download
+        // Handle Excel (.xlsx) Download
         if ($request->has('excel')) {
-            $fileName = "prayer_report_{$type}_{$startDate}_to_{$endDate}.csv";
-            $headers = [
-                "Content-type"        => "text/csv; charset=UTF-8",
-                "Content-Disposition" => "attachment; filename={$fileName}",
-                "Pragma"              => "no-cache",
-                "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
-                "Expires"             => "0"
+            $sheetName = 'รายงานการละหมาด';
+            $titleRows = [
+                "รายงานการละหมาด ({$type}) โรงเรียนศิริราษฎร์สามัคคี",
+                "ช่วงวันที่: {$startDate} ถึง {$endDate} (จำนวน " . count($stats) . " รายการ)"
             ];
 
-            $callback = function() use ($stats, $type, $startDate, $endDate) {
-                $file = fopen('php://output', 'w');
-                // Write UTF-8 BOM so Excel opens it with correct Thai characters
-                fprintf($file, chr(0xEF).chr(0xBB).chr(0xBF));
+            $columns = [
+                "รหัสนักเรียน" => 15,
+                "ชื่อ-สกุล" => 25,
+                "ระดับชั้น" => 14,
+                "เพศ" => 10,
+                "จำนวนครั้งที่ละหมาด" => 20,
+                "จำนวนครั้งที่ขาด" => 18,
+                "จำนวนครั้งที่ละหมาดไม่ได้" => 22,
+                "เปอร์เซ็นต์การละหมาด" => 20
+            ];
 
-                // Title header
-                fputcsv($file, ["รายงานการละหมาด ({$type}) ช่วงวันที่: {$startDate} ถึง {$endDate}"]);
-                fputcsv($file, []);
+            $dataRows = [];
+            foreach ($stats as $row) {
+                $dataRows[] = [
+                    $row['StudentID'],
+                    $row['FullName'],
+                    $row['Class'],
+                    $row['Gender'],
+                    $row['prayed'],
+                    $row['absent'],
+                    $row['exempt'],
+                    $row['percent'] . '%'
+                ];
+            }
 
-                // Column Headers
-                fputcsv($file, ["รหัสนักเรียน", "ชื่อ-สกุล", "ระดับชั้น", "เพศ", "จำนวนครั้งที่ละหมาด", "จำนวนครั้งที่ขาด", "จำนวนครั้งที่ละหมาดไม่ได้", "เปอร์เซ็นต์การละหมาด"]);
+            $xlsxBinary = SimpleXlsxGenerator::create($sheetName, $titleRows, $columns, $dataRows);
+            $fileName = "prayer_report_{$type}_{$startDate}_to_{$endDate}.xlsx";
 
-                // Data Rows
-                foreach ($stats as $row) {
-                    fputcsv($file, [
-                        $row['StudentID'],
-                        $row['FullName'],
-                        $row['Class'],
-                        $row['Gender'],
-                        $row['prayed'],
-                        $row['absent'],
-                        $row['exempt'],
-                        $row['percent'] . '%'
-                    ]);
-                }
-                fclose($file);
-            };
-
-            return response()->stream($callback, 200, $headers);
+            return response($xlsxBinary, 200, [
+                'Content-Type'        => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'Content-Disposition' => "attachment; filename=\"{$fileName}\"",
+                'Content-Length'      => strlen($xlsxBinary),
+                'Pragma'              => 'no-cache',
+                'Cache-Control'       => 'must-revalidate, post-check=0, pre-check=0',
+                'Expires'             => '0'
+            ]);
         }
 
         // Otherwise return Printable HTML View

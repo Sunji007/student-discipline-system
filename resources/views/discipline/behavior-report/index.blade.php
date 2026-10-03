@@ -99,7 +99,7 @@
             <i class="fas fa-print"></i> พิมพ์รายงาน / PDF
         </a>
         <a href="{{ route('discipline.behavior-report.export', array_merge(request()->all(), ['excel' => 1, 'start_date' => $startDate, 'end_date' => $endDate])) }}" class="btn btn-primary">
-            <i class="fas fa-file-excel"></i> ส่งออก Excel (CSV)
+            <i class="fas fa-file-excel"></i> ส่งออก Excel (.xlsx)
         </a>
     </div>
 </div>
