@@ -33,18 +33,21 @@ class MigrateStudentIdsToAutoNumber extends Command
             return 0;
         }
 
-        $idMap = [];
+        $mappings = [];
         $counter = $startNum;
         foreach ($students as $s) {
-            $oldId = (string)$s->StudentID;
-            $newId = str_pad((string)$counter++, 5, '0', STR_PAD_LEFT);
-            $idMap[$oldId] = $newId;
+            $mappings[] = [
+                'old' => (string)$s->StudentID,
+                'new' => str_pad((string)$counter++, 5, '0', STR_PAD_LEFT),
+            ];
         }
 
-        $this->info("Mapping " . count($idMap) . " students to new auto IDs...");
+        $this->info("Mapping " . count($mappings) . " students to new auto IDs...");
 
         // Step A: Intermediate temporary IDs
-        foreach ($idMap as $oldId => $newId) {
+        foreach ($mappings as $map) {
+            $oldId = (string)$map['old'];
+            $newId = (string)$map['new'];
             $tempId = 'T' . $newId;
 
             DB::table('students')->where('StudentID', $oldId)->update(['StudentID' => $tempId]);
@@ -60,7 +63,9 @@ class MigrateStudentIdsToAutoNumber extends Command
         }
 
         // Step B: Final IDs
-        foreach ($idMap as $oldId => $newId) {
+        foreach ($mappings as $map) {
+            $oldId = (string)$map['old'];
+            $newId = (string)$map['new'];
             $tempId = 'T' . $newId;
 
             DB::table('students')->where('StudentID', $tempId)->update(['StudentID' => $newId]);
@@ -83,7 +88,7 @@ class MigrateStudentIdsToAutoNumber extends Command
             DB::statement('PRAGMA foreign_keys = ON;');
         }
 
-        $this->info("Migration completed successfully! Total: " . count($idMap) . " students.");
+        $this->info("Migration completed successfully! Total: " . count($mappings) . " students.");
         return 0;
     }
 }

@@ -31,16 +31,19 @@ return new class extends Migration
             }
 
             if ($needsMigration) {
-                $idMap = [];
+                $mappings = [];
                 $counter = 6000;
                 foreach ($students as $s) {
-                    $oldId = (string)$s->StudentID;
-                    $newId = str_pad((string)$counter++, 5, '0', STR_PAD_LEFT);
-                    $idMap[$oldId] = $newId;
+                    $mappings[] = [
+                        'old' => (string)$s->StudentID,
+                        'new' => str_pad((string)$counter++, 5, '0', STR_PAD_LEFT),
+                    ];
                 }
 
                 // Step A: Update to intermediate temporary IDs to prevent unique constraint collisions
-                foreach ($idMap as $oldId => $newId) {
+                foreach ($mappings as $map) {
+                    $oldId = (string)$map['old'];
+                    $newId = (string)$map['new'];
                     $tempId = 'T' . $newId;
 
                     DB::table('students')->where('StudentID', $oldId)->update(['StudentID' => $tempId]);
@@ -56,7 +59,8 @@ return new class extends Migration
                 }
 
                 // Step B: Finalize from temporary IDs to clean new 06xxx IDs
-                foreach ($idMap as $oldId => $newId) {
+                foreach ($mappings as $map) {
+                    $newId = (string)$map['new'];
                     $tempId = 'T' . $newId;
 
                     DB::table('students')->where('StudentID', $tempId)->update(['StudentID' => $newId]);
