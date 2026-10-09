@@ -1,3 +1,5 @@
+param([switch]$LoadFunctionsOnly)
+
 $ErrorActionPreference = 'Stop'
 $taskRoot = Split-Path $PSScriptRoot -Parent
 $taskTokens = $null
@@ -25,8 +27,8 @@ if ($null -eq $taskServer -or $taskServer.Host -ne 'ftp://host.site.yru.ac.th' -
 
 $taskCredentials = [System.Net.NetworkCredential]::new($taskServer.User, $taskServer.Pass)
 
-function New-TaskFtpRequest([string]$relativePath, [string]$method) {
-    $taskUri = [Uri]($taskServer.Host + $taskServer.RemoteBase + '/' + $relativePath)
+function New-TaskFtpRequest([string]$relativePath, [string]$method, [string]$remoteBase = $taskServer.RemoteBase) {
+    $taskUri = [Uri]($taskServer.Host + $remoteBase.TrimEnd('/') + '/' + $relativePath)
     $taskRequest = [System.Net.FtpWebRequest]::Create($taskUri)
     $taskRequest.Method = $method
     $taskRequest.Credentials = $taskCredentials
@@ -38,8 +40,8 @@ function New-TaskFtpRequest([string]$relativePath, [string]$method) {
     return $taskRequest
 }
 
-function Get-TaskRemoteBytes([string]$relativePath, [bool]$allowMissing = $false) {
-    $taskRequest = New-TaskFtpRequest $relativePath ([System.Net.WebRequestMethods+Ftp]::DownloadFile)
+function Get-TaskRemoteBytes([string]$relativePath, [bool]$allowMissing = $false, [string]$remoteBase = $taskServer.RemoteBase) {
+    $taskRequest = New-TaskFtpRequest $relativePath ([System.Net.WebRequestMethods+Ftp]::DownloadFile) $remoteBase
     $taskResponse = $null
     $taskBuffer = [System.IO.MemoryStream]::new()
     try {
@@ -61,8 +63,8 @@ function Get-TaskRemoteBytes([string]$relativePath, [bool]$allowMissing = $false
     }
 }
 
-function Send-TaskRemoteBytes([string]$relativePath, [byte[]]$bytes) {
-    $taskRequest = New-TaskFtpRequest $relativePath ([System.Net.WebRequestMethods+Ftp]::UploadFile)
+function Send-TaskRemoteBytes([string]$relativePath, [byte[]]$bytes, [string]$remoteBase = $taskServer.RemoteBase) {
+    $taskRequest = New-TaskFtpRequest $relativePath ([System.Net.WebRequestMethods+Ftp]::UploadFile) $remoteBase
     $taskRequest.ContentLength = $bytes.Length
     $taskStream = $null
     $taskResponse = $null
@@ -85,6 +87,8 @@ function Get-TaskHash([byte[]]$bytes) {
     try { return [BitConverter]::ToString($taskHasher.ComputeHash($bytes)).Replace('-', '') }
     finally { $taskHasher.Dispose() }
 }
+
+if ($LoadFunctionsOnly) { return }
 
 # Deploy parent credential generation and the login query fix before its form.
 $taskPaths = @(
