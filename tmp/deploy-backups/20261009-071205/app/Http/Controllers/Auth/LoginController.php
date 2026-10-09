@@ -53,21 +53,14 @@ class LoginController extends Controller
 
         // 1. ตรวจสอบฟิลด์ Username (ว่างหรือไม่)
         if (!$request->filled('Username')) {
-            return $this->sendLoginError($request, ['Username' => 'กรุณากรอกชื่อผู้ใช้/รหัสประจำตัว']);
+            return $this->sendLoginError($request, ['Username' => 'กรุณากรอกรหัสประจำตัว/รหัสนักเรียน']);
         }
 
         // 2. ตรวจสอบว่ามีผู้ใช้งานนี้ในระบบหรือไม่
         $user = \App\Models\User::where('Username', $request->Username)->first();
         if (!$user) {
-            // A teacher's generated ID can differ from their login username.
-            // Preserve exact username matches before resolving this additional identifier.
-            $user = \App\Models\User::whereHas('teacher', function ($query) use ($request) {
-                $query->where('TeacherID', $request->Username);
-            })->first();
-        }
-        if (!$user) {
             $this->incrementLoginAttempts($request);
-            return $this->sendLoginError($request, ['Username' => 'ไม่พบชื่อผู้ใช้/รหัสประจำตัวนี้ในระบบ']);
+            return $this->sendLoginError($request, ['Username' => 'ไม่พบรหัสประจำตัว/รหัสนักเรียนนี้ในระบบ']);
         }
 
         // Parent fallback: if logging in with student's ID but parent's password
