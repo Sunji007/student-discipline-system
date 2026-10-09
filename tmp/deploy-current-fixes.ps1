@@ -38,7 +38,7 @@ function New-TaskFtpRequest([string]$relativePath, [string]$method) {
     return $taskRequest
 }
 
-function Get-TaskRemoteBytes([string]$relativePath) {
+function Get-TaskRemoteBytes([string]$relativePath, [bool]$allowMissing = $false) {
     $taskRequest = New-TaskFtpRequest $relativePath ([System.Net.WebRequestMethods+Ftp]::DownloadFile)
     $taskResponse = $null
     $taskBuffer = [System.IO.MemoryStream]::new()
@@ -47,6 +47,13 @@ function Get-TaskRemoteBytes([string]$relativePath) {
         $taskResponse.GetResponseStream().CopyTo($taskBuffer)
         return ,$taskBuffer.ToArray()
     } catch {
+        $taskFailure = $_.Exception
+        while ($null -ne $taskFailure.InnerException) { $taskFailure = $taskFailure.InnerException }
+        if ($taskFailure -is [System.Net.WebException] -and $null -ne $taskFailure.Response) {
+            $taskMissing = $taskFailure.Response.StatusCode -eq [System.Net.FtpStatusCode]::ActionNotTakenFileUnavailable
+            $taskFailure.Response.Close()
+            if ($allowMissing -and $taskMissing) { return $null }
+        }
         throw "FTP download failed for $relativePath."
     } finally {
         if ($null -ne $taskResponse) { $taskResponse.Close() }
@@ -79,16 +86,20 @@ function Get-TaskHash([byte[]]$bytes) {
     finally { $taskHasher.Dispose() }
 }
 
-# Deploy the model before the callers of its new role-validation method.
+# Deploy both validation rules before the controllers and views that use them.
 $taskPaths = @(
-    'app/Models/User.php',
-    'app/Http/Controllers/Auth/LoginController.php',
+    'app/Rules/ThaiMobilePhone.php',
+    'app/Rules/UniqueUserPhone.php',
     'app/Http/Controllers/Admin/UserController.php',
-    'app/Http/Middleware/CheckRole.php',
-    'app/Http/Controllers/Prayer/PrayerController.php',
-    'routes/web.php',
-    'resources/views/admin/users/edit.blade.php'
+    'app/Http/Controllers/Admin/ParentGuardianController.php',
+    'app/Http/Controllers/Admin/StudentImportController.php',
+    'resources/views/admin/users/create.blade.php',
+    'resources/views/admin/users/edit.blade.php',
+    'resources/views/admin/parents/create.blade.php',
+    'resources/views/admin/parents/edit.blade.php',
+    'resources/views/admin/students/import.blade.php'
 )
+$taskNewPaths = @('app/Rules/ThaiMobilePhone.php', 'app/Rules/UniqueUserPhone.php')
 $taskBackupName = [DateTime]::UtcNow.ToString('yyyyMMdd-HHmmss', [Globalization.CultureInfo]::InvariantCulture)
 $taskBackupRoot = Join-Path $PSScriptRoot ('deploy-backups/' + $taskBackupName)
 $taskChanges = [System.Collections.Generic.List[object]]::new()
@@ -96,7 +107,12 @@ $taskChanges = [System.Collections.Generic.List[object]]::new()
 foreach ($taskPath in $taskPaths) {
     $taskLocalPath = Join-Path $taskRoot $taskPath
     $taskLocalBytes = [System.IO.File]::ReadAllBytes($taskLocalPath)
-    $taskRemoteBytes = Get-TaskRemoteBytes $taskPath
+    $taskRemoteBytes = Get-TaskRemoteBytes $taskPath ($taskNewPaths -contains $taskPath)
+    if ($null -eq $taskRemoteBytes) {
+        $taskChanges.Add(@{ Path = $taskPath; Local = $taskLocalBytes; Original = $null })
+        Write-Output "New file: $taskPath"
+        continue
+    }
     if ((Get-TaskHash $taskLocalBytes) -eq (Get-TaskHash $taskRemoteBytes)) {
         Write-Output "Already current: $taskPath"
         continue
@@ -106,6 +122,20 @@ foreach ($taskPath in $taskPaths) {
     [System.IO.File]::WriteAllBytes($taskBackupPath, $taskRemoteBytes)
     $taskChanges.Add(@{ Path = $taskPath; Local = $taskLocalBytes; Original = $taskRemoteBytes })
     Write-Output "Backed up: $taskPath"
+}
+
+# Create only the explicit directory needed by the two new rule classes.
+$taskDirectoryResponse = $null
+try {
+    $taskDirectoryRequest = New-TaskFtpRequest 'app/Rules/' ([System.Net.WebRequestMethods+Ftp]::ListDirectory)
+    $taskDirectoryResponse = $taskDirectoryRequest.GetResponse()
+} catch {
+    try {
+        $taskDirectoryRequest = New-TaskFtpRequest 'app/Rules' ([System.Net.WebRequestMethods+Ftp]::MakeDirectory)
+        $taskDirectoryResponse = $taskDirectoryRequest.GetResponse()
+    } catch { throw 'Could not prepare the app/Rules directory on the server.' }
+} finally {
+    if ($null -ne $taskDirectoryResponse) { $taskDirectoryResponse.Close() }
 }
 
 $taskAttempted = [System.Collections.Generic.List[object]]::new()
@@ -124,6 +154,14 @@ try {
     for ($taskIndex = $taskAttempted.Count - 1; $taskIndex -ge 0; $taskIndex--) {
         $taskRestore = $taskAttempted[$taskIndex]
         try {
+            if ($null -eq $taskRestore.Original) {
+                $taskDeleteRequest = New-TaskFtpRequest $taskRestore.Path ([System.Net.WebRequestMethods+Ftp]::DeleteFile)
+                $taskDeleteResponse = $taskDeleteRequest.GetResponse()
+                $taskDeleteResponse.Close()
+                if ($null -ne (Get-TaskRemoteBytes $taskRestore.Path $true)) { throw 'New file removal verification failed.' }
+                Write-Output "Removed newly uploaded file: $($taskRestore.Path)"
+                continue
+            }
             Send-TaskRemoteBytes $taskRestore.Path $taskRestore.Original
             if ((Get-TaskHash (Get-TaskRemoteBytes $taskRestore.Path)) -ne (Get-TaskHash $taskRestore.Original)) {
                 throw 'Restore verification failed.'

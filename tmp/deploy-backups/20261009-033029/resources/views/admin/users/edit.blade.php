@@ -90,11 +90,10 @@
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label class="form-label">เบอร์มือถือ</label>
+                        <label class="form-label">เบอร์โทรศัพท์</label>
                         <input type="tel" name="Phone" id="phoneInput" class="form-control {{ $errors->has('Phone') ? 'is-invalid' : '' }}"
                                value="{{ old('Phone', $user->Phone) }}"
                                placeholder="เช่น 081-234-5678" maxlength="12"
-                               inputmode="numeric" pattern="0[689][0-9]-[0-9]{3}-[0-9]{4}" title="{{ \App\Rules\ThaiMobilePhone::MESSAGE }}"
                                oninput="let val = this.value.replace(/\D/g, ''); if(val.length > 3 && val.length <= 6) { this.value = val.slice(0,3) + '-' + val.slice(3); } else if(val.length > 6) { this.value = val.slice(0,3) + '-' + val.slice(3,6) + '-' + val.slice(6,10); } else { this.value = val; }">
                         <div id="phoneFeedback" style="display:none; color:var(--red,#ef4444); font-size:0.8rem; margin-top:0.25rem;"></div>
                         @error('Phone')<div class="invalid-feedback">{{ $message }}</div>@enderror
@@ -292,24 +291,14 @@
         const phoneInput = document.getElementById('phoneInput');
         const phoneFeedback = document.getElementById('phoneFeedback');
         let isPhoneDuplicate = false;
-        let phoneCheckSequence = 0;
-
-        function showPhoneError(message) {
-            isPhoneDuplicate = Boolean(message);
-            phoneInput.setCustomValidity(message);
-            phoneInput.style.borderColor = message ? 'var(--red, #ef4444)' : '';
-            phoneInput.style.backgroundColor = message ? '#fef2f2' : '';
-            phoneFeedback.textContent = message;
-            phoneFeedback.style.display = message ? 'block' : 'none';
-        }
 
         function checkPhone() {
             const val = phoneInput.value.trim();
-            const sequence = ++phoneCheckSequence;
-            showPhoneError('');
-            if (!val) return;
-            if (!/^0[689][0-9]-[0-9]{3}-[0-9]{4}$/.test(val)) {
-                showPhoneError(@json(\App\Rules\ThaiMobilePhone::MESSAGE));
+            if (val.length !== 12) {
+                phoneInput.style.borderColor = '';
+                phoneInput.style.backgroundColor = '';
+                phoneFeedback.style.display = 'none';
+                isPhoneDuplicate = false;
                 return;
             }
 
@@ -317,7 +306,6 @@
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Accept': 'application/json',
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 },
                 body: JSON.stringify({
@@ -327,8 +315,18 @@
             })
             .then(res => res.json())
             .then(data => {
-                if (sequence !== phoneCheckSequence) return;
-                showPhoneError(data.errors?.Phone?.[0] || (data.exists ? data.message : ''));
+                if (data.exists) {
+                    phoneInput.style.borderColor = 'var(--red, #ef4444)';
+                    phoneInput.style.backgroundColor = '#fef2f2';
+                    phoneFeedback.textContent = data.message;
+                    phoneFeedback.style.display = 'block';
+                    isPhoneDuplicate = true;
+                } else {
+                    phoneInput.style.borderColor = '';
+                    phoneInput.style.backgroundColor = '';
+                    phoneFeedback.style.display = 'none';
+                    isPhoneDuplicate = false;
+                }
             })
             .catch(err => console.error('Error checking Phone:', err));
         }

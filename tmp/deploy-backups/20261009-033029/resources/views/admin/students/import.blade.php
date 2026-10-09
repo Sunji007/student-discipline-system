@@ -391,9 +391,6 @@
             if (!row.last_name) errors.push('ไม่มีนามสกุล');
             if (!row.grade) errors.push('ไม่มีระดับชั้น');
             if (!row.room) errors.push('ไม่มีห้องเรียน');
-            if (row.phone && !/^(?:0[689][0-9]{8}|0[689][0-9]-[0-9]{3}-[0-9]{4})$/.test(row.phone)) {
-                errors.push(@json(\App\Rules\ThaiMobilePhone::MESSAGE));
-            }
 
             const isExisting = existingStudentsMap.has(row.student_id) || (row.citizen_id && existingCitizenMap.has(row.citizen_id));
 
@@ -464,7 +461,6 @@
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Accept': 'application/json',
                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
             },
             body: JSON.stringify({
@@ -478,12 +474,7 @@
                 alert('✅ ' + data.message);
                 window.location.href = data.redirect || '{{ route('admin.students.index') }}';
             } else {
-                const errors = Object.entries(data.errors || {}).map(([field, messages]) => {
-                    const match = field.match(/^students\.([0-9]+)\./);
-                    const rowNumber = match ? parsedRows.indexOf(validRows[Number(match[1])]) + 1 : 0;
-                    return (rowNumber ? `รายการที่ ${rowNumber}: ` : '') + messages.join(', ');
-                });
-                alert('❌ เกิดข้อผิดพลาด: ' + (errors.length ? errors.join('\n') : data.message));
+                alert('❌ เกิดข้อผิดพลาด: ' + data.message);
                 btn.disabled = false;
                 btn.innerHTML = '<i class="fas fa-check-circle"></i> ยืนยันและนำเข้าข้อมูล';
             }

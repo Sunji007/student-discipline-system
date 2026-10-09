@@ -112,9 +112,8 @@
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label class="form-label" for="Phone">เบอร์มือถือ</label>
+                        <label class="form-label" for="Phone">เบอร์โทรศัพท์</label>
                         <input type="text" name="Phone" id="Phone"
-                               inputmode="numeric" pattern="0[689][0-9]-[0-9]{3}-[0-9]{4}" title="{{ \App\Rules\ThaiMobilePhone::MESSAGE }}"
                                class="form-control @error('Phone') is-invalid @enderror"
                                value="{{ old('Phone') }}" placeholder="เช่น 081-234-5678" maxlength="12"
                                oninput="let val = this.value.replace(/\D/g, ''); if(val.length > 3 && val.length <= 6) { this.value = val.slice(0,3) + '-' + val.slice(3); } else if(val.length > 6) { this.value = val.slice(0,3) + '-' + val.slice(3,6) + '-' + val.slice(6,10); } else { this.value = val; }">

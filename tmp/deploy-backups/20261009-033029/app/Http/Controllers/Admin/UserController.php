@@ -8,8 +8,6 @@ use App\Models\Teacher;
 use App\Models\DisciplineStaff;
 use App\Models\Student;
 use App\Models\ParentGuardian;
-use App\Rules\ThaiMobilePhone;
-use App\Rules\UniqueUserPhone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -165,7 +163,7 @@ class UserController extends Controller
             'LastName'       => 'required|string|max:50',
             'FirstName_EN'   => 'required|string|max:50|regex:/^[a-zA-Z ]*$/',
             'LastName_EN'    => 'required|string|max:50|regex:/^[a-zA-Z ]*$/',
-            'Phone'          => ['bail', 'nullable', 'string', new ThaiMobilePhone, new UniqueUserPhone],
+            'Phone'          => 'nullable|string|max:20|regex:/^\d{3}-\d{3}-\d{4}$/|unique:users,Phone',
             'Email'          => 'required|email:rfc,dns|max:100|unique:users,Email',
             'Role'           => 'required|in:ฝ่ายปกครอง,ผู้ดูแลระบบ,ครู,นักเรียน,ผู้ปกครอง',
             'Status'         => 'required|in:ปกติ,ระงับการใช้งาน',
@@ -203,6 +201,8 @@ class UserController extends Controller
             'LastName_EN.required'  => 'กรุณากรอกนามสกุลภาษาอังกฤษ',
             'LastName_EN.regex'    => 'นามสกุลภาษาอังกฤษต้องเป็นตัวอักษรภาษาอังกฤษเท่านั้น',
             'advisory_rooms.*.regex' => 'รูปแบบห้องเรียนไม่ถูกต้อง (ระบุ ชั้น/ห้อง เช่น 4/1, 1/2)',
+            'Phone.regex'          => 'เบอร์โทรศัพท์ต้องอยู่ในรูปแบบ 111-111-1111',
+            'Phone.unique'         => 'เบอร์โทรศัพท์นี้ถูกใช้งานในระบบแล้ว',
             'Email.required'       => 'กรุณากรอกอีเมล',
             'Email.email'          => 'รูปแบบอีเมลไม่ถูกต้อง หรือโดเมนอีเมลไม่มีอยู่จริง (เช่น @gmail.com)',
             'Email.unique'         => 'อีเมลนี้ถูกใช้งานแล้ว',
@@ -210,6 +210,17 @@ class UserController extends Controller
 
         if ($request->filled('prefix') && isset($validated['FirstName'])) {
             $validated['FirstName'] = $request->prefix . $validated['FirstName'];
+        }
+
+        if ($request->filled('Phone')) {
+            $cleanPhone = preg_replace('/\D/', '', $request->Phone);
+            $phoneExists = User::where(function ($q) use ($cleanPhone, $request) {
+                $q->where('Phone', $cleanPhone)->orWhere('Phone', $request->Phone);
+            })->exists();
+
+            if ($phoneExists) {
+                return back()->withErrors(['Phone' => 'เบอร์โทรศัพท์นี้ถูกใช้งานในระบบแล้ว'])->withInput();
+            }
         }
 
         // Enforce Username naming conventions based on Role
@@ -326,7 +337,7 @@ class UserController extends Controller
             'LastName'       => 'required|string|max:50',
             'FirstName_EN'   => 'required|string|max:50|regex:/^[a-zA-Z ]*$/',
             'LastName_EN'    => 'required|string|max:50|regex:/^[a-zA-Z ]*$/',
-            'Phone'          => ['bail', 'nullable', 'string', new ThaiMobilePhone, new UniqueUserPhone($user->UserID)],
+            'Phone'          => 'nullable|string|max:20|regex:/^\d{3}-\d{3}-\d{4}$/|unique:users,Phone,' . $user->UserID . ',UserID',
             'Email'          => 'required|email:rfc,dns|max:100|unique:users,Email,' . $user->UserID . ',UserID',
             'CitizenID'      => 'required|string|digits:13|unique:users,CitizenID,' . $user->UserID . ',UserID',
             'Role'           => 'required|in:ฝ่ายปกครอง,ผู้ดูแลระบบ,ครู,นักเรียน,ผู้ปกครอง',
@@ -364,6 +375,8 @@ class UserController extends Controller
             'FirstName_EN.regex'  => 'ชื่อภาษาอังกฤษต้องเป็นตัวอักษรภาษาอังกฤษเท่านั้น',
             'LastName_EN.required' => 'กรุณากรอกนามสกุลภาษาอังกฤษ',
             'LastName_EN.regex'   => 'นามสกุลภาษาอังกฤษต้องเป็นตัวอักษรภาษาอังกฤษเท่านั้น',
+            'Phone.regex'         => 'เบอร์โทรศัพท์ต้องอยู่ในรูปแบบ 111-111-1111',
+            'Phone.unique'        => 'เบอร์โทรศัพท์นี้ถูกใช้งานในระบบแล้ว',
             'Email.required'      => 'กรุณากรอกอีเมล',
             'Email.email'         => 'รูปแบบอีเมลไม่ถูกต้อง หรือโดเมนอีเมลไม่มีอยู่จริง (เช่น @gmail.com)',
             'Email.unique'        => 'อีเมลนี้ถูกใช้งานแล้ว',
@@ -376,6 +389,17 @@ class UserController extends Controller
 
         if ($request->filled('prefix') && isset($validated['FirstName'])) {
             $validated['FirstName'] = $request->prefix . $validated['FirstName'];
+        }
+
+        if ($request->filled('Phone')) {
+            $cleanPhone = preg_replace('/\D/', '', $request->Phone);
+            $phoneExists = User::where(function ($q) use ($cleanPhone, $request) {
+                $q->where('Phone', $cleanPhone)->orWhere('Phone', $request->Phone);
+            })->where('UserID', '!=', $user->UserID)->exists();
+
+            if ($phoneExists) {
+                return back()->withErrors(['Phone' => 'เบอร์โทรศัพท์นี้ถูกใช้งานในระบบแล้ว'])->withInput();
+            }
         }
 
         $classroom = $validated['Classroom'] ?? null;
@@ -531,11 +555,16 @@ class UserController extends Controller
     public function checkPhone(Request $request)
     {
         $request->validate([
-            'Phone'  => ['required', 'string', new ThaiMobilePhone],
+            'Phone'  => 'required|string',
             'UserID' => 'nullable|string'
         ]);
 
-        $query = User::whereIn('Phone', ThaiMobilePhone::storageVariants($request->Phone));
+        $cleanPhone = preg_replace('/\D/', '', $request->Phone);
+
+        $query = \App\Models\User::where(function ($q) use ($cleanPhone, $request) {
+            $q->where('Phone', $cleanPhone)
+              ->orWhere('Phone', $request->Phone);
+        });
 
         if ($request->filled('UserID')) {
             $query->where('UserID', '!=', $request->UserID);

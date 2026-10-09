@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\ParentGuardian;
 use App\Models\Student;
 use App\Models\User;
-use App\Rules\ThaiMobilePhone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -48,7 +47,7 @@ class ParentGuardianController extends Controller
                     return $query->where('StudentID', $student->StudentID);
                 })
             ],
-            'Phone'        => ['nullable', 'string', new ThaiMobilePhone],
+            'Phone'        => 'nullable|string|max:20|regex:/^\d{3}-\d{3}-\d{4}$/',
             'Email'        => 'required|email:rfc,dns|max:255',
             'Address'      => 'nullable|string|max:500',
             'UserID'       => 'nullable|string|exists:users,UserID',
@@ -56,6 +55,7 @@ class ParentGuardianController extends Controller
             'CitizenID.required' => 'กรุณากรอกรหัสบัตรประชาชน',
             'CitizenID.digits'   => 'รหัสบัตรประชาชนต้องเป็นตัวเลข 13 หลัก',
             'CitizenID.unique'   => 'ผู้ปกครองคนนี้ได้รับการเชื่อมโยงกับนักเรียนคนนี้อยู่แล้ว',
+            'Phone.regex'        => 'เบอร์โทรศัพท์ต้องอยู่ในรูปแบบ 111-111-1111',
             'Email.required'     => 'กรุณากรอกอีเมล',
             'Email.email'        => 'รูปแบบอีเมลไม่ถูกต้อง หรือโดเมนอีเมลไม่มีอยู่จริง (เช่น @gmail.com)',
         ]);
@@ -101,7 +101,7 @@ class ParentGuardianController extends Controller
                     return $query->where('StudentID', $student->StudentID);
                 })->ignore($parent->ParentID, 'ParentID')
             ],
-            'Phone'        => ['nullable', 'string', new ThaiMobilePhone],
+            'Phone'        => 'nullable|string|max:20|regex:/^\d{3}-\d{3}-\d{4}$/',
             'Email'        => 'required|email:rfc,dns|max:255',
             'Address'      => 'nullable|string|max:500',
             'UserID'       => 'nullable|string|exists:users,UserID',
@@ -109,6 +109,7 @@ class ParentGuardianController extends Controller
             'CitizenID.required' => 'กรุณากรอกรหัสบัตรประชาชน',
             'CitizenID.digits'   => 'รหัสบัตรประชาชนต้องเป็นตัวเลข 13 หลัก',
             'CitizenID.unique'   => 'ผู้ปกครองคนนี้ได้รับการเชื่อมโยงกับนักเรียนคนนี้อยู่แล้ว',
+            'Phone.regex'        => 'เบอร์โทรศัพท์ต้องอยู่ในรูปแบบ 111-111-1111',
             'Email.required'     => 'กรุณากรอกอีเมล',
             'Email.email'        => 'รูปแบบอีเมลไม่ถูกต้อง หรือโดเมนอีเมลไม่มีอยู่จริง (เช่น @gmail.com)',
         ]);

@@ -6,10 +6,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Student;
 use App\Models\User;
-use App\Rules\ThaiMobilePhone;
-use App\Rules\UniqueUserPhone;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -77,7 +73,6 @@ class StudentImportController extends Controller
             'students.*.last_name'  => 'required|string|max:100',
             'students.*.grade'      => 'required|string|max:10',
             'students.*.room'       => 'required|string|max:10',
-            'students.*.phone'      => ['nullable', 'string', new ThaiMobilePhone],
         ]);
 
         $mode = $request->input('mode', 'update_and_insert');
@@ -89,7 +84,7 @@ class StudentImportController extends Controller
 
         DB::beginTransaction();
         try {
-            foreach ($rows as $rowIndex => $r) {
+            foreach ($rows as $r) {
                 $studentId = trim($r['student_id'] ?? '');
                 if (empty($studentId)) {
                     $studentId = Student::generateNextStudentId();
@@ -117,15 +112,6 @@ class StudentImportController extends Controller
                         }
                     })
                     ->first();
-
-                // Validate only rows that will be written. Earlier writes in this
-                // transaction also participate, so duplicates within a file fail.
-                if (!(($existingStudent && $mode === 'insert_only') || (!$existingStudent && $mode === 'update_only'))) {
-                    Validator::make(
-                        ['students' => [$rowIndex => ['phone' => $phone]]],
-                        ["students.$rowIndex.phone" => ['nullable', new UniqueUserPhone($existingStudent?->UserID)]]
-                    )->validate();
-                }
 
                 if ($existingStudent) {
                     if ($mode === 'insert_only') {
@@ -211,9 +197,6 @@ class StudentImportController extends Controller
                 'redirect' => route('admin.students.index'),
             ]);
 
-        } catch (ValidationException $e) {
-            DB::rollBack();
-            throw $e;
         } catch (\Throwable $e) {
             DB::rollBack();
             return response()->json([
