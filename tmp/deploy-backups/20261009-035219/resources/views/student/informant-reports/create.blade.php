@@ -96,10 +96,10 @@
             </div>
 
             <div class="form-group">
-                <label class="form-label" for="evidence">แนบหลักฐานรูปภาพ <span style="color:var(--red);">*</span> (ต้องแนบอย่างน้อย 1 ภาพ รองรับ JPG หรือ PNG - แนบได้หลายรูปพร้อมกัน)</label>
-                <input type="file" name="evidence[]" id="evidence" class="form-control @error('evidence') is-invalid @enderror @error('evidence.*') is-invalid @enderror" accept=".jpg,.jpeg,.png,image/jpeg,image/png" multiple required>
+                <label class="form-label" for="evidence">แนบหลักฐานรูปภาพ <span style="font-weight:400; color:var(--text-muted); font-size:0.8rem;">(ถ้ามี)</span> (รองรับเฉพาะไฟล์รูปภาพ JPG หรือ PNG - แนบได้หลายรูปพร้อมกัน)</label>
+                <input type="file" name="evidence[]" id="evidence" class="form-control @error('evidence') is-invalid @enderror @error('evidence.*') is-invalid @enderror" accept=".jpg,.jpeg,.png,image/jpeg,image/png" multiple>
                 <small style="color:var(--text-muted); display:block; margin-top:0.35rem; font-size:0.78rem;">
-                    <i class="fas fa-info-circle" style="color:var(--gold);"></i> กรุณาแนบรูปภาพอย่างน้อย 1 ภาพ (.jpg, .jpeg, .png) สามารถเลือกได้มากกว่า 1 รูปพร้อมกัน ขนาดไฟล์ละไม่เกิน 20MB
+                    <i class="fas fa-info-circle" style="color:var(--gold);"></i> สามารถแนบได้เฉพาะรูปภาพ (.jpg, .jpeg, .png) เท่านั้น สามารถเลือกได้มากกว่า 1 รูปพร้อมกัน (ขนาดไฟล์ละไม่เกิน 20MB หรือสามารถเว้นว่างได้)
                 </small>
                 <div id="file-size-feedback" style="margin-top:0.4rem;"></div>
                 <div id="evidence-preview-container" style="margin-top:0.5rem; display:none;"></div>
@@ -867,22 +867,6 @@ window.confirmAndSubmitForm = function() {
     const category = categorySelect ? categorySelect.value.trim() : '';
     const desc = descInput ? descInput.value.trim() : '';
     const fileCount = (evidenceInputEl && evidenceInputEl.files) ? evidenceInputEl.files.length : 0;
-
-    if (fileCount === 0) {
-        if (typeof Swal !== 'undefined') {
-            Swal.fire({
-                icon: 'warning',
-                title: 'กรุณาแนบหลักฐานรูปภาพ',
-                text: 'ต้องแนบรูปภาพอย่างน้อย 1 ภาพก่อนส่งเบาะแส',
-                confirmButtonText: 'ตกลง',
-                confirmButtonColor: '#3b82f6'
-            }).then(() => evidenceInputEl && evidenceInputEl.focus());
-        } else {
-            alert('กรุณาแนบหลักฐานรูปภาพอย่างน้อย 1 ภาพก่อนส่งเบาะแส');
-            if (evidenceInputEl) evidenceInputEl.focus();
-        }
-        return false;
-    }
 
     if (studentIdInput && studentIdInput.classList.contains('is-invalid')) {
         if (typeof Swal !== 'undefined') {

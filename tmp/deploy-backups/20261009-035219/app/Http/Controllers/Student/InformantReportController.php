@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\InformantReport;
 use App\Models\Student;
 use Illuminate\Http\Request;
-use Illuminate\Validation\ValidationException;
 
 class InformantReportController extends Controller
 {
@@ -59,19 +58,14 @@ class InformantReportController extends Controller
             'Category' => 'required|string|max:50',
             'Description' => 'required|string',
             'StudentID' => 'nullable|string|max:1000',
-            'evidence' => 'required|array|min:1',
-            'evidence.*' => 'required|file|image|mimes:jpg,jpeg,png|max:20480',
+            'evidence' => 'nullable',
+            'evidence.*' => 'nullable|file|mimes:jpg,jpeg,png|max:20480',
             'IsAnonymous' => 'nullable|boolean',
             'AcknowledgeTruth' => 'accepted',
         ], [
             'Title.required' => 'กรุณากรอกหัวข้อเบาะแส',
             'Category.required' => 'กรุณาเลือกประเภทพฤติกรรม',
             'Description.required' => 'กรุณากรอกรายละเอียดเบาะแส',
-            'evidence.required' => 'กรุณาแนบหลักฐานรูปภาพอย่างน้อย 1 ภาพก่อนส่งเบาะแส',
-            'evidence.array' => 'กรุณาแนบหลักฐานเป็นไฟล์รูปภาพ',
-            'evidence.min' => 'กรุณาแนบหลักฐานรูปภาพอย่างน้อย 1 ภาพก่อนส่งเบาะแส',
-            'evidence.*.required' => 'กรุณาแนบหลักฐานเป็นไฟล์รูปภาพที่ถูกต้อง',
-            'evidence.*.image' => 'ไฟล์หลักฐานต้องเป็นรูปภาพ JPG หรือ PNG ที่ถูกต้อง',
             'evidence.*.mimes' => 'ไฟล์หลักฐานต้องเป็นไฟล์รูปภาพนามสกุล JPG หรือ PNG เท่านั้น (ไม่อนุญาตไฟล์ประเภทอื่น เช่น PDF หรือเอกสาร)',
             'evidence.*.max' => 'ขนาดไฟล์หลักฐานต้องไม่เกิน 20MB แต่ละไฟล์',
             'AcknowledgeTruth.accepted' => 'กรุณาติ๊กยืนยันว่าข้อมูลที่แจ้งเป็นความจริงตามที่ได้พบเห็นก่อนส่งเบาะแส',
@@ -134,13 +128,7 @@ class InformantReportController extends Controller
             }
         }
 
-        if (empty($evidencePaths)) {
-            throw ValidationException::withMessages([
-                'evidence' => 'อัปโหลดหลักฐานรูปภาพไม่สำเร็จ กรุณาแนบภาพแล้วลองส่งอีกครั้ง',
-            ]);
-        }
-
-        $evidencePathStr = count($evidencePaths) === 1 ? $evidencePaths[0] : json_encode($evidencePaths);
+        $evidencePathStr = !empty($evidencePaths) ? (count($evidencePaths) === 1 ? $evidencePaths[0] : json_encode($evidencePaths)) : null;
 
         InformantReport::create([
             'Title' => $validated['Title'],

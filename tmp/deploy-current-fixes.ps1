@@ -86,20 +86,12 @@ function Get-TaskHash([byte[]]$bytes) {
     finally { $taskHasher.Dispose() }
 }
 
-# Deploy both validation rules before the controllers and views that use them.
+# Deploy the required-image validation before its corresponding student form.
 $taskPaths = @(
-    'app/Rules/ThaiMobilePhone.php',
-    'app/Rules/UniqueUserPhone.php',
-    'app/Http/Controllers/Admin/UserController.php',
-    'app/Http/Controllers/Admin/ParentGuardianController.php',
-    'app/Http/Controllers/Admin/StudentImportController.php',
-    'resources/views/admin/users/create.blade.php',
-    'resources/views/admin/users/edit.blade.php',
-    'resources/views/admin/parents/create.blade.php',
-    'resources/views/admin/parents/edit.blade.php',
-    'resources/views/admin/students/import.blade.php'
+    'app/Http/Controllers/Student/InformantReportController.php',
+    'resources/views/student/informant-reports/create.blade.php'
 )
-$taskNewPaths = @('app/Rules/ThaiMobilePhone.php', 'app/Rules/UniqueUserPhone.php')
+$taskNewPaths = @()
 $taskBackupName = [DateTime]::UtcNow.ToString('yyyyMMdd-HHmmss', [Globalization.CultureInfo]::InvariantCulture)
 $taskBackupRoot = Join-Path $PSScriptRoot ('deploy-backups/' + $taskBackupName)
 $taskChanges = [System.Collections.Generic.List[object]]::new()
@@ -122,20 +114,6 @@ foreach ($taskPath in $taskPaths) {
     [System.IO.File]::WriteAllBytes($taskBackupPath, $taskRemoteBytes)
     $taskChanges.Add(@{ Path = $taskPath; Local = $taskLocalBytes; Original = $taskRemoteBytes })
     Write-Output "Backed up: $taskPath"
-}
-
-# Create only the explicit directory needed by the two new rule classes.
-$taskDirectoryResponse = $null
-try {
-    $taskDirectoryRequest = New-TaskFtpRequest 'app/Rules/' ([System.Net.WebRequestMethods+Ftp]::ListDirectory)
-    $taskDirectoryResponse = $taskDirectoryRequest.GetResponse()
-} catch {
-    try {
-        $taskDirectoryRequest = New-TaskFtpRequest 'app/Rules' ([System.Net.WebRequestMethods+Ftp]::MakeDirectory)
-        $taskDirectoryResponse = $taskDirectoryRequest.GetResponse()
-    } catch { throw 'Could not prepare the app/Rules directory on the server.' }
-} finally {
-    if ($null -ne $taskDirectoryResponse) { $taskDirectoryResponse.Close() }
 }
 
 $taskAttempted = [System.Collections.Generic.List[object]]::new()
