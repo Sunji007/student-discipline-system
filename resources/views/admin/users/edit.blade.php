@@ -99,11 +99,16 @@
                         @error('Phone')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
                     <div class="form-group">
-                        <label class="form-label">รหัสบัตรประชาชน <span style="color:var(--text-muted); font-size:0.8rem;">(ไม่สามารถแก้ไขได้)</span></label>
+                        @php
+                            $citizenIdLocked = preg_match('/^[0-9]{13}$/D', (string) $user->CitizenID) === 1;
+                        @endphp
+                        <label class="form-label">รหัสบัตรประชาชน <span style="color:var(--text-muted); font-size:0.8rem;">{{ $citizenIdLocked ? '(ไม่สามารถแก้ไขได้)' : '(กรุณากรอกตัวเลข 13 หลัก)' }}</span></label>
                         <input type="text" name="CitizenID" id="citizenIdInput" class="form-control {{ $errors->has('CitizenID') ? 'is-invalid' : '' }}"
                                value="{{ old('CitizenID', $user->CitizenID) }}"
-                               placeholder="เช่น 1234567890123" maxlength="13"
-                               readonly style="background-color: #f1f5f9; cursor: not-allowed;" required>
+                               placeholder="เช่น 1234567890123" maxlength="13" inputmode="numeric" pattern="[0-9]{13}"
+                               oninput="this.value = this.value.replace(/\D/g, '')"
+                               @readonly($citizenIdLocked)
+                               @if($citizenIdLocked) style="background-color: #f1f5f9; cursor: not-allowed;" @endif required>
                         <div id="citizenIdFeedback" style="display:none; color:var(--red,#ef4444); font-size:0.8rem; margin-top:0.25rem;"></div>
                         @error('CitizenID')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
