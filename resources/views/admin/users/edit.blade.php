@@ -143,6 +143,10 @@
                     $hasTeacherProfile = $user->teacher()->exists();
                     $hasDisciplineProfile = $user->disciplineOfficer()->exists();
                     $hasParentProfile = $user->parentGuardian()->exists() || $user->parentStudents()->count() > 0;
+                    $hasOld = session()->has('_old_input');
+                    $isTeacherChecked = $hasOld ? in_array('ครู', old('additional_roles', [])) : ($user->Role === 'ครู' || $hasTeacherProfile);
+                    $isDisciplineChecked = $hasOld ? in_array('ฝ่ายปกครอง', old('additional_roles', [])) : ($user->Role === 'ฝ่ายปกครอง' || $hasDisciplineProfile);
+                    $isParentChecked = $hasOld ? in_array('ผู้ปกครอง', old('additional_roles', [])) : ($user->Role === 'ผู้ปกครอง' || $hasParentProfile);
                 @endphp
                 <div class="form-group" style="background: #F8FAFC; padding: 1rem 1.25rem; border-radius: 10px; border: 1px solid #E2E8F0; margin-bottom: 1.25rem;">
                     <label class="form-label" style="font-weight: 700; color: #1E293B; margin-bottom: 0.5rem;">
@@ -150,15 +154,15 @@
                     </label>
                     <div style="display: flex; gap: 1.75rem; flex-wrap: wrap; margin-top: 0.35rem;">
                         <label style="display: flex; align-items: center; gap: 0.55rem; cursor: pointer; font-size: 0.95rem; font-weight: 500; color: #334155;">
-                            <input type="checkbox" name="additional_roles[]" value="ครู" {{ (old('additional_roles') ? in_array('ครู', old('additional_roles')) : ($user->Role === 'ครู' || $hasTeacherProfile)) ? 'checked' : '' }} style="accent-color: var(--primary); width: 17px; height: 17px; cursor: pointer;">
+                            <input type="checkbox" name="additional_roles[]" value="ครู" {{ $isTeacherChecked ? 'checked' : '' }} style="accent-color: var(--primary); width: 17px; height: 17px; cursor: pointer;">
                             <span>👨‍🏫 ครูประจำชั้น</span>
                         </label>
                         <label style="display: flex; align-items: center; gap: 0.55rem; cursor: pointer; font-size: 0.95rem; font-weight: 500; color: #334155;">
-                            <input type="checkbox" name="additional_roles[]" value="ฝ่ายปกครอง" {{ (old('additional_roles') ? in_array('ฝ่ายปกครอง', old('additional_roles')) : ($user->Role === 'ฝ่ายปกครอง' || $hasDisciplineProfile)) ? 'checked' : '' }} style="accent-color: var(--primary); width: 17px; height: 17px; cursor: pointer;">
+                            <input type="checkbox" name="additional_roles[]" value="ฝ่ายปกครอง" {{ $isDisciplineChecked ? 'checked' : '' }} style="accent-color: var(--primary); width: 17px; height: 17px; cursor: pointer;">
                             <span>🛡️ ฝ่ายปกครอง</span>
                         </label>
                         <label style="display: flex; align-items: center; gap: 0.55rem; cursor: pointer; font-size: 0.95rem; font-weight: 500; color: #334155;">
-                            <input type="checkbox" name="additional_roles[]" value="ผู้ปกครอง" {{ (old('additional_roles') ? in_array('ผู้ปกครอง', old('additional_roles')) : ($user->Role === 'ผู้ปกครอง' || $hasParentProfile)) ? 'checked' : '' }} style="accent-color: var(--primary); width: 17px; height: 17px; cursor: pointer;">
+                            <input type="checkbox" name="additional_roles[]" value="ผู้ปกครอง" {{ $isParentChecked ? 'checked' : '' }} style="accent-color: var(--primary); width: 17px; height: 17px; cursor: pointer;">
                             <span>👨‍👩‍👧 ผู้ปกครอง</span>
                         </label>
                     </div>

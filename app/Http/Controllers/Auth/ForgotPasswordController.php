@@ -22,6 +22,17 @@ class ForgotPasswordController extends Controller
     */
 
     use SendsPasswordResetEmails;
+    
+    /**
+     * Get the needed authentication credentials from the request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array
+     */
+    protected function credentials(Request $request)
+    {
+        return ['email' => trim($request->input('email', ''))];
+    }
 
     /**
      * Show the form to reset password via phone number.

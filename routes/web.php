@@ -16,6 +16,7 @@ Route::get('/logout', function () {
     return redirect('/login');
 });
 
+
 // ==========================================
 // Maintenance Routes (Protected: Admin Only)
 // ==========================================

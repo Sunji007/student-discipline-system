@@ -617,6 +617,18 @@ document.addEventListener('DOMContentLoaded', function() {
                     window.location.href = data.redirect;
                 } else {
                     if (btn) { btn.disabled = false; btn.innerText = origText; }
+                    const existingAlert = loginForm.parentNode.querySelector('.alert-danger');
+                    if (existingAlert) existingAlert.remove();
+
+                    if (res.status === 419 || (data.message && data.message.includes('CSRF'))) {
+                        const alertDiv = document.createElement('div');
+                        alertDiv.className = 'alert-danger';
+                        alertDiv.innerHTML = 'เซสชันความปลอดภัยหมดอายุ กำลังรีเฟรชหน้าเว็บให้อัตโนมัติ...';
+                        loginForm.parentNode.insertBefore(alertDiv, loginForm);
+                        setTimeout(() => window.location.reload(), 1200);
+                        return;
+                    }
+
                     let msg = 'เกิดข้อผิดพลาดในการเข้าสู่ระบบ';
                     if (data.errors) {
                         msg = Object.values(data.errors).flat().join('<br>');

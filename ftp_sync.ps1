@@ -18,6 +18,9 @@ $servers = @(
 # Exclude patterns (regular expressions)
 # Only core Laravel production runtime files will be uploaded
 $excludePatterns = @(
+    "^output(/|\\|$)",
+    "^tmp(/|\\|$)",
+    "^\.codex(/|\\|$)",
     "^tools(/|\\|$)",
     "^docs(/|\\|$)",
     "^tests(/|\\|$)",
@@ -25,8 +28,8 @@ $excludePatterns = @(
     "^\.cursor(/|\\|$)",
     "^\.vscode(/|\\|$)",
     "^\.git(/|\\|$)",
-    "node_modules",
-    "vendor",
+    "^node_modules(/|\\|$)",
+    "^vendor(/|\\|$)",
     "^\.env",
     "^public/storage",
     "^public\\storage",

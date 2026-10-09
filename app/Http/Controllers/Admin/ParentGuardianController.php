@@ -132,6 +132,12 @@ class ParentGuardianController extends Controller
     {
         $parent->delete();
 
+        // If this parent was set as the primary ParentID on student, update or clear it
+        if ($student->ParentID === $parent->ParentID) {
+            $otherParent = ParentGuardian::where('StudentID', $student->StudentID)->first();
+            $student->update(['ParentID' => $otherParent ? $otherParent->ParentID : null]);
+        }
+
         return redirect()
             ->route('admin.students.parents.index', $student->StudentID)
             ->with('success', 'ลบข้อมูลผู้ปกครองสำเร็จ');

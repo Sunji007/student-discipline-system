@@ -42,6 +42,34 @@ class ResetPasswordController extends Controller
     }
 
     /**
+     * Set the user's password.
+     *
+     * @param  \Illuminate\Contracts\Auth\CanResetPassword  $user
+     * @param  string  $password
+     * @return void
+     */
+    protected function setUserPassword($user, $password)
+    {
+        $user->Password = \Illuminate\Support\Facades\Hash::make($password);
+    }
+
+    /**
+     * Get the password reset credentials from the request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array
+     */
+    protected function credentials(\Illuminate\Http\Request $request)
+    {
+        return [
+            'email' => trim($request->input('email', '')),
+            'password' => $request->input('password'),
+            'password_confirmation' => $request->input('password_confirmation'),
+            'token' => $request->input('token'),
+        ];
+    }
+
+    /**
      * Get the password reset validation rules.
      *
      * @return array
@@ -50,7 +78,7 @@ class ResetPasswordController extends Controller
     {
         return [
             'token' => 'required',
-            'email' => 'required|email:rfc,dns',
+            'email' => 'required|email',
             'password' => [
                 'required',
                 'confirmed',

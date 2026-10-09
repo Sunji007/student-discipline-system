@@ -211,6 +211,17 @@ class UserController extends Controller
             $validated['FirstName'] = $request->prefix . $validated['FirstName'];
         }
 
+        if ($request->filled('Phone')) {
+            $cleanPhone = preg_replace('/\D/', '', $request->Phone);
+            $phoneExists = User::where(function ($q) use ($cleanPhone, $request) {
+                $q->where('Phone', $cleanPhone)->orWhere('Phone', $request->Phone);
+            })->exists();
+
+            if ($phoneExists) {
+                return back()->withErrors(['Phone' => 'เบอร์โทรศัพท์นี้ถูกใช้งานในระบบแล้ว'])->withInput();
+            }
+        }
+
         // Enforce Username naming conventions based on Role
         $username = $validated['Username'];
         $role = $validated['Role'];
@@ -251,34 +262,50 @@ class UserController extends Controller
             $classroom = ($validated['GradeLevel'] ?? '') . '/' . $classroom;
         }
 
-        // สร้าง profile ตาม Role
-        match ($validated['Role']) {
-            'ครู' => (function() use ($user, $validated, $request) {
-                $teacher = Teacher::create([
-                    'TeacherID'     => $validated['TeacherID'],
-                    'UserID'        => $user->UserID,
-                    'department_id' => $validated['department_id'] ?? null,
-                ]);
-                $rooms = array_filter(array_map('trim', $request->input('advisory_rooms', [])));
-                $rooms = array_map(function($room) {
-                    return preg_replace('/^ม\./', '', $room);
-                }, $rooms);
-                $rooms = array_unique($rooms);
+        $additionalRoles = $request->input('additional_roles', []);
 
-                foreach ($rooms as $room) {
-                    $teacher->advisoryRooms()->create([
-                        'Classroom' => $room
-                    ]);
-                }
-                return $teacher;
-            })(),
-            'ฝ่ายปกครอง' => DisciplineStaff::create([
+        // สร้าง profile ตาม Role และ additional_roles
+        if ($validated['Role'] === 'ครู' || in_array('ครู', $additionalRoles)) {
+            $teacher = Teacher::create([
+                'TeacherID'     => $validated['TeacherID'] ?? substr($user->Username, 0, 10),
+                'UserID'        => $user->UserID,
+                'department_id' => $validated['department_id'] ?? null,
+            ]);
+            $rooms = array_filter(array_map('trim', $request->input('advisory_rooms', [])));
+            $rooms = array_map(function($room) {
+                return preg_replace('/^ม\./', '', $room);
+            }, $rooms);
+            $rooms = array_unique($rooms);
+
+            foreach ($rooms as $room) {
+                $teacher->advisoryRooms()->create([
+                    'Classroom' => $room
+                ]);
+            }
+        }
+
+        if ($validated['Role'] === 'ฝ่ายปกครอง' || in_array('ฝ่ายปกครอง', $additionalRoles)) {
+            DisciplineStaff::create([
                 'StaffID'  => Str::uuid(),
                 'UserID'   => $user->UserID,
                 'Position' => $validated['Position'] ?? null,
                 'Level'    => $validated['Level'] ?? 'บันทึกได้',
-            ]),
-            'นักเรียน' => Student::create([
+            ]);
+        }
+
+        if ($validated['Role'] === 'ผู้ปกครอง' || in_array('ผู้ปกครอง', $additionalRoles)) {
+            ParentGuardian::create([
+                'ParentID'     => (string) Str::uuid(),
+                'UserID'       => $user->UserID,
+                'FirstName'    => $validated['FirstName'],
+                'LastName'     => $validated['LastName'],
+                'Phone'        => $validated['Phone'] ?? null,
+                'Relationship' => 3,
+            ]);
+        }
+
+        if ($validated['Role'] === 'นักเรียน') {
+            Student::create([
                 'StudentID'    => $validated['StudentID'],
                 'UserID'       => $user->UserID,
                 'FirstName'    => $validated['FirstName'],
@@ -287,9 +314,8 @@ class UserController extends Controller
                 'Classroom'    => $classroom,
                 'BehaviorScore'=> 100,
                 'RiskStatus'   => 'ปกติ',
-            ]),
-            default => null,
-        };
+            ]);
+        }
 
         return redirect()->route('admin.users.index')
             ->with('success', 'เพิ่มผู้ใช้งานเรียบร้อยแล้ว');
@@ -362,6 +388,17 @@ class UserController extends Controller
             $validated['FirstName'] = $request->prefix . $validated['FirstName'];
         }
 
+        if ($request->filled('Phone')) {
+            $cleanPhone = preg_replace('/\D/', '', $request->Phone);
+            $phoneExists = User::where(function ($q) use ($cleanPhone, $request) {
+                $q->where('Phone', $cleanPhone)->orWhere('Phone', $request->Phone);
+            })->where('UserID', '!=', $user->UserID)->exists();
+
+            if ($phoneExists) {
+                return back()->withErrors(['Phone' => 'เบอร์โทรศัพท์นี้ถูกใช้งานในระบบแล้ว'])->withInput();
+            }
+        }
+
         $classroom = $validated['Classroom'] ?? null;
         if ($classroom && !str_contains($classroom, '/')) {
             $classroom = ($validated['GradeLevel'] ?? '') . '/' . $classroom;
@@ -396,8 +433,8 @@ class UserController extends Controller
 
         $additionalRoles = $request->input('additional_roles', []);
 
-        // Update or create role-specific profile
-        if (in_array($user->Role, ['ครู', 'ฝ่ายปกครอง', 'ผู้ดูแลระบบ']) || in_array('ครู', $additionalRoles)) {
+        // 1. Teacher profile: only if Role is ครู or selected in additional_roles
+        if ($user->Role === 'ครู' || in_array('ครู', $additionalRoles)) {
             $teacher = $user->teacher()->updateOrCreate(
                 ['UserID' => $user->UserID],
                 [
@@ -420,9 +457,13 @@ class UserController extends Controller
                 }
             }
         } else {
-            $user->teacher()->delete();
+            if ($user->teacher) {
+                $user->teacher->advisoryRooms()->delete();
+                $user->teacher->delete();
+            }
         }
 
+        // 2. Discipline Officer profile: only if Role is ฝ่ายปกครอง or selected in additional_roles
         if ($user->Role === 'ฝ่ายปกครอง' || in_array('ฝ่ายปกครอง', $additionalRoles)) {
             $user->disciplineOfficer()->updateOrCreate(
                 ['UserID' => $user->UserID],
@@ -433,11 +474,10 @@ class UserController extends Controller
                 ]
             );
         } else {
-            if ($user->Role !== 'ผู้ดูแลระบบ') {
-                $user->disciplineOfficer()->delete();
-            }
+            $user->disciplineOfficer()->delete();
         }
 
+        // 3. Parent profile: only if Role is ผู้ปกครอง or selected in additional_roles
         if ($user->Role === 'ผู้ปกครอง' || in_array('ผู้ปกครอง', $additionalRoles)) {
             $user->parentGuardian()->updateOrCreate(
                 ['UserID' => $user->UserID],
@@ -450,11 +490,12 @@ class UserController extends Controller
                 ]
             );
         } else {
-            if ($user->Role !== 'ผู้ปกครอง' && $user->parentStudents()->count() === 0) {
+            if ($user->parentStudents()->count() === 0) {
                 $user->parentGuardian()->delete();
             }
         }
 
+        // 4. Student profile: only if Role is นักเรียน
         if ($user->Role === 'นักเรียน') {
             $user->student()->updateOrCreate(
                 ['UserID' => $user->UserID],
@@ -471,9 +512,8 @@ class UserController extends Controller
         } else {
             $user->student()->delete();
         }
-        if ($user->Role !== 'นักเรียน') {
-            $user->student()->delete();
-        }
+
+        $user->clearAvailableRolesCache();
 
         return redirect()->route('admin.users.index')
             ->with('success', 'แก้ไขข้อมูลผู้ใช้เรียบร้อยแล้ว');
@@ -514,7 +554,13 @@ class UserController extends Controller
             'UserID' => 'nullable|string'
         ]);
 
-        $query = \App\Models\User::where('Phone', $request->Phone);
+        $cleanPhone = preg_replace('/\D/', '', $request->Phone);
+
+        $query = \App\Models\User::where(function ($q) use ($cleanPhone, $request) {
+            $q->where('Phone', $cleanPhone)
+              ->orWhere('Phone', $request->Phone);
+        });
+
         if ($request->filled('UserID')) {
             $query->where('UserID', '!=', $request->UserID);
         }
