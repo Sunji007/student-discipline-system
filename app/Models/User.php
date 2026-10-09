@@ -80,12 +80,6 @@ class User extends Authenticatable {
             return $this->cachedAvailableRoles;
         }
 
-        $sessionKey = 'user_available_roles_' . $this->UserID;
-        if (session()->has($sessionKey)) {
-            $this->cachedAvailableRoles = session($sessionKey);
-            return $this->cachedAvailableRoles;
-        }
-
         $roles = [];
         $primary = $this->Role;
 
@@ -118,8 +112,6 @@ class User extends Authenticatable {
 
         $result = array_values(array_unique($roles));
         $this->cachedAvailableRoles = $result;
-        session([$sessionKey => $result]);
-
         return $result;
     }
 
@@ -129,9 +121,22 @@ class User extends Authenticatable {
         session()->forget('user_available_roles_' . $this->UserID);
     }
 
-    public function canAccess(string $module): bool
+    public function getActiveRole(): ?string
     {
         $role = session('active_role', $this->Role);
+        $availableRoles = array_map('strtolower', $this->getAvailableRoles());
+
+        if (!is_string($role) || !in_array(strtolower($role), $availableRoles, true)) {
+            session()->forget('active_role');
+            return null;
+        }
+
+        return strtolower($role);
+    }
+
+    public function canAccess(string $module): bool
+    {
+        $role = $this->getActiveRole();
         if (!$role) {
             return false;
         }

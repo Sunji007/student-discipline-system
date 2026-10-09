@@ -9,6 +9,7 @@ use App\Models\DisciplineStaff;
 use App\Models\Student;
 use App\Models\ParentGuardian;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
@@ -241,22 +242,6 @@ class UserController extends Controller
             return back()->withErrors(['Username' => 'รหัสประจำตัวผู้ดูแลระบบไม่ถูกต้อง'])->withInput();
         }
 
-        $user = User::create([
-            'UserID'         => Str::uuid(),
-            'Username'       => $validated['Username'],
-            'CitizenID'      => $validated['CitizenID'],
-            'Password'       => Hash::make($validated['Password']),
-            'FirstName'      => $validated['FirstName'],
-            'LastName'       => $validated['LastName'],
-            'FirstName_EN'   => $validated['FirstName_EN'] ?? null,
-            'LastName_EN'    => $validated['LastName_EN'] ?? null,
-            'Phone'          => $validated['Phone'] ?? null,
-            'Email'          => $validated['Email'] ?? null,
-            'Role'           => $validated['Role'],
-            'Status'         => $validated['Status'],
-            'AdditionalInfo' => $validated['AdditionalInfo'] ?? null,
-        ]);
-
         $classroom = $validated['Classroom'] ?? null;
         if ($classroom && !str_contains($classroom, '/')) {
             $classroom = ($validated['GradeLevel'] ?? '') . '/' . $classroom;
@@ -264,58 +249,76 @@ class UserController extends Controller
 
         $additionalRoles = $request->input('additional_roles', []);
 
-        // สร้าง profile ตาม Role และ additional_roles
-        if ($validated['Role'] === 'ครู' || in_array('ครู', $additionalRoles)) {
-            $teacher = Teacher::create([
-                'TeacherID'     => $validated['TeacherID'] ?? substr($user->Username, 0, 10),
-                'UserID'        => $user->UserID,
-                'department_id' => $validated['department_id'] ?? null,
+        DB::transaction(function () use ($validated, $request, $classroom, $additionalRoles) {
+            $user = User::create([
+                'UserID'         => Str::uuid(),
+                'Username'       => $validated['Username'],
+                'CitizenID'      => $validated['CitizenID'],
+                'Password'       => Hash::make($validated['Password']),
+                'FirstName'      => $validated['FirstName'],
+                'LastName'       => $validated['LastName'],
+                'FirstName_EN'   => $validated['FirstName_EN'] ?? null,
+                'LastName_EN'    => $validated['LastName_EN'] ?? null,
+                'Phone'          => $validated['Phone'] ?? null,
+                'Email'          => $validated['Email'] ?? null,
+                'Role'           => $validated['Role'],
+                'Status'         => $validated['Status'],
+                'AdditionalInfo' => $validated['AdditionalInfo'] ?? null,
             ]);
-            $rooms = array_filter(array_map('trim', $request->input('advisory_rooms', [])));
-            $rooms = array_map(function($room) {
-                return preg_replace('/^ม\./', '', $room);
-            }, $rooms);
-            $rooms = array_unique($rooms);
 
-            foreach ($rooms as $room) {
-                $teacher->advisoryRooms()->create([
-                    'Classroom' => $room
+            // สร้าง profile ตาม Role และ additional_roles
+            if ($validated['Role'] === 'ครู' || in_array('ครู', $additionalRoles)) {
+                $teacher = Teacher::create([
+                    'TeacherID'     => $validated['TeacherID'] ?? $this->getNextUsernameAndId('ครู')['role_id'],
+                    'UserID'        => $user->UserID,
+                    'department_id' => $validated['department_id'] ?? null,
+                ]);
+                $rooms = array_filter(array_map('trim', $request->input('advisory_rooms', [])));
+                $rooms = array_map(function($room) {
+                    return preg_replace('/^ม\./', '', $room);
+                }, $rooms);
+                $rooms = array_unique($rooms);
+
+                foreach ($rooms as $room) {
+                    $teacher->advisoryRooms()->create([
+                        'Classroom' => $room
+                    ]);
+                }
+            }
+
+            if ($validated['Role'] === 'ฝ่ายปกครอง' || in_array('ฝ่ายปกครอง', $additionalRoles)) {
+                DisciplineStaff::create([
+                    'StaffID'  => Str::uuid(),
+                    'UserID'   => $user->UserID,
+                    'Position' => $validated['Position'] ?? null,
+                    'Level'    => $validated['Level'] ?? 'บันทึกได้',
                 ]);
             }
-        }
 
-        if ($validated['Role'] === 'ฝ่ายปกครอง' || in_array('ฝ่ายปกครอง', $additionalRoles)) {
-            DisciplineStaff::create([
-                'StaffID'  => Str::uuid(),
-                'UserID'   => $user->UserID,
-                'Position' => $validated['Position'] ?? null,
-                'Level'    => $validated['Level'] ?? 'บันทึกได้',
-            ]);
-        }
+            if ($validated['Role'] === 'ผู้ปกครอง' || in_array('ผู้ปกครอง', $additionalRoles)) {
+                ParentGuardian::create([
+                    'ParentID'     => (string) Str::uuid(),
+                    'UserID'       => $user->UserID,
+                    'FirstName'    => $validated['FirstName'],
+                    'LastName'     => $validated['LastName'],
+                    'Phone'        => $validated['Phone'] ?? null,
+                    'Relationship' => 3,
+                ]);
+            }
 
-        if ($validated['Role'] === 'ผู้ปกครอง' || in_array('ผู้ปกครอง', $additionalRoles)) {
-            ParentGuardian::create([
-                'ParentID'     => (string) Str::uuid(),
-                'UserID'       => $user->UserID,
-                'FirstName'    => $validated['FirstName'],
-                'LastName'     => $validated['LastName'],
-                'Phone'        => $validated['Phone'] ?? null,
-                'Relationship' => 3,
-            ]);
-        }
-
-        if ($validated['Role'] === 'นักเรียน') {
-            Student::create([
-                'StudentID'    => $validated['StudentID'],
-                'UserID'       => $user->UserID,
-                'FirstName'    => $validated['FirstName'],
-                'LastName'     => $validated['LastName'],
-                'GradeLevel'   => $validated['GradeLevel'] ?? null,
-                'Classroom'    => $classroom,
-                'BehaviorScore'=> 100,
-                'RiskStatus'   => 'ปกติ',
-            ]);
-        }
+            if ($validated['Role'] === 'นักเรียน') {
+                Student::create([
+                    'StudentID'    => $validated['StudentID'],
+                    'UserID'       => $user->UserID,
+                    'FirstName'    => $validated['FirstName'],
+                    'LastName'     => $validated['LastName'],
+                    'GradeLevel'   => $validated['GradeLevel'] ?? null,
+                    'Classroom'    => $classroom,
+                    'BehaviorScore'=> 100,
+                    'RiskStatus'   => 'ปกติ',
+                ]);
+            }
+        });
 
         return redirect()->route('admin.users.index')
             ->with('success', 'เพิ่มผู้ใช้งานเรียบร้อยแล้ว');
@@ -429,89 +432,91 @@ class UserController extends Controller
             $user->Username = $validated['CitizenID'];
         }
 
-        $user->save();
-
         $additionalRoles = $request->input('additional_roles', []);
 
-        // 1. Teacher profile: only if Role is ครู or selected in additional_roles
-        if ($user->Role === 'ครู' || in_array('ครู', $additionalRoles)) {
-            $teacher = $user->teacher()->updateOrCreate(
-                ['UserID' => $user->UserID],
-                [
-                    'TeacherID'  => optional($user->teacher)->TeacherID ?? substr($user->Username, 0, 10),
-                    'Department' => $request->has('Department') ? ($validated['Department'] ?? null) : optional($user->teacher)->Department,
-                ]
-            );
-            if ($request->has('advisory_rooms')) {
-                $teacher->advisoryRooms()->delete();
-                $rooms = array_filter(array_map('trim', $request->input('advisory_rooms', [])));
-                $rooms = array_map(function($room) {
-                    return preg_replace('/^ม\./', '', $room);
-                }, $rooms);
-                $rooms = array_unique($rooms);
+        DB::transaction(function () use ($user, $validated, $request, $classroom, $additionalRoles) {
+            $user->save();
 
-                foreach ($rooms as $room) {
-                    $teacher->advisoryRooms()->create([
-                        'Classroom' => $room
-                    ]);
+            // 1. Teacher profile: only if Role is ครู or selected in additional_roles
+            if ($user->Role === 'ครู' || in_array('ครู', $additionalRoles)) {
+                $teacher = $user->teacher()->updateOrCreate(
+                    ['UserID' => $user->UserID],
+                    [
+                        'TeacherID'  => optional($user->teacher)->TeacherID ?? $this->getNextUsernameAndId('ครู')['role_id'],
+                        'Department' => $request->has('Department') ? ($validated['Department'] ?? null) : optional($user->teacher)->Department,
+                    ]
+                );
+                if ($request->has('advisory_rooms')) {
+                    $teacher->advisoryRooms()->delete();
+                    $rooms = array_filter(array_map('trim', $request->input('advisory_rooms', [])));
+                    $rooms = array_map(function($room) {
+                        return preg_replace('/^ม\./', '', $room);
+                    }, $rooms);
+                    $rooms = array_unique($rooms);
+
+                    foreach ($rooms as $room) {
+                        $teacher->advisoryRooms()->create([
+                            'Classroom' => $room
+                        ]);
+                    }
+                }
+            } else {
+                if ($user->teacher) {
+                    $user->teacher->advisoryRooms()->delete();
+                    $user->teacher->delete();
                 }
             }
-        } else {
-            if ($user->teacher) {
-                $user->teacher->advisoryRooms()->delete();
-                $user->teacher->delete();
+
+            // 2. Discipline Officer profile: only if Role is ฝ่ายปกครอง or selected in additional_roles
+            if ($user->Role === 'ฝ่ายปกครอง' || in_array('ฝ่ายปกครอง', $additionalRoles)) {
+                $user->disciplineOfficer()->updateOrCreate(
+                    ['UserID' => $user->UserID],
+                    [
+                        'StaffID'  => optional($user->disciplineOfficer)->StaffID ?? (string) Str::uuid(),
+                        'Position' => $request->has('Position') ? ($validated['Position'] ?? null) : (optional($user->disciplineOfficer)->Position ?? 'เจ้าหน้าที่ฝ่ายปกครอง'),
+                        'Level'    => $request->has('Level') ? ($validated['Level'] ?? 'บันทึกได้') : (optional($user->disciplineOfficer)->Level ?? 'บันทึกได้'),
+                    ]
+                );
+            } else {
+                $user->disciplineOfficer()->delete();
             }
-        }
 
-        // 2. Discipline Officer profile: only if Role is ฝ่ายปกครอง or selected in additional_roles
-        if ($user->Role === 'ฝ่ายปกครอง' || in_array('ฝ่ายปกครอง', $additionalRoles)) {
-            $user->disciplineOfficer()->updateOrCreate(
-                ['UserID' => $user->UserID],
-                [
-                    'StaffID'  => optional($user->disciplineOfficer)->StaffID ?? (string) Str::uuid(),
-                    'Position' => $request->has('Position') ? ($validated['Position'] ?? null) : (optional($user->disciplineOfficer)->Position ?? 'เจ้าหน้าที่ฝ่ายปกครอง'),
-                    'Level'    => $request->has('Level') ? ($validated['Level'] ?? 'บันทึกได้') : (optional($user->disciplineOfficer)->Level ?? 'บันทึกได้'),
-                ]
-            );
-        } else {
-            $user->disciplineOfficer()->delete();
-        }
-
-        // 3. Parent profile: only if Role is ผู้ปกครอง or selected in additional_roles
-        if ($user->Role === 'ผู้ปกครอง' || in_array('ผู้ปกครอง', $additionalRoles)) {
-            $user->parentGuardian()->updateOrCreate(
-                ['UserID' => $user->UserID],
-                [
-                    'ParentID'     => optional($user->parentGuardian)->ParentID ?? (string) Str::uuid(),
-                    'FirstName'    => $validated['FirstName'],
-                    'LastName'     => $validated['LastName'],
-                    'Phone'        => $validated['Phone'] ?? optional($user->parentGuardian)->Phone,
-                    'Relationship' => optional($user->parentGuardian)->Relationship ?? 3,
-                ]
-            );
-        } else {
-            if ($user->parentStudents()->count() === 0) {
-                $user->parentGuardian()->delete();
+            // 3. Parent profile: only if Role is ผู้ปกครอง or selected in additional_roles
+            if ($user->Role === 'ผู้ปกครอง' || in_array('ผู้ปกครอง', $additionalRoles)) {
+                $user->parentGuardian()->updateOrCreate(
+                    ['UserID' => $user->UserID],
+                    [
+                        'ParentID'     => optional($user->parentGuardian)->ParentID ?? (string) Str::uuid(),
+                        'FirstName'    => $validated['FirstName'],
+                        'LastName'     => $validated['LastName'],
+                        'Phone'        => $validated['Phone'] ?? optional($user->parentGuardian)->Phone,
+                        'Relationship' => optional($user->parentGuardian)->Relationship ?? 3,
+                    ]
+                );
+            } else {
+                if ($user->parentStudents()->count() === 0) {
+                    $user->parentGuardian()->delete();
+                }
             }
-        }
 
-        // 4. Student profile: only if Role is นักเรียน
-        if ($user->Role === 'นักเรียน') {
-            $user->student()->updateOrCreate(
-                ['UserID' => $user->UserID],
-                [
-                    'StudentID'    => $validated['StudentID'] ?? (optional($user->student)->StudentID ?? $user->Username),
-                    'FirstName'    => $validated['FirstName'],
-                    'LastName'     => $validated['LastName'],
-                    'GradeLevel'   => $validated['GradeLevel'] ?? optional($user->student)->GradeLevel,
-                    'Classroom'    => $classroom ?? optional($user->student)->Classroom,
-                    'BehaviorScore'=> optional($user->student)->BehaviorScore ?? 100,
-                    'RiskStatus'   => optional($user->student)->RiskStatus ?? 'ปกติ',
-                ]
-            );
-        } else {
-            $user->student()->delete();
-        }
+            // 4. Student profile: only if Role is นักเรียน
+            if ($user->Role === 'นักเรียน') {
+                $user->student()->updateOrCreate(
+                    ['UserID' => $user->UserID],
+                    [
+                        'StudentID'    => $validated['StudentID'] ?? (optional($user->student)->StudentID ?? $user->Username),
+                        'FirstName'    => $validated['FirstName'],
+                        'LastName'     => $validated['LastName'],
+                        'GradeLevel'   => $validated['GradeLevel'] ?? optional($user->student)->GradeLevel,
+                        'Classroom'    => $classroom ?? optional($user->student)->Classroom,
+                        'BehaviorScore'=> optional($user->student)->BehaviorScore ?? 100,
+                        'RiskStatus'   => optional($user->student)->RiskStatus ?? 'ปกติ',
+                    ]
+                );
+            } else {
+                $user->student()->delete();
+            }
+        });
 
         $user->clearAvailableRolesCache();
 

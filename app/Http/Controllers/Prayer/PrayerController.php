@@ -17,7 +17,7 @@ class PrayerController extends Controller
     public function scan()
     {
         // Require role to be Discipline staff
-        $role = strtolower(auth()->user()->Role);
+        $role = auth()->user()->getActiveRole();
         if (!in_array($role, ['ฝ่ายปกครอง', 'discipline'])) {
             abort(403, 'คุณไม่มีสิทธิ์เข้าใช้งานหน้านี้');
         }
@@ -33,7 +33,7 @@ class PrayerController extends Controller
     public function store(Request $request)
     {
         $user = auth()->user();
-        $role = strtolower($user->Role);
+        $role = $user->getActiveRole();
 
         $request->validate([
             'student_id' => 'required|string',
@@ -152,7 +152,7 @@ class PrayerController extends Controller
     public function calendar(Request $request)
     {
         $user = auth()->user();
-        $role = strtolower($user->Role);
+        $role = $user->getActiveRole();
         $studentId = trim($request->input('student_id') ?: $request->input('student_id_typed') ?: '');
 
         // Lock Student/Parent filters or block unauthorized access
@@ -396,7 +396,7 @@ class PrayerController extends Controller
     // 4. Dashboard / Analytics View
     public function dashboard(Request $request)
     {
-        $role = strtolower(auth()->user()->Role);
+        $role = auth()->user()->getActiveRole();
         if (!in_array($role, ['ฝ่ายปกครอง', 'discipline', 'ผู้ดูแลระบบ', 'admin'])) {
             abort(403, 'ไม่มีสิทธิ์เข้าถึงรายงานสรุปผล');
         }
@@ -429,7 +429,7 @@ class PrayerController extends Controller
         // Automatic room filter: If no classroom is specified and no search is active, default to first classroom (or teacher's advisory room)
         if (empty($classroom) && $search === '') {
             $user = auth()->user();
-            if (in_array(strtolower($user->Role), ['ครู', 'teacher']) && $user->teacher) {
+            if (in_array($role, ['ครู', 'teacher']) && $user->teacher) {
                 $myRoom = $user->teacher->advisoryRooms()->first()?->Classroom;
                 if ($myRoom) {
                     $classroom = $myRoom;
@@ -700,7 +700,7 @@ class PrayerController extends Controller
     // 5. Export Report Page
     public function export(Request $request)
     {
-        $role = strtolower(auth()->user()->Role);
+        $role = auth()->user()->getActiveRole();
         if (!in_array($role, ['ฝ่ายปกครอง', 'discipline'])) {
             abort(403, 'ไม่มีสิทธิ์ส่งออกรายงาน');
         }
@@ -889,7 +889,7 @@ class PrayerController extends Controller
     // 6. Toggle Prayer Correction status (POST)
     public function toggleCorrection(Request $request)
     {
-        $role = strtolower(auth()->user()->Role);
+        $role = auth()->user()->getActiveRole();
         if (!in_array($role, ['ฝ่ายปกครอง', 'discipline'])) {
             abort(403, 'ไม่มีสิทธิ์บันทึกข้อมูลการแก้ละหมาด');
         }

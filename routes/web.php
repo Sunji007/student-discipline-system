@@ -169,7 +169,7 @@ Route::middleware(['auth', 'permission:attendance'])->prefix('prayer')->name('pr
     Route::get('/export', [App\Http\Controllers\Prayer\PrayerController::class, 'export'])->name('export');
     Route::post('/corrections/toggle', [App\Http\Controllers\Prayer\PrayerController::class, 'toggleCorrection'])->name('corrections.toggle');
     Route::get('/export-select', function () {
-        $role = strtolower(auth()->user()->Role);
+        $role = auth()->user()->getActiveRole();
         if (in_array($role, ['นักเรียน', 'student', 'ผู้ปกครอง', 'parent'])) {
             abort(403, 'ไม่มีสิทธิ์ส่งออกรายงาน');
         }

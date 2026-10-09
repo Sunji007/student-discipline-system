@@ -65,13 +65,7 @@ class LoginController extends Controller
 
         // Parent fallback: if logging in with student's ID but parent's password
         if ($user->Role === 'นักเรียน' && $user->student && $request->filled('Password')) {
-            $cleanInput = preg_replace('/[^0-9]/', '', $request->Password);
-            $cleanCitizen = preg_replace('/[^0-9]/', '', (string)$user->CitizenID);
-            $isCitizenMatch = !empty($user->CitizenID) && (
-                $request->Password === $user->CitizenID ||
-                (!empty($cleanCitizen) && $cleanInput === $cleanCitizen)
-            );
-            $isStudentPwd = \Hash::check($request->Password, $user->Password) || $isCitizenMatch;
+            $isStudentPwd = \Hash::check($request->Password, $user->Password);
             if (!$isStudentPwd) {
                 // If student password check fails, check if it matches a parent of this student
                 $studentId = $user->student->StudentID;
@@ -103,18 +97,6 @@ class LoginController extends Controller
 
         // 5. ตรวจสอบความถูกต้องของรหัสผ่าน
         $passwordValid = \Hash::check($request->Password, $user->Password);
-
-        // Fallback for students: allow logging in using their Citizen ID
-        if (!$passwordValid && $user->Role === 'นักเรียน' && !empty($user->CitizenID)) {
-            $cleanInput = preg_replace('/[^0-9]/', '', $request->Password);
-            $cleanCitizen = preg_replace('/[^0-9]/', '', (string)$user->CitizenID);
-            if ($request->Password === $user->CitizenID || (!empty($cleanCitizen) && $cleanInput === $cleanCitizen)) {
-                $passwordValid = true;
-                // Automatically update password hash to CitizenID for future logins
-                $user->Password = \Hash::make($request->Password);
-                $user->save();
-            }
-        }
 
         if (!$passwordValid) {
             $this->incrementLoginAttempts($request);

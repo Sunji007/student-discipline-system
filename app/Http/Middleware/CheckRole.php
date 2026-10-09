@@ -14,7 +14,7 @@ class CheckRole
             return redirect()->route('login');
         }
 
-        $activeRole = strtolower(session('active_role', auth()->user()->Role));
+        $activeRole = auth()->user()->getActiveRole();
         if (in_array($activeRole, ['ผู้ดูแลระบบ', 'admin'])) {
             return $next($request);
         }
