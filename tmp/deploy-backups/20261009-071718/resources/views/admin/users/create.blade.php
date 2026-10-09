@@ -369,15 +369,9 @@
         }
     }
 
-    let teacherIdRequest = 0;
-
     async function updateTeacherIDForUser() {
-        const requestId = ++teacherIdRequest;
         const role = roleSelect.value;
         if (role !== 'ครู') return;
-
-        // Always show an available ID, even before optional department/room fields are filled.
-        teacherIDInput.value = nextIds['ครู']?.role_id || '';
 
         const deptSelect = document.getElementById('teacherDeptSelect');
         const advisoryInput = document.querySelector('input[name="advisory_rooms[]"]');
@@ -386,19 +380,17 @@
         const dept = deptSelect.value;
         const room = advisoryInput.value.trim();
 
-        if (!dept || !/^(ม\.)?\s*\d+\s*[\/\-]\s*\d+$/.test(room)) {
+        if (!dept || !room) {
+            teacherIDInput.value = '';
+            usernameInput.value = '';
             return;
         }
 
         try {
             const url = `{{ route('admin.teachers.get-next-id') }}?department=${encodeURIComponent(dept)}&classroom=${encodeURIComponent(room)}`;
             const response = await fetch(url);
-            if (!response.ok) return;
             const data = await response.json();
-
-            if (requestId !== teacherIdRequest || roleSelect.value !== 'ครู'
-                || deptSelect.value !== dept || advisoryInput.value.trim() !== room) return;
-
+            
             if (data.TeacherID) {
                 teacherIDInput.value = data.TeacherID;
             }
