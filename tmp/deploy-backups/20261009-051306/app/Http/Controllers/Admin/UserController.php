@@ -134,12 +134,7 @@ class UserController extends Controller
     public function store(Request $request)
     {
         if ($request->input('Role') === 'ผู้ปกครอง') {
-            $citizenId = (string) $request->input('CitizenID', '');
-            $englishName = preg_replace('/\s+/', '', (string) $request->input('FirstName_EN', ''));
-            $parentPassword = preg_match('/^[a-zA-Z]+$/D', $englishName) && preg_match('/^[0-9]{13}$/D', $citizenId)
-                ? $englishName . substr($citizenId, -4)
-                : '';
-            $request->merge(['Username' => $citizenId, 'Password' => $parentPassword]);
+            $request->merge(['Username' => $request->input('CitizenID')]);
         } elseif (in_array($request->input('Role'), ['ครู', 'ฝ่ายปกครอง'])) {
             if (!$request->filled('Username') && $request->filled('FirstName_EN')) {
                 $cleanEn = strtolower(preg_replace('/[^a-zA-Z]/', '', $request->input('FirstName_EN')));
@@ -165,7 +160,7 @@ class UserController extends Controller
         $validated = $request->validate([
             'Username'       => 'required|string|max:50|unique:users,Username',
             'CitizenID'      => 'required|string|digits:13|unique:users,CitizenID',
-            'Password'       => $request->input('Role') === 'ผู้ปกครอง' ? 'required|string|min:5' : 'required|string|min:8',
+            'Password'       => 'required|string|min:8',
             'FirstName'      => 'required|string|max:50',
             'LastName'       => 'required|string|max:50',
             'FirstName_EN'   => 'required|string|max:50|regex:/^[a-zA-Z ]*$/',

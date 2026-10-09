@@ -473,15 +473,7 @@
             passwordInput.value = citizenId || getGeneratedPassword();
         } else if (role === 'ผู้ปกครอง') {
             usernameInput.value = citizenId;
-            const englishName = (firstNameEN.value || '').replace(/\s+/g, '');
-            const complete = /^[a-zA-Z]+$/.test(englishName) && /^[0-9]{13}$/.test(citizenId);
-            passwordInput.value = complete ? englishName + citizenId.slice(-4) : '';
-            autoGenBadge.style.display = 'inline-flex';
-            autoGenBadge.textContent = complete
-                ? 'สร้าง Username จากเลขบัตรประชาชน และรหัสผ่านจากชื่ออังกฤษ + เลขบัตร 4 ตัวท้ายเรียบร้อยแล้ว'
-                : 'กรุณากรอกชื่อภาษาอังกฤษและเลขบัตรประชาชน 13 หลักเพื่อสร้างข้อมูลเข้าสู่ระบบ';
-            autoGenBadge.style.backgroundColor = complete ? 'var(--green, #22c55e)' : 'var(--gold, #d97706)';
-            return;
+            passwordInput.value = citizenId || getGeneratedPassword();
         } else {
             if (cfg) usernameInput.value = cfg.username;
             passwordInput.value = citizenId || getGeneratedPassword();

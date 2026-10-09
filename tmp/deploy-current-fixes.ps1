@@ -86,10 +86,11 @@ function Get-TaskHash([byte[]]$bytes) {
     finally { $taskHasher.Dispose() }
 }
 
-# Deploy the required-image validation before its corresponding student form.
+# Deploy parent credential generation and the login query fix before its form.
 $taskPaths = @(
-    'app/Http/Controllers/Student/InformantReportController.php',
-    'resources/views/student/informant-reports/create.blade.php'
+    'app/Http/Controllers/Admin/UserController.php',
+    'app/Http/Controllers/Auth/LoginController.php',
+    'resources/views/admin/users/create.blade.php'
 )
 $taskNewPaths = @()
 $taskBackupName = [DateTime]::UtcNow.ToString('yyyyMMdd-HHmmss', [Globalization.CultureInfo]::InvariantCulture)

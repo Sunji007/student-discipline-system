@@ -116,7 +116,7 @@ class LoginController extends Controller
             // If parent logged in using a child's student ID, default session to that child
             if ($user->Role === 'ผู้ปกครอง' && $request->Username !== $user->Username) {
                 $typedUsername = $request->Username;
-                $hasStudent = $user->parentStudents()->where('students.StudentID', $typedUsername)->exists();
+                $hasStudent = $user->parentStudents()->where('StudentID', $typedUsername)->exists();
                 if ($hasStudent) {
                     $request->session()->put('selected_student_id', $typedUsername);
                 }
