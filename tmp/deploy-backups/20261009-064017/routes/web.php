@@ -204,7 +204,6 @@ Route::middleware(['auth', 'role:ฝ่ายปกครอง,discipline'])->p
     Route::post('informant-reports/bulk-archive', [App\Http\Controllers\Discipline\InformantReportController::class, 'bulkArchive'])->name('informant-reports.bulk-archive')->middleware('permission:informant-reports');
     Route::patch('informant-reports/{id}/archive', [App\Http\Controllers\Discipline\InformantReportController::class, 'archive'])->name('informant-reports.archive')->middleware('permission:informant-reports');
     Route::patch('informant-reports/{id}/unarchive', [App\Http\Controllers\Discipline\InformantReportController::class, 'unarchive'])->name('informant-reports.unarchive')->middleware('permission:informant-reports');
-    Route::get('informant-reports/{informantReport}/evidence/{index}', [App\Http\Controllers\Discipline\InformantReportController::class, 'evidence'])->whereNumber('index')->name('informant-reports.evidence')->middleware('permission:informant-reports');
     Route::resource('informant-reports', App\Http\Controllers\Discipline\InformantReportController::class)->middleware('permission:informant-reports');
     Route::patch('informant-reports/{informantReport}/accept', [App\Http\Controllers\Discipline\InformantReportController::class, 'accept'])->name('informant-reports.accept')->middleware('permission:informant-reports');
     Route::patch('informant-reports/{informantReport}/close', [App\Http\Controllers\Discipline\InformantReportController::class, 'close'])->name('informant-reports.close')->middleware('permission:informant-reports');

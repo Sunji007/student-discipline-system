@@ -195,7 +195,7 @@
                 <div style="display:flex; flex-wrap:wrap; gap:0.5rem;">
                     @foreach($evidenceList as $idx => $path)
                     @php
-                        $fileUrl = str_starts_with($path, 'http') ? asset($path) : route('discipline.informant-reports.evidence', [$informantReport->ReportID, $idx]);
+                        $fileUrl = (str_starts_with($path, 'uploads/') || str_starts_with($path, 'http')) ? asset($path) : asset('storage/' . $path);
                     @endphp
                     <a href="{{ $fileUrl }}" target="_blank" class="btn btn-outline btn-sm">
                         <i class="fas fa-paperclip"></i> ดาวน์โหลดหลักฐาน {{ count($evidenceList) > 1 ? ($idx + 1) : '' }}

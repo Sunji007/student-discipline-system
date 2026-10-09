@@ -1,4 +1,4 @@
-param([switch]$LoadFunctionsOnly)
+param([switch]$LoadFunctionsOnly, [string[]]$Paths)
 
 $ErrorActionPreference = 'Stop'
 $taskRoot = Split-Path $PSScriptRoot -Parent
@@ -96,6 +96,7 @@ $taskPaths = @(
     'app/Http/Controllers/Auth/LoginController.php',
     'resources/views/admin/users/create.blade.php'
 )
+if ($Paths.Count -gt 0) { $taskPaths = $Paths }
 $taskNewPaths = @()
 $taskBackupName = [DateTime]::UtcNow.ToString('yyyyMMdd-HHmmss', [Globalization.CultureInfo]::InvariantCulture)
 $taskBackupRoot = Join-Path $PSScriptRoot ('deploy-backups/' + $taskBackupName)

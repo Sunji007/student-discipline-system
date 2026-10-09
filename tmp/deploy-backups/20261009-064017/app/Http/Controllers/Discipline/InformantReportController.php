@@ -10,7 +10,6 @@ use App\Models\Message;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class InformantReportController extends Controller
@@ -81,30 +80,6 @@ class InformantReportController extends Controller
         }
 
         return view('discipline.informant-reports.show', compact('informantReport', 'reporterStats'));
-    }
-
-    public function evidence(InformantReport $informantReport, int $index)
-    {
-        $path = $informantReport->evidence_paths[$index] ?? null;
-        abort_unless(is_string($path) && $path !== '', 404);
-
-        // Serve through Laravel: shared hosts may intercept /storage/*.jpg in nginx.
-        if (str_starts_with($path, 'uploads/')) {
-            $root = realpath(public_path('uploads'));
-            $file = realpath(public_path($path));
-        } else {
-            $disk = Storage::disk('public');
-            $root = realpath($disk->path(''));
-            $file = realpath($disk->path($path));
-        }
-
-        abort_unless($root !== false && $file !== false && is_file($file)
-            && str_starts_with($file, rtrim($root, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR), 404);
-
-        return response()->file($file, [
-            'Cache-Control' => 'private, no-store',
-            'X-Content-Type-Options' => 'nosniff',
-        ]);
     }
 
     // รับเรื่อง → เปลี่ยนเป็น "กำลังตรวจสอบ"
