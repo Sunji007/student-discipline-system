@@ -223,20 +223,20 @@
         /* Codes Display Area */
         .codes-section {
             width: 100%;
-            display: grid;
-            grid-template-columns: minmax(0, 1fr) 104px;
-            gap: 0.5rem;
-            align-items: stretch;
-            min-height: 130px;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            justify-content: center;
+            align-items: center;
             margin-top: auto;
             padding-bottom: 0.5rem;
         }
 
-        .barcode-box, .qr-box {
+        .barcode-box {
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-width: 0;
+            justify-content: center;
             width: 100%;
             background: #fff;
         }
@@ -244,14 +244,19 @@
         #barcode {
             max-width: 100%;
             height: auto;
-            margin: auto 0;
+        }
+
+        .qr-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #fff;
         }
 
         #qr-code {
-            width: 104px;
-            height: 104px;
+            width: 168px;
+            height: 168px;
             max-width: 100%;
-            margin: auto 0;
         }
 
         .code-label {
@@ -355,7 +360,6 @@
                 <!-- Barcode Box -->
                 <div class="barcode-box">
                     <svg id="barcode" role="img" aria-label="บาร์โค้ดรหัสนักเรียน {{ $student->StudentID }}"></svg>
-                    <span class="code-label">Barcode</span>
                     <p id="barcode-error" class="barcode-error" role="alert" hidden>ไม่สามารถแสดงบาร์โค้ดได้ กรุณาโหลดหน้าใหม่</p>
                 </div>
                 <div class="qr-box">
@@ -385,14 +389,14 @@
                 // Keep the ID as a string to preserve leading zeroes.
                 JsBarcode("#barcode", studentId, {
                     format: "CODE128",
-                    width: 1.5,
+                    width: 1.8,
                     height: 60,
                     displayValue: true,
                     fontSize: 16,
                     font: "monospace",
                     lineColor: "#000000",
                     background: "#ffffff",
-                    margin: 15
+                    margin: 20
                 });
                 barcodeReady = true;
             } catch (error) {
