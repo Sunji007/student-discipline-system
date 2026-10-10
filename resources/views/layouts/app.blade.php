@@ -413,6 +413,15 @@
             border-color: rgba(255, 255, 255, 0.15);
         }
 
+        .role-badge-card {
+            text-decoration: none;
+        }
+
+        .role-badge-card:focus-visible {
+            outline: 2px solid var(--yellow);
+            outline-offset: 3px;
+        }
+
         .role-badge .user-name {
             color: var(--white);
             font-size: 0.88rem;
@@ -1806,9 +1815,14 @@
         @php
             $currentActiveRole = session('active_role', auth()->user()->Role);
             $userAvailableRoles = auth()->user()->getAvailableRoles();
+            $canOpenStudentCard = in_array(strtolower($currentActiveRole), ['นักเรียน', 'student']);
         @endphp
 
+        @if($canOpenStudentCard)
+        <a href="{{ route('student.card') }}" class="role-badge role-badge-card" style="position:relative;" title="เปิดบัตรนักเรียน" aria-label="เปิดบัตรนักเรียน">
+        @else
         <div class="role-badge" style="position:relative;">
+        @endif
             <div class="user-name">{{ auth()->user()->FullName }}</div>
             <div class="user-username" style="font-size:0.75rem; color:rgba(255, 255, 255, 0.7); display:flex; align-items:center; gap:0.25rem;">
                 <i class="far fa-id-card" style="font-size:0.7rem;"></i> รหัสประจำตัว: <strong style="color:#fff;">{{ auth()->user()->Username }}</strong>
@@ -1818,7 +1832,11 @@
                     {{ $currentActiveRole === 'ครู' ? 'ครูประจำชั้น' : $currentActiveRole }}
                 </div>
             </div>
+        @if($canOpenStudentCard)
+        </a>
+        @else
         </div>
+        @endif
 
         <nav class="sidebar-nav">
             @include('layouts.partials.nav-' . match(strtolower($currentActiveRole)) {
