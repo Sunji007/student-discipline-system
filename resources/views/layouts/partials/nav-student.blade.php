@@ -7,6 +7,12 @@
 </div>
 @endif
 
+<div class="nav-item">
+    <a href="{{ route('student.card') }}" class="{{ request()->routeIs('student.card') ? 'active' : '' }}" data-title="บัตรนักเรียน">
+        <i class="fas fa-id-card"></i> <span class="nav-text">บัตรนักเรียน</span>
+    </a>
+</div>
+
 @if(auth()->user()->canAccess('behavior-records') || auth()->user()->canAccess('attendance') || auth()->user()->canAccess('appeals') || auth()->user()->canAccess('informant-reports') || auth()->user()->canAccess('messages'))
 <div class="nav-section-title">พฤติกรรมและการเรียน</div>
 @endif

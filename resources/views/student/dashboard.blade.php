@@ -38,6 +38,9 @@
 <div class="page-header">
     <h2>{{ $student->FullName }}</h2>
     <p>ห้อง {{ $student->classroom_display }} &nbsp;&bull;&nbsp; ครูประจำชั้น: {{ $student->advisory_teacher->user->FullName ?? 'ยังไม่มีข้อมูล' }} &nbsp;&bull;&nbsp; {{ $semesterText }}</p>
+    <a href="{{ route('student.card') }}" class="btn btn-gold" style="margin-top:0.75rem;">
+        <i class="fas fa-id-card"></i> แสดงบัตรนักเรียน
+    </a>
 </div>
 
 {{-- Score Card & Behavior Criteria --}}

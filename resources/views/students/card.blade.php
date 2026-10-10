@@ -40,6 +40,8 @@
             margin-bottom: 2rem;
             display: flex;
             gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
         .btn {
@@ -65,6 +67,10 @@
             background: #08372b;
             transform: translateY(-1px);
         }
+        .btn-print:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
 
         .btn-back {
             background: white;
@@ -79,7 +85,8 @@
         /* Card Container (Standard ID-1 Size: 85.6mm x 54mm or scale of 3.375 x 2.125 inches) */
         .card-container {
             width: 338px;
-            height: 530px; /* Vertically oriented card */
+            max-width: 100%;
+            min-height: 530px;
             background: var(--bg-card);
             border-radius: 16px;
             box-shadow: 0 15px 35px rgba(11,74,58, 0.12), 0 5px 15px rgba(0,0,0,0.06);
@@ -228,16 +235,34 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            width: 100%;
+            background: #fff;
         }
 
-        .barcode-canvas {
-            max-width: 170px;
+        #barcode {
+            max-width: 100%;
             height: auto;
+        }
+
+        .card-hint {
+            max-width: 338px;
+            margin-top: 1rem;
+            text-align: center;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            color: #64748b;
+        }
+
+        .barcode-error {
+            color: #b91c1c;
+            font-size: 0.85rem;
+            text-align: center;
         }
 
         /* Footer Accent */
         .card-footer {
             height: 12px;
+            flex-shrink: 0;
             background: linear-gradient(90deg, var(--primary-islamic) 0%, var(--emerald) 100%);
             position: relative;
         }
@@ -256,7 +281,7 @@
                 background: white;
                 padding: 0;
             }
-            .controls {
+            .controls, .card-hint {
                 display: none !important;
             }
             .card-container {
@@ -271,10 +296,10 @@
 <body>
 
     <div class="controls">
-        <a href="javascript:void(0)" onclick="if (window.history.length > 1 && document.referrer) { window.history.back(); } else { window.close(); setTimeout(function() { window.location.href = '{{ route('admin.students.index') }}'; }, 500); }" class="btn btn-back">
+        <a href="{{ $backUrl }}" class="btn btn-back">
             <i class="fas fa-arrow-left"></i> ย้อนกลับ
         </a>
-        <button onclick="window.print()" class="btn btn-print">
+        <button type="button" id="print-card" onclick="window.print()" class="btn btn-print" disabled>
             <i class="fas fa-print"></i> พิมพ์บัตรประจำตัว
         </button>
     </div>
@@ -313,7 +338,8 @@
             <div class="codes-section">
                 <!-- Barcode Box -->
                 <div class="barcode-box">
-                    <svg id="barcode"></svg>
+                    <svg id="barcode" role="img" aria-label="บาร์โค้ดรหัสนักเรียน {{ $student->StudentID }}"></svg>
+                    <p id="barcode-error" class="barcode-error" role="alert" hidden>ไม่สามารถแสดงบาร์โค้ดได้ กรุณาโหลดหน้าใหม่</p>
                 </div>
             </div>
         </div>
@@ -322,20 +348,30 @@
         <div class="card-footer"></div>
     </div>
 
+    <p class="card-hint">แสดงบาร์โค้ดนี้ให้ครูสแกนจากหน้าจอ หรือพิมพ์บัตรเพื่อใช้งาน</p>
+
     <!-- Generate Codes Scripts -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+    <script src="{{ asset('js/vendor/JsBarcode.all.min.js') }}"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            // Generate Barcode (Code128 format)
-            JsBarcode("#barcode", "{{ $student->StudentID }}", {
-                format: "CODE128",
-                width: 1.5,
-                height: 52,
-                displayValue: false,
-                lineColor: "#0b4a3a",
-                margin: 0
-            });
+            try {
+                // Keep the ID as a string to preserve leading zeroes.
+                JsBarcode("#barcode", {{ Illuminate\Support\Js::from((string) $student->StudentID) }}, {
+                    format: "CODE128",
+                    width: 1.8,
+                    height: 60,
+                    displayValue: true,
+                    fontSize: 16,
+                    font: "monospace",
+                    lineColor: "#000000",
+                    background: "#ffffff",
+                    margin: 20
+                });
+                document.getElementById('print-card').disabled = false;
+            } catch (error) {
+                document.getElementById('barcode').style.display = 'none';
+                document.getElementById('barcode-error').hidden = false;
+            }
         });
     </script>
 </body>

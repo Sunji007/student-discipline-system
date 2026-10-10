@@ -197,6 +197,9 @@ class StudentController extends Controller
     public function card($id)
     {
         $student = Student::findOrFail($id);
-        return view('admin.students.card', compact('student'));
+        return view('students.card', [
+            'student' => $student,
+            'backUrl' => route('admin.students.index'),
+        ]);
     }
 }

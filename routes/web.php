@@ -228,6 +228,7 @@ Route::middleware(['auth', 'role:ครู,teacher'])->prefix('teacher')->name('
 // ==========================================
 Route::middleware(['auth', 'role:นักเรียน,student'])->prefix('student')->name('student.')->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\Student\DashboardController::class, 'index'])->name('dashboard')->middleware('permission:dashboard');
+    Route::get('/card', [App\Http\Controllers\Student\CardController::class, 'show'])->name('card');
     
     Route::get('/attendance', [App\Http\Controllers\Student\AttendanceController::class, 'index'])->name('attendance.index')->middleware('permission:attendance');
     Route::get('/behavior-records', [App\Http\Controllers\Student\BehaviorRecordController::class, 'index'])->name('behavior-records.index')->middleware('permission:behavior-records');
