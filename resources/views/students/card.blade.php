@@ -224,6 +224,8 @@
         .codes-section {
             width: 100%;
             display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
             justify-content: center;
             align-items: center;
             margin-top: auto;
@@ -242,6 +244,25 @@
         #barcode {
             max-width: 100%;
             height: auto;
+        }
+
+        .qr-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #fff;
+        }
+
+        #qr-code {
+            width: 168px;
+            height: 168px;
+            max-width: 100%;
+        }
+
+        .code-label {
+            font-size: 0.75rem;
+            color: #64748b;
+            padding-bottom: 0.5rem;
         }
 
         .card-hint {
@@ -341,6 +362,11 @@
                     <svg id="barcode" role="img" aria-label="บาร์โค้ดรหัสนักเรียน {{ $student->StudentID }}"></svg>
                     <p id="barcode-error" class="barcode-error" role="alert" hidden>ไม่สามารถแสดงบาร์โค้ดได้ กรุณาโหลดหน้าใหม่</p>
                 </div>
+                <div class="qr-box">
+                    <canvas id="qr-code" role="img" aria-label="คิวอาร์โค้ดรหัสนักเรียน {{ $student->StudentID }}"></canvas>
+                    <span class="code-label">QR Code</span>
+                    <p id="qr-error" class="barcode-error" role="alert" hidden>ไม่สามารถแสดง QR Code ได้ กรุณาโหลดหน้าใหม่</p>
+                </div>
             </div>
         </div>
 
@@ -348,15 +374,20 @@
         <div class="card-footer"></div>
     </div>
 
-    <p class="card-hint">แสดงบาร์โค้ดนี้ให้ครูสแกนจากหน้าจอ หรือพิมพ์บัตรเพื่อใช้งาน</p>
+    <p class="card-hint">แสดงบาร์โค้ดหรือ QR Code ให้ครูสแกนจากหน้าจอ หรือพิมพ์บัตรเพื่อใช้งาน</p>
 
     <!-- Generate Codes Scripts -->
     <script src="{{ asset('js/vendor/JsBarcode.all.min.js') }}"></script>
+    <script src="{{ asset('js/vendor/qrious.min.js') }}"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
+            // Both codes identify the student; the scanning page determines the activity.
+            const studentId = {{ Illuminate\Support\Js::from((string) $student->StudentID) }};
+            let barcodeReady = false;
+            let qrReady = false;
             try {
                 // Keep the ID as a string to preserve leading zeroes.
-                JsBarcode("#barcode", {{ Illuminate\Support\Js::from((string) $student->StudentID) }}, {
+                JsBarcode("#barcode", studentId, {
                     format: "CODE128",
                     width: 1.8,
                     height: 60,
@@ -367,11 +398,29 @@
                     background: "#ffffff",
                     margin: 20
                 });
-                document.getElementById('print-card').disabled = false;
+                barcodeReady = true;
             } catch (error) {
                 document.getElementById('barcode').style.display = 'none';
                 document.getElementById('barcode-error').hidden = false;
             }
+
+            try {
+                new QRious({
+                    element: document.getElementById('qr-code'),
+                    value: studentId,
+                    size: 336,
+                    padding: 48,
+                    level: 'M',
+                    foreground: '#000000',
+                    background: '#ffffff'
+                });
+                qrReady = true;
+            } catch (error) {
+                document.getElementById('qr-code').hidden = true;
+                document.getElementById('qr-error').hidden = false;
+            }
+
+            document.getElementById('print-card').disabled = !(barcodeReady && qrReady);
         });
     </script>
 </body>

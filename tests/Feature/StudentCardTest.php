@@ -35,8 +35,10 @@ class StudentCardTest extends TestCase
             ->assertViewHas('student', fn ($cardStudent) => $cardStudent->StudentID === '06000')
             ->assertViewHas('backUrl', route('student.dashboard'))
             ->assertSee('บาร์โค้ดรหัสนักเรียน 06000')
+            ->assertSee('คิวอาร์โค้ดรหัสนักเรียน 06000')
             ->assertSee("'06000'", false)
-            ->assertSee(asset('js/vendor/JsBarcode.all.min.js'), false);
+            ->assertSee(asset('js/vendor/JsBarcode.all.min.js'), false)
+            ->assertSee(asset('js/vendor/qrious.min.js'), false);
     }
 
     public function test_student_cannot_select_another_students_card(): void
@@ -79,6 +81,7 @@ class StudentCardTest extends TestCase
             ->assertOk()
             ->assertViewIs('students.card')
             ->assertViewHas('backUrl', route('admin.students.index'))
-            ->assertSee('บาร์โค้ดรหัสนักเรียน 06000');
+            ->assertSee('บาร์โค้ดรหัสนักเรียน 06000')
+            ->assertSee('คิวอาร์โค้ดรหัสนักเรียน 06000');
     }
 }
